@@ -1,0 +1,106 @@
+/* Start Mac IE5 filter \*/
+* html #sidebar a   { height: 1% }/* fixes bottom margin problem*/
+* html #placeholder a { width: 1% }
+* html #placeholder { width: 100% }
+* html #thumbnails li  { display: inline }
+* html div#thumbnails dl  { display: inline }
+* html body#forsale #sell table { }
+* html div#thumbnails { float: left }
+/* NO PNG SUPPORT */
+* html #sidebar a:link,  * html  #sidebar a:visited  { background-image: url("../images/the_links.gif") }/* NO PNG SUPPORT */
+/* End Mac IE5 filter */
+
+
+
+
+/* Start IE5/Mac Band Pass Filter \*//*/
+
+#content, #sidebar     { margin-bottom:-180px; padding-bottom: 180px }
+#placeholder p.left, #placeholder p.right { text-align: left }
+div.im { display: none }
+#content         { background-color: transparent; background-repeat: no-repeat; background-position: 0 70px }
+body#home #content { background-image: url("../images/ie_mac/home/the_farm_05.jpg")}
+body#upkeep #content { background-image: url("../images/ie_mac/upkeep/the_farm_05.jpg"); }
+body#forsale #content  { background-image: none }
+body#forsale #content { background-image: url("../images/ie_mac/sale/the_farm_05.jpg");}
+body#us #content    { background-image: url("../images/honcho.png"); background-position: right 150px }
+body#alpacas #content  { background-image: url("../images/alpacas.png"); background-position: right 110px }
+body#lnks #content  { background-image: url("../images/links.png"); background-position: right 100px }
+body#contact #content  { background-image: url("../images/contact.png"); background-position: right 80px }
+body#stud #content   { background-image: url("../images/stud.png"); background-position: right 0px }
+
+body#home #content h2 { background-image: url("../images/ie_mac/home/the_farm_03.jpg");}
+body#upkeep #content h2 { background-image: url("../images/ie_mac/upkeep/the_farm_03.jpg");}
+body#sale #content h2 { background-image: url("../images/t/title.jpg");}
+
+
+body#upkeep #wrap { background-image: url("../images/ie_mac/upkeep/the_farm_01.jpg");}
+body#gal #content, body#gal #sidebar      {  margin-bottom: 0; padding-bottom: 0; }
+
+/* 
+But note the end of this comment. div.im is an AP (Absolutely Positioned) element. This wasn't showing up in IE Win6.
+After many many attempts with z-index and relative postioning of the other structural elements I happened across this:-
+http://www.brunildo.org/test/IE_raf3.html.
+As explained an AP element NEXT to (ie SIBLING of) a float will trigger this non-showing bug.
+div.im is included here because bottom postioning is a problem for IE5 Mac.
+See:- http://www.l-c-n.com/IE5tests/right_pos/bottom.shtml
+
+
+End of IE5/Mac Band Pass Filter */
+
+/* * html #copy p { height: 1%; filter: alpha(opacity=70) }*/
+* html ul.breadcrumb { height: 1% }
+
+/*
+
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+/*
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}*/
+/* HTML5 display-role reset for older browsers */
+/*
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+*/

@@ -1,0 +1,245 @@
+html,
+body {
+	height: 100%;
+}
+
+body {
+	/*display: flex;
+	flex-direction: column;
+	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
+	min-height: 100vh;
+	margin: 3%;
+}
+
+img,
+#sidebar a {
+	display: block;
+}
+
+#footer,
+#content #copy p,
+#content label.read-more-trigger {
+	position: relative;
+}
+
+/* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
+
+img {
+	width: 100%;
+	height: auto;
+}
+
+
+/*  the OUTER CONTAINER DIV  */
+
+#wrap {
+    /* https://colintoh.com/blog/display-table-anti-hero */
+	display: table;
+	margin: auto;
+    width: 100%;
+    padding-top: 40%;
+}
+
+
+#header h1 {
+    text-indent: -500%;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+#ga_logo {
+    position: absolute;
+    right: 4%;
+	top: 2%;
+    width: 50%;
+	max-width: 16.5em;
+	display: block;
+}
+
+#header {
+	margin: 0 0 1em;
+	border: solid #9c0;
+	border-width: 0px 0px 1px;
+	width: 100%;
+	display: table;
+}
+
+#header>* {
+	display: table-cell;
+	vertical-align: bottom;
+}
+
+a#yag,
+#yorks,
+svg {
+	width: 12%;
+	width: 3em;
+	max-width: 3.75em;
+}
+
+#copy p {
+	display: inline;
+	margin: 0;
+}
+
+@keyframes entry {
+	0% {
+		left: 9999px;
+	}
+	90% {
+		left: -5px;
+	}
+	100% {
+		left: 0;
+	}
+}
+
+@keyframes enter {
+	0% {
+		bottom: -100em;
+	}
+	50% {
+		bottom: 1em;
+	}
+	100% {
+		bottom: 0em;
+	}
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+#copy p:nth-of-type(1) {
+	animation: entry 1s 1 ease-out;
+}
+
+#copy p:nth-of-type(2) {
+	animation: entry 3s 1 ease-out;
+}
+
+#copy p:nth-of-type(3) {
+	animation: entry 5s 1 ease-out;
+}
+
+#copy p:nth-of-type(4) {
+	animation: entry 7s 1 ease-in-out;
+}
+
+
+/* https://codepen.io/Idered/pen/AeBgF */
+
+#content .read-more-trigger {
+	display: inline-block;
+	padding: 0 .5em;
+	color: #900;
+	font: .8em/2.5 'Droid Sans', sans-serif;
+	border: 1px solid #ddd;
+	border-radius: .25em;
+}
+
+#content .read-more-trigger:hover {
+	color: #080;
+}
+
+#content .read-more-state~.read-more-target p {
+	position: absolute;
+	opacity: 0;
+}
+
+#content .read-more-state:checked~.read-more-target p {
+	position: relative;
+	opacity: 1;
+}
+
+.read-more-state~.read-more-trigger::before {
+	content: 'Read On';
+}
+
+.read-more-state:checked~.read-more-trigger::before {
+	content: 'Read It';
+}
+
+.wild img {
+	float: left;
+	position: relative;
+	animation: entry 2s 1 ease-out;
+}
+
+.wild img:last-child {
+	/*mask*/
+	margin-left: -500%;
+}
+
+.menu {
+	position: absolute;
+	display: block;
+	top: .7em;
+	height: 3em;
+}
+
+#sidebar ul {
+	white-space: nowrap;
+	background: white;
+	position: absolute;
+	left: -9999px;
+	transition: font .5s;
+}
+
+#menu-toggle:checked+ul {
+	top: 3em;
+	left: 3%;
+}
+
+#sidebar a {
+	padding: .6em;
+	height: 1%;
+	/*ie*/
+}
+
+#footer {
+	/*  animation-name: bobble;
+    animation-delay: 1s;
+    animation-iteration-count: 5;
+    animation-duration: 1s;*/
+	margin-bottom: 1em;
+}
+
+#footer ul {
+	padding: 22% 5% 3.5% 0;
+	line-height: 1.2;
+}
+
+
+/* Start Mac IE5 filter \*/
+
+div.wild img {}
+
+
+/* End Mac IE5 filter */
+
+.wild {
+	margin: 1em 0;
+	overflow: hidden;
+	z-index: -1;
+	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
+
+.wild img {}
+
+#sidebar,
+#copy,
+#header h2,
+label.menu,
+#menu-toggle+ul {
+	z-index: 1;
+}
+
+.clip-svg {
+	clip-path: url(#myClip);
+}

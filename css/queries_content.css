@@ -1,0 +1,149 @@
+@media screen and (min-width: 375px) and (-webkit-min-device-pixel-ratio: 2) {}
+
+@media screen and (min-width: 481px) {
+	/*http://nicolasgallagher.com/pure-css-gui-icons/ */
+	/*
+    #header a::before,
+    #header li::before,
+    #header a::after,
+    #header li::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        margin: -8px 0 0;
+        background: #C6C084;
+    }
+    #header a:link,
+    #header a:visited {
+        color: #C6C084;
+    }
+    #header a:hover,
+    #header a:focus,
+    #header a:active {
+        background: #7F4E1E;
+    }
+         
+   #header a::before {
+    left:2px;
+    width:16px;
+    height:12px;
+    margin-top:-6px;
+}
+   
+   #header a::after {
+    left:6px;
+    width:8px;
+    height:2px;
+    margin-top:-8px;
+}
+
+ #header ul li::after {
+    left:6px;
+    width:8px;
+    height:8px;
+    margin-top:-4px;
+    background:#fff;*/
+	/* css3 */
+	/*   -webkit-border-radius:8px;
+    -moz-border-radius:8px;
+    border-radius:8px;
+     z-index: 99;
+}
+
+#header a:hover:after, #header a:hover:before,
+#header a:focus:after, #header a:focus:before,
+#header a:active:after, #header a:active:before {
+    background:#7F4E1E;
+}  
+    
+    #header a::before {
+        left: 5px;
+        width: 8px;
+        height: 12px;
+        border: 2px solid #C6C084;
+        background: transparent;
+    }
+    #header a::after {
+        left: 4px;
+        border-width: 3px;
+        border-style: solid;
+        border-color: #fff #C6C084 #C6C084 #fff;
+        margin-top: -9px;
+        background: transparent;
+    }
+    #header a:hover:before,
+    #header a:focus:before,
+    #header a:active:before {
+        border-color: #730800;
+        background: transparent;
+    }
+    #header a:hover:after,
+    #header a:focus:after,
+    #header a:active:after {
+        border-color: #fff #7F4E1E #7F4E1E #fff;
+    }
+      */
+}
+
+@media screen and (min-width: 768px) {
+	#wrap {
+		background: transparent url("../assets/header_960.png") no-repeat;
+		background-size: 100%;
+	}
+	#sidebar ul,
+	#sidebar:active ul {
+		/*reset*/
+		background: transparent;
+		box-shadow: none;
+		border-width: 0px;
+		font-size: 1em;
+	}
+	#sidebar li:last-child {
+		border-width: 0 0 1px 0;
+	}
+	#sidebar a:hover {
+		background: transparent;
+	}
+}
+
+@media screen and (min-width: 960px) {
+	#sidebar ul,
+	#sidebar:active ul,
+	#content {
+		font-size: .95em;
+	}
+	#sidebar a:link,
+	#sidebar a:visited {
+		background: url("../assets/links.png") no-repeat;
+		background-size: 15%;
+		background-position: 0 -1%;
+	}
+	#sidebar a:hover {
+		background-position: 0 49%;
+	}
+	#sidebar a:active {
+		background-position: 0 99%;
+	}
+	#welcome/*sidebar*/
+	ul li:nth-child(1) a,
+	#about_us ul li:nth-child(2) a,
+	#about_alpacas ul li:nth-child(3) a,
+	#upkeep ul li:nth-child(4) a,
+	#stud_services ul li:nth-child(5) a,
+	#forsale ul li:nth-child(6) a,
+	#links ul li:nth-child(7) a,
+	#contact_us ul li:nth-child(8) a,
+	#gal ul li:nth-child(9) a {
+		background: url("../assets/links.png") 0 99%/15% no-repeat;
+	}
+	/* override above, save repeating sidebar , wrap for weight*/
+	#wrap #footer ul li a {
+		color: white;
+		background: none;
+	}
+}
+
+@media screen and (min-width: 1280px) {
+
+}

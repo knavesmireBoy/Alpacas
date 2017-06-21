@@ -1,0 +1,135 @@
+#forsale.selling #sell {
+	border: 1px solid;
+}
+
+#forsale #copy ul {
+	font-weight: bold;
+	font-size: 1em;
+	color: hsla(80, 50%, 89%, 1);
+	border-bottom: solid 1px #99cc00;
+}
+
+
+/* Following style: left and right borders turned to white when only top rule is required for the NO SALE status. Otherwise breadcrumb is top of a border that is complted by the following "sell" div
+ul.breadcrumb  { border-right: white; border-left: white }*/
+
+#forsale #copy ul li a {
+	color: #fff;
+	background: #99cc00;
+	background: hsla(80, 50%, 40%, 1);
+	padding: 0.45em 0 .45em 2em;
+}
+
+#forsale #copy ul li:first-child a {
+	padding-left: 1em;
+}
+
+#forsale #copy ul li a:hover {
+	color: hsla(80, 50%, 89%, 1);
+	text-decoration: none;
+}
+
+#forsale #copy ul li a::after {
+	content: " ";
+	border-top: 2em solid transparent;
+	/* Go big on the size, and let overflow hide */
+	border-bottom: 2em solid transparent;
+	border-left: 1.2em solid hsla(75, 50%, 40%, 1);
+}
+
+#forsale #copy ul li:nth-child(2) a {
+	background: hsla(75, 50%, 50%, 1);
+}
+
+#forsale #copy ul li:nth-child(2) a::after {
+	border-left-color: hsla(75, 50%, 50%, 1);
+}
+
+#forsale #copy ul li:nth-child(3) a {
+	background: hsla(75, 50%, 60%, 1);
+}
+
+#forsale #copy ul li:nth-child(3) a::after {
+	border-left-color: hsla(75, 50%, 60%, 1);
+}
+
+#forsale h2 {
+	text-decoration: line-through;
+}
+
+#forsale.selling h2 {
+	text-decoration: none;
+}
+
+#forsale.selling #sell {
+	border-color: #9c0;
+	box-shadow: inset 0 0 3em hsla(75, 50%, 50%, 1);
+}
+
+#sell a {
+	border: 1px solid black;
+	background: white;
+}
+
+table,
+th {
+	border: solid 1px hsla(75, 100%, 20%, 1);
+}
+
+th {
+	background-color: hsla(75, 100%, 20%, 1);
+}
+
+
+/*"gallery"*/
+
+ul#thumbnails {
+	border-color: #9c0;
+}
+
+ul#thumbnails li a:link,
+ul#thumbnails li a:visited {
+	border-color: black;
+}
+
+ul#thumbnails li a:hover,
+ul#thumbnails li a:active {
+	border-color: #900
+}
+
+#swapping img {
+	outline: solid black 1px;
+}
+
+#placeholder div button {
+	background: rgba(99, 99, 99, .5);
+	background: hsla(75, 50%, 40%, .3);
+	color: rgba(255, 255, 255, .75);
+	cursor: pointer;
+	border: 1px solid rgba(255, 255, 255, .75);
+	border-radius: .2em;
+	box-shadow: 2px 2px 2px black;
+	text-shadow: 1px 1px 1px black;
+	/*
+    border-top-color: #9c0;
+    border-right-color: #900;
+    border-bottom-color: #080;
+    border-left-color: #C6C084;
+    outline: 0px solid #7F4E1E;*/
+}
+
+#placeholder div button:hover,
+#placeholder div button:focus {
+	background: rgba(150, 150, 150, .5);
+	color: black;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, .75);
+}
+
+#overlay {
+	opacity: 0.5;
+}
+
+#gal #footer,
+#gal #footer ul {
+	background-color: hsla(75, 50%, 40%, 1);
+}

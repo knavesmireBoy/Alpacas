@@ -1,0 +1,168 @@
+@media screen and
+/*(orientation: landscape) and*/ (min-width: 667px) {
+	#footer li {
+		display: inline-block;
+		color: white;
+	}
+	#footer li:first-child::after {
+		content: " |";
+	}
+	#footer ul {
+		padding: 3% 5% 3% 0;
+		border: solid 0px #9c0;
+		border-top-width: 1px;
+		line-height: 1;
+	}
+	#footer {
+		padding-top: 15%;
+	}
+	#footer,
+	#footer ul {
+		background-size: 110%;
+	}
+}
+
+
+/* ------------------------------------------------------------------------------------------*/
+
+@media screen and (min-width: 768px) {
+	#wrap {
+		position: relative;
+		padding-top: 18%;
+		overflow: hidden;
+	}
+	#header {
+		margin: 0 0 0 25%;
+		width: 75%;
+	}
+	#innerwrap {
+		/*display: flex;
+		flex-direction: row-reverse;
+		font-size: 1em;*/
+		overflow: hidden;
+	}
+	#content {
+		/*flex: 4;
+		box-sizing: border-box;*/
+		width: 75%;
+		padding-top: 1em;
+		float: right;
+	}
+	#sidebar {
+		/*flex: 1;
+		box-sizing: border-box;*/
+		width: 20%;
+		float: left;
+	}
+	#content,
+	#sidebar {
+		margin-bottom: -49.9em;
+		padding-bottom: 50em;
+	}
+	#ga_logo {
+		width: 21%;
+		left: 3%;
+		top: 1%;
+		right: auto;
+	}
+	a#yag {
+		position: absolute;
+		top: 1.5%;
+		right: 1.5%;
+		width: 10%;
+		max-width: 10%;
+	}
+	#header>* {
+		display: block;
+	}
+	a#yag svg {
+		width: 5em;
+		overflow: visible !important;
+	}
+	.card {
+		fill: #fff;
+		filter: url(../assets/YAG.svg);
+	}
+	#sidebar ul,
+	#sidebar:active ul {
+		/*reset*/
+		position: static;
+		top: auto;
+		left: auto;
+		width: auto;
+	}
+	#sidebar a {
+		padding: 5% 0% 3% 6%;
+	}
+	#sidebar a:hover {
+		transform: scale(1);
+	}
+	#sidebar li:last-child {
+		border-width: 0 0 1px 0;
+	}
+	#content .read-more-state~.read-more-target p {
+		position: relative;
+		animation: fade 1s ease-in;
+		opacity: 1;
+	}
+	.menu,
+	#content label.read-more-trigger {
+		position: absolute;
+		left: -9999px;
+	}
+}
+
+@media screen and (min-width: 960px) {
+	#wrap {
+		position: relative;
+		/* width ONLY required here to provide height context for absolute items*/
+	}
+    
+
+	.wild {
+		position: absolute;
+		width: 80%;
+		margin: 0;
+		right: 0%;
+		bottom: 15%;
+	}
+
+	/*mask*/
+	#content .wild img:last-child {
+		margin-left: -100%;
+	}
+	#content p {
+		z-index: 1;
+	}
+	#content .read-more-target p {
+		margin-right: 30%;
+	}
+	#content .wild img {
+		animation: enter 3s 1;
+	}
+	#content #copy p {
+		animation: fade 1s ease-in;
+	}
+	#sidebar .inner {
+		padding: .5em 0 1em 1em;
+	}
+	#sidebar a {
+		padding: 5% 0% 2% 23%;
+	}
+}
+
+@media screen and (min-width: 1024px) {
+	#wrap {
+		width: 87.5%;
+        padding-top: 15%
+	}
+}
+
+@media screen and (min-width: 1280px) {
+	#wrap {
+		width: 82%;
+	}
+	#sidebar a {
+		padding: 7% 0% 1% 20%;
+	}
+}

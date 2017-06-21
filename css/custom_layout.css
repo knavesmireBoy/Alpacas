@@ -1,0 +1,277 @@
+div#thumbnails,
+.showtime #placeholder {
+	position: relative;
+}
+
+ul#thumbnails li a,
+div#thumbnails a,
+.showtime #placeholder,
+#placeholder a,
+img,
+#sidebar a {
+	display: block;
+}
+
+#about_us #content .wild img:last-child {
+	position: absolute;
+	left: -9999px;
+}
+
+#stud_services #copy p {
+	display: block;
+	margin: 0.5em 0;
+}
+
+#forsale div.wild {
+	position: relative;
+	width: 100%;
+	bottom: 0%;
+	left: 0%;
+	z-index: 0;
+}
+
+#forsale #content div.wild img {
+	margin: 0%;
+	float: none;
+	animation: enter 2s 1 ease-out;
+}
+
+#forsale #footer {
+	margin-top: -25%;
+}
+
+#forsale.selling #footer {
+	margin-top: 2%;
+}
+
+#forsale.selling div.wild {
+	position: absolute;
+	left: -9999px;
+}
+
+#forsale #copy ul {
+	overflow: hidden;
+	margin: 2% 0;
+}
+
+#forsale #copy ul li,
+#forsale #copy ul li a {
+	display: inline-block;
+	position: relative;
+}
+
+#forsale #copy ul li a::after,
+#forsale #copy ul li a::before {
+	/*border arrows */
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	z-index: 1;
+	width: 0;
+	height: 0;
+	margin-top: -2em;
+}
+
+#forsale #copy ul li a::before {
+	content: "";
+	margin-left: 1px;
+	border: 2em solid transparent;
+	border-left-width: 1.2em;
+	border-left-color: white;
+	border-right-width: 0;
+}
+
+.selling dl.thumbnails {
+	margin: 0 .5em 0 0;
+	width: 30.416%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.selling dl.thumbnails:last-of-type {
+	width: 31.166%;
+}
+
+.selling dl.thumbnails dd {
+	margin-top: 1%;
+}
+
+
+/*
+with flex dt and dd elements don't require a singular containing dl element
+dl.bumnails {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+dl.bumnails dd {
+    flex: 0 1 32%;
+    margin: .5em 0 0 0;
+    order: 2;
+}
+
+dl.bumnails dt {
+    flex: 0 1 32%;
+    order: 1;
+}
+*/
+
+#sell,
+#forsale #copy ul,
+dl.thumbnails,
+.selling #copy.js dl.thumbnails,
+.selling #sell.chosen table {
+	position: absolute;
+	left: -9999px;
+}
+
+#forsale.selling #copy ul,
+.selling dl.thumbnails,
+.selling #copy.js,
+.selling #sell.chosen,
+.selling #sell.chosen section table {
+	position: relative;
+	left: 0;
+}
+
+#forsale.selling #sell {
+	padding: 1.5%;
+	overflow: hidden;
+	margin: 2% 0;
+	padding: 3%;
+}
+
+#sell table {
+	float: left;
+	width: 47%;
+	margin-right: 2%;
+}
+
+#sell a {
+	display: block;
+	overflow: hidden;
+	padding: 1.5%;
+}
+
+#contact_us #copy p {
+	display: block;
+	margin: 0;
+}
+
+
+/* gallery */
+
+
+/* gallery */
+
+
+/* gallery */
+
+
+/* gallery */
+
+
+/* gallery */
+
+
+/* gallery */
+
+#gal #footer {
+	padding-top: 0%;
+	margin-top: 1.5em;
+}
+
+#gal #footer ul {
+	padding: 3.5% 5%;
+}
+
+.showtime ul#thumbnails,
+#controls {
+	position: absolute;
+	left: -9999px;
+}
+
+ul#thumbnails {
+	padding: .5%;
+	margin-top: 1em;
+	/*clear*/
+	overflow: hidden;
+}
+
+ul#thumbnails li,
+#controls div.buttons {
+	margin: .5%;
+	float: left;
+}
+
+ul#thumbnails li.portrait,
+#controls div.buttons:last-child {
+	float: right;
+}
+
+ul#thumbnails li {
+	width: 16.5%;
+}
+
+ul#thumbnails li.portrait {
+	width: 11.5%;
+}
+
+ul#thumbnails a {
+	/* constrains scale transition */
+	overflow: hidden;
+}
+
+ul#thumbnails img {
+	opacity: 0.95;
+	transition: opacity 2s, transform 1s;
+}
+
+ul#thumbnails img:hover {
+	transform: scale(1.1);
+	opacity: 1;
+}
+
+#swapping {
+	margin: 0 auto;
+	display: table;
+	width: 100%;
+}
+
+#swapping:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+#swapping img {
+	padding: 2%;
+	width: 96%;
+	/* crucial for slideshow */
+	float: left;
+}
+
+#swapping img#slidepic,
+#swapping img#overlay {
+	margin-left: -100%;
+}
+
+.showtime #controls {
+	position: relative;
+	left: 0;
+	padding: 0 .75em;
+	z-index: 2;
+	transition: top 1s ease-in-out, margin .5s .5s;
+}
+
+#controls button {
+	display: inline-block;
+	vertical-align: top;
+	background: hsla(75, 50%, 40%, .3);
+}
+
+#controls div.buttons {
+	float: left;
+}

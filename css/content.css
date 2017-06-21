@@ -1,0 +1,126 @@
+body {
+	background: rgb(238, 238, 221);
+	background-color: white;
+}
+
+body.js {
+	background: #ffff66;
+}
+
+body.no-js {
+	background-color: white;
+}
+
+#footer li:last-child,
+div#thumbnails a,
+#thumbnails,
+ul#thumbnails li a,
+#sidebar li {
+	border: 1px solid;
+}
+
+#content,
+#sidebar,
+#wrap {
+	background: transparent;
+}
+
+#footer,
+#placeholder a,
+div.wild {
+	/*outline: solid blue 1px;*/
+}
+
+#sidebar li {
+	border-width: 0px 0px 1px;
+	border-color: #C6C084;
+}
+
+#sidebar li:last-child {
+	border-width: 0;
+}
+
+#sidebar a:link,
+#sidebar a:visited {
+	color: #080;
+}
+
+#sidebar a:active {
+	color: #900;
+}
+
+#sidebar ul,
+#sidebar:active ul {
+	border: solid #C6C084 1px;
+	box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 1.2em;
+	font-weight: bold;
+	letter-spacing: -.03em;
+}
+
+#sidebar ul a {
+	transition: background-color 1s;
+}
+
+#sidebar a:hover {
+	color: #6e2900;
+	background-color: rgb(238, 238, 221);
+	text-shadow: 1px 1px 1px white;
+	transform: scale(1.01);
+	transform-origin: left;
+}
+
+label.menu {
+	content: url(../assets/menu-icon.png);
+	background-color: #C6C084;
+	box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
+}
+
+#footer,
+#footer ul {
+	text-align: right;
+	background: url(../assets/grass_960.png) no-repeat;
+	background-size: 150%;
+	background-position: 50% 100%;
+	transition: background 1s;
+	font-size: 1.1em;
+}
+
+#footer ul li:last-child {
+	border-width: 0px;
+}
+
+#footer b {
+	color: #ff6
+}
+
+#welcome
+/*sidebar*/
+
+ul li:nth-child(1) a,
+#about_us ul li:nth-child(2) a,
+#about_alpacas ul li:nth-child(3) a,
+#upkeep ul li:nth-child(4) a,
+#stud_services ul li:nth-child(5) a,
+#forsale ul li:nth-child(6) a,
+#links ul li:nth-child(7) a,
+#contact_us ul li:nth-child(8) a,
+#gal ul li:nth-child(9) a {
+	color: #900;
+}
+
+
+/* override above, save repeating sidebar */
+
+#wrap #footer ul li a {
+	color: white;
+	background: none;
+}
+
+#innerwrap input {
+	cursor: pointer;
+	position: absolute;
+	left: -9999px;
+}

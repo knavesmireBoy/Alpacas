@@ -1,0 +1,12 @@
+#footer    { background-image: url("../images/grass.gif") }
+body#home img#carlos, body#us img#honcho, body#alpacas img#alpacas_group, body#upkeep img#upkeep2, body#stud img#Carlos_gys, body#forsale img#for_sale, body#lnks img#grazing_alpaca, body#contact img#pablo  { visibility: hidden }
+div.im   { background-repeat: no-repeat; background-position: right bottom }
+body#home div.im  { background-image: url("../images/carlos.gif") }
+body#us div.im  { background-image: url("../images/honcho.png") }
+body#alpacas div.im  { background-image: url("../images/alpacas.png") }
+body#upkeep div.im  { background-image: url("../images/upkeep.gif") }
+body#stud div.im  { background-image: url("../images/stud.png") }
+body#forsale div.im   { background-image: url("../images/for_sale.gif") }
+body#forsale div.im { background-color: aqua; background-image: none }
+body#lnks div.im  { background-image: url("../images/links.png") }
+body#contact div.im  { background-image: url("../images/contact.png") }
