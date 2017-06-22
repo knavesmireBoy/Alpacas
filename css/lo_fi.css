@@ -39,6 +39,7 @@ th em {
 #header h2 {
 	font: 2.4em/1 'Handwritten', 'cursive';
 	color: #900;
+	color: pink;
 	/*background: pink url("../images/t/copy_title_alt_Welcome.gif") no-repeat top right;*/
 }
 a:link, a:visited {
