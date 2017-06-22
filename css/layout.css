@@ -22,6 +22,7 @@ img,
 	position: relative;
 }
 
+
 /* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
 
 img {
@@ -33,27 +34,15 @@ img {
 /*  the OUTER CONTAINER DIV  */
 
 #wrap {
-    /* https://colintoh.com/blog/display-table-anti-hero */
+	/* https://colintoh.com/blog/display-table-anti-hero */
 	display: table;
 	margin: auto;
-    width: 100%;
-    padding-top: 40%;
-}
-
-
-#header h1 {
-    text-indent: -500%;
-    white-space: nowrap;
-    font-size: 16px;
+	width: 100%;
+	padding-top: 40%;
 }
 
 #ga_logo {
-    position: absolute;
-    right: 4%;
-	top: 2%;
-    width: 50%;
-	max-width: 16.5em;
-	display: block;
+	width: 100%;
 }
 
 #header {
@@ -67,6 +56,18 @@ img {
 #header>* {
 	display: table-cell;
 	vertical-align: bottom;
+}
+
+#header h1 {
+	position: absolute;
+	right: 4%;
+	top: 2%;
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	font-size: 0em;
+	width: 50%;
+	max-width: 45%;
 }
 
 a#yag,

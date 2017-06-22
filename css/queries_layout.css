@@ -1,5 +1,7 @@
 @media screen and
-/*(orientation: landscape) and*/ (min-width: 667px) {
+/*(orientation: landscape) and*/
+
+(min-width: 667px) {
 	#footer li {
 		display: inline-block;
 		color: white;
@@ -28,7 +30,7 @@
 @media screen and (min-width: 768px) {
 	#wrap {
 		position: relative;
-		padding-top: 18%;
+		padding-top: 22%;
 		overflow: hidden;
 	}
 	#header {
@@ -59,11 +61,12 @@
 		margin-bottom: -49.9em;
 		padding-bottom: 50em;
 	}
-	#ga_logo {
-		width: 21%;
+	#ga_logo {}
+	#header h1 {
 		left: 3%;
 		top: 1%;
 		right: auto;
+		width: 21%;
 	}
 	a#yag {
 		position: absolute;
@@ -117,8 +120,6 @@
 		position: relative;
 		/* width ONLY required here to provide height context for absolute items*/
 	}
-    
-
 	.wild {
 		position: absolute;
 		width: 80%;
@@ -126,7 +127,6 @@
 		right: 0%;
 		bottom: 15%;
 	}
-
 	/*mask*/
 	#content .wild img:last-child {
 		margin-left: -100%;
@@ -154,7 +154,7 @@
 @media screen and (min-width: 1024px) {
 	#wrap {
 		width: 87.5%;
-        padding-top: 15%
+		padding-top: 19%;
 	}
 }
 
