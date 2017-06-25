@@ -97,7 +97,6 @@
 		background: transparent;
 		box-shadow: none;
 		border-width: 0px;
-		font-size: 1em;
 	}
 	#sidebar li:last-child {
 		border-width: 0 0 1px 0;
@@ -108,25 +107,24 @@
 }
 
 @media screen and (min-width: 960px) {
-	#sidebar ul,
-	#sidebar:active ul,
 	#content {
 		font-size: .95em;
 	}
-	#sidebar a:link,
+        
+	#sidebar a, #sidebar a:link,
 	#sidebar a:visited {
 		background: url("../assets/links.png") no-repeat;
-		background-size: 15%;
-		background-position: 0 -1%;
+		background-size: 13%;
+		background-position: 0 -3.5%;
 	}
 	#sidebar a:hover {
-		background-position: 0 49%;
+		background-position: 0 47%;
 	}
 	#sidebar a:active {
 		background-position: 0 99%;
 	}
-	#welcome/*sidebar*/
-	ul li:nth-child(1) a,
+    /*sidebar*/
+	#welcome ul li:nth-child(1) a,
 	#about_us ul li:nth-child(2) a,
 	#about_alpacas ul li:nth-child(3) a,
 	#upkeep ul li:nth-child(4) a,
@@ -135,15 +133,12 @@
 	#links ul li:nth-child(7) a,
 	#contact_us ul li:nth-child(8) a,
 	#gal ul li:nth-child(9) a {
-		background: url("../assets/links.png") 0 99%/15% no-repeat;
+		background: url("../assets/links.png") 0 99%/13% no-repeat;
 	}
 	/* override above, save repeating sidebar , wrap for weight*/
 	#wrap #footer ul li a {
 		color: white;
 		background: none;
 	}
-}
-
-@media screen and (min-width: 1280px) {
-
+  
 }

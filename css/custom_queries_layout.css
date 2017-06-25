@@ -1,4 +1,5 @@
-	@media screen and (min-device-width: 320px) {
+@media screen and (min-device-width: 320px) {
+    
 	#controls div button {
 		width: 1.8em;
 		height: 1.8em;
@@ -18,6 +19,14 @@
 	#controls {
 		font-size: 1.5em;
 	}
+}
+
+@media screen and (min-device-width: 375px) {
+    
+    #controls {
+		top: 2em;
+	}
+    
 }
 
 @media screen and (orientation: portrait) and (max-device-width: 320px) {
@@ -43,6 +52,18 @@
 	}
 }
 
+@media screen and (max-device-width: 320px) {
+
+  #sidebar a {
+       line-height: 2.75; 
+    }
+    
+   #menu-toggle:checked+ul {
+	top: 3.4em;
+}
+    
+}
+
 @media screen and (min-width: 480px) {
 	ul#thumbnails li {
 		width: 16.5%;
@@ -62,6 +83,9 @@
 		letter-spacing: -4px;
 		padding-right: 4px;
 	}
+    #gal.showtime #wrap {
+    padding-top: 0%;
+}
 }
 
 @media screen and (orientation: landscape) and (max-device-width: 480px) {
@@ -87,6 +111,7 @@
 	#swapping img#overlay {
 		margin-left: -446px;
 	}
+    
 }
 
 @media screen and (min-width: 481px) {
@@ -124,11 +149,10 @@
 	}
 }
 
-@media screen and (min-device-width: 375px) and (max-device-width: 667px) {
+@media screen and (min-device-width: 375px) and (orientation: landscape) and (max-device-width: 667px) {
 	#controls {
 		top: 1.9em;
 	}
-    
     	ul#thumbnails li {
 		width: 106px;
 		margin: 2px;
@@ -139,13 +163,14 @@
 }
     
 	@media screen and (min-width: 768px) {
+        
 		#forsale div.wild {
 			position: absolute;
-			outline: 1px solid red;
 			width: 75%;
 			left: 25%;
 			bottom: 7%;
 		}
+        
 		#forsale #footer {
 			margin-top: 0;
 		}
@@ -168,6 +193,12 @@
 			display: block;
 			margin-left: 10%;
 		}
+        
+        
+            #gal.showtime #wrap {
+            padding-top: 22%;
+}
+        
 	}
 	@media screen and (min-width: 960px) {
 		#welcome div.wild img {

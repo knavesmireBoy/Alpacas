@@ -11,17 +11,13 @@ body {
 	margin: 3%;
 }
 
-img,
-#sidebar a {
-	display: block;
-}
+
 
 #footer,
 #content #copy p,
 #content label.read-more-trigger {
 	position: relative;
 }
-
 
 /* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
 
@@ -30,16 +26,103 @@ img {
 	height: auto;
 }
 
+.animated {
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 0.2s;
+  -webkit-animation-timing-function: ease;
+  -moz-animation-duration: 0.2s;
+  -moz-animation-timing-function: ease;
+  -ms-animation-duration: 0.2s;
+  -ms-animation-timing-function: ease;
+  -o-animation-duration: 0.2s;
+  -o-animation-timing-function:ease;
+  animation-duration: 0.2s;
+  animation-timing-function: ease;
+}
 
-/*  the OUTER CONTAINER DIV  */
+
+@-webkit-keyframes entry  {
+	0% {
+		left: 9999px;
+	}
+	90% {
+		left: -5px;
+	}
+	100% {
+		left: 0;
+	}
+}
+
+@keyframes entry  {
+    /*position for inline elements */
+	0% {
+		left: 9999px;
+	}
+	90% {
+		left: -5px;
+	}
+	100% {
+		left: 0;
+	}
+}
+
+@keyframes enter {
+	0% {
+		transform: translate(0,50em);
+	}
+	50% {
+        transform: translate(0,-1.5em);
+	}
+	100% {
+		transform: translate(0,0);
+	}
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+    25% {
+		opacity: 1;
+	}
+    75% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes blow {
+        
+     100% {
+		padding-top: 30%;
+	}
+}
+
+@-webkit-keyframes arriva {    
+   100% {
+	       top: 2%;
+	}
+}
 
 #wrap {
-	/* https://colintoh.com/blog/display-table-anti-hero */
-	display: table;
+	/* https://colintoh.com/blog/display-table-anti-hero 
+    display: table;
+    display: block;
+    seems display table isn't a requirement for centering, just margin: auto
+    which is good news as display: table + overflow: hidden + absolutely pos items are not clipped in firefox
+    div is left to defaut to display block
+    */
 	margin: auto;
 	width: 100%;
-	padding-top: 40%;
+    -webkit-animation: blow 1s 1 5s ease-in-out forwards;
 }
+
 
 #ga_logo {
 	width: 100%;
@@ -60,14 +143,25 @@ img {
 
 #header h1 {
 	position: absolute;
-	right: 4%;
-	top: 2%;
+    top: -100%;
+    right: 4%;
 	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
 	font-size: 0em;
 	width: 50%;
 	max-width: 45%;
+    -webkit-animation: arriva 3s 1 5s ease-in-out forwards;
+}
+
+
+.menu {
+	position: absolute;
+    top: -100%;
+    left: 3%;
+	height: 3em;
+    width: 3em;
+    -webkit-animation: arriva 3s 1 5s ease-in-out forwards; 
 }
 
 a#yag,
@@ -83,55 +177,25 @@ svg {
 	margin: 0;
 }
 
-@keyframes entry {
-	0% {
-		left: 9999px;
-	}
-	90% {
-		left: -5px;
-	}
-	100% {
-		left: 0;
-	}
-}
-
-@keyframes enter {
-	0% {
-		bottom: -100em;
-	}
-	50% {
-		bottom: 1em;
-	}
-	100% {
-		bottom: 0em;
-	}
-}
-
-@keyframes fade {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
 #copy p:nth-of-type(1) {
+	-webkit-animation: entry 1s 1 ease-out;
 	animation: entry 1s 1 ease-out;
 }
 
 #copy p:nth-of-type(2) {
+	-webkit-animation: entry 3s 1 ease-out;
 	animation: entry 3s 1 ease-out;
 }
 
 #copy p:nth-of-type(3) {
+	-webkit-animation: entry 5s 1 ease-out;
 	animation: entry 5s 1 ease-out;
 }
 
 #copy p:nth-of-type(4) {
+	-webkit-animation: entry 7s 1 ease-in-out;
 	animation: entry 7s 1 ease-in-out;
 }
-
 
 /* https://codepen.io/Idered/pen/AeBgF */
 
@@ -169,7 +233,20 @@ svg {
 .wild img {
 	float: left;
 	position: relative;
+	/*animation: entry 2s 1 ease-out;*/
+}
+
+.wild {
+    position: relative;
+    margin-bottom: 1em;
+	-webkit-animation: entry 2s 1 ease-out;
 	animation: entry 2s 1 ease-out;
+}
+
+.wild:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .wild img:last-child {
@@ -177,37 +254,26 @@ svg {
 	margin-left: -500%;
 }
 
-.menu {
-	position: absolute;
-	display: block;
-	top: .7em;
-	height: 3em;
-}
-
 #sidebar ul {
-	white-space: nowrap;
+    position: absolute;
+    overflow: hidden;
 	background: white;
-	position: absolute;
 	left: -9999px;
 	transition: font .5s;
 }
 
 #menu-toggle:checked+ul {
-	top: 3em;
+	top: 3.8em;
 	left: 3%;
 }
-
+/*
 #sidebar a {
 	padding: .6em;
 	height: 1%;
 	/*ie*/
 }
-
+*/
 #footer {
-	/*  animation-name: bobble;
-    animation-delay: 1s;
-    animation-iteration-count: 5;
-    animation-duration: 1s;*/
 	margin-bottom: 1em;
 }
 
@@ -215,7 +281,6 @@ svg {
 	padding: 22% 5% 3.5% 0;
 	line-height: 1.2;
 }
-
 
 /* Start Mac IE5 filter \*/
 
@@ -226,7 +291,7 @@ div.wild img {}
 
 .wild {
 	margin: 1em 0;
-	overflow: hidden;
+    /* z-index required IF persisting with masking, explore clipping */
 	z-index: -1;
 	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
 }

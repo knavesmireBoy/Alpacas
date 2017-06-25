@@ -1,13 +1,14 @@
-@font-face {
-	font-family: 'Handwritten';
-	src: url('../fonts/AlexBrush-Regular.ttf') format('truetype');
-}
 body {
-	font-family: 'Droid Sans', sans-serif;
-	font-family: "Georgia", "Helvetica", "Verdana", "Trebuchet MS", "Times", "Times New Roman", "Comic Sans MS", "serif";
-	font: 1em 'Droid Sans', sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-webkit-text-size-adjust: 100%;
+	background: rgb(238, 238, 221);
+	background-color: white;
+}
+
+body.js {
+	background: #ffff66;
+}
+
+body.no-js {
+	background-color: white;
 }
 
 p {
@@ -36,12 +37,8 @@ th em {
 	white-space: nowrap;
 	padding-right: 1em
 }
-#header h2 {
-	font: 2.4em/1 'Handwritten', 'cursive';
-	color: #900;
-	/*background: pink url("../images/t/copy_title_alt_Welcome.gif") no-repeat top right;*/
-}
-a:link, a:visited {
+
+a, a:link, a:visited {
 	color: #900;
 	border-width: 0;
 	text-decoration: none;

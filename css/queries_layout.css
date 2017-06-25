@@ -1,7 +1,4 @@
-@media screen and
-/*(orientation: landscape) and*/
-
-(min-width: 667px) {
+@media screen and (min-width: 667px) {
 	#footer li {
 		display: inline-block;
 		color: white;
@@ -28,45 +25,44 @@
 /* ------------------------------------------------------------------------------------------*/
 
 @media screen and (min-width: 768px) {
-	#wrap {
-		position: relative;
+    
+	#gal #wrap, #gal.showtime #wrap, #wrap {
 		padding-top: 22%;
-		overflow: hidden;
+        animation: none;
+        position: relative;
 	}
 	#header {
-		margin: 0 0 0 25%;
-		width: 75%;
+		margin: 0 0 0 26%;
+		width: 74%;
 	}
 	#innerwrap {
 		/*display: flex;
 		flex-direction: row-reverse;
-		font-size: 1em;*/
-		overflow: hidden;
+		font-size: 1em;  */
+        overflow: hidden;
+      
 	}
 	#content {
 		/*flex: 4;
 		box-sizing: border-box;*/
-		width: 75%;
+		width: 74%;
 		padding-top: 1em;
 		float: right;
 	}
 	#sidebar {
 		/*flex: 1;
 		box-sizing: border-box;*/
-		width: 20%;
+		width: 22%;
 		float: left;
 	}
-	#content,
-	#sidebar {
-		margin-bottom: -49.9em;
-		padding-bottom: 50em;
-	}
-	#ga_logo {}
+        
+    
 	#header h1 {
 		left: 3%;
 		top: 1%;
 		right: auto;
 		width: 21%;
+        animation: none;
 	}
 	a#yag {
 		position: absolute;
@@ -95,7 +91,8 @@
 		width: auto;
 	}
 	#sidebar a {
-		padding: 5% 0% 3% 6%;
+		/*padding: 5% 0% 3% 6%;*/
+        padding-left: 6%;
 	}
 	#sidebar a:hover {
 		transform: scale(1);
@@ -116,16 +113,14 @@
 }
 
 @media screen and (min-width: 960px) {
-	#wrap {
-		position: relative;
-		/* width ONLY required here to provide height context for absolute items*/
-	}
+
 	.wild {
 		position: absolute;
 		width: 80%;
 		margin: 0;
 		right: 0%;
 		bottom: 15%;
+        animation: enter 3s 1;
 	}
 	/*mask*/
 	#content .wild img:last-child {
@@ -137,9 +132,7 @@
 	#content .read-more-target p {
 		margin-right: 30%;
 	}
-	#content .wild img {
-		animation: enter 3s 1;
-	}
+
 	#content #copy p {
 		animation: fade 1s ease-in;
 	}
@@ -147,22 +140,26 @@
 		padding: .5em 0 1em 1em;
 	}
 	#sidebar a {
-		padding: 5.5% 0% 1.75% 23%;
+        line-height: 2;
+        padding-left: 20%;
 	}
 }
 
 @media screen and (min-width: 1024px) {
-	#wrap {
-		width: 87.5%;
-		padding-top: 19%;
-	}
+	#gal #wrap, #wrap {
+		width: 92%;
+		padding-top: 20%;
+	}    
 }
 
-@media screen and (min-width: 1280px) {
-	#wrap {
+
+@media screen and (min-width: 1260px) {
+	#gal #wrap, #wrap {
 		width: 82%;
+        padding-top: 18%;
 	}
 	#sidebar a {
-		padding: 7% 0% 1% 20%;
+		/*padding: 7% 0% 1% 20%;*/
+        padding-left: 20%;
 	}
 }
