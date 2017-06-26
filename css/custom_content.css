@@ -9,7 +9,6 @@
 	border-bottom: solid 1px #99cc00;
 }
 
-
 /* Following style: left and right borders turned to white when only top rule is required for the NO SALE status. Otherwise breadcrumb is top of a border that is complted by the following "sell" div
 ul.breadcrumb  { border-right: white; border-left: white }*/
 

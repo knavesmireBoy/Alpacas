@@ -83,12 +83,11 @@
 		letter-spacing: -4px;
 		padding-right: 4px;
 	}
-    #gal.showtime #wrap {
-    padding-top: 0%;
-}
+
 }
 
-@media screen and (orientation: landscape) and (max-device-width: 480px) {
+@media screen and (orientation: landscape) and (max-device-height: 320px) {
+    
 	body {
 		margin: 16px;
 	}
@@ -112,6 +111,10 @@
 		margin-left: -446px;
 	}
     
+   #gal.showtime #wrap {
+    padding-top: 0%;
+}
+    
 }
 
 @media screen and (min-width: 481px) {
@@ -125,6 +128,7 @@
 }
 
 @media screen and (orientation: landscape) and (min-width: 667px) {
+    
 	#placeholder #swapping {
 		width: 80%;
 	}
@@ -193,7 +197,6 @@
 			display: block;
 			margin-left: 10%;
 		}
-        
         
             #gal.showtime #wrap {
             padding-top: 22%;

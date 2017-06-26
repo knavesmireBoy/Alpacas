@@ -118,6 +118,7 @@ img {
     which is good news as display: table + overflow: hidden + absolutely pos items are not clipped in firefox
     div is left to defaut to display block
     */
+    padding-top: 0%;
 	margin: auto;
 	width: 100%;
     -webkit-animation: blow 1s 1 5s ease-in-out forwards;
