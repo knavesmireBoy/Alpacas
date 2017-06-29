@@ -1,3 +1,185 @@
+.animated {
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 0.2s;
+  -webkit-animation-timing-function: ease;
+  -moz-animation-duration: 0.2s;
+  -moz-animation-timing-function: ease;
+  -ms-animation-duration: 0.2s;
+  -ms-animation-timing-function: ease;
+  -o-animation-duration: 0.2s;
+  -o-animation-timing-function:ease;
+  animation-duration: 0.2s;
+  animation-timing-function: ease;
+}
+
+
+@-webkit-keyframes entry  {
+	0% {
+		left: 9999px;
+	}
+	90% {
+		left: -5px;
+	}
+	100% {
+		left: 0;
+	}
+}
+
+@keyframes entry  {
+    /*position for inline elements */
+	0% {
+		left: 9999px;
+	}
+	90% {
+		left: -5px;
+	}
+	100% {
+		left: 0;
+	}
+}
+
+@keyframes enter {
+	0% {
+		transform: translate(0,50em);
+	}
+	50% {
+        transform: translate(0,-1.5em);
+	}
+	100% {
+		transform: translate(0,0);
+	}
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+    25% {
+		opacity: 1;
+	}
+    75% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes blow {
+        
+     100% {
+		padding-top: 30%;
+	}
+}
+
+@-webkit-keyframes arriva {    
+   100% {
+	       top: 2%;
+	}
+}
+
+#wrap {
+    -webkit-animation: blow 1s 1 5s ease-in-out forwards;
+}
+
+
+#header h1, .menu {
+    -webkit-animation: arriva 3s 1 5s ease-in-out forwards;
+}
+
+.menu {
+	position: absolute;
+    top: 3%;
+    left: 3%;
+	height: 3em;
+    width: 3em;
+}
+
+#sidebar ul {
+    position: absolute;
+	left: -9999px;
+}
+
+
+#copy p:nth-of-type(1) {
+	-webkit-animation: entry 1s 1 ease-out;
+	animation: entry 1s 1 ease-out;
+}
+
+#copy p:nth-of-type(2) {
+	-webkit-animation: entry 3s 1 ease-out;
+	animation: entry 3s 1 ease-out;
+}
+
+#copy p:nth-of-type(3) {
+	-webkit-animation: entry 5s 1 ease-out;
+	animation: entry 5s 1 ease-out;
+}
+
+#copy p:nth-of-type(4) {
+	-webkit-animation: entry 7s 1 ease-in-out;
+	animation: entry 7s 1 ease-in-out;
+}
+
+/* https://codepen.io/Idered/pen/AeBgF */
+
+#content .read-more-trigger {
+	display: inline-block;
+	padding: 0 .5em;
+	color: #900;
+	font: .8em/2.5 'Droid Sans', sans-serif;
+	border: 1px solid #ddd;
+	border-radius: .25em;
+}
+
+#content .read-more-trigger:hover {
+	color: #080;
+}
+
+#content .read-more-state~.read-more-target p {
+	position: absolute;
+	opacity: 0;
+}
+
+#content .read-more-state:checked~.read-more-target p {
+	position: relative;
+	opacity: 1;
+}
+
+.read-more-state~.read-more-trigger::before {
+	content: 'Read On';
+}
+
+.read-more-state:checked~.read-more-trigger::before {
+	content: 'Read It';
+}
+
+.wild {
+	-webkit-animation: entry 2s 1 ease-out;
+	animation: entry 2s 1 ease-out;
+}
+
+.wild:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+#sidebar ul {
+	transition: font .5s;
+}
+
+#menu-toggle:checked+ul {
+	top: 3.8em;
+	left: 3%;
+}
+
+
 @media screen and (min-width: 667px) {
 	#footer li {
 		display: inline-block;
@@ -32,12 +214,35 @@
         position: relative;
         overflow: hidden;
 	}
+    
 	#header {
 		margin: 0 0 0 25%;
 		width: 75%;
 	}
     
-	#innerwrap {
+    #innerwrap {
+		overflow: hidden;
+	}
+    
+	#content {
+		float: right;
+        width: 75%;
+		padding-top: 1em;
+	}
+    
+	#sidebar {
+        float: left;
+        width: 22%;
+	}
+    
+    #sidebar, #content {
+        padding-bottom: 50em;
+        margin-bottom: -50em;
+    }
+    
+/*
+    
+    	#innerwrap {
 		display: flex;
 		flex-direction: row-reverse;
         justify-content: space-between;
@@ -51,6 +256,8 @@
 	#sidebar {
         flex: 0 0 22%;
 	}
+    
+    */
         
 	#header h1 {
 		left: 3%;
@@ -86,7 +293,6 @@
 		width: auto;
 	}
 	#sidebar a {
-		/*padding: 5% 0% 3% 6%;*/
         padding-left: 6%;
 	}
 	#sidebar a:hover {
@@ -100,10 +306,14 @@
 		animation: fade 1s ease-in;
 		opacity: 1;
 	}
-	.menu,
 	#content label.read-more-trigger {
 		position: absolute;
 		left: -9999px;
+	}
+    .menu {
+		position: absolute;
+		 top: -100%;
+         animation: none;
 	}
 }
 
@@ -117,26 +327,6 @@
 		bottom: 15%;
         animation: enter 3s 1;
 	}
-    
-   
-	#content .wild img:last-child {
-		margin-left: -100%;
-	}
-        
-    /*masking support...
-    
-     #content .wild img:first-child {
-        -webkit-mask: url('../images/carlos_masking.png') top left / cover;
-        mask: url('../images/carlos_masking.png') top left / cover;
-	}
-	#content .wild img:last-child {
-		margin-left: -1000%;
-	}
-    
-     .wild {
-    z-index: 0;
-    }
-    */
     
 	#content p {
 		z-index: 1;

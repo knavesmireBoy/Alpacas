@@ -4,6 +4,12 @@ if (!window.gAlp) {
 }
 
 /*
+var location = 'http://www.my-app-address.com'
+javascript:open(location,'iPhone:portrait','innerWidth='+(320+15)+',innerHeight='+(480+15)+',scrollbars=yes');
+javascript:open(location,'iPhone:landscape','innerWidth='+(480+15)+',innerHeight='+(320+15)+',scrollbars=yes');
+*/
+
+/*
 for(var p in gAlp){
     alert(p);
 }

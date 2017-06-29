@@ -11,8 +11,6 @@ body {
 	margin: 3%;
 }
 
-
-
 #footer,
 #content #copy p,
 #content label.read-more-trigger {
@@ -26,89 +24,6 @@ img {
 	height: auto;
 }
 
-.animated {
-  -webkit-animation-fill-mode: forwards;
-  -moz-animation-fill-mode: forwards;
-  -ms-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  -webkit-animation-duration: 0.2s;
-  -webkit-animation-timing-function: ease;
-  -moz-animation-duration: 0.2s;
-  -moz-animation-timing-function: ease;
-  -ms-animation-duration: 0.2s;
-  -ms-animation-timing-function: ease;
-  -o-animation-duration: 0.2s;
-  -o-animation-timing-function:ease;
-  animation-duration: 0.2s;
-  animation-timing-function: ease;
-}
-
-
-@-webkit-keyframes entry  {
-	0% {
-		left: 9999px;
-	}
-	90% {
-		left: -5px;
-	}
-	100% {
-		left: 0;
-	}
-}
-
-@keyframes entry  {
-    /*position for inline elements */
-	0% {
-		left: 9999px;
-	}
-	90% {
-		left: -5px;
-	}
-	100% {
-		left: 0;
-	}
-}
-
-@keyframes enter {
-	0% {
-		transform: translate(0,50em);
-	}
-	50% {
-        transform: translate(0,-1.5em);
-	}
-	100% {
-		transform: translate(0,0);
-	}
-}
-
-@keyframes fade {
-	0% {
-		opacity: 0;
-	}
-    25% {
-		opacity: 1;
-	}
-    75% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
-@-webkit-keyframes blow {
-        
-     100% {
-		padding-top: 30%;
-	}
-}
-
-@-webkit-keyframes arriva {    
-   100% {
-	       top: 2%;
-	}
-}
 
 #wrap {
 	/* https://colintoh.com/blog/display-table-anti-hero 
@@ -118,15 +33,15 @@ img {
     which is good news as display: table + overflow: hidden + absolutely pos items are not clipped in firefox
     div is left to defaut to display block
     */
-    padding-top: 0%;
+    padding-top: 33%;
 	margin: auto;
 	width: 100%;
-    -webkit-animation: blow 1s 1 5s ease-in-out forwards;
 }
 
 
 #ga_logo {
 	width: 100%;
+    float: left;
 }
 
 #header {
@@ -144,26 +59,17 @@ img {
 
 #header h1 {
 	position: absolute;
-    top: -100%;
+    top: 3%;
     right: 4%;
-	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
-	font-size: 0em;
 	width: 50%;
 	max-width: 45%;
-    -webkit-animation: arriva 3s 1 5s ease-in-out forwards;
+    line-height: 1;
+    text-indent: 100%;
+    margin-top: -1em;
 }
 
-
-.menu {
-	position: absolute;
-    top: -100%;
-    left: 3%;
-	height: 3em;
-    width: 3em;
-    -webkit-animation: arriva 3s 1 5s ease-in-out forwards; 
-}
 
 a#yag,
 #yorks,
@@ -173,62 +79,65 @@ svg {
 	max-width: 3.75em;
 }
 
+/**//**//**//**//**//**//**//**/
+
+
+ 
+	#header {
+		margin: 0 0 2% 25%;
+		width: 75%;
+	}
+
+#gal #wrap, #wrap {
+		padding-top: 22%;
+        animation: none;
+        position: relative;
+        overflow: hidden;
+	}
+
+	#header h1 {
+		left: 3%;
+		top: 1%;
+		right: auto;
+		width: 21%;
+        animation: none;
+	}
+	a#yag {
+		position: absolute;
+		top: 1.5%;
+		right: 1.5%;
+		width: 10%;
+		max-width: 10%;
+	}
+	#header>* {
+		display: block;
+	}
+	a#yag svg {
+		width: 5em;
+		overflow: visible !important;
+	}
+	.card {
+		fill: #fff;
+		filter: url(../assets/YAG.svg);
+	}
+
+#sidebar {
+    width: 22%;
+    float: left:
+}
+
+#content {
+    width: 75%;
+    float: right;
+}
+
+#innerwrap {
+    overflow: hidden;
+}
+
 #copy p {
 	display: inline;
 	margin: 0;
-}
-
-#copy p:nth-of-type(1) {
-	-webkit-animation: entry 1s 1 ease-out;
-	animation: entry 1s 1 ease-out;
-}
-
-#copy p:nth-of-type(2) {
-	-webkit-animation: entry 3s 1 ease-out;
-	animation: entry 3s 1 ease-out;
-}
-
-#copy p:nth-of-type(3) {
-	-webkit-animation: entry 5s 1 ease-out;
-	animation: entry 5s 1 ease-out;
-}
-
-#copy p:nth-of-type(4) {
-	-webkit-animation: entry 7s 1 ease-in-out;
-	animation: entry 7s 1 ease-in-out;
-}
-
-/* https://codepen.io/Idered/pen/AeBgF */
-
-#content .read-more-trigger {
-	display: inline-block;
-	padding: 0 .5em;
-	color: #900;
-	font: .8em/2.5 'Droid Sans', sans-serif;
-	border: 1px solid #ddd;
-	border-radius: .25em;
-}
-
-#content .read-more-trigger:hover {
-	color: #080;
-}
-
-#content .read-more-state~.read-more-target p {
-	position: absolute;
-	opacity: 0;
-}
-
-#content .read-more-state:checked~.read-more-target p {
-	position: relative;
-	opacity: 1;
-}
-
-.read-more-state~.read-more-trigger::before {
-	content: 'Read On';
-}
-
-.read-more-state:checked~.read-more-trigger::before {
-	content: 'Read It';
 }
 
 .wild img {
@@ -239,34 +148,26 @@ svg {
 
 .wild {
     position: relative;
+    overflow: hidden;
     margin-bottom: 1em;
-	-webkit-animation: entry 2s 1 ease-out;
-	animation: entry 2s 1 ease-out;
 }
 
-.wild:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
+/*
 .wild img:last-child {
-	/*mask*/
 	margin-left: -500%;
 }
 
+*/
+/*
 #sidebar ul {
     position: absolute;
+    top: 3%;
+    left: 3%;
     overflow: hidden;
-	background: white;
-	left: -9999px;
-	transition: font .5s;
+    font-size: .5em;
 }
 
-#menu-toggle:checked+ul {
-	top: 3.8em;
-	left: 3%;
-}
+*/
 /*
 #sidebar a {
 	padding: .6em;
@@ -274,26 +175,37 @@ svg {
 	/*ie*/
 }
 */
-#footer {
-	margin-bottom: 1em;
-}
+
 
 #footer ul {
 	padding: 22% 5% 3.5% 0;
 	line-height: 1.2;
+}
+#footer {
+		padding-top: 15%;
+        margin-bottom: 1em;
+	}
+#footer ul {
+		padding: 3% 5% 3% 0;
+		border: solid 0px #9c0;
+		border-top-width: 1px;
+		line-height: 1;
+	}
+
+#footer li {
+	display: inline-block;
 }
 
 /* Start Mac IE5 filter \*/
 
 div.wild img {}
 
-
 /* End Mac IE5 filter */
 
 .wild {
 	margin: 1em 0;
     /* z-index required IF persisting with masking, explore clipping */
-	z-index: -1;
+	z-index: 0;
 	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
 }
 
@@ -307,6 +219,26 @@ label.menu,
 	z-index: 1;
 }
 
-.clip-svg {
-	clip-path: url(#myClip);
-}
+.js .wild {
+		position: absolute;
+		width: 80%;
+		margin: 0;
+		right: 0%;
+		bottom: 15%;
+        animation: enter 3s 1;
+	}
+
+ .cssmask #welcome .wild img:first-child {
+         left: 18%;
+        -webkit-mask: url('../images/carlos_masking.png') top left / cover;
+        mask: url('../images/carlos_masking.png') top left / cover;
+	}
+
+
+.js #content .read-more-target p {
+		margin-right: 30%;
+	}
+
+	#content p {
+		z-index: 1;
+	}

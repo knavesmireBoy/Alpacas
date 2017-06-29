@@ -19,7 +19,6 @@
     font-style: normal;
 }
 
-
 @font-face {
 	font-family: 'sidebar';
 	src: url('../fonts/ebgaramond12-regular-webfont.eot'); /* IE9 Compat Modes */
@@ -39,6 +38,11 @@ body {
 	-webkit-text-size-adjust: 100%;
 }
 
+	#wrap {
+		background: transparent url("../assets/header_960.png") no-repeat;
+		background-size: 100%;
+	}
+
 #header h2 {
 	font: 2.4em/1 'Handwritten', 'cursive';
 	color: #900;
@@ -49,7 +53,6 @@ body {
     padding: 0 1em;
     letter-spacing: -1px;
 }
-
 
 #footer {
     font: 700 1.1em/2 'Verdana';
@@ -64,11 +67,6 @@ ul#thumbnails li a,
 	border: 1px solid;
 }
 
-#content,
-#sidebar,
-#wrap {
-	background: transparent;
-}
 
 #footer,
 #placeholder a,
@@ -97,8 +95,10 @@ div.wild {
 #sidebar ul,
 #sidebar:active ul {
 	border: solid #C6C084 1px;
-	box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
+    border-width: 0px 0px 1px 0px;
 	white-space: nowrap;
+    /*box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);*/
+
 }
 
 #sidebar ul a {
@@ -113,6 +113,44 @@ div.wild {
 	transform-origin: left;
 }
 
+	#content {
+		font-size: .95em;
+	}
+
+#sidebar a {
+        padding-left: 20%;
+	}
+        
+	#sidebar a, #sidebar a:link,
+	#sidebar a:visited {
+		background: url("../assets/links.png") no-repeat;
+		background-size: 13%;
+		background-position: 0 -3.5%;
+	}
+	#sidebar a:hover {
+		background-position: 0 47%;
+	}
+	#sidebar a:active {
+		background-position: 0 99%;
+	}
+    /*sidebar*/
+	#welcome ul li:nth-child(1) a,
+	#about_us ul li:nth-child(2) a,
+	#about_alpacas ul li:nth-child(3) a,
+	#upkeep ul li:nth-child(4) a,
+	#stud_services ul li:nth-child(5) a,
+	#forsale ul li:nth-child(6) a,
+	#links ul li:nth-child(7) a,
+	#contact_us ul li:nth-child(8) a,
+	#gal ul li:nth-child(9) a {
+		background: url("../assets/links.png") 0 99%/13% no-repeat;
+	}
+	/* override above, save repeating sidebar , wrap for weight*/
+	#wrap #footer ul li a {
+		color: white;
+		background: none;
+	}
+
 .menu {
     background-color: #C6C084;
 	box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
@@ -124,7 +162,7 @@ div.wild {
 #footer ul {
 	text-align: right;
 	background: url(../assets/grass_960.png) no-repeat;
-	background-size: 150%;
+	background-size: 100%;
 	background-position: 50% 100%;
 	transition: background 1s;
 }

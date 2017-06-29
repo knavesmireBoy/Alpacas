@@ -203,10 +203,23 @@
 }
         
 	}
-	@media screen and (min-width: 960px) {
-		#welcome div.wild img {
-			left: 18%;
-		}
+
+@media screen and (min-width: 960px) {
+        
+    
+    #welcome #content .wild img:first-child {
+         left: 18%;
+        -webkit-mask: url('../images/carlos_masking.png') top left / cover;
+        mask: url('../images/carlos_masking.png') top left / cover;
+	}
+        	
+   /* 
+     .wild {
+    z-index: -1;
+    }
+*/
+    
+    
 		#welcome #copy p:nth-last-of-type(1) {
 			display: block;
 			margin: 0;
@@ -226,9 +239,16 @@
 		}
 		#about_alpacas div.wild {
 			right: -23%;
-			width: 80%;
+			width: 100%;
 			bottom: 12%;
 		}
+        
+        
+        #about_alpacas #content .wild img:first-child {
+        -webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+        mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+	}
+        
 		#about_alpacas #copy {
 			margin-right: 35%;
 		}
@@ -238,7 +258,7 @@
 		#about_alpacas .wild img.mask,
 		#contact_us .wild img.mask,
 		#upkeep .wild img.mask {
-			margin-left: -100.1%;
+			margin-left: -1000.1%;
 		}
 		#stud_services div.wild {
 			bottom: 7%;

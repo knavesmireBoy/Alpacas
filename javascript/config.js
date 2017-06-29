@@ -164,7 +164,7 @@ window.gAlp.Config = (function () {
 
                         if (typeof key === 'string') {
                             var res = doc[feature](key);
-                            if (res && typeof res.length !== 'undefined' && index) {
+                            if (res && typeof res.length !== 'undefined' && typeof index !== "undefined") {
                                 return res[index];
                             }
                             return res;

@@ -10,8 +10,7 @@ for(var p in gAlp){
 */
 window.gAlp.bindEvents = (function(doc, core, config, presenter, gallery, slideshow, publisher){
     "use strict";
-    
-    
+     
     function _round(number, precision) {
     var factor = Math.pow(10, precision);
     var tempNumber = number * factor;
