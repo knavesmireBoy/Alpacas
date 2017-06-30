@@ -1,3 +1,107 @@
+@font-face {
+	font-family: 'Handwritten';
+	src: url('../fonts/AlexBrush-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'QuestaGrande';
+    src: url('../fonts/2-questa_grande_regular_31-webfont.woff2') format('woff2'),
+         url('../fonts/2-questa_grande_regular_31-webfont.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'QuestaSans';
+    src: url('../fonts/2-Questa_Sans_Regular-webfont.woff2') format('woff2'),
+         url('../fonts/2-Questa_Sans_Regular-webfont.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'sidebar';
+	src: url('../fonts/ebgaramond12-regular-webfont.eot'); /* IE9 Compat Modes */
+	src: url('../fonts/ebgaramond12-regular-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+	     url('../fonts/ebgaramond12-regular-webfont.woff') format('woff'), /* Modern Browsers */
+        url('../fonts/ebgaramond12-regular-webfont.woff2') format('woff2'),
+	     url('../fonts/ebgaramond12-regular-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+	     url('../fonts/ebgaramond12-regular-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
+     font-weight: 700;
+    font-style: normal;
+	}
+
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-size-adjust: 100%;
+}
+
+
+#sidebar li:last-child {
+	border-width: 0;
+}
+
+#sidebar ul a {
+	transition: background-color 1s;
+}
+
+
+#sidebar ul,
+#sidebar:active ul {
+	border: solid #C6C084 1px;
+    border-width: 0px 0px 1px 0px;
+ box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
+}
+
+#sidebar a:hover {
+	background-color: rgb(238, 238, 221);
+	text-shadow: 1px 1px 1px white;
+	transform: scale(1.01);
+	transform-origin: left;
+}
+
+/*sidebar*/
+#welcome ul li:nth-child(1) a,
+#about_us ul li:nth-child(2) a,
+#about_alpacas ul li:nth-child(3) a,
+#upkeep ul li:nth-child(4) a,
+#stud_services ul li:nth-child(5) a,
+#forsale ul li:nth-child(6) a,
+#links ul li:nth-child(7) a,
+#contact_us ul li:nth-child(8) a,
+#gal ul li:nth-child(9) a {
+	color: #900;
+    background-position: 0 99%;
+}
+
+	/* override above, save repeating sidebar , wrap added to increase specificity*/
+	#wrap #footer ul li a {
+		color: white;
+		background: none;
+	}
+
+
+.menu {
+    background-color: #C6C084;
+	box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
+    background: url(../assets/menu-icon.png) center no-repeat #C6C084;
+    background-size: 105%;
+}
+
+#footer li:last-child {
+	border: 1px solid;
+}
+
+#footer ul li:last-child {
+	border-width: 0px;
+}
+
+#footer,
+#footer ul {
+	transition: background 1s;
+}
+
 @media screen and (min-width: 375px) and (-webkit-min-device-pixel-ratio: 2) {}
 
 @media screen and (min-width: 481px) {

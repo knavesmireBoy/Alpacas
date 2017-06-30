@@ -7,14 +7,14 @@ body {
 	/*display: flex;
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
-	min-height: 100vh;
 	margin: 3%;
 }
 
 #footer,
-#content #copy p,
+#content p,
 #content label.read-more-trigger {
 	position: relative;
+    z-index: 1;
 }
 
 /* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
@@ -33,9 +33,7 @@ img {
     which is good news as display: table + overflow: hidden + absolutely pos items are not clipped in firefox
     div is left to defaut to display block
     */
-    padding-top: 33%;
-	margin: auto;
-	width: 100%;
+	
 }
 
 
@@ -80,16 +78,17 @@ svg {
 }
 
 /**//**//**//**//**//**//**//**/
-
-
  
 	#header {
-		margin: 0 0 2% 25%;
-		width: 75%;
+        padding-top: 22%;
+		margin: 0 0 2% 24%;
+		width: 76%;
 	}
 
 #gal #wrap, #wrap {
-		padding-top: 22%;
+        margin: auto;
+	   width: 85.1%;/*max-width of 1024*/
+        min-width: 54em;
         animation: none;
         position: relative;
         overflow: hidden;
@@ -123,27 +122,28 @@ svg {
 
 #sidebar {
     width: 22%;
-    float: left:
+    float: left;
+}
+
+#sidebar .inner {
+    padding: 0 1em;
+}
+
+#sidebar, #content {
+    padding-bottom: 50em;
+    margin-bottom: -50em;
 }
 
 #content {
-    width: 75%;
     float: right;
+    width: 76%;
+    margin-top: 1.5em;
 }
+
 
 #innerwrap {
     overflow: hidden;
-}
-
-#copy p {
-	display: inline;
-	margin: 0;
-}
-
-.wild img {
-	float: left;
-	position: relative;
-	/*animation: entry 2s 1 ease-out;*/
+    margin-top: -1.5em;
 }
 
 .wild {
@@ -205,40 +205,54 @@ div.wild img {}
 .wild {
 	margin: 1em 0;
     /* z-index required IF persisting with masking, explore clipping */
-	z-index: 0;
 	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
 }
 
-.wild img {}
-
-#sidebar,
-#copy,
+#innerwrap,
 #header h2,
 label.menu,
 #menu-toggle+ul {
-	z-index: 1;
 }
 
 .js .wild {
 		position: absolute;
 		width: 80%;
 		margin: 0;
-		right: 0%;
+        right: 6%;
 		bottom: 15%;
         animation: enter 3s 1;
 	}
 
+.js #welcome div.wild {
+         left: 34%;
+}
+
  .cssmask #welcome .wild img:first-child {
-         left: 18%;
         -webkit-mask: url('../images/carlos_masking.png') top left / cover;
         mask: url('../images/carlos_masking.png') top left / cover;
 	}
+    
+/*
+.no-cssmask .wild img {
+    position: relative;
+    float: left;
+}
+.no-cssmask .wild img:last-child {
+	margin-left: -100%;
+}
+.no-cssmask .wild {
+    z-index: -1;
+	}
+*/
 
 
 .js #content .read-more-target p {
 		margin-right: 30%;
 	}
 
-	#content p {
-		z-index: 1;
-	}
+
+#innerwrap input {
+	cursor: pointer;
+	position: absolute;
+	left: -9999px;
+}

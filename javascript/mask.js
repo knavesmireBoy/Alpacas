@@ -5,6 +5,11 @@ if (!window.gAlp) {
 
 window.gAlp.masking = (function(doc, core, config, builder){
     
+    
+    if(!Modernizr){ return; }
+    
+    
+    if(!Modernizr.prefixed('mask-image')){
     var byClass = config.getFeatures('class'),
         byTags = config.getFeatures('tags'),
         getContainer = config.getFeature(byClass, null, 0),
@@ -22,7 +27,8 @@ window.gAlp.masking = (function(doc, core, config, builder){
         }
         };
     
-    builder.build(data(tgt.src.split('.')), tgt)
+    builder.build(data(tgt.src.split('.')), tgt);
+    }
                 
     
 })(document, gAlp.Core, gAlp.Config, gAlp.tagBuilder);

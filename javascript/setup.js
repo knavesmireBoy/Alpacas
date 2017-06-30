@@ -102,8 +102,8 @@ window.addEventListener("orientationchange", function() { getTheStyle(); }, fals
         footer = footer('ul')[0],
         body = config.getFeature(config.getFeatures('tags')),
          body = body('body')[0],
-        w = byId('content').offsetWidth,
-        w = body.offsetWidth,
+       w = byId('wrap').offsetWidth,
+
     
         heading = header('h2')[0],
         tgt = window.getComputedStyle(heading, null),
@@ -120,11 +120,11 @@ window.addEventListener("orientationchange", function() { getTheStyle(); }, fals
         var nav = byId("content"),
             a = nav.querySelector('a');
         
-        tgt = window.getComputedStyle(footer, null),
+        tgt = window.getComputedStyle(sidebar, null),
         f = tgt.getPropertyValue("font-size");
         
     
-        heading.innerHTML = _round(parseFloat(w),2) + ' /' + f;
+        heading.innerHTML = _round(parseFloat(w),2) + ' /' + _round(parseFloat(f),2);
    
         
     core.augment(gallery, gAlp.Iterator(list('img'), options));
