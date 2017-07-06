@@ -665,6 +665,7 @@ if (!Object.prototype.hasProperty) {//dirty check ;-P
                 args = arguments,
                 L = args.length,
                 m;
+            if(!C) return;
             if (args[2]) { // Only give certain methods.
                 for (; i < L; i++) {
                     C[args[i]] = P[args[i]];

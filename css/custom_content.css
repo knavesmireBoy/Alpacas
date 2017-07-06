@@ -1,3 +1,4 @@
+
 #forsale.selling #sell {
 	border: 1px solid;
 }
@@ -128,7 +129,7 @@ ul#thumbnails li a:active {
 	opacity: 0.5;
 }
 
-#gal #footer,
-#gal #footer ul {
+#gallery #footer,
+#gallery #footer ul {
 	background-color: hsla(75, 50%, 40%, 1);
 }

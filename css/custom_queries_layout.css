@@ -1,3 +1,104 @@
+#gallery #header h1,
+#gallery #wrap,
+#gallery .menu {
+	top: 2%;
+
+}
+ul#thumbnails img {
+	opacity: 0.95;
+	transition: opacity 2s, transform 1s;
+}
+
+ul#thumbnails img:hover {
+	transform: scale(1.1);
+	opacity: 1;
+}
+
+.wild {
+    z-index: -1;
+}
+
+.wild img{
+    float: left;
+}
+
+.wild img:last-child {
+	margin-left: -100%;
+}
+
+.cssmasky #welcome .wild img:first-child {
+	-webkit-mask: url('../images/carlos_masking.png') top left / cover;
+	mask: url('../images/carlos_masking.png') top left / cover;
+}
+
+.js #about_us .wild img:first-child,
+.no-js #about_us .wild img:last-child {
+	position: absolute;
+	left: -9999px;
+}
+
+.cssmask #about_alpacas .wild img:first-child {
+	-webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+	mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+}
+
+.cssmask #upkeep .wild img:first-child {
+	-webkit-mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+	mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+}
+
+.cssmask #stud_services .wild img:first-child {
+	-webkit-mask: url('../images/stud_masking.png') -1px 0px / cover;
+	mask: url('../images/stud_masking.png') -1px 0px / cover;
+}
+
+.js #forsale div.wild img {
+	margin: 0%;
+	float: none;
+	animation: enter 2s 1 ease-out;
+}
+
+#forsale #copy ul li a::after,
+#forsale #copy ul li a::before {
+	/*border arrows */
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	z-index: 1;
+	width: 0;
+	height: 0;
+	margin-top: -2em;
+}
+
+#forsale #copy ul li a::before {
+	content: "";
+	margin-left: 1px;
+	border: 2em solid transparent;
+	border-left-width: 1.2em;
+	border-left-color: white;
+	border-right-width: 0;
+}
+
+
+.selling dl.thumbnails:last-of-type {
+	width: 31.166%;
+}
+
+
+.cssmask #links .wild img:first-child {
+	-webkit-mask: url('../images/links_masking.png') -1px 0px / cover;
+	mask: url('../images/links_masking.png') -1px 0px / cover;
+}
+
+#controls div.buttons:last-child {
+	float: right;
+}
+
+#controls div button {
+	background: hsla(75, 50%, 40%, .3);
+}
+
 @media screen and (min-device-width: 320px) {
     
 	#controls div button {
@@ -19,6 +120,10 @@
 	#controls {
 		font-size: 1.5em;
 	}
+    
+    #controls div button {
+	background: hsla(75, 50%, 40%, .3);
+}
 }
 
 @media screen and (min-device-width: 375px) {
@@ -47,7 +152,7 @@
 	ul#thumbnails li.portrait {
 		width: 34px;
 	}
-	#gal #footer ul {
+	#gallery #footer ul {
 		padding: 2% 5%;
 	}
 }
@@ -91,11 +196,7 @@
 	body {
 		margin: 16px;
 	}
-	.showtime #sidebar,
-	.showtime #header {
-		position: absolute;
-		left: -9999px;
-	}
+
 	ul#thumbnails {
 		padding: 3px;
 	}
@@ -111,7 +212,7 @@
 		margin-left: -446px;
 	}
     
-   #gal.showtime #wrap {
+   #gallery.showtime #wrap {
     padding-top: 0%;
 }
     
@@ -141,16 +242,23 @@
 		height: 2em;
 		margin: 0 .4em;
 	}
-	#gal ul#thumbnails li {
+	#gallery ul#thumbnails li {
 		/*	width: 32.33%;*/
 	}
-	#gal.showtime #footer ul li {
+	#gallery.showtime #footer ul li {
 		visibility: visible;
 	}
-	#gal.showtime #header,
-	#gal.showtime #footer {
+	#gallery.showtime #header,
+	#gallery.showtime #footer {
 		clear: both;
 	}
+    
+    
+.showtime #controls {
+	
+	transition: top 1s ease-in-out, margin .5s .5s;
+}
+
 }
 
 @media screen and (min-device-width: 375px) and (orientation: landscape) and (max-device-width: 667px) {
@@ -178,123 +286,30 @@
 		#forsale #footer {
 			margin-top: 0;
 		}
-		#gal.showtime #header,
-		#gal.showtime #footer {
-			position: static;
-			left: 0;
-		}
-		#gal.showtime #sidebar {
-			width: 0%;
-		}
-		#gal.showtime #content {
-			width: 100%;
-		}
-		#gal.showtime #header {
-			margin: 7% 0 0 0%;
-			width: 100%;
-		}
-		#gal.showtime #header h2 {
-			display: block;
-			margin-left: 10%;
-		}
-        
-            #gal.showtime #wrap {
-            padding-top: 22%;
-}
+
         
 	}
 
 @media screen and (min-width: 960px) {
         
-    
-    #welcome #content .wild img:first-child {
-         left: 18%;
-        -webkit-mask: url('../images/carlos_masking.png') top left / cover;
-        mask: url('../images/carlos_masking.png') top left / cover;
-	}
-        	
+     	
    /* 
      .wild {
     z-index: -1;
     }
 */
     
-    
 		#welcome #copy p:nth-last-of-type(1) {
 			display: block;
 			margin: 0;
 		}
-		#about_us div.wild {
-			bottom: 4%;
-			width: 67%;
-		}
-		#about_us #content .wild img:first-child {
-			position: absolute;
-			left: -9999px;
-		}
-		#about_us #content .wild img:last-child {
-			position: relative;
-			left: 0;
-			margin-left: 0%;
-		}
-		#about_alpacas div.wild {
-			right: -23%;
-			width: 100%;
-			bottom: 12%;
-		}
-        
-        
-        #about_alpacas #content .wild img:first-child {
-        -webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
-        mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
-	}
-        
-		#about_alpacas #copy {
-			margin-right: 35%;
-		}
-		#about_alpacas .read-more-target p {
-			margin-right: 45%;
-		}
-		#about_alpacas .wild img.mask,
-		#contact_us .wild img.mask,
-		#upkeep .wild img.mask {
-			margin-left: -1000.1%;
-		}
-		#stud_services div.wild {
-			bottom: 7%;
-			width: 75%;
-			right: -15%;
-		}
-		#stud_services #copy {
-			width: 30%;
-		}
-		#upkeep div.wild {
-			width: 95%;
-			bottom: 10%;
-			right: -18%;
-		}
-		#upkeep .read-more-target p,
-		#upkeep #copy {
-			margin-right: 40%;
-		}
-		#links div.wild {
-			right: -24%;
-			width: 90%;
-			bottom: 5%;
-		}
-		#contact_us div.wild {
-			right: -19%;
-			width: 64%;
-			bottom: 12%;
-		}
+	
+	
+	
 		.showtime #controls {
 			top: -4em;
 		}
 	}
 	@media screen and (min-width: 1160px) {
-		#about_alpacas div.wild {
-			right: -23%;
-			width: 77%;
-			bottom: 10%;
-		}
+	
 	}

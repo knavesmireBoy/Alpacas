@@ -5,11 +5,20 @@ if (!window.gAlp) {
 
 window.gAlp.masking = (function(doc, core, config, builder){
     
+     function preSuffix(str, splitter, append){
+            var tmp = str.split(splitter);
+                tmp[tmp.length-2] += append;
+            return tmp.join(splitter);
+        }
+    
+    
+    return function(){
+    
     
     if(!Modernizr){ return; }
     
     
-    if(!Modernizr.prefixed('mask-image')){
+    if(!Modernizr.prefixed('mask-imagey')){
     var byClass = config.getFeatures('class'),
         byTags = config.getFeatures('tags'),
         getContainer = config.getFeature(byClass, null, 0),
@@ -22,14 +31,16 @@ window.gAlp.masking = (function(doc, core, config, builder){
             attrs: {
                 'class': 'mask',
                 alt: 'mask for image',
-                src: src[0] + '_mask.' + src[1]
+                src: preSuffix(src, '.', '_mask')
             }
         }
         };
-    
-    builder.build(data(tgt.src.split('.')), tgt);
+        
+    builder.build(data(tgt.src), tgt);
     }
-                
+    
+        
+    };
     
 })(document, gAlp.Core, gAlp.Config, gAlp.tagBuilder);
 

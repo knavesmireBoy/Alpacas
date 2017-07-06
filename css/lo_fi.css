@@ -63,6 +63,17 @@ dd {
     margin-bottom: 1em;
 }
 
+/* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
+
+img {
+	width: 100%;
+	height: auto;
+}
+
+img, #sidebar a {
+	display: block;
+}
+
 /*
 .examples {
 

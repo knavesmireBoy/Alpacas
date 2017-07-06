@@ -14,16 +14,8 @@ body {
 #content p,
 #content label.read-more-trigger {
 	position: relative;
-    z-index: 1;
+	z-index: 1;
 }
-
-/* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
-
-img {
-	width: 100%;
-	height: auto;
-}
-
 
 #wrap {
 	/* https://colintoh.com/blog/display-table-anti-hero 
@@ -33,123 +25,71 @@ img {
     which is good news as display: table + overflow: hidden + absolutely pos items are not clipped in firefox
     div is left to defaut to display block
     */
-	
 }
 
+#wrap {
+	margin: auto;
+	width: 85.1%;
+	/*max-width of 1024*/
+	min-width: 54em;
+	position: relative;
+	overflow: hidden;
+}
 
-#ga_logo {
-	width: 100%;
-    float: left;
+a#yag {
+	position: absolute;
+	top: 1.5%;
+	right: 1.5%;
+	width: 10%;
+	max-width: 10%;
 }
 
 #header {
-	margin: 0 0 1em;
+	padding-top: 22%;
 	border: solid #9c0;
 	border-width: 0px 0px 1px;
 	width: 100%;
-	display: table;
-}
-
-#header>* {
-	display: table-cell;
-	vertical-align: bottom;
+	margin: 0 0 2% 24%;
+	width: 76%;
 }
 
 #header h1 {
 	position: absolute;
-    top: 3%;
-    right: 4%;
+	left: 3%;
+	top: 1%;
+	width: 21%;
 	white-space: nowrap;
 	overflow: hidden;
-	width: 50%;
-	max-width: 45%;
-    line-height: 1;
-    text-indent: 100%;
-    margin-top: -1em;
+	text-indent: 100%;
+	margin-top: -1em;
 }
 
-
-a#yag,
-#yorks,
-svg {
-	width: 12%;
-	width: 3em;
-	max-width: 3.75em;
+#innerwrap {
+	overflow: hidden;
+	/*clear floats*/
+	margin-top: -1.5em;
 }
-
-/**//**//**//**//**//**//**//**/
- 
-	#header {
-        padding-top: 22%;
-		margin: 0 0 2% 24%;
-		width: 76%;
-	}
-
-#gal #wrap, #wrap {
-        margin: auto;
-	   width: 85.1%;/*max-width of 1024*/
-        min-width: 54em;
-        animation: none;
-        position: relative;
-        overflow: hidden;
-	}
-
-	#header h1 {
-		left: 3%;
-		top: 1%;
-		right: auto;
-		width: 21%;
-        animation: none;
-	}
-	a#yag {
-		position: absolute;
-		top: 1.5%;
-		right: 1.5%;
-		width: 10%;
-		max-width: 10%;
-	}
-	#header>* {
-		display: block;
-	}
-	a#yag svg {
-		width: 5em;
-		overflow: visible !important;
-	}
-	.card {
-		fill: #fff;
-		filter: url(../assets/YAG.svg);
-	}
 
 #sidebar {
-    width: 22%;
-    float: left;
+	width: 22%;
+	float: left;
 }
 
 #sidebar .inner {
-    padding: 0 1em;
+	padding: 0 1em;
 }
 
-#sidebar, #content {
-    padding-bottom: 50em;
-    margin-bottom: -50em;
+#sidebar,
+#content {
+	/*equal columns*/
+	padding-bottom: 50em;
+	margin-bottom: -49.9em;
 }
 
 #content {
-    float: right;
-    width: 76%;
-    margin-top: 1.5em;
-}
-
-
-#innerwrap {
-    overflow: hidden;
-    margin-top: -1.5em;
-}
-
-.wild {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 1em;
+	float: right;
+	width: 76%;
+	margin-top: 1.5em;
 }
 
 /*
@@ -158,6 +98,8 @@ svg {
 }
 
 */
+
+
 /*
 #sidebar ul {
     position: absolute;
@@ -168,71 +110,63 @@ svg {
 }
 
 */
+
+
 /*
 #sidebar a {
 	padding: .6em;
 	height: 1%;
 	/*ie*/
+
+
 }
-*/
-
-
 #footer ul {
 	padding: 22% 5% 3.5% 0;
 	line-height: 1.2;
 }
 #footer {
-		padding-top: 15%;
-        margin-bottom: 1em;
-	}
+	padding-top: 15%;
+	margin-bottom: 1em;
+}
 #footer ul {
-		padding: 3% 5% 3% 0;
-		border: solid 0px #9c0;
-		border-top-width: 1px;
-		line-height: 1;
-	}
-
+	padding: 3% 5% 3% 0;
+	border: solid 0px #9c0;
+	border-top-width: 1px;
+	line-height: 1;
+}
 #footer li {
 	display: inline-block;
 }
 
 /* Start Mac IE5 filter \*/
-
 div.wild img {}
 
 /* End Mac IE5 filter */
 
+
 .wild {
 	margin: 1em 0;
-    /* z-index required IF persisting with masking, explore clipping */
+	/* z-index required IF persisting with masking, explore clipping */
 	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
 }
-
 #innerwrap,
 #header h2,
 label.menu,
-#menu-toggle+ul {
+#menu-toggle+ul {}
+.js #content .read-more-target p {
+	margin-right: 30%;
 }
-
 .js .wild {
-		position: absolute;
-		width: 80%;
-		margin: 0;
-        right: 6%;
-		bottom: 15%;
-        animation: enter 3s 1;
-	}
-
-.js #welcome div.wild {
-         left: 34%;
+	position: absolute;
+	width: 80%;
+	margin: 0;
+	right: 6%;
+	bottom: 15%;
+	animation: enter 3s 1;
 }
 
- .cssmask #welcome .wild img:first-child {
-        -webkit-mask: url('../images/carlos_masking.png') top left / cover;
-        mask: url('../images/carlos_masking.png') top left / cover;
-	}
-    
 /*
+
 .no-cssmask .wild img {
     position: relative;
     float: left;
@@ -241,16 +175,11 @@ label.menu,
 	margin-left: -100%;
 }
 .no-cssmask .wild {
+    position: relative;
+    overflow: hidden;
     z-index: -1;
 	}
 */
-
-
-.js #content .read-more-target p {
-		margin-right: 30%;
-	}
-
-
 #innerwrap input {
 	cursor: pointer;
 	position: absolute;

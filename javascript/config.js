@@ -1,4 +1,3 @@
-
 /*jslint browser: true*/
 /*global $, jQuery, alert*/
 if (!window.gAlp) {
@@ -134,7 +133,6 @@ window.gAlp.Config = (function () {
                 return method(str);
             }
         },
-
 
         getPlaceholder: function (str) {
             var content = config.contents;

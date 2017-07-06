@@ -23,8 +23,9 @@ window.gAlp.bindEvents = (function(doc, core, config, presenter, gallery, slides
     var elem = document.getElementById("placeholder"),
     tgt = window.getComputedStyle(elem, null),
         f = tgt.getPropertyValue("font-size"),
-        w = tgt.getPropertyValue("width");
-    document.querySelector("#header h2").innerHTML = _round(parseFloat(f),2) +' / '+_round(parseFloat(w),2);
+        w = tgt.getPropertyValue("width"),
+        h = document.getElementById("header").getElementsByTagName('h2')[0];
+      h.innerHTML = _round(parseFloat(f),2) +' / '+_round(parseFloat(w),2);
             
 window.addEventListener("orientationchange", function() { getTheStyle(); }, false);
       
@@ -112,23 +113,22 @@ window.addEventListener("orientationchange", function() { getTheStyle(); }, fals
         _.each(body.style, function(a, b){
            
         });
-        
+        /*
         for(var o in body.style){
              console.log(o+': '+ body.style[o]);
-        }
+        }*/
         
         var nav = byId("content"),
-            a = nav.querySelector('a');
+            a = nav.getElementsByTagName('a')[0];
         
         tgt = window.getComputedStyle(sidebar, null),
         f = tgt.getPropertyValue("font-size");
         
     
         heading.innerHTML = _round(parseFloat(w),2) + ' /' + _round(parseFloat(f),2);
-   
+           
         
     core.augment(gallery, gAlp.Iterator(list('img'), options));
-   
     core.augment(slideshow, gallery);
     
     core.publish.call(publisher, presenter);

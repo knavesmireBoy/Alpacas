@@ -86,6 +86,36 @@
     -webkit-animation: blow 1s 1 5s ease-in-out forwards;
 }
 
+#ga_logo {
+	width: 100%;
+    float: left;
+}
+
+a#yag,
+#yorks,
+svg {
+	width: 12%;
+	width: 3em;
+	max-width: 3.75em;
+}
+
+#header {
+	display: table;
+    margin: 0 0 1em;
+     top: 3%;
+    right: 4%;
+    width: 45%;
+}
+
+a#yag svg {
+		width: 5em;
+		overflow: visible !important;
+	}
+
+#header>* {
+	display: table-cell;
+	vertical-align: bottom;
+}
 
 #header h1, .menu {
     -webkit-animation: arriva 3s 1 5s ease-in-out forwards;
@@ -208,7 +238,7 @@
 
 @media screen and (min-width: 768px) {
     
-	#gal #wrap, #wrap {
+	#gallery #wrap, #wrap {
 		padding-top: 22%;
         animation: none;
         position: relative;
@@ -348,7 +378,7 @@
 }
 
 @media screen and (min-width: 1024px) {
-	#gal #wrap, #wrap {
+	#gallery #wrap, #wrap {
 		width: 92%;
 		padding-top: 20%;
 	}    
@@ -356,7 +386,7 @@
 
 
 @media screen and (min-width: 1260px) {
-	#gal #wrap, #wrap {
+	#gallery #wrap, #wrap {
 		width: 82%;
         padding-top: 18%;
 	}
