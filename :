@@ -1,0 +1,91 @@
+Revert "pics"
+
+This reverts commit bdfb5a368027013b02d179863280a15df3444a56.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch gh-pages
+# Changes to be committed:
+#	modified:   about_us/index.html
+#	modified:   assets/grass_960.png
+#	modified:   assets/header_960.png
+#	deleted:    assets/links.jpg
+#	modified:   assets/links.png
+#	modified:   assets/logo_new_opt.svg
+#	modified:   assets/pause_.png
+#	deleted:    assets/pause_long.png
+#	modified:   css/content.css
+#	modified:   css/layout.css
+#	modified:   gal/small/Juanita.jpg
+#	deleted:    gal/small/New_arrivals.jpg
+#	modified:   gal/small/WiredUp.jpg
+#	modified:   gallery/index.html
+#	modified:   images/about_alpacas_mask.png
+#	deleted:    images/about_alpacas_mask8.png
+#	deleted:    images/carlos.jpg
+#	modified:   images/carlos.png
+#	modified:   images/carlos_.png
+#	modified:   images/carlos_mask.png
+#	deleted:    images/carlos_mask8.png
+#	modified:   images/carlos_masking.svg
+#	deleted:    images/contacts_mask.gif
+#	modified:   images/contacts_mask.png
+#	deleted:    images/contacts_mask8.png
+#	deleted:    images/links.png
+#	modified:   images/links_mask.png
+#	deleted:    images/links_mask8.png
+#	modified:   images/stud_mask.png
+#	deleted:    images/stud_mask8.png
+#	modified:   images/stud_masking.png
+#	modified:   images/upkeep_mask.png
+#	deleted:    images/upkeep_mask8.png
+#	modified:   index.html
+#	new file:   javascript/Interface.js
+#	new file:   javascript/Library.js
+#	new file:   javascript/__iterator.js
+#	new file:   javascript/__observer.js
+#	new file:   javascript/__sales.js
+#	new file:   javascript/_config.js
+#	new file:   javascript/_core.js
+#	new file:   javascript/_gallery.js
+#	new file:   javascript/_iterator.js
+#	new file:   javascript/_observer.js
+#	new file:   javascript/_presenter.js
+#	new file:   javascript/_sales.js
+#	new file:   javascript/_setup.js
+#	new file:   javascript/_showpic.js
+#	new file:   javascript/_simple.js
+#	new file:   javascript/_slideshow.js
+#	new file:   javascript/_state.js
+#	new file:   javascript/_tabs.js
+#	new file:   javascript/_tagBuilder.js
+#	new file:   javascript/_vanilla_tagBuilder.js
+#	new file:   javascript/addLoadEvent.js
+#	new file:   javascript/backbone.js
+#	new file:   javascript/config.js
+#	new file:   javascript/core.js
+#	new file:   javascript/dom_builder.js
+#	new file:   javascript/dombuilder.js
+#	new file:   javascript/gallery.js
+#	new file:   javascript/indent.js
+#	new file:   javascript/insertAfter.js
+#	new file:   javascript/iterator.js
+#	new file:   javascript/jquery.js
+#	new file:   javascript/mask.js
+#	new file:   javascript/mess.js
+#	new file:   javascript/messy.js
+#	new file:   javascript/modernizr-custom.js
+#	new file:   javascript/move.js
+#	new file:   javascript/myelement.js
+#	new file:   javascript/observer.js
+#	new file:   javascript/observeroo.js
+#	new file:   javascript/pos.js
+#	new file:   javascript/presenter.js
+#	new file:   javascript/sales.js
+#	new file:   javascript/setup.js
+#	new file:   javascript/showpic.js
+#	new file:   javascript/slideshow.js
+#	new file:   javascript/styleHeaderSiblings.js
+#	new file:   javascript/tagBuilder.js
+#	new file:   javascript/underscore.js
+
