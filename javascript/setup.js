@@ -10,13 +10,140 @@ for(var p in gAlp){
 */
 window.gAlp.bindEvents = (function(doc, core, config, presenter, gallery, slideshow, publisher){
     "use strict";
+    var a = document.createElement('a'),
+        s = a.style;
+   s.cssText = "margin: 5px 9px 4px 8px";
+ 
      
+        var rule = "body{background-color:red; font-size:26px;}",
+            pattern = /^[^\{]+\s+\{([^\}]+)}\s*/,
+        
+            style = doc.createElement('style');
+    style.type = 'text/css';
+    style.id = 'bongo';
+    
+    style.appendChild(document.createTextNode(rule));
+    
+      doc.body.appendChild(style); 
+    
+
+    
+    
+
+  
+    
+ function isNthChildSupported(){
+     
+   /*  https://stackoverflow.com/questions/21064101/understanding-offsetwidth-clientwidth-scrollwidth-and-height-respectively */
+        function setAttr(context, key, value){
+         context['setAttribute'](key, value);
+     }
+     
+     function Parental(el){
+         this.el = el;
+     }
+         
+    Parental.prototype = {
+        constructor: Parental,
+        create: function(el){
+            this.el.appendChild(el);
+        },
+        destroy: function(el){
+           this.el.removeChild(el); 
+        }
+    };     
+             
+    var result = false,
+    doc = document,
+    test =  document.createElement('ul'),
+    style = document.createElement('style'),
+    $ = function(id){
+        return doc.getElementById(id);
+    },
+    $$ = function(tag, container, index){
+        var doc = container || document,
+            res = doc.getElementsByTagName(tag);
+        if(typeof index !== 'undefined'){
+            return res[0];
+        }
+        return res;
+    },
+    getMethod = function(el, m){
+        var methods = ['innerText','textContent','innerHTML'], L = methods.length;
+        
+
+            while(L--){
+                if(typeof el[methods[L]] !== 'undefined'){
+                    return methods[L];
+                }
+            }
+                 return null;
+    },
+        
+        elContent = function(el, content){
+         var method = getMethod(el);
+         if(!method){ return; }
+         if(!content){
+        return el[method];
+         }
+         else {
+             el[method] = content;
+         }
+     },
+    
+    head = new Parental(doc.head),
+    body = new Parental(doc.body),
+    tester = new Parental(test);
+
+     setAttr(test, 'id', 'nth-child-test');
+     setAttr(style, 'type', 'text/css');
+     setAttr(style, 'rel', 'stylesheet');
+     setAttr(style, 'id', 'nth-child-test-style');
+     elContent(style, "#nth-child-test li:nth-child(1){ height:10px; }" );
+     
+  
+for(var i=0; i<3; i++){
+    tester.create(doc.createElement('li'));   
+}
+     body.create(test);
+     head.create(style);  
+
+  if($$('li', test, 1).offsetHeight == 10) { result = true; }
+     //body.destroy(test);
+    // head.destroy(style);
+    return result;
+ }
+    
+    /*
+    https://stackoverflow.com/questions/7630408/how-to-test-for-nth-child-using-modernizr
+    function isNthChildSupported(){
+var result = false,
+    test =  document.createElement('ul'),
+    style = document.createElement('style');
+test.setAttribute('id', 'nth-child-test');
+style.setAttribute('type', 'text/css');
+style.setAttribute('rel', 'stylesheet');
+style.setAttribute('id', 'nth-child-test-style');
+style.innerHTML = "#nth-child-test li:nth-child(even){height:10px;}";
+for(var i=0; i<3; i++){
+    test.appendChild(document.createElement('li'));   
+}
+document.body.appendChild(test);
+document.head.appendChild(style);
+  if(document.getElementById('nth-child-test').getElementsByTagName('li')[1].offsetHeight == 10) {result = true;}
+document.body.removeChild(document.getElementById('nth-child-test'));
+document.head.removeChild(document.getElementById('nth-child-test-style'));
+  return result;
+}
+*/
+
+    
     function _round(number, precision) {
     var factor = Math.pow(10, precision);
     var tempNumber = number * factor;
     var roundedTempNumber = Math.round(tempNumber);
     return roundedTempNumber / factor;
-};
+    }
 
 
   function getTheStyle(){
@@ -29,7 +156,7 @@ window.gAlp.bindEvents = (function(doc, core, config, presenter, gallery, slides
             
 window.addEventListener("orientationchange", function() { getTheStyle(); }, false);
       
-   }
+  }
     
      var  byId = 'getElementById',
           byTags = 'getElementsByTagName',
@@ -93,6 +220,15 @@ window.addEventListener("orientationchange", function() { getTheStyle(); }, fals
     
     return function(){
         
+   
+        
+        
+      /*  <script src="../javascript/modernizr-opacity.js">
+</script>*/
+
+        
+        
+                
     var thumbs = config.getContents('thumbnails'),
         list = config.getFeature(config.getFeatures('tags'), thumbs),
         options = {rev:false, loop: true},
@@ -126,6 +262,9 @@ window.addEventListener("orientationchange", function() { getTheStyle(); }, fals
         
     
         heading.innerHTML = _round(parseFloat(w),2) + ' /' + _round(parseFloat(f),2);
+        
+
+        
            
         
     core.augment(gallery, gAlp.Iterator(list('img'), options));
@@ -162,6 +301,7 @@ window.addEventListener("orientationchange", function() { getTheStyle(); }, fals
 };*/
     };
     
+
 })(document, gAlp.Core, gAlp.Config, gAlp.Presenter, gAlp.Gallery, gAlp.SlideShow, gAlp.Publish);
 
 //gAlp.Core.addEvent(window, 'load', window.gAlp.bindEvents);

@@ -101,6 +101,10 @@ if (!Object.prototype.hasProperty) {//dirty check ;-P
 
     return {
         
+          toTitleCase: function (str){
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+},
+        
         addEvent: function (obj, type, fn) {
             
             if(!obj || !type || !fn){
@@ -771,8 +775,16 @@ if (!Object.prototype.hasProperty) {//dirty check ;-P
                 }
                 this.methods.push(methods[i]);
             }
+        },
+        
+        
+         getComputedStyle: function(element, styleProperty) {
+                var computedStyle = element.currentStyle || document.defaultView.getComputedStyle(element, null);
+               return computedStyle[styleProperty];
         }
     } //Core
+    
+ //alert(gAlp.Core.Conf);   
 
 }({}, _));
 

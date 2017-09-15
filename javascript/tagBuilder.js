@@ -65,7 +65,10 @@ window.gAlp.tagBuilder = (function () {
 
         build: function (data, anchor) {
             
-            
+            if(!data || !anchor || !data.tag){
+                return;
+            }
+
                         
             //this.$anchor = makeJQ($anchor);
             this.anchor = notJQ(anchor);
@@ -89,8 +92,6 @@ window.gAlp.tagBuilder = (function () {
                             We need to determine whether to append to current or parent tag, "_sibling" added to config: tag to indicate status. String.split returns an array at "_", if array has length of 2 we are dealing with a sibling tag and must reset current anchor to common parent*/
                             var tg = isSibling(tag);//anchor function will be called to determine the dom element to anchor to
                            //tg[1] will be a string or undefined
-                              
-
                             return appendIt(fn(tg[1]), makeTag(tg[0]), tg[2]);
                         };
                     },
@@ -118,6 +119,7 @@ window.gAlp.tagBuilder = (function () {
                 };
 
             gang = [getAnchor];
+            
 
             for (prop in data) {
               if (data.hasOwnProperty(prop) || Object.getPrototypeOf(data).hasOwnProperty(prop)) {
@@ -126,9 +128,11 @@ window.gAlp.tagBuilder = (function () {
                     gang.push(method(arg));
                }
             }
+  
            //ie if more than initial method 'getAnchor'
             if (gang[1]) {//children method flushes data and sets new anchor
                 //elements with no children get flushed here
+               // alert(this.anchor.getAttribute('id'));
                 flush(gang);
             }
 

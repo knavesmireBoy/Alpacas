@@ -31,8 +31,7 @@ window.gAlp.SlideShow = (function(core, tagBuilder, gallery) {
                         alt: '',
                         id: 'slidepic',
                         src: "",
-                        "class": 'slides',
-                        height: "500px"
+                        "class": 'slides'
                     }
                 },
                 {

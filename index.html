@@ -21,6 +21,138 @@
         }
         
     </style>
+    
+
+    
+    <script>
+    
+    var CommandManager = (function() {
+  function CommandManager() {}
+
+  CommandManager.executed = [];
+  CommandManager.unexecuted = [];
+  
+  CommandManager.execute = function execute(cmd) {
+    cmd.execute();
+    CommandManager.executed.push(cmd);
+  };
+  
+  CommandManager.undo = function undo() {
+    var cmd1 = CommandManager.executed.pop();
+    if (cmd1 !== undefined){
+      if (cmd1.unexecute !== undefined){
+        cmd1.unexecute();
+      }
+      CommandManager.unexecuted.push(cmd1);
+    }
+  };
+  
+  CommandManager.redo = function redo() {
+    var cmd2 = CommandManager.unexecuted.pop();
+    
+    if (cmd2 === undefined){
+      cmd2 = CommandManager.executed.pop();
+      CommandManager.executed.push(cmd2); 
+      CommandManager.executed.push(cmd2); 
+    }
+    
+    if (cmd2 !== undefined){
+      cmd2.execute();
+      CommandManager.executed.push(cmd2); 
+    }
+  };
+  
+  return CommandManager;
+})();
+    
+    
+    </script>
+    
+       <script>
+  function min(i, n){
+      if(i <= n){
+          return i;
+      }
+      return n;
+  }
+
+         function isEven(n){
+             while(n > 0){
+              n-=2;
+             }
+             return !n;
+         }
+function range(start, end){
+    var gang = [];
+    for(; start <= end; start++){
+        gang.push(start);
+    }
+    return gang;
+}
+           
+           function rangeStep(start, end, step){
+    var gang = [], step = step || 1, aux;
+               aux = start > end ? true : false;
+               if(aux){
+                   aux = start;
+                   start = end;
+                   end = aux;
+               }
+    for(; start <= end; start +=step){
+        gang.push(start);
+    }
+    return gang;
+}
+           
+           function sum(gang){
+              var L = gang.length, total = 0;
+               while(L--){
+                   total += gang[L];
+               }
+               return total;
+           }
+         
+    
+           function getObj(n){
+               return {
+                   value: n,
+                   rest: null
+               }
+           }
+           
+var list = { value : 1 , rest : {
+             value : 2 , rest : {
+             value : 3 , rest : null }
+            }
+            };
+           
+          function arrayToList(arr){
+              var  list = null, i = 0, j = 1, L = arr.length-1;  
+                    for(; L >= 0; L--){
+                        list = {value: arr[L], rest: list};
+                    }
+              return list;
+          }
+           
+           function prepend(el, list){
+               el.rest = list;
+               return el;
+           }
+           
+          function nth(n, hash){
+            for(var node = hash; node; node = hash.rest){
+                if(node.value === n){
+                    return node;
+                }
+            }
+              return node.rest;
+          }
+           
+                  console.log(nth(2,arrayToList([1,2,3])))
+
+    </script>
+    
+    
 </head>
 <body id="forsale">
 	<div id="sell">
@@ -58,7 +190,7 @@
 </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="javascript/_core.js"></script>
+    <script src="javascript/core.js"></script>
     <script src="javascript/_config.js"></script>
             <script src="javascript/_vanilla_tagBuilder.js"></script>
 
@@ -66,15 +198,6 @@
 
     <script src="javascript/_iterator.js"></script>
 
-    <script>
-        if (!window.gAlp) {
-    window.gAlp = {};
-}
-        
-     window.addEventListener("load", function(){});
-      //document.querySelector('#img').addEventListener("click", getRid, false);
-    
-    </script>
 
       <!--
           

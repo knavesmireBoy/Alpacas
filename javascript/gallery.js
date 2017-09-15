@@ -12,7 +12,7 @@ window.gAlp.Gallery = (function (core) {
 
         init: function (node, conf) {
             this.find(node);
-            this.fire('diaporama', core.Conf(core.create(conf)));
+            this.fire('diaporama', core.Conf(core.create(conf)));            
             this.fire('nouvelle', this.getNext());
         },
 
@@ -99,7 +99,7 @@ window.gAlp.Element = (function (core, tagBuilder, config, iterator) {
                 return this.element;
             },
 
-            fetchElement: function (Conf, $anchor, _tag) {
+            fetchElement: function (Conf, $anchor) {
 
                 core.Inter_face.Ensures(Conf, this.iconf('Conf', ['getAttrs', 'getTag', 'setTag', 'getIndex', 'getConf']));
 
@@ -119,13 +119,12 @@ window.gAlp.Element = (function (core, tagBuilder, config, iterator) {
                     index = 0,
                     byId = config.getFeature(config.getFeatures('id'));
 
-                this.fetchElement = function (Conf, $anchor, _tag) {
+                this.fetchElement = function (Conf, $anchor) {
                     var tag = Conf.getTag(),
-                        i = Conf.getIndex(),
-                        byTags = config.getFeature(config.getFeatures('tags'), $anchor, i.toString()),
+                        i = Conf.getIndex().toString(),
+                        byTags = config.getFeature(config.getFeatures('tags'), $anchor, i),
                         //a indexes can be strings. 0 === false, '0' === true which is crucial for byTags/byClass functions
-                        byClass = config.getFeature(config.getFeatures('class'), $anchor, i.toString());
-
+                        byClass = config.getFeature(config.getFeatures('class'), $anchor, i);
                     if (!selectors.length) {
                         selectors.push(prepare(byId, this, Conf.getAttrs('id')));
                         selectors.push(prepare(byTags, this, tag));
@@ -133,23 +132,23 @@ window.gAlp.Element = (function (core, tagBuilder, config, iterator) {
                     }
 
                     this.init(selectors.splice(0, 1)[0]()); //discard failled attempts to getBy..
-
                     if (this.element) {
                         return this;
                     } else if (selectors.length) {
-                        return this.fetchElement(Conf, $anchor, _tag);
+                        return this.fetchElement(Conf, $anchor);
                     } else {
+                        
                         //tagBuilder requires tag to have this form (tag_n) when building trees, but this form (tag) for branches
                         //this.builder.build(Conf.getConf('_'), $anchor);
-                        this.builder.build(Conf.getConf(!_tag), $anchor);
+                        this.builder.build(Conf.getConf(i), $anchor);
                         this.built = true;
 
                         //run fetch after building to assign element find>init>element
                         //BUT make sure builder.build returns an element else infinite loop
-                        return this.fetchElement(Conf, $anchor, _tag);
+                        return this.fetchElement(Conf, $anchor);
                     }
                 };
-                return this.fetchElement(Conf, $anchor, _tag);
+                return this.fetchElement(Conf, $anchor);
             },
 
             removeElement: function () {
@@ -161,6 +160,23 @@ window.gAlp.Element = (function (core, tagBuilder, config, iterator) {
             },
 
             builder: tagBuilder,
+            
+            /*
+            
+              
+            var attr = this.getNext().attributes,
+                i = 0, p, res;
+            while(res = attr.item(i)){
+                for(p in res){
+                    if(p === 'value'){
+                        alert(res[p]);
+                    }
+                }
+                i++;
+            }
+            
+            
+            */
 
             setAttributes: function (obj) {
                 var p, o = obj && obj.hasAttributes && obj.hasAttributes() ? obj.attributes : obj ? obj : null;
@@ -170,6 +186,21 @@ window.gAlp.Element = (function (core, tagBuilder, config, iterator) {
                     }
                 }
             },
+            
+            setAttributes: function (obj) {
+            var p, o = obj && obj.hasAttributes && obj.hasAttributes() ? obj.attributes : obj ? obj : null;
+if(!o)return;
+                
+                    var i = 0, L = o.length, gang = [];
+                    for(; i < L; i++){
+                  this.getElement().setAttribute(o[i].name, o[i].value);
+                      alert(o[i].specified)
+                    }
+            alert(gang.length);
+            },
+            
+            
+            
             setStyle: function (options) {
                 var p;
                 //options.style instanceof CSSStyleDeclaration

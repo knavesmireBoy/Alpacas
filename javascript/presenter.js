@@ -184,26 +184,26 @@ gAlp.Presenter = (function (core, conf, tagBuilder, gallery, slideshow) {
 					},
 					swap = core.CommandFactory(swapper).getCommand(),
 					reload = core.CommandFactory(presenter).getCommand(),
-					base = core.create(Base),
-					state = core.create(core.State),
-					stopped = core.create(base),
-					playing = core.create(base),
-					paused = core.create(playing);
+                    
+					stopped = core.create(core.create(Base)),
+					playing = core.create(stopped),
+					paused = core.create(playing),
+                    
+                    state = core.create(core.State);
+
 				try {
 					stopped.method('setClickHandler', swap.execute('setClickHandler')); /*override base clickHandler*/
 					stopped.method('swap', swap.execute('swap', forward.execute('forward'), reverse.execute('reverse'), this.threshold));
 					stopped.method('play', slide.execute('play'));
-					//stopped.method('reload', reload.execute('hide'));
 					stopped.method('reload', reload.execute('hide').wrap(andExit));
 					stopped.method('forward', forward.execute('forward'));
 					stopped.method('reverse', reverse.execute('reverse'));
+                    
 					playing.method('swap', slide.execute('pause'));
 					playing.method('play', slide.execute('pause'));
-					playing.method('reload', reload.execute('hide').wrap(andExit));
 					playing.method('forward', slide.execute('hide'));
 					playing.method('reverse', slide.execute('hide'));
-					paused.method('forward', slide.execute('hide'));
-					paused.method('reverse', slide.execute('hide'));
+                    
 					paused.method('swap', slide.execute('resume'));
 					paused.method('play', slide.execute('resume'));
 				} catch (e) {

@@ -7,6 +7,12 @@ body {
 	-webkit-text-size-adjust: 100%;
 }
 
+mod {
+    font-size: 5em;
+    color: red;
+    display: block;
+}
+
 #wrap {
 		background: transparent url("../assets/header_960.png") no-repeat;
 		background-size: 100%;
