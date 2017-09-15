@@ -4,16 +4,10 @@ body {
 }
 
 body {
- /* https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 	/*display: flex;
-	flex-direction: column;*/
+	flex-direction: column;
+	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 	margin: 3%;
-}
-
-body > ul li {
-    height: 22px;
-    background: red;
-    margin: 1px;
 }
 
 #footer,
