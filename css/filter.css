@@ -1,3 +1,5 @@
+ringo { background-color: blue; width: 100px; height: 100px;}
+#header h2 {color: pink;}
 #footer    { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/grass.png")   }
 div#thumbnails dt a span    { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/sold_only.png")   }
 #copy p        { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/tintFadeNew.png")      }

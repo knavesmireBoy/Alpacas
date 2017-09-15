@@ -3,74 +3,12 @@ div#thumbnails,
 	position: relative;
 }
 
+
 ul#thumbnails li a,
 div#thumbnails a,
 .showtime #placeholder,
 #placeholder a {
 	display: block;
-}
-
-.js #welcome div.wild {
-	left: 34%;
-}
-
-.js #about_us div.wild {
-	bottom: 4%;
-	width: 67%;
-	right: 0%;
-}
-
-.js #about_alpacas div.wild {
-	right: -23%;
-	bottom: 12%;
-}
-
-
-.js #about_alpacas .read-more-target p {
-	margin-right: 45%;
-}
-
-.js #upkeep div.wild {
-	width: 95%;
-	bottom: 10%;
-	right: -18%;
-}
-
-
-.js #upkeep .read-more-target p,
-.js #upkeep #copy {
-	margin-right: 40%;
-}
-
-.js #stud_services div.wild {
-	bottom: 7%;
-	width: 75%;
-	right: -15%;
-}
-
-.js #stud_services #copy {
-	width: 30%;
-}
-
-#stud_services #copy p {
-	display: block;
-	margin: 0.5em 0;
-}
-
-#forsale #innerwrap {
-    padding-bottom: 25%;
-}
-
-.js #forsale div.wild {
-	left: auto;
-    width: 75%;
-    right: 0%;
-    bottom: 5%;
-    z-index: 0;
-}
-
-#forsale #footer {
-	margin-top: -25%;
 }
 
 #forsale.selling #footer {
@@ -93,16 +31,12 @@ div#thumbnails a,
 	position: relative;
 }
 
-
-
 .selling dl.thumbnails {
 	margin: 0 .5em 0 0;
 	width: 30.416%;
 	display: inline-block;
 	vertical-align: top;
 }
-
-
 
 .selling dl.thumbnails dd {
 	margin-top: 1%;
@@ -169,22 +103,6 @@ position: absolute;
 
 /* end of sale */
 
-.js #links div.wild {
-	right: -24%;
-	width: 90%;
-	bottom: 5%;
-}
-
-.js #contact_us #copy p {
-	display: block;
-	margin: 0;
-}
-
-.js #contact_us div.wild {
-	right: -19%;
-	width: 64%;
-	bottom: 12%;
-}
 
 .cssmask #contact_us .wild img:first-child {
 	-webkit-mask: url('../images/contacts_masking.png') -1px 0px / cover;
@@ -195,15 +113,19 @@ position: absolute;
 /* G A L L E R Y */
 
 ul#thumbnails {
-	padding: .5%;
-	margin-top: 1em;
+	margin: 1em auto 0;
+	padding: 4px;
+	padding: 0.33em;
 	/*clear*/
 	overflow: hidden;
+	width: 97%;
+	font-size: 1.008em;
 }
 
-ul#thumbnails li,
+ul#thumbnails li, 
 #controls div.buttons {
-	margin: .5%;
+	margin: 4px;
+	margin: 0.33em;
 	float: left;
 }
 
@@ -212,38 +134,59 @@ ul#thumbnails li.portrait {
 }
 
 ul#thumbnails li {
-	width: 16.5%;
+	width: 79px;
+	width: 6.6em;
+	display: block;
+	
 }
 
 ul#thumbnails li.portrait {
-	width: 11.5%;
+	width: 60px;
+	width: 4.96em;
 }
 
 ul#thumbnails a {
 	/* constrains scale transition */
 	overflow: hidden;
+	/* ie mac*/
+	float: left;
 }
 
 #gallery #footer {
 	padding-top: 0%;
-	margin-top: 1.5em;
+	margin-top: 2em;
 }
 
 #gallery #footer ul {
 	padding: 3.5% 5%;
+	border-width: 0px;
 }
 
 
 /* G A L L E R Y | S H O W T I M E */
 
-.showtime #sidebar,
-.showtime #header {
+.showtime #sidebar, .showtime ul#thumbnails, #placeholder {
 	position: absolute;
-	left: -9999px;
+	left: -99999px;
 }
 
-#gallery.showtime #header,
-#gallery.showtime #footer {
+#placeholder{
+*width: 100%;
+}
+
+#gallery #content:last-child{
+background: maroon;
+}
+
+#swapping {
+*width: 100%;
+clear: both;
+display: block;
+overflow: hidden;
+}
+
+
+.showtime #placeholder {
 	position: static;
 	left: 0;
 }
@@ -257,6 +200,11 @@ ul#thumbnails a {
 	min-width: 0%;
 }
 
+#gallery #header {
+padding-top: 21%;
+margin-bottom: 0;
+}
+
 #gallery.showtime #header {
 	margin: 0% 0% 2em;
 	width: 100%;
@@ -264,7 +212,7 @@ ul#thumbnails a {
 
 #gallery.showtime #header h2 {
 	display: block;
-	margin-left: 10%;
+	margin: 0% 10%;
 }
 
 #swapping {
@@ -275,8 +223,13 @@ ul#thumbnails a {
 #swapping img {
 	padding: 2%;
 	width: 96%;
-	/* crucial for slideshow */
 	float: left;
+	/* crucial for slideshow */
+	
+}
+
+#swapping > img {
+height: auto;
 }
 
 #swapping img#slidepic,
@@ -284,33 +237,60 @@ ul#thumbnails a {
 	margin-left: -100%;
 }
 
-.showtime ul#thumbnails,
-#controls {
-	position: absolute;
-	left: -99999px;
+#swapping > #slidepic {
+visibility: hidden;
+}
+
+.opacity #slidepic  {
+visibility: visible;
 }
 
 .showtime #controls {
     position: relative;
     left: 0;
-    top: -3.3em;
+    top: -3.8em;
 	margin: 0 10%;
 	font-size: 1.5em;
 	padding: 0 .75em;
+	clear: left;
+	overflow: hidden;
 }
 
-#gallery.showtime #innerwrap {
-    margin-bottom: -3.3em;
+
+#gallery.showtime #footer {
+	margin-top: 0em;
 }
 
 #controls div.buttons {
-	float: left;
+float: left;
+*position: relative;
+*height: 1%;
 }
 
 #controls div button {
 	width: 2em;
-	height: 2em;
+	padding: .5em 0;
 	margin: 0 .4em;
-	display: inline-block;
-	vertical-align: top;
+	text-align: center;
+	float: left;
 }
+#controls div.buttons:last-child, #controls #reload {
+	float: right;
+}
+
+
+/*IE5/Mac Band Pass Filter\*//*/
+#gallery #innerwrap, #gallery ul {
+/*visible required for 'wild' pages OVERRIDE for gallery else footer cannot calculate top margin*/
+overflow: hidden;
+/* deal with painting bug */
+position: relative;
+}
+#controls {
+outline: solid 1px blue;
+*height: 1%;
+*overflow: hidden;
+*clear: both;
+}
+
+/**/

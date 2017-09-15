@@ -1,193 +1,10 @@
-html,
-body {
-	height: 100%;
+body {margin: 2em;	/*display: flex;	flex-direction: column;	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */}#wrap   {margin: 0 auto;position: relative;overflow: hidden;}a#yag {	position: absolute;	left: -9999px;}a#yag {	top: 0px;	left: auto;	right: -1em;	width: 10em;	overflow: hidden;}#header  { padding-top: 13em; }   #header h2 { margin-left: 28%; }  #header h1 {	position: absolute;	white-space: nowrap;	overflow: hidden;	text-indent: -100%;	left: 0px;	top: 0px;	width: 9em;	margin: -.9em 0 0;}	#innerwrap {	overflow: hidden;}	#sidebar  {width: 23%;
+z-index: 1;margin: .5em 0em 0em 1.5em;
+float: left;}
+#sidebar a, #sidebar a:link,	#sidebar a:visited{		padding-left: 3em;	}#content  {padding: .6em 0 0;width: 71%;
+float: right;}#footer {
+	padding-top: 15%;	clear: both;	position: relative;	z-index: 1;}
+
+#footer ul {	padding: 22% 5% 3.5% 0;	line-height: 1.2;}#footer ul {	padding: 3% 5% 3% 0;	line-height: 1;}#footer li {	display: inline-block;	display: inline;}#innerwrap,#header h2,label.menu,#menu-toggle+ul,.js #content .read-more-target p {}.js #copy p, .js .read-more-target p {margin-right: 33%;}#innerwrap input {	cursor: pointer;	position: absolute;	left: -9999px;}#content .wild {	margin: 1em 0;		/* z-index required IF persisting with masking, explore clipping */	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */}.js #content .wild {	position: absolute;	z-index: -1;	overflow: hidden;	display: none;}.js .wild img {	 float: right;   	color: red;}.js .wild > img {   color: white;}/* https://stopdesign.com/eg/ie5mac-bpf *//* Start Mac IE5 filter \*/#sidebar ul, #copy, #content .read-more-target, #content label, #content input {	overflow: hidden;}#content p,#content label.read-more-trigger {	position: relative;	z-index: 1;}#content p,#content label.read-more-trigger {	z-index: 2;}.js #content > .wild {	width: 76%;	right: -23%;	bottom: 3.33%;	}#wrap, #innerwrap, #sidebar li, #sidebar a, #footer {*width: 100%;}#sidebar, #content, .js .wild img {*display: inline;
 }
-
-body {
- /* https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
-	/*display: flex;
-	flex-direction: column;*/
-	margin: 3%;
-}
-
-body > ul li {
-    height: 22px;
-    background: red;
-    margin: 1px;
-}
-
-#footer,
-#content p,
-#content label.read-more-trigger {
-	position: relative;
-	z-index: 1;
-}
-
-#wrap {
-	/* https://colintoh.com/blog/display-table-anti-hero 
-    display: table;
-    display: block;
-    seems display table isn't a requirement for centering, just margin: auto
-    which is good news as display: table + overflow: hidden + absolutely pos items are not clipped in firefox
-    div is left to defaut to display block
-    */
-}
-
-#wrap {
-	margin: auto;
-	width: 85.1%;
-	/*max-width of 1024*/
-	min-width: 54em;
-	position: relative;
-	overflow: hidden;
-}
-
-a#yag {
-	position: absolute;
-	top: 1.5%;
-	right: 1.5%;
-	width: 10%;
-	max-width: 10%;
-}
-
-#header {
-	padding-top: 22%;
-	border: solid #9c0;
-	border-width: 0px 0px 1px;
-	width: 100%;
-	margin: 0 0 2% 24%;
-	width: 76%;
-}
-
-#header h1 {
-	position: absolute;
-	left: 3%;
-	top: 1%;
-	width: 21%;
-	white-space: nowrap;
-	overflow: hidden;
-	text-indent: 100%;
-	margin-top: -1em;
-}
-
-#innerwrap {
-	overflow: hidden;
-	/*clear floats*/
-	margin-top: -1.5em;
-}
-
-#sidebar {
-	width: 22%;
-	float: left;
-}
-
-#sidebar .inner {
-	padding: 0 1em;
-}
-
-#sidebar,
-#content {
-	/*equal columns*/
-	padding-bottom: 50em;
-	margin-bottom: -49.9em;
-}
-
-#content {
-	float: right;
-	width: 76%;
-	margin-top: 1.5em;
-}
-
-/*
-.wild img:last-child {
-	margin-left: -500%;
-}
-
-*/
-
-
-/*
-#sidebar ul {
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    overflow: hidden;
-    font-size: .5em;
-}
-
-*/
-
-
-/*
-#sidebar a {
-	padding: .6em;
-	height: 1%;
-	/*ie*/
-
-
-}
-#footer ul {
-	padding: 22% 5% 3.5% 0;
-	line-height: 1.2;
-}
-#footer {
-	padding-top: 15%;
-	margin-bottom: 1em;
-}
-#footer ul {
-	padding: 3% 5% 3% 0;
-	border: solid 0px #9c0;
-	border-top-width: 1px;
-	line-height: 1;
-}
-#footer li {
-	display: inline-block;
-}
-
-/* Start Mac IE5 filter \*/
-div.wild img {}
-
-/* End Mac IE5 filter */
-
-
-.wild {
-	margin: 1em 0;
-	/* z-index required IF persisting with masking, explore clipping */
-	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
-}
-#innerwrap,
-#header h2,
-label.menu,
-#menu-toggle+ul {}
-.js #content .read-more-target p {
-	margin-right: 30%;
-}
-.js .wild {
-	position: absolute;
-	width: 80%;
-	margin: 0;
-	right: 6%;
-	bottom: 15%;
-	animation: enter 3s 1;
-}
-
-/*
-
-.no-cssmask .wild img {
-    position: relative;
-    float: left;
-}
-.no-cssmask .wild img:last-child {
-	margin-left: -100%;
-}
-.no-cssmask .wild {
-    position: relative;
-    overflow: hidden;
-    z-index: -1;
-	}
-*/
-#innerwrap input {
-	cursor: pointer;
-	position: absolute;
-	left: -9999px;
-}
+#sidebar li, #footer {*overflow: hidden;}/* End Mac IE5 filter *//*IE5/Mac Band Pass Filter\*//*/#header {position: relative;z-index: 2;} #sidebar,#content{	position: relative;	z-index: 1;}.js .wild img {position: relative;z-index: -1;}#sidebar .inner {width: 100%;}#innerwrap {overflow: visible;}/**//*.no-cssmask .wild img {    position: relative;    float: left;}.no-cssmask .wild img:last-child {	margin-left: -100%;}.no-cssmask .wild {    position: relative;    overflow: hidden;    z-index: -1;	}*//*.wild img:last-child {	margin-left: -500%;}*//*#sidebar ul {    position: absolute;    top: 3%;    left: 3%;    overflow: hidden;    font-size: .5em;}*//*#sidebar a {	padding: .6em;	height: 1%;}/* Start Mac IE5 filter \*//* End Mac IE5 filter *//* z-index not working in IE6 so mask is in front of header graphicso drop down the containing div and lift up the img within. overflow: hidden requiredIE6 doesn't understand the child selector so we can reset for other browsers.Default position for contact page*/   /* this non-sensical property required to determine IE6 for scripting which won't reset color to white*/

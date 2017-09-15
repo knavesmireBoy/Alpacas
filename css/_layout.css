@@ -1,0 +1,453 @@
+body {
+margin: 2em;
+	/*display: flex;
+	flex-direction: column;
+	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
+}
+
+#wrap   {
+margin: 0 auto;
+position: relative;
+overflow: hidden;
+}
+
+a#yag {
+	position: absolute;
+	left: -9999px;
+}
+
+a#yag {
+	top: 0px;
+	left: auto;
+	right: -1em;
+	width: 10em;
+	overflow: hidden;
+}
+
+#header  {
+ padding-top: 13em;
+ }
+ 
+  #header h2 {
+ margin-left: 28%;
+ }
+ 
+ #header h1 {
+	position: absolute;
+	white-space: nowrap;
+	overflow: hidden;
+	text-indent: -20%;
+	left: 0px;
+	top: 0px;
+	width: 9em;
+	margin: -.9em 0 0;
+}
+
+#sidebar  {
+float: left;
+width: 23%;
+z-index: 1;
+margin: .5em 0em 0em 1.5em;
+background: transparent;
+}
+
+#sidebar a, #sidebar a:link,
+	#sidebar a:visited{
+		padding-left: 3em;
+	}
+
+#content  {
+padding: .6em 0 0;
+width: 71%;
+float: right;
+}
+
+#footer ul {
+	padding: 22% 5% 3.5% 0;
+	line-height: 1.2;
+}
+#footer {
+	padding-top: 15%;
+	clear: left;
+	position: relative;
+	z-index: 1;
+}
+#footer ul {
+	padding: 3% 5% 3% 0;
+	border: solid 0px #9c0;
+	border-top-width: 1px;
+	line-height: 1;
+}
+#footer li {
+	display: inline-block;
+	display: inline;
+}
+
+#contact_us p {
+line-height: 1em;
+}
+
+#innerwrap,
+#header h2,
+label.menu,
+#menu-toggle+ul,
+.js #content .read-more-target p {
+}
+
+.js #copy p, .js .read-more-target p {
+margin-right: 33%;
+}
+
+#innerwrap input {
+	cursor: pointer;
+	position: absolute;
+	left: -9999px;
+}
+
+.wild {
+	margin: 1em 0;
+	width: 100%;
+	/* z-index required IF persisting with masking, explore clipping */
+	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
+
+.js #content .wild {
+	position: absolute;
+	z-index: -1;
+	overflow: hidden;
+	display: none;
+	}
+	
+.js #alpacas_for_sale #content .wild {
+	display: block;
+	}
+	
+	#innerwrap {
+	overflow: hidden;
+}
+	
+/*https://stopdesign.com/eg/ie5mac-bpf/*/
+
+.js .wild img {
+	 float: right;
+   	color: red;
+}
+
+.js .wild > img {
+   color: white;
+}
+
+ #alpacas_for_sale .wild img,  .js #alpacas_for_sale .wild img {
+float: none;
+}
+
+.js #stud_services #content p {
+margin-right: 65%;
+}
+
+/* Start Mac IE5 filter \*/
+
+#sidebar ul, #copy, #content .read-more-target, #content label, #content input {
+	overflow: hidden;
+}
+
+#content p,
+#content label.read-more-trigger {
+	position: relative;
+	z-index: 1;
+}
+
+#content p,
+#content label.read-more-trigger {
+	z-index: 2;
+}
+
+
+.js #content .wild {
+	width: 46em;
+	right: -14em;
+	bottom: 2em;
+	}
+	
+	.js #content > .wild {
+	width: 76%;
+	right: -23%;
+	bottom: 5%;
+	}
+
+	.js #welcome #content .wild {
+		width: 54em;
+		right: -10em;
+		bottom: 5em;
+	}
+	
+	.js #welcome #content > .wild {
+		width: 90%;
+		right: -17%;
+		bottom: 10%;
+	}
+
+
+.js #about_us #content .wild {
+width: 48em;
+right: 0em;
+bottom: -1em;
+}
+
+.js #about_us #content > .wild {
+width: 78%;
+right: 0em;
+bottom: -3%;
+}
+
+.js #about_us #copy p {
+margin-right: 0%;
+}
+
+.js #about_alpacas .wild {
+width: 52em;
+right: -15.5em;
+bottom: 5em;
+}
+
+.js #about_alpacas > .wild {
+width: 84%;
+right: -25%;
+bottom: 8%;
+}
+
+.js #about_alpacas #innerwrap {
+margin-bottom: -2em;
+}
+
+.js #upkeep .wild {
+width: 54em;
+right: -11.5em;
+bottom: 6em;
+}
+
+.js #upkeep > .wild {
+width: 88%;
+right: -19%;
+bottom: 8%;
+}
+
+.js #upkeep #footer {
+margin-top: -5%;
+}
+
+#upkeep #content p{
+margin-right: 35%;
+}
+
+#upkeep #content .read-more-target p {
+margin-right: 40%;
+}
+
+.js #stud_services .wild {
+width: 56em;
+right: -14em;
+bottom: -.5em;
+}
+
+.js #stud_services #content > .wild {
+width: 93%;
+right: -22%;
+bottom: -2%
+}
+
+.js #links .wild {
+width: 60em;
+right: -16em;
+bottom: 0em;
+}
+
+.js #links .wild {
+width: 97%;
+right: -26%;
+}
+
+#wrap, #innerwrap, #sidebar li, #sidebar a, #footer {
+*width: 100%;
+}
+
+#sidebar, #content, .js .wild img {
+*display: inline;
+}
+
+#sidebar li, #footer {
+*overflow: hidden;
+}
+
+/* End Mac IE5 filter */
+
+/*IE5/Mac Band Pass Filter\*//*/
+
+	.js #content .wild {
+	width: 100%;
+	right: 0%;
+	bottom: 0em;
+	}
+
+#sidebar ul, #copy, #content .read-more-target {
+	overflow: hidden;
+}
+
+#header {
+position: relative;
+z-index: 2;
+}
+
+#alpacas_for_sale #header {
+z-index: 0;
+}
+ 
+#sidebar,
+#content{
+	position: relative;
+	z-index: 1;
+}
+
+.js .wild img {
+display: none;
+}
+
+.js .wild img {
+display: block;
+position: relative;
+z-index: -1;
+}
+
+.js #alpacas_for_sale #content .wild img {
+position: static;
+}
+
+#alpacas_for_sale #content .wild {
+top: -10em;
+}
+
+#innerwrap {
+overflow: visible;
+}
+
+.js #footer {
+margin-top: -25%;
+margin-top: 0%;
+}
+
+.js  #welcome #content .wild {
+width: 127%;
+right: -24%;
+bottom: -6.5em;
+}
+
+.js  #about_us #content .wild {
+width: 110%;
+bottom: -13em;
+bottom: -50%;
+}
+
+.js #contact_us #content .wild {
+width: 105%;
+right: -30%;
+bottom: -250%;
+}
+
+.js #contact_us #footer {
+margin-top: -20%;
+margin-top: 0%;
+}
+
+.js #about_alpacas #content .wild {
+width: 121%;
+right: -36%;
+bottom: -19%;
+}
+
+.js #about_alpacas #footer, .js #about_us #footer{
+margin-top: 21em;
+}
+
+.js #about_us #copy p {
+margin-right: 0%;
+}
+
+.js #upkeep #footer{
+margin-top: 58%;
+}
+
+.js #upkeep #content .wild {
+width: 129%;
+right: -26%;
+bottom: -21%;
+}
+
+.js #stud_services #content .wild{
+width: 131%;
+right: -30%;
+bottom: -80%;
+}
+
+.js #links #content .wild{
+width: 145%;
+right: -38%;
+bottom: -200%;
+}
+
+/**/
+
+
+/*
+
+.no-cssmask .wild img {
+    position: relative;
+    float: left;
+}
+.no-cssmask .wild img:last-child {
+	margin-left: -100%;
+}
+.no-cssmask .wild {
+    position: relative;
+    overflow: hidden;
+    z-index: -1;
+	}
+*/
+
+
+
+/*
+.wild img:last-child {
+	margin-left: -500%;
+}
+
+*/
+
+
+/*
+#sidebar ul {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    overflow: hidden;
+    font-size: .5em;
+}
+
+*/
+
+
+/*
+#sidebar a {
+	padding: .6em;
+	height: 1%;
+}
+
+/* Start Mac IE5 filter \*/
+/* End Mac IE5 filter */
+
+
+
+/* z-index not working in IE6 so mask is in front of header graphic
+so drop down the containing div and lift up the img within. overflow: hidden required
+IE6 doesn't understand the child selector so we can reset for other browsers.
+Default position for contact page*/
+   /* this non-sensical property required to determine IE6 for scripting which won't reset color to white*/

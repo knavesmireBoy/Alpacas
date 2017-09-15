@@ -1,21 +1,22 @@
-/* Start Mac IE5 filter \*/
-* html #sidebar a   { height: 1% }/* fixes bottom margin problem*/
+
+
+/* \*//*/
+
+
+ul#thumbnails a { float: left; }
+
 * html #placeholder a { width: 1% }
 * html #placeholder { width: 100% }
-* html #thumbnails li  { display: inline }
 * html div#thumbnails dl  { display: inline }
 * html body#forsale #sell table { }
 * html div#thumbnails { float: left }
-/* NO PNG SUPPORT */
-* html #sidebar a:link,  * html  #sidebar a:visited  { background-image: url("../images/the_links.gif") }/* NO PNG SUPPORT */
+
 /* End Mac IE5 filter */
-
-
-
 
 /* Start IE5/Mac Band Pass Filter \*//*/
 
-#content, #sidebar     { margin-bottom:-180px; padding-bottom: 180px }
+
+
 #placeholder p.left, #placeholder p.right { text-align: left }
 div.im { display: none }
 #content         { background-color: transparent; background-repeat: no-repeat; background-position: 0 70px }
@@ -35,7 +36,6 @@ body#sale #content h2 { background-image: url("../images/t/title.jpg");}
 
 
 body#upkeep #wrap { background-image: url("../images/ie_mac/upkeep/the_farm_01.jpg");}
-body#gal #content, body#gal #sidebar      {  margin-bottom: 0; padding-bottom: 0; }
 
 /* 
 But note the end of this comment. div.im is an AP (Absolutely Positioned) element. This wasn't showing up in IE Win6.
@@ -104,3 +104,15 @@ table {
 	border-spacing: 0;
 }
 */
+
+.frog {
+font-size: 100px;
+background: red;
+}
+
+#nth-child-test li {
+border: solid 1px;
+height: 22px;
+margin: 1px;
+}
+#nth-child-test li:nth-child(1) { height: 10px }

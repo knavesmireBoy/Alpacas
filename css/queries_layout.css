@@ -86,18 +86,7 @@
     -webkit-animation: blow 1s 1 5s ease-in-out forwards;
 }
 
-#ga_logo {
-	width: 100%;
-    float: left;
-}
 
-a#yag,
-#yorks,
-svg {
-	width: 12%;
-	width: 3em;
-	max-width: 3.75em;
-}
 
 #header {
 	display: table;
@@ -107,10 +96,7 @@ svg {
     width: 45%;
 }
 
-a#yag svg {
-		width: 5em;
-		overflow: visible !important;
-	}
+
 
 #header>* {
 	display: table-cell;

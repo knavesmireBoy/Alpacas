@@ -1,0 +1,20 @@
+.js #stud_services #content p {margin-right: 65%;} #alpacas_for_sale .wild img,  .js #alpacas_for_sale .wild img {float: none;}#contact_us p {line-height: 1em;}.js  #welcome #content .wild {		width: 126%;		right: -17%;		bottom: 10%;}.js #about_us #copy p, .js #about_alpacas #copy p {margin-right: 0%;}
+.js #about_alpacas #content .wild {width: 121%;right: -25%;bottom: 8%;}.js #about_alpacas #innerwrap {margin-bottom: -2em;}.js #upkeep #content .wild {width: 129%;right: -19%;bottom: 8%;}
+.js #upkeep #footer {margin-top: -5%;}#upkeep #content p{margin-right: 35%;}#upkeep #content .read-more-target p {margin-right: 40%;}.js #stud_services #content .wild {width: 131%;right: -20%;bottom: 0%}.js #links #content .wild {width: 145%;right: -26%;bottom: 0%;}.js #contact_us #content .wild {width: 105%;right: -23%;bottom: 4.5%;}
+
+/* Start Mac IE5 filter \*/
+.js #welcome #content > .wild {		width: 90%;}
+
+.js #about_us #content > .wild {width: 78%;right: 0em;bottom: -3%;}
+.js #about_alpacas #content  > .wild {width: 84%;}
+
+.js #upkeep #content > .wild {width: 88%;}
+
+.js #stud_services #content > .wild {width: 90%;}
+
+.js #links #content > .wild {width: 97%;}
+
+.js #contact_us #content > .wild {	width: 76%;}
+
+/* End Mac IE5 filter *//*IE5/Mac Band Pass Filter\*//*/#alpacas_for_sale #header {z-index: 0;} .js #alpacas_for_sale #content .wild img {position: static;}#alpacas_for_sale #content .wild {top: -10em;}.js  #welcome #content .wild {right: -24%;bottom: -39%}.js  #about_us #content .wild {width: 120%;bottom: -59%;}.js #about_alpacas #content .wild {right: -35%;bottom: -31%;}
+.js #upkeep #content .wild {right: -28%;bottom: -25%;}.js #upkeep #footer{margin-top: 0%;}.js #upkeep #innerwrap{margin-bottom: -200%;}.js #stud_services #content .wild{right: -30%;bottom: -80%;}.js #alpacas_for_sale #content .wild img {position: static;}#alpacas_for_sale #content .wild {top: -10em;}#alpacas_for_sale #header {z-index: 0;}.js #links #content .wild{right: -38%;bottom: -200%;}.js #contact_us #content .wild {right: -30%;bottom: -250%;}/**/

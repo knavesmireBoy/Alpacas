@@ -1,0 +1,103 @@
+div#thumbnails,
+.showtime #placeholder {
+	position: relative;
+}
+
+ul#thumbnails li a,
+div#thumbnails a,
+.showtime #placeholder,
+#placeholder a {
+	display: block;
+}
+
+
+#alpacas_for_sale.selling #footer {
+	margin-top: 2%;
+}
+
+#alpacas_for_sale.selling div.wild {
+	position: absolute;
+	left: -9999px;
+}
+
+#alpacas_for_sale #copy ul {
+	overflow: hidden;
+	margin: 2% 0;
+}
+
+#alpacas_for_sale #copy ul li,
+#alpacas_for_sale #copy ul li a {
+	display: inline-block;
+	position: relative;
+}
+
+.selling dl.thumbnails {
+	margin: 0 .5em 0 0;
+	width: 30.416%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.selling dl.thumbnails dd {
+	margin-top: 1%;
+}
+
+
+/*
+with flex dt and dd elements don't require a singular containing dl element
+dl.bumnails {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+dl.bumnails dd {
+    flex: 0 1 32%;
+    margin: .5em 0 0 0;
+    order: 2;
+}
+
+dl.bumnails dt {
+    flex: 0 1 32%;
+    order: 1;
+}
+*/
+
+#sell,
+#alpacas_for_sale #copy ul,
+dl.thumbnails,
+.selling #copy.js dl.thumbnails,
+.selling #sell.chosen table {
+position: absolute;
+	left: -9999px;
+}
+
+#alpacas_for_sale.selling #copy ul,
+.selling dl.thumbnails,
+.selling #copy.js,
+.selling #sell.chosen,
+.selling #sell.chosen section table {
+	position: relative;
+	left: 0;
+}
+
+#alpacas_for_sale.selling #sell {
+	padding: 1.5%;
+	overflow: hidden;
+	margin: 2% 0;
+	padding: 3%;
+}
+
+#sell table {
+	float: left;
+	width: 47%;
+	margin-right: 2%;
+}
+
+#sell a {
+	display: block;
+	overflow: hidden;
+	padding: 1.5%;
+}
+
+/* end of sale */

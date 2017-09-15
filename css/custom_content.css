@@ -1,4 +1,3 @@
-
 #forsale.selling #sell {
 	border: 1px solid;
 }
@@ -97,15 +96,19 @@ ul#thumbnails li a:active {
 	border-color: #900
 }
 
-#swapping img {
-	outline: solid black 1px;
+
+
+#swapping {
+	border: solid black 1px;
 }
 
 #placeholder div button {
-	background: rgba(99, 99, 99, .5);
+	background: gray;
 	background: hsla(75, 50%, 40%, .3);
+	color: white;
 	color: rgba(255, 255, 255, .75);
 	cursor: pointer;
+	border: 1px solid white;
 	border: 1px solid rgba(255, 255, 255, .75);
 	border-radius: .2em;
 	box-shadow: 2px 2px 2px black;
@@ -120,16 +123,24 @@ ul#thumbnails li a:active {
 
 #placeholder div button:hover,
 #placeholder div button:focus {
+	background: silver;
 	background: rgba(150, 150, 150, .5);
 	color: black;
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, .75);
 }
 
-#overlay {
+img#overlay {
 	opacity: 0.5;
+	outline-width: 0px;
+}
+
+#gallery #header {
+border: 0px;
 }
 
 #gallery #footer,
 #gallery #footer ul {
+	background-color: olive;
 	background-color: hsla(75, 50%, 40%, 1);
 }
+ 
