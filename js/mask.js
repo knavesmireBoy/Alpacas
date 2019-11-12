@@ -399,7 +399,7 @@ if (!window.gAlp) {
 					to camelCase*/
 					return {
 						init: function() {
-							if (getPredicate()) {
+							if (!getPredicate()) {
 								return this.execute;
 							}
 							getPredicate = _.negate(getPredicate);
