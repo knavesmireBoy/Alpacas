@@ -400,7 +400,7 @@ if (!window.gAlp) {
 					return {
 						init: function() {
                             report.innerHTML = window.viewportSize.getWidth();
-							if (getPredicate()) {
+							if (!getPredicate()) {
 								return this.execute;
 							}
 							getPredicate = _.negate(getPredicate);
