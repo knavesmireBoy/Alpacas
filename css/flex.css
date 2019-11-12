@@ -5,7 +5,9 @@ body#alpacas_for_sale {
 }
 
 @supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)){
-
+    html.js body {
+        background: blue;
+    }
 /*
          /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
     /*
