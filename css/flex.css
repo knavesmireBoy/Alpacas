@@ -5,9 +5,7 @@ body#alpacas_for_sale {
 }
 
 @supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)){
-    html.no-js body {
-        background: blue;
-    }
+
 /*
          /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
     /*
@@ -24,7 +22,7 @@ body#alpacas_for_sale {
     }
             
 
-.sell #article #sell {
+.sell #article.loop #sell {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -53,11 +51,6 @@ body#alpacas_for_sale {
 }
 #sell.tog a {
 	margin: 0%;
-}
-    
-#sell table {
-	max-width: 46%;
-	margin: 0;
 }
 
 #article #extent {

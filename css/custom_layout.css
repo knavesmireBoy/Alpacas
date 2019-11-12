@@ -164,12 +164,18 @@ html.js #article #sell a.show, html.js #article #sell table.show {
 	*height: 1%;
 }
 
+.sell #article #sell.tog a {
+       margin-left: 0; 
+    }
+
 #sell table {
-	margin-right: 2.5%;
 	table-layout: fixed;
-	width: 46.5%;
 	float: left;
 }
+#sell table {
+    width: 46.5%;
+    margin-right: 2.5%;
+    }
 
 #sell table table {
 	margin-right: 0%;
