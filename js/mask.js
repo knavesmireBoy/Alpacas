@@ -399,7 +399,7 @@ if (!window.gAlp) {
 					to camelCase*/
 					return {
 						init: function() {
-							if (!getPredicate()) {
+							if (getPredicate()) {
 								return this.execute;
 							}
 							getPredicate = _.negate(getPredicate);
@@ -438,7 +438,7 @@ if (!window.gAlp) {
 						oldel;
 					return {
 						init: function(outcomes) {
-							if (getPredicate()) {
+							if (!getPredicate()) {
 								return prepAction(outcomes, true);
 							}
 							return activate;
