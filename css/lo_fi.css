@@ -1,22 +1,14 @@
-body {
-	background: rgb(238, 238, 221);
-}
-
-body {
-	background-color: white;
-}
-
 p {
 	line-height: 1.4;
 	margin: 0.5em 0;
 }
 table {
-	font-size: .8em;
 	border: solid 1px black;
 }
 th, td {
 	padding: 0.3em;
-	vertical-align: top
+	vertical-align: top;
+    border: 1px solid;
 }
 th {
 	color: white;
@@ -24,15 +16,12 @@ th {
 	background-color: black;
 	vertical-align: middle
 }
-td {
-	border: 1px solid;
-}
+
 th em {
 	font-style: normal;
 	white-space: nowrap;
 	padding-right: 1em
 }
-
 a, a:link, a:visited {
 	color: #900;
 	border-width: 0;
@@ -42,38 +31,31 @@ a, a:link, a:visited {
 a:hover {
 	text-decoration: underline;
 }
-a:active {
+a:active, a:focus {
 	outline: none;
-}
-
-a:focus {
-	-moz-outline-style: none;
-}
-
-#sidebar a:hover {
-	text-decoration: none;
+    -moz-outline-style: none;
 }
 
 #footer a {
-color: white;
-}
-
-dd {
-    font-size: 90%;
-    margin-bottom: 1em;
+	color: white;
 }
 
 /* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
 
 img {
 	width: 100%;
-/*	height: auto; */
+	/*	height: auto; */
 }
-
-img, #sidebar a {
+img, #nav a {
 	display: block;
 }
-
+button {
+	padding: 0 .4em;
+    margin: 0 .3em;
+}
+h1 {
+    font-size: 2em;
+}
 /*
 .examples {
 

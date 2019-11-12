@@ -1,135 +1,99 @@
-/*
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center, dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend, table, 
-caption, tbody, tfoot, thead, tr, th, td 
-                  {margin: 0;padding: 0;border: 0;outline: 0;
-                  font-size: 100%;vertical-align: baseline;
-                  background: transparent;}
-body              {line-height: 1;}
-ol, ul            {list-style: none;}
-blockquote, q     {quotes: none;}
-blockquote:before, blockquote:after,
-q:before, q:after {content: '';	content: none;}
-:focus            {outline: 0;}
-ins               {text-decoration: none;}
-del               {text-decoration: line-through;}
-table             {border-collapse: collapse;border-spacing: 0;}
-*/
+/*https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25*/
+/*Box sizing (the nuclear option)*/
+*, *:before, *:after {
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:border-box;
+    box-sizing: border-box;
+    /*above messing with slideshow*/
+    box-sizing: content-box;
+}
 
-/*http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/ */
+/* Fix font rendering defaults */
+html, button {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-size: 100%;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
+del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
+b, u, i, center, input,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td, button {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-weight: inherit;
-	font-style: inherit;
-	font-size: 100%;
-	font-family: inherit;
-	vertical-align: baseline;
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
 }
-/* remember to define focus styles! */
-:focus {
-	outline: 0;
+
+/* IE fixes for HTML5 elements */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+    display: block;
 }
-body {
-	line-height: 1;
-	color: black;
-	background: white;
-}
-ol, ul, dl {
-	list-style: none;
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 caption, th, td {
-	text-align: left;
-	font-weight: normal;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: "";
-}
-blockquote, q {
-	quotes: "" "";
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
 }
 
-/*
+strong, b, mark{
+    font-weight:bold;
+    font-style:inherit;
+}
 
-body#welcome .c-tab, .c-tabs-nav a.is-active {
-	background: white;
+em, i, cite, q, address, dfn, var{
+    font-style:italic;
+    font-weight:inherit;
 }
-.c-tabs-nav {
-	display: flex;
-	margin: 0 0 0 .25em;
+
+a, u, ins{
+    text-decoration:none;
 }
-body#welcome .c-tabs-nav a {
-	font-weight: 700;
-	flex: none;
-	display: inline-block;
-	margin: 0 .25em;
-	padding: .6em 1.5em;
-	text-align: center;
-	border-radius: .5em .5em 0 0;
-	border: dotted 1px #7F4E1E;
-	border-bottom-width: 0px;
-	color: #7F4E1E;
-	z-index: 3;
+
+pre, code, samp, kbd{
+    font-family:monospace;
 }
-.c-tabs-nav a:hover {
-	color: #6d6d6d;
+
+iframe {
+  width: 100%;
 }
-body#welcome .c-tabs-nav a.is-active {
-	color: #C6C084;
-	border-bottom-color: white;
+
+img {
+    /*max-width: 100%;
+    height: auto;
+    -msinterpolation-mode: bicubic;*/
+    border: none;
 }
-.c-tab {
-	position: absolute;
-	top: -9999px;
-	;
-	left: -9999px;
-	border: dotted 1px #7F4E1E;
-	transition: all .5s;
+
+input,
+select,
+textarea{
+    font:inherit;
 }
-.c-tab.is-active {
-	position: relative;
-	top: 0;
-	left: 0;
-	margin-top: -1px;
+
+button {
+    cursor: pointer;
+    font-size: 100%;
 }
-.c-tab_content {
-	padding: .2em 1em;
-	position: relative;
-	background: transparent;
+
+ol, ul, dl {
+	list-style: none;
 }
-.c-tab_content.img {
-	overflow: hidden;
-}
-.c-tab_content.img img {
-	position: relative;
-	padding: 1em;
-	box-sizing: border-box;
-	z-index: 1;
-}
-.c-tab_content.img::after {
-	content: "";
-	background-image: radial-gradient(#C6C084, white);
-	width: 25em;
-	height: 25em;
-	border-radius: 12.5em;
-	position: absolute;
-	right: -4em;
-	bottom: -4em;
-}
-*/

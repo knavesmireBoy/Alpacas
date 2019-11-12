@@ -1,146 +1,139 @@
+body {
+	font: 0.9em "Trebuchet MS", sans-serif;
+}
 html.no-js body {
-background: ivory;
+	background: ivory;
 }
-
-html.js body{
-background: white
+html.js body {
+	background: white;
 }
-
-body  {
-font: 0.75em  "Trebuchet MS", sans-serif;
+#innerwrap {
+	font-size: 1em;
 }
-
-#header  { 
-background: url(../assets/header_752.png) no-repeat 0% 0%;
- }
-
-
+#header {
+    background-image: url("../assets/header__964.png");
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
 #header h2 {
-	font: italic 2.8em/1 "Handwritten", Georgia, cursive;
+	font: italic 3.2em/1 "Handwritten", Georgia, cursive;
+	text-indent: .1em;
+	border-bottom: solid #9c0 1px;
+	letter-spacing: -.01em;
+    color: #900;
+	color: rgb(153, 0, 0);
+}
+#nav {
+	white-space: nowrap;
+	font: 700 1em/2 Verdana, sans-serif;
+}
+#nav a, #nav a:link, #nav a:visited {
+	background-image: url(../assets/links.jpg);
+	background-repeat:  no-repeat;
+	background-position: 0 -4%;
+	color: #080;
+	color: rgb(0, 136, 0);
+}
+#nav a:hover {
+	text-decoration: none;
+	color: #6e2900;
+	background-position: 0 47%;
+}
+
+/*keep separate to keep early ie happy!*/
+/* ie6 requires "#nav a.current:visited" */
+#nav a.current, #nav a.current:visited, #nav a:active {
 	color: #900;
-	text-indent: .2em;
-	 border: solid #9c0 1px;
-	border-width: 0 0 1px;
+	color: rgb(153, 0, 0);
+	background-position: 0 99%;
 }
 
-#sidebar { 
-font: 700 1em/2 Verdana, sans-serif;
-white-space: nowrap;
- }
-
-	#sidebar a, #sidebar a:link, #sidebar a:visited {
-		background: url(../assets/links22.png) no-repeat;
-		_background: url(../assets/links8.png) no-repeat;
-	background: url(../assets/links.jpg) no-repeat;
-		background-position: 0 -1%;
-		color: #080;
-	}
-
-	#sidebar a:hover  {
-		background-position: 0 50%;
-		color: #6e2900;
-	}
-	/* ie6 requires "#sidebar a.current:visited" */
-	#sidebar a.current, #sidebar a.current:visited, #sidebar a:active {
-		background-position: 0 99%;
-		color: #900;
-	}
-	
-
-
-div#thumbnails a,
-#thumbnails,
-ul#thumbnails li a,
-#sidebar li {
-	border: 1px solid;
+#nav li {
+	border-bottom: solid #C6C084 1px;
+	border-bottom: solid rgb(198, 192, 132) 1px;
 }
-
-#sidebar li {
-	border: solid #C6C084 1px;
-    border-width: 0px 0px 1px;
-}
-
 #footer {
-font: 700 1.25em/200% Georgia;
-letter-spacing: -1px;
-white-space: nowrap;
-text-align: right;
-background: url("../assets/grass_960.png")  50% 0% no-repeat;
+	font: 700 1.25em/200% Georgia;
+	letter-spacing: -1px;
+	white-space: nowrap;
+	text-align: right;
+	background-position: 50% 0%;
 }
-
 #footer ul {
-	background-color: #9db54c;
-	border: solid 0px #9c0;
-	border-top-width: 1px;
+	background-color: #759707;
+	background-color: rgb(117, 151, 7);
+	border-top: solid 1px #9c0;
+	transition: width .8s ease;
+	background-position: 50% 100%;
 }
-
-#footer > ul {
-	background: url("../assets/grass_960.png") 50% 100% no-repeat rgb(157, 181, 76);
-}
-
-#gallery #footer{
-background-color: #080;
-}
-
-/* hide from ie mac\*/
-#footer {
-background-position: 50% 100%;
-}
-#footer ul{
-background-position: 50% 0%;
-}
-/**/
-
 #footer li {
-margin-left: .5em;
+	color: white;
+	line-height: 2;
+	margin: 0px;
+	display: inline-block;
 }
-
+#footer, #footer ul {
+	background-image: url("../assets/grass_960.png");
+	background-repeat: no-repeat;
+}
 #footer b {
 	color: #ff6;
+	color: rgb(255, 255, 102);
 }
 
-#footer,
-#placeholder a,
-div.wild {
-	/*outline: solid blue 1px;*/
+hr {
+  border: 0;
+  margin: .35em auto;
+  max-width: 100%;
+  background-position: 50%;
+  box-sizing: border-box;
+}
+
+.fade {
+  height: 1px;
+  color: red;
+  background-image: linear-gradient(
+    90deg,
+    rgba(153,204,0,0),
+    rgba(153,204,0,1) 50%,
+    rgba(153,204,0,0) 100%);
+}
+
+.indent {
+    margin-right: 33%;
 }
 
 
+/* hide from ie mac AND WATCH OUT FOR SPACE BETWEEN progid: AND DXImageTransform.
+MUST BE: progid:DXImageTransform
+_NOT BE: progid: DXImageTransform
+\*/
 
-/* hide from ie mac\*/
-
-	*html #header{ 
+*html #header {
 	background: none;
-width: 100%;
-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/header_752.png", sizingMethod="crop");
+	width: 100%;
+	/*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/header_752.png", sizingMethod="crop");*/
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/header__964.png", sizingMethod="crop");
 }
-
-*html a#yag img, *html #header h1 img, *html #alpacas_for_sale #content .wild img {
-filter: alpha(opacity=0);
+*html a#yag img, *html #header h1 img, *html #alpacas_for_sale #main #aside img {
+	filter: alpha(opacity=0);
 }
-	
-*html #footer{ 
-background: none;
-width: 100%;
-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/grass_960.png", sizingMethod="crop");
+*html a#yag {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/yag_logo_ie.png", sizingMethod="scale");
 }
-
-	*html #footer ul{ 
-	background: none;
-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/grass_960.png", sizingMethod="crop");
-}
-
-	*html a#yag { 
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/yag_logo_ie.png", sizingMethod="crop")
-}
-
-	*html #header h1 { 
+*html #header h1 {
 	margin: 0;
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/ga_logo_ie.png", sizingMethod="crop")
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/ga_logo_ie.png", sizingMethod="crop");
 }
-
-	*html #alpacas_for_sale #content .wild { 
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../images/for_sale.png", sizingMethod="scale")
+*html #alpacas_for_sale #main #aside {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../images/for_sale.png", sizingMethod="scale");
 }
-	
+*html #wrap #footer, *html #wrap #footer ul {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/grass_960.png", sizingMethod="crop");
+}
+*html #gallery #wrap #footer, *html #gallery #wrap #footer ul {
+	filter: -;
+	background: url("../assets/grass_960.png") 50% 100% no-repeat;
+}
 /**/
