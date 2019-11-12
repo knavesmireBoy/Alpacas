@@ -1,0 +1,270 @@
+#welcome #main #aside {
+	width: 126%;
+	max-width: 69em;
+	right: -15%;
+	bottom: 13%;
+}
+#about_us #main #aside {
+	width: 100%;
+	max-width: 62em;
+	right: 0em;
+	bottom: 12%;
+}
+#about_alpacas #main #aside {
+	width: 121%;
+	max-width: 60em;
+	right: -25%;
+	bottom: 11%;
+}
+#upkeep #main #aside {
+	width: 129%;
+	max-width: 60em;
+	right: -19%;
+	bottom: 12%;
+}
+.js #upkeep #article>* {
+	margin-right: 40%;
+}
+#stud_services #main #aside {
+	width: 135%;
+	right: -20%;
+	bottom: 2%;
+}
+#links #main #aside {
+	width: 145%;
+	max-width: 70em;
+	right: -25%;
+	bottom: 2%;
+}
+#contact_us #main #aside {
+	width: 105%;
+	max-width: 55em;
+	right: -20%;
+	bottom: 13%;
+}
+/* Start Mac IE5 filter \*/
+
+#welcome #main>#aside, .js #about_us #main>#aside, #about_alpacas #main>#aside, #upkeep #main>#aside {
+	width: 80%;
+}
+#stud_services #main>#aside {
+	width: 90%;
+}
+#links #main>#aside {
+	width: 110%;
+}
+#links dl {
+	margin: 1em 0;
+}
+#links dd {
+	margin: .1em 0 .4em .75em;
+}
+#contact_us #main>#aside {
+	width: 76%;
+}
+/* End Mac IE5 filter */
+
+/*IE5/Mac Band Pass Filter\*/
+
+/*/
+
+  #welcome #main #aside {
+right: -24%;
+bottom: -39%
+}
+
+  #about_us #main #aside {
+bottom: -59%;
+}
+
+ #about_alpacas #main #aside {
+right: -35%;
+bottom: -31%;
+}
+
+ #upkeep #main #aside {
+right: -28%;
+bottom: -25%;
+}
+
+ #upkeep #footer{
+margin-top: 0%;
+}
+
+ #upkeep #innerwrap{
+margin-bottom: -200%;
+}
+
+ #stud_services #main #aside{
+right: -30%;
+bottom: -80%;
+}
+
+#alpacas_for_sale #main #aside {
+top: -10em;
+}
+
+#alpacas_for_sale #main div#aside {
+	right: 0%;
+bottom: 20em;
+}
+
+ #alpacas_for_sale #main #aside img {
+position: static;
+}
+
+#alpacas_for_sale #header {
+z-index: 0;
+}
+ #links #main #aside{
+right: -38%;
+bottom: -200%;
+}
+ #contact_us #main #aside {
+right: -30%;
+bottom: -250%;
+}
+
+/**/
+
+@media only screen {
+	#header {
+		padding-top: 22%;
+		background-image: url("../assets/header.png");
+		background-size: 100%;
+	}
+	#nav {
+		margin-left: 1em
+	}
+	#wrap #innerwrap {
+		margin-bottom: 0;
+	}
+	#wrap {
+		min-width: 500px;
+	}
+	#main {
+		width: 71%;
+	}
+	#header h2 {
+		margin-left: 28%;
+	}
+	#wrap #footer {
+		background: url(../assets/grass.png) no-repeat 50% 0%;
+		background-size: 105%;
+	}
+	#wrap #footer ul {
+		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
+		background-repeat: repeat-x;
+		background-size: 80%;
+	}
+}
+@media screen and (hover: hover) {
+	#controls button#forwardbutton:hover {
+		background-position: 50% 56%;
+	}
+	#controls button#backbutton:hover {
+		background-position: 50% 70.5%;
+	}
+	#controls button#playbutton:hover {
+		background-position: 50% 85%;
+	}
+	#controls.playing button#playbutton:hover {
+		background-position: 50% 100%;
+	}
+}
+@media screen and (min-width: 769px) {
+	/*(DOOZY) IF javascript is disabled allow these rules to apply if masking is supported
+        @supports(mask-image: url("")) {*/
+        @supports (mask-size: cover) or (-webkit-mask-size: cover) {
+        
+        .no-js body.verbose {
+            background-color: lavender;
+        }
+        
+        .no-js .verbose #main div > * {
+            margin-right: 33%;
+        }
+        
+        #about_alpacas #main div > * {
+			margin-right: 44%;
+		}
+        
+		#wrap #innerwrap #main #aside {
+			position: absolute;
+            z-index: -1;
+		}		
+		
+		#stud_services #footer, #contact_us #footer, #links #footer, #about_alpacas #footer, #about_us #footer {
+			margin-top: 3%;
+		}
+		#stud_services #main #article p {
+			margin-right: 70%;
+		}
+		#welcome #aside img {
+			-webkit-mask: url('../images/carlos_masking.png') top left / cover;
+			mask: url('../images/carlos_masking.png') top left / cover;
+		}
+		#about_alpacas #aside img {
+			-webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+			mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+		}
+		#upkeep #aside img {
+			-webkit-mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+			mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+		}
+		#stud_services #aside img:first-child {
+			-webkit-mask: url('../images/stud_masking.png') -1px 0px / cover;
+			mask: url('../images/stud_masking.png') -1px 0px / cover;
+		}
+		#links #aside img {
+			-webkit-mask: url('../images/links_masking.png') -1px 0px / cover;
+			mask: url('../images/links_masking.png') -1px 0px / cover;
+		}
+		#contact_us #aside img {
+			-webkit-mask: url('../images/contacts_masking.png') -1px 0px / cover;
+			mask: url('../images/contacts_masking.png') -1px 0px / cover;
+		}
+		.cssmask #about_us #aside img {
+			-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
+			mask: url('../images/honcho_masking.png') -1px 0px / cover;
+		}
+		.cssmask #about_us #wrap #main #aside {
+			z-index: 0;
+		}
+	}
+    #alpacas_for_sale #wrap #main #aside {
+            z-index: 1;
+		}
+    #alpacas_for_sale #main #aside {
+			max-width: 50em;
+		}
+		
+		#alpacas_for_sale #main div#aside {
+			width: 130%;
+		}
+		#alpacas_for_sale #innerwrap {
+			margin-top: 0%;
+		}
+		#alpacas_for_sale #footer {
+			margin-top: 0%;
+		}
+    #about_us #main div > * {
+        margin-right: 33%;
+    }
+    #about_us #wrap #main #aside {
+			position: absolute;
+            z-index: -1;
+		}
+     #alpacas_for_sale #innerwrap  #main  div#aside {
+         position: absolute;
+    }
+}
+
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
+   #header {
+		padding-top: 22%;
+		background-image: url("../assets/header.png");
+		background-size: 100%;
+       display: block;
+	} 
+}
