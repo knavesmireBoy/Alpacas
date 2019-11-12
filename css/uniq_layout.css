@@ -148,15 +148,7 @@ bottom: -250%;
 	#header h2 {
 		margin-left: 28%;
 	}
-	#wrap #footer {
-		background: url(../assets/grass.png) no-repeat 50% 0%;
-		background-size: 105%;
-	}
-	#wrap #footer ul {
-		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
-		background-repeat: repeat-x;
-		background-size: 80%;
-	}
+	
 }
 @media screen and (hover: hover) {
 	#controls button#forwardbutton:hover {
@@ -232,6 +224,7 @@ bottom: -250%;
 			z-index: 0;
 		}
 	}
+    
     #alpacas_for_sale #wrap #main #aside {
             z-index: 1;
 		}
