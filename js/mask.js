@@ -399,7 +399,6 @@ if (!window.gAlp) {
 					to camelCase*/
 					return {
 						init: function() {
-                            report.innerHTML = window.viewportSize.getWidth();
 							if (!getPredicate()) {
 								return this.execute;
 							}
@@ -439,7 +438,7 @@ if (!window.gAlp) {
 						oldel;
 					return {
 						init: function(outcomes) {
-							if (!getPredicate()) {
+							if (getPredicate()) {
 								return prepAction(outcomes, true);
 							}
 							return activate;
@@ -449,7 +448,7 @@ if (!window.gAlp) {
 							oldel = gAlp.Util.removeNodeOnComplete(getKid());
 							render('img');
 							highLighter.perform();
-							//report.innerHTML = mask_target.childNodes.length;
+							report.innerHTML = mask_target.childNodes[1].src;
 						},
 						undo: function() {
 							gAlp.Util.removeNodeOnComplete(getKid());
