@@ -28,6 +28,10 @@
 		opacity: 0;
 		opacity: .1;
 	}
+    
+    #controls.playing.static {
+		opacity: 1;
+	}
 }
 @media (hover: none) {}
 /*https://css-tricks.com/logic-in-media-queries/*/
@@ -123,20 +127,22 @@
 		height: 1.5em;
 	}
 	#gallery.showtime #controls {
-		top: -2.8em;
+		top: -3.3em;
 	}
-	#gallery #controls.playing {
-		top: 1.3em;
+    
+    #gallery #controls.playing {
+		top: 1.65em;
 	}
 	#gallery.showtime #innerwrap {
-		padding-bottom: 1.2em;
+		padding-bottom: 1.75em;
 	}
 	#gallery.showtime #footer {
-		margin-top: -3em;
+		margin-top: -3.1em;
 	}
-	#gallery.showtime #footer ul {
-		opacity: 0;
-	}
+	
+    #wrap.inplay #footer ul > * {
+        opacity: 0;
+    }
 }
 /*
 -moz-device-pixel-ratio
@@ -146,7 +152,7 @@ Gives the number of device pixels per CSS pixel.
 Note: This media feature is also implemented by Webkit as -webkit-device-pixel-ratio. The min and max prefixes as implemented by Gecko are named min--moz-device-pixel-ratio and max--moz-device-pixel-ratio; but the same prefixes as implemented by Webkit are named -webkit-min-device-pixel-ratio and -webkit-max-device-pixel-ratio.
 */
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 192dpi) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5)/*, (min-resolution: 192dpi)*/ {
 	ul#thumbnails.gallery li {
 		width: 16%;
 		margin: 1%;
@@ -255,7 +261,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#gallery.showtime #footer {
 		margin-top: -5em;
 		padding-bottom: 3em;
+		padding-bottom: 0em;
 	}
+    /*
 	#gallery #footer ul {
 		-webkit-transition: all 1s;
 		transition: all 1s;
@@ -264,6 +272,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#gallery .inplay #footer ul {
 		width: 0;
 	}
+    */
 }
 @media only screen and (max-width: 800px) {
 	#about_alpacas #main .read-more-target p:first-child {
@@ -284,3 +293,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		margin-right: 0%;
 	}
 }
+
+.touchevents #wrap.inplay #footer ul > * {
+        opacity: 0;
+    }

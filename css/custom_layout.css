@@ -265,6 +265,13 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 	padding: 3.5% 5%;
 	border-width: 0px;
 }
+
+#gallery #footer ul > * {
+    -webkit-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
+    opacity: 1;
+}
 /* G A L L E R Y | S H O W T I M E */
 
 ul#thumbnails li#slide, li#paused {

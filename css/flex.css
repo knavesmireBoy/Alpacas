@@ -5,9 +5,7 @@ body#alpacas_for_sale {
 }
 
 @supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)){
-    html.js body {
-        background: blue;
-    }
+  
 /*
          /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
     /*
@@ -21,7 +19,7 @@ body#alpacas_for_sale {
     
     .no-js #article #sell {
         flex-wrap: wrap;
-    }
+    }   
             
 
 .sell #article.loop #sell {
@@ -84,6 +82,7 @@ body#alpacas_for_sale {
         background: red;
     }
 }
+
 .flexboxlegacy .sell #sell {
 	display: -webkit-box;
 	display: -ms-flexbox;
