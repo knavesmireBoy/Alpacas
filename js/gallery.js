@@ -217,18 +217,9 @@
 				//CANNOT be LIVE collection, otherwise the li#slide would be added dynamically
 				//coll = _.toArray($('thumbnails').getElementsByTagName('li')),
 				coll = _.toArray(document.querySelectorAll('#thumbnails li')),
-				getParent = gAlp.Util.getDomParent(gAlp.Util.getNodeByTag('li')),
-				skip = _.partial(gAlp.Util.bindSub, 'classList', 'contains'),
-				orientation = gAlp.Util.getClassList(tgt.parentNode.parentNode).contains('portrait'),
-				t1 = function(f, m, arg, o) {
-					var b = f(o);
-					return _.bind(b[m], b)(arg);
-				};
-			skip = preSet(deferred2, skip, preArgs(['portrait']));
-			skip = orientation ? _.negate(skip) : skip;
+				getParent = gAlp.Util.getDomParent(gAlp.Util.getNodeByTag('li'));
 			coll = _.filter(coll, pred);
 			index = _.findIndex(coll, _.partial(isEqual, getParent(tgt)));
-			t1 = skip(coll[index + 1]);
 			return gAlp.Iterator(index, coll, always(true), _.partial(modulo, coll.length), always(false));
 		},
 		removingListeners = function(remover, n) {
@@ -294,13 +285,17 @@
 			return [soPlay, soPause];
 		},
 		fadeUntil = function(strategy, setStyle, doFade, pred, onDone, el, i) {
-			//con(el.firstChild, document.querySelector('.show').firstChild)
-			//el = document.querySelector('.show');
 			/*setStyle awaiting value i, (i/100), then calls setProperty on supplied object's style object
 			until opacity reaches the limit*/
 			deferred(gAlp.Util.setStyle, _.partial(doFade, strategy(i)), getDomTargetImg(el));
 			invokeOn(_.partial(thunk, pred, i), _.partial(thunk, onDone, el));
 		},
+        /*
+        fadeUntil = function(myopacity, setStyle, doFade, pred, onDone, el, i) {
+			deferred(gAlp.Util.setStyle, _.partial(doFade, myopacity.getValue(i)), getDomTargetImg(el));
+			invokeOn(_.partial(thunk, pred, i), _.partial(thunk, onDone, el));
+		},
+ */
 		nodematch = function(el, validator) {
 			var res = gAlp.Util.checker(validator)(el),
 				isNot = negate(_.isEmpty),
@@ -342,6 +337,7 @@
 				}
 			};
 		},
+        /*
 		doToolTip = function(instr) {
 			var createDiv = _.partial(getNew, 'div'),
 				doElement = _.partial(gAlp.Util.render, $('thumbnails'), null, createDiv),
@@ -397,6 +393,7 @@
 			gAlp.Util.makeElement(doAttrs, doElement).add();
 			return timer;
 		},
+        */
 		listen = function(createDiv, createButton) {
 			var isMatch = function(str, agg) {
 					return str.match(agg[0]);
@@ -419,10 +416,28 @@
 				isButton = gAlp.Util.validator('Please press a button', _.partial(checkIsButton, 'nodeName', /button/i)),
 				swapImgCB = _.compose(_.isNumber, lessOrEqual(0)),
 				preNodeNameBridge = _.partial(nodematchBridge, isButton),
+                
 				fader = _.partial(fadeUntil, divideBy(100), gAlp.Util.setStyle, _.partial(doArray, 'opacity'), swapImgCB),
+                
+                /*
+                fader = _.partial(fadeUntil, gAlp.getOpacity(), gAlp.Util.setStyle, _.partial(doArray, cssopacity), swapImgCB),
+				doanime = gAlp.Util.doGetSet(countdown, 'anime'),
+                */
+                
 				doanime = gAlp.Util.doGetSet(countdown, 'anime'),
 				doprog = gAlp.Util.doGetSet(countdown, 'progress'),
+                
+                /**/
+                 half = gAlp.getOpacity(50).getValue(),
+                full = gAlp.getOpacity(100).getValue(),
+                 /**/
+                
 				fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs(['opacity', .5])), curryView('add')(display)(true)),
+                /*
+                fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs([cssopacity, half])), curryView('add')(display)(true)),
+                */
+                
+                
 				inherit = function(iterator, slide) {
 					var kid = getDomTargetImg(slide.firstChild),
 						link = getDomTargetLink(slide.firstChild),
@@ -491,25 +506,34 @@
 					doPlay = function(e, bool) {
 						var doButtonBound = _.partial(setPlayButton, e.target),
 							tooltip_timer,
+                            allow = 2,
 							enterSlideShow = function() {
 								//dealing with more than one element...
 								var stat = prepareView('add')('static')(true),
 									nostat = prepareView('remove')('static')(true),
 									mouseenter = _.partial(enterHandler, _.partial(stat, getControls)),
 									mouseleave = _.partial(enterHandler, _.partial(nostat, getControls)),
+                                    /*
 									dotooltip = _.partial(doToolTip, ["move mouse in and out of footer...", "...to toggle the display of control buttons"]);
+                                */
+                                
+                                dotooltip = _.partial(gAlp.Tooltip, $('thumbnails'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]);
+                                
 								mouseenter(getControls()).addListener();
 								mouseleave($('footer')).addListener();
 								toggleStatic(getControls());
 								navigator.locationhandler.remove(navigator.locationhandler);
+                                
 								tooltip_timer = gAlp.Util.invokeWhen(function() {
-									return mq && !touchevents;
+									return mq && !touchevents && (allow--) > 0;
 								}, dotooltip);
 							},
+                            
 							best = gAlp.Util.getBest,
 							doNull,
 							once = doOnce(),
 							doListeners = _.partial(best, _.partial(thunk, once(1))),
+                            doTool = _.partial(best, _.partial(thunk, once(1))),
 							doAni = _.partial(best, _.partial(thunk, once(1)));
 						doPlay = function(e, bool) { //memo
                             if (!bool) {
@@ -536,6 +560,7 @@
 								doListeners([enterSlideShow, noOp])();
 								//returns 'best' options in an array...
 								doAni(play(_.compose(next, copier), fader))();
+                                doTool([tooltip_timer.init, noOp])();
 								doNull = nullify;
 							} else if(doNull){//only run post-play doNull is either null or a (exit) function
                                     doListeners = _.partial(best, _.partial(thunk, once(1)));

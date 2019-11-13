@@ -48,6 +48,7 @@ pre {
 }
 #tooltip {
 	position: absolute;
+    z-index: 22;
 	bottom: 0em;
 	font-weight: normal;
 	font-size: .7em;
@@ -75,13 +76,14 @@ pre {
 #tooltip.tip {
 	-webkit-transform: translate(10em, -3em);
 	-ms-transform: translate(10em, -3em);
-	transform: translate(10em, -3em) opacity: .75;
+	transform: translate(10em, -3em);
+    opacity: .75;
 }
 #tooltip.tb1 {
-	opacity: 1;
 	-webkit-transform: translate(2em, -5em);
 	-ms-transform: translate(2em, -5em);
 	transform: translate(2em, -5em);
+    opacity: 1;
 }
 #tooltip.tb2 {
 	-webkit-transform: translate(2em, 10em);
