@@ -62,7 +62,6 @@ window.gAlp.Tooltip = function(anchor, instr) {
 		timer = {
             init: init,
 			run: function(gang, el) {
-                console.log(arguments);
                 //if(!this.ids.length){
                    // this.init();
                 //}

@@ -7,6 +7,30 @@ if (!window.gAlp) {
 	window.gAlp = {};
 }
 
+function doHandler(){
+        function Handler(thunk) {
+		// the cached instance
+		var instance;
+		// rewrite the constructor
+		Handler = function Handler() {
+            con(99)
+			return instance;
+		};
+            con(11)
+		// carry over the prototype properties
+		Handler.prototype = this;
+		// the instance
+		instance = new Handler();
+		// reset the constructor pointer
+		instance.constructor = Handler;
+		// all the functionality
+		instance.handler = thunk();
+		return instance;
+	}
+        return Handler;
+        
+    }
+
 
 gAlp.Util = (function() {
     //https://stackoverflow.com/questions/7068967/css-how-to-make-ie7-respect-min-width

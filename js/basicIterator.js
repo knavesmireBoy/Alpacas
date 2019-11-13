@@ -7,11 +7,13 @@
 }
 
 gAlp.Iterator = (function(rev){
+    //var count = 0;
     return function(index, coll, validate, doAdvance) {
 			var loop = function(bool) {
 					if (!bool) {
                         index = gAlp.Util.doWhen(validate, _.partial(doAdvance, index += 1));
 					}
+                        //document.getElementsByTagName('h2')[0].innerHTML = index;
 					return index;
 				},
 				switchDirection = function() {
