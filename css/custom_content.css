@@ -392,8 +392,8 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	background-color: #7F9933;
 	background-color: hsla(75, 50%, 40%, 1);
 	cursor: pointer;
-	border: 1px solid white;
-	border: 1px solid rgba(255, 255, 255, .75);
+	border: 1px solid #7F9933;
+	border: 1px solid hsla(75, 50%, 40%, 1);
 	border-radius: .2em;
 	-webkit-box-shadow: 2px 2px 4px black;
     box-shadow: 2px 2px 4px black;
@@ -415,7 +415,12 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
     border-left-color: #C6C084;
     outline: 0px solid #7F4E1E;*/
 }
-#control > button {
+
+#controls.static button {
+    border: 1px solid white;
+    border: 1px solid rgba(255, 255, 255, .75);
+}
+#controls > button {
     background-image: url(../assets/buttons_sprite_lowend.png);
 }
 #controls button:hover, #controls button:focus {
@@ -434,9 +439,8 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	background-position: 50% 44%;
 	opacity: 0.9;
 }
-#controls.playing button {
+#controls button {
 	background-color: hsla(50, 50%, 40%, .3);
-	border-color: #7F9933;
 }
 button#exit {
 	background: white;

@@ -24,12 +24,12 @@
 	}
 }
 @media (hover: hover) {
-	#controls.playing {
+	#controls {
 		opacity: 0;
 		opacity: .1;
 	}
     
-    #controls.playing.static {
+    #controls.static {
 		opacity: 1;
 	}
 }
@@ -90,17 +90,7 @@
 	margin-left: 2%;
 }
 }
-@media only screen and (max-device-width: 667px) {
-	#controls {
-		top: -3em;
-	}
-	#controls button {
-		font-size: 0.9em;
-		padding: 0px;
-		width: 1.8em;
-		height: 1.8em;
-	}
-}
+
 /*@media only screen and (max-width: 505px) {*/
 
 /*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
@@ -123,25 +113,30 @@
 	#gallery #thumbnails {
 		margin-bottom: 0em;
 	}
-	#controls {
-		border-spacing: .25em;
+    
+    #controls.static {
+		top: -3.3em;
 	}
+    
+    #controls {
+        top: 2em;
+        border-spacing: .25em;
+    }
 	#controls button {
 		width: 1.5em;
 		height: 1.5em;
 	}
-	#gallery.showtime #controls {
-		top: -3.3em;
-	}
-    
-    #gallery #controls.playing {
+	
+    /* ideally fix the issue of toggling static in javascript in the meantime let playing hold sway*/
+    .inplay #gallery {
 		top: 1.65em;
+        background: blue;
 	}
 	#gallery.showtime #innerwrap {
-		padding-bottom: 1.75em;
+		padding-bottom: 2.4em;
 	}
 	#gallery.showtime #footer {
-		margin-top: -3.1em;
+		margin-top: -3.3em;
 	}
 	
     #wrap.inplay #footer ul > * {
@@ -167,9 +162,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#article>ul {
 		font-size: .9em;
 	}
-	#gallery.showtime #controls.static {
-		top: -2.5em;
-	}
+    
+	
+    
 }
 /* iPhone 6, 7, 8 ----------- */
 
@@ -177,12 +172,27 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#gallery.showtime #controls {
 		font-size: 2em;
 		top: 3.3em;
+        background: orange;
+	}
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+	#controls {
+		top: -3em;
+        background: pink;
+	}
+	#controls button {
+		font-size: 0.9em;
+		padding: 0px;
+		width: 1.8em;
+		height: 1.8em;
 	}
 }
 @media only screen and (max-device-width: 667px) and (max-device-height: 375px) and (orientation: landscape) {
 	#gallery.showtime #controls {
 		font-size: 2em;
 		top: 3.3em;
+        background: brown;
 	}
 	#gallery.showtime #innerwrap {
 		padding-bottom: 7em;
@@ -249,15 +259,16 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 }
 /* iPads (portrait and landscape) ----------- */
 
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (hover: none) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) /*and (hover: none) */{
 	#gallery.showtime #controls {
+        font-size: 1.8em;
 		z-index: 2;
 	}
-	#controls.playing {
-		top: 2.5em;
+	.inplay #controls{
+		top: 2.2em;
 	}
 	#controls {
-		top: -3.85em;
+		top: -3.7em;
 	}
 	#gallery.showtime #innerwrap {
 		padding-bottom: 4.5em;

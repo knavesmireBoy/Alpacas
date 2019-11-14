@@ -6,7 +6,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-window.gAlp.Tooltip = function(anchor, instr) {
+window.gAlp.Tooltip = function(anchor, instr, count) {
 	//"use strict";
 	var $ = function(str) {
 			return document.getElementById(str);
@@ -58,13 +58,17 @@ window.gAlp.Tooltip = function(anchor, instr) {
                 gAlp.Util.makeElement(doAttr, doDiv).add();
             return this;
             },
+        
+        dummytimer = {
+            init: function(){},
+			run: function() {},
+			ids: [],
+			cancel: function() {}
+		},
 
 		timer = {
             init: init,
 			run: function(gang, el) {
-                //if(!this.ids.length){
-                   // this.init();
-                //}
 				var invoke = function(partial) {
 					return partial(el);
 				};
@@ -79,5 +83,5 @@ window.gAlp.Tooltip = function(anchor, instr) {
 			}
 		};
 		//init.call(timer);
-	return timer;
+	return count ? timer : dummytimer;
 };
