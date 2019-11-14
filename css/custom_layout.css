@@ -286,7 +286,7 @@ ul#thumbnails li#slide, li#paused {
 	z-index: 2;
 }
 #controls.static {
-	top: -3.7em;
+	top: -3.7em;       
 }
 #gallery #main {
 	padding: 0;
