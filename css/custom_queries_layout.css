@@ -85,6 +85,10 @@
 	.js #about_us #main>#aside {
 		width: 100%;
 	}
+    
+    #article div#sell a {
+	margin-left: 2%;
+}
 }
 @media only screen and (max-device-width: 667px) {
 	#controls {

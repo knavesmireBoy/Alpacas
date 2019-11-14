@@ -43,7 +43,6 @@ body#alpacas_for_sale {
     #article div#sell a {
 	/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
 	padding: .825em;
-	margin-left: 2%;
 }
   
 #sell.tog {
@@ -75,12 +74,6 @@ body#alpacas_for_sale {
 	-ms-flex: 0 0 auto;
 	flex: 0 0 auto;
 }
-}
-
-@supports ((display: -webkit-grid) or (display: -moz-grid) or (display: grid)){
-    html.no-js body {
-        background: red;
-    }
 }
 
 .flexboxlegacy .sell #sell {

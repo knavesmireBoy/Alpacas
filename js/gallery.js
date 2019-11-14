@@ -148,7 +148,7 @@
 		isNodeName = _.partial(matchUp, isEqual, isLowerCase, _.partial(gAlp.Util.bindContext, 'toLowerCase')),
 		changeView = function (el, bool, klas, method) {
 			var f = _.partial(gAlp.Util.bindContext, method),
-				args = _.partial(_.identity, [klas, bool]);
+				args = _.partial(_.identity, [klas]);
 			//el may be a function. eg awaitng the creation of an element
 			el = gAlp.Util.getClassList(getResult(el));
 			//we don't want to return here as it would break a loop on fading
@@ -255,14 +255,11 @@
 				prepPause = function (then, pred) {
 					then(pred)();
 				},
-                doToggle = _.partial(gAlp.Util.getBest, _.partial(thunk, doOnce()(1))),
 				soPlay = function () {
-                    con('soplay');
 					/*hasPlayed returns a reference to the function provided to requestAnimation... set below
 				it is persisted as a property of the outer function or else hasPlayed returns null*/
 					hasPlayed(countdown(_.partial(doFade, onDone, slider.add()), 120));
 					play = _.compose(doInPlay, hasPlayed(), resume);
-					//play = _.compose(doToggle([doInPlay, alert.bind(window,9)]), hasPlayed(), resume);
 					pausedEvent = _.partial(prepPause, gAlp.Util.getBestRight([pause, play]), inProgress);
 					addMyEvent(clickHandler, pausedEvent)(thumbnails);
 					play();

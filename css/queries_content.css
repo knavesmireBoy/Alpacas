@@ -126,6 +126,9 @@
 		background-repeat: repeat-x;
 		background-size: 80%;
 	}
+    #main p, #main hr {
+		animation: fade 3s ease-in;
+	}
 }
 /*
 @media screen\0 {

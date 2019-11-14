@@ -183,7 +183,7 @@ bottom: -250%;
         
 		#wrap #innerwrap #main #aside {
 			position: absolute;
-            z-index: -1;
+            /*z-index: -1;*/
 		}		
 		
 		#stud_services #footer, #contact_us #footer, #links #footer, #about_alpacas #footer, #about_us #footer {
