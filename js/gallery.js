@@ -4,7 +4,7 @@
 /*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
-(function (doc, slide_config, paused_config, visiblity, mq, query, cssanimations, touchevents) {
+(function (doc, slide_config, paused_config, visiblity, mq, query, cssanimations, touchevents, report) {
 	"use strict";
 
 	function getResult(arg) {
@@ -120,7 +120,7 @@
         isFunction = function (fn, context) {
 			return _.isFunction(fn) || isFunction(context[fn]) || isFunction(fn[context]);
 		},
-        con = window.console.log,
+        //con = window.console.log,
 		negate = _.partial(_.negate),
 		$ = function (str) {
 			return document.getElementById(str);
@@ -160,9 +160,8 @@
 		},
 		changeViewWrap = _.wrap(changeView, changeViewRet),
 		prepareView = gAlp.Util.curry4(changeView),
-		prepDisplay = prepareView('toggle')(display),
-		hide = prepDisplay(false),
-		show = prepDisplay(true),
+		doHide = prepareView('remove')(display)(),
+		doShow = prepareView('add')(display)(),
 		getLoc = (function (div, subtract, isGreaterEq) {
 			var getThreshold = _.compose(div, subtract);
 			/*
@@ -176,10 +175,11 @@
 			};
 		}(divideBy(2), subtract, greaterOrEqual)),
 		getControls = _.partial($, 'controls'),
-		togglePlaying = gAlp.Util.curry4(changeViewWrap)('toggle')('playing')(),
-        isInPlay = gAlp.Util.curry4(changeViewWrap)('toggle')('inplay'),
-		doInPlay = _.partial(isInPlay(true), _.partial($, 'wrap')),
-		doNotInPlay = _.partial(isInPlay(false), _.partial($, 'wrap')),
+		//togglePlaying = gAlp.Util.curry4(changeViewWrap)('toggle')('playing')(),
+        isInPlay = gAlp.Util.curry4(changeViewWrap)('add')('inplay')(),
+        isNotInPlay = gAlp.Util.curry4(changeViewWrap)('remove')('inplay')(),
+		doInPlay = _.partial(isInPlay, $('wrap')),
+		doNotInPlay = _.partial(isNotInPlay, $('wrap')),
 		dorender = _.partial(gAlp.Util.render, thumbnails, null),
 		getNew = gAlp.Util.getNewElement,
 		setAttrs = gAlp.Util.setAttrs,
@@ -327,13 +327,13 @@
 					return el[attr].match(regExp);
 				},
 				setButton = function (attr, content) {
-					var toggle = _.partial(togglePlaying, _.partial($, 'controls'));
+					var toggle = _.partial(_.partial($, 'controls'));
 					return _.compose(toggle, _.partial(setAttrs, {
 						'data-swap': attr
 					}), setText(content));
 				},
 				setPlayButton = _.partial(applyOn, setButton, _.partial(gAlp.Util.reverse, outcomes)),
-				toggleStatic = gAlp.Util.curry4(changeViewWrap)('toggle')('static')(),
+				toggleStatic = gAlp.Util.curry4(changeViewWrap)('toggle')('static')(touchevents),
 				isButton = gAlp.Util.validator('Please press a button', _.partial(checkIsButton, 'nodeName', /button/i)),
 				swapImgCB = _.compose(_.isNumber, lessOrEqual(0)),
 				preNodeNameBridge = _.partial(nodematchBridge, isButton),
@@ -366,8 +366,8 @@
 				locationhandler,
 				makeNavigator = function (tgt, pred, context) {
 					var iterator = getGallery(tgt, pred),
-						advance = _.compose(show, iterator.forward, hide, getCurrent),
-						retreat = _.compose(show, iterator.back, hide, getCurrent),
+						advance = _.compose(doShow, iterator.forward, doHide, getCurrent),
+						retreat = _.compose(doShow, iterator.back, doHide, getCurrent),
 						delegateLocation = function (e) {
 							var best1 = _.partial(gAlp.Util.getBest, function (agg) {
 									return agg[0](e);
@@ -412,22 +412,23 @@
 					doPlay = function (e, bool) {
 						var doButtonBound = _.partial(setPlayButton, e.target),
 							tooltip_timer,
-							allow = 2,
+							allow = !touchevents ? 2 : 0,
 							enterSlideShow = function () {
+                                //report.innerHTML = $('controls').className+'^^';
 								//dealing with more than one element...
 								var stat = prepareView('add')('static')(true),
 									nostat = prepareView('remove')('static')(true),
+                                    dotooltip = _.partial(gAlp.Tooltip, $('thumbnails'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"], allow),
 									mouseenter = _.partial(enterHandler, _.partial(stat, getControls)),
-									mouseleave = _.partial(enterHandler, _.partial(nostat, getControls)),
-									dotooltip = _.partial(gAlp.Tooltip, $('thumbnails'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]);
+									mouseleave = _.partial(enterHandler, _.partial(nostat, getControls));
+									
 								mouseenter(getControls()).addListener();
 								mouseleave($('footer')).addListener();
 								toggleStatic(getControls());
 								navigator.locationhandler.remove(navigator.locationhandler);
-								tooltip_timer = gAlp.Util.invokeWhen(function () {
-									return mq && !touchevents && (allow -= 1) > 0;
-								}, dotooltip);
+                                tooltip_timer = dotooltip();
 							},
+                            
 							best = gAlp.Util.getBest,
 							doNull,
 							once = doOnce(),
@@ -435,6 +436,7 @@
 							doTool = _.partial(best, _.partial(thunk, once(1))),
 							doAni = _.partial(best, _.partial(thunk, once(1)));
 						doPlay = function (e, bool) { //memo
+                            try {
 							if (!bool) {
 								navigator = getPlayIterator(navigator.get(), isLscp, thumbnails);
 								var config = {
@@ -445,14 +447,15 @@
 									},
 									play_iterator = navigator.get(),
 									copier = _.partial(inherit, play_iterator),
-									next = _.compose(show, play_iterator.getNext, hide, getCurrent),
+									next = _.compose(doShow, play_iterator.getNext, doHide, getCurrent),
 									baseEl = getBaseElement(dorender, getNew, config),
 									pauser = getSlide(baseEl, paused_config, fade50),
 									slider = getSlide(baseEl, slide_config, curryView('remove')(display)(true)),
 									pause = _.compose(doButtonBound, pauser.add, _.partial(doprog, null)),
 									resume = _.compose(doButtonBound, pauser.remove, _.partial(doprog, 1)),
+                                    touchStatic = _.partial(invokeWhen, always(touchevents),_.partial(toggleStatic, e.target.parentNode)),
 									maybeButton = _.partial(gAlp.Util.doWhenWait(_.bind(setPlayButton, null, e.target)), doprog),
-									cleanup = _.compose(doNotInPlay, slider.remove, pauser.remove, _.partial(doprog, null), maybeButton),
+									cleanup = _.compose(touchStatic, doNotInPlay, slider.remove, pauser.remove, _.partial(doprog, null), maybeButton),
 									nullify = _.compose(_.partial(doanime, null), navigator.enter, cleanup, _.partial(navigator.exit, 3)),
 									play = _.partial(playAway, doprog, doanime, pause, resume, slider);
 								//tooltip_timer becomes an object with run and cancel methods, to enable clearTimeout
@@ -469,6 +472,10 @@
 								tooltip_timer.cancel();
 								doNull = null;
 							}
+                            }
+                            catch(e){
+                                alert(e);
+                            }
 							//EXIT($('boys'));
 						};
 						doPlay(e, bool); //run
@@ -525,13 +532,11 @@
 				given browser inconsistency in rendering arrows. However it is doing no harm*/
 				delegate = function (e) {
 					doPlay(e, true);
-					//ideally set up an observer, NOT PURE
-					//_.each([e.target], gAlp.Util.removeNodeOnComplete);
 					_.each(['flush', 'addListener'], function (m) {
 						this[m]();
 					}, thumbnailsListener);
 					switchView(els, gAlp.Util.reverse);
-					_.each(navigator.get().getCollection(), hide);
+					_.each(navigator.get().getCollection(), doHide);
 					this.fire();
 				};
 				handler = _.partial(clickHandler, _.partial(invokeWhen, preNodeNameBridge, delegate));
@@ -550,11 +555,11 @@
     enter = function (pairs, el) {
         thumbnailsListener.remove(-1, 1);
         switchView(pairs, _.identity);
-        show(el);
+        doShow(el);
     };
 }(document, {
 	id: 'slide'
 }, {
 	id: 'paused',
 	src: '../assets/pause.png'
-}, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents));
+}, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
