@@ -163,6 +163,13 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		font-size: .9em;
 	}
     
+    #controls.static {
+		top: -2.9em;
+	}
+    
+    #controls {
+        top: 1.8em;
+    }
 	
     
 }

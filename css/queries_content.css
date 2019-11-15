@@ -64,11 +64,18 @@
 		color: #900;
 		color: rgb(153, 0, 0);
 	}
+    #main.scroll .read-more-trigger {
+		display: none;
+	}
 	#main .read-more-state~.read-more-target p {
 		position: absolute;
 		opacity: 0;
+        -webkit-transition: opacity 2s;
+        -o-transition: opacity 2s;
+        transition: opacity 2s;
 	}
-	#main .read-more-state:checked~.read-more-target p {
+  
+	#main .read-more-state:checked~.read-more-target p, #main.scroll .read-more-target p.show {
 		position: relative;
 		opacity: 1;
 	}
@@ -137,9 +144,3 @@
 		background-size: 100%;
 	}
 }*/
-
-
-
-
-
-

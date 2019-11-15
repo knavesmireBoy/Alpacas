@@ -112,7 +112,7 @@
 	100% {
 		-webkit-transform: translate(0, 0);
 		-ms-transform: translate(0, 0);
-    transform: translate(0, 0);
+        transform: translate(0, 0);
 	}
 }
 
@@ -235,6 +235,9 @@
 	.verbose #wrap #footer {
 		margin-top: 0%;
 	}
+    .js .verbose #main div > * {
+        margin-right: 0%;
+    }
 }
 @media only screen and (max-width: 900px) {
 	.verbose #article > * {
