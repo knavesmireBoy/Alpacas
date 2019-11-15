@@ -138,8 +138,24 @@ window.onkeyup = function(e) {
 */
 	function isTouchDevice() {
 		return 'ontouchstart' in window // works on most browsers 
-			|| navigator.maxTouchPoints; // works on IE10/11 and Surface
+			|| window.navigator.maxTouchPoints; // works on IE10/11 and Surface
 	}
+    //https://medium.com/snips-ai/make-your-next-microsite-beautifully-readable-with-this-simple-javascript-technique-ffa1a18d6de2
+    function getElementOffset(el) {
+        var top = 0,
+            left = 0;
+
+  // grab the offset of the element relative to it's parent,
+  // then repeat with the parent relative to it's parent,
+  // ... until we reach an element without parents.
+  do {
+    top += el.offsetTop;
+    left += el.offsetLeft;
+    el = el.offsetParent
+  } while (el)
+
+  return { top: top, left: left };
+}
 
 	function composer() {
 		var args = _.toArray(arguments),
@@ -643,6 +659,7 @@ const curry = fn => (...args) => args.length >= fn.length
 		return el && (el.classList || gAlp.ClassList(el));
 	}
 
+
 	function regExp(str, flag) {
 		return new RegExp(str, flag);
 	}
@@ -805,6 +822,15 @@ const curry = fn => (...args) => args.length >= fn.length
 		});
 	}
     
+    function proxy(method){
+        if(this.subject[method] && _.isFunction(this.subject[method])){
+        this[method] = function(){
+            return this.subject && this.subject[method] && this.subject[method].apply(this.subject, arguments);
+        };
+        }
+        return this;
+    }
+    
     function byIndex(i, arg) {
 			return getResult(arg)[i];
 		}
@@ -964,15 +990,17 @@ const curry = fn => (...args) => args.length >= fn.length
 			};
 		},
         retWhen: curry3(retWhen),
+        proxy: proxy,
 		command: function() {
 			//method: (execute or undo)
 			function prepFactory(method) {
 				//command: init, toString, whatevers
 				return function(command) {
 					var that = this,
-						args = _.rest(arguments)
+						args = _.rest(arguments);
+                    //rewrite execute/undo
 					this[method] = function() {
-						if (command && that.object[command]) {
+						if (command && that.object && that.object[command]) {
 							var newargs = args.concat(_.toArray(arguments));
 							return that.object[command].apply(that.object, newargs);
 						}
@@ -982,7 +1010,7 @@ const curry = fn => (...args) => args.length >= fn.length
 			} //factory
 			var ret = {
 				init: function(object) {
-					this.object = object;
+					this.setObject(object);
 					/* prepFactory returns a function as the first version of execute or undo
 					This function expects at least a command as a STRING and returns the rewritten
 					execute/undo which calls the method of the supplied object to init IF the STRING is not empty 
@@ -993,6 +1021,9 @@ const curry = fn => (...args) => args.length >= fn.length
 				},
 				getObject: function() {
 					return this.object;
+				},
+                setObject: function(object) {
+					this.object = object;
 				},
 				toString: function() {
 					return 'A Command Object';

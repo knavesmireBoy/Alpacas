@@ -59,6 +59,17 @@ if (!window.gAlp) {
 		_.each(_.invert(_.rest(args)[0]), chain.handle, chain);
 	}
     */
+    
+    function curry22(fun) {
+		return function(secondArg) {
+			return function(firstArg) {
+				return function(){
+                    return fun(firstArg, secondArg);
+                };
+			};
+		};
+	}
+    
 	String.prototype.capitalize = function() {
 		var res = this.split(' '),
 			mapper = function(str) {
@@ -261,9 +272,31 @@ if (!window.gAlp) {
 			var method = mq ? 'setProperty' : '';
 			return _.partial(doConstruct, drillDown(['style']), [method, config]);
 		},
+        getElementOffset = function(el) {
+			var top = 0,
+				left = 0;
+			// grab the offset of the element relative to it's parent,
+			// then repeat with the parent relative to it's parent,
+			// ... until we reach an element without parents.
+			do {
+				top += el.offsetTop;
+				left += el.offsetLeft;
+				el = el.offsetParent
+			} while (el)
+			return {
+				top: top,
+				left: left
+			};
+		},
 		constr,
 		player,
 		anCr = curryRight(gAlp.Util.setAnchor)(gAlp.Util.getNewElement)(null),
+        readmoretarget = document.getElementsByClassName('read-more-target')[0],
+        getThreshold = function(el){
+            var elementOffsetTop = getElementOffset(el).top,
+                elementHeight = el.getBoundingClientRect().height
+            return (elementOffsetTop - window.innerHeight) + (elementHeight * 0.2);            
+        },
 		split = function(hyper, paras, target, copy) {
 			var store = function(match, attrs, content) {
 					content = content.replace(/&nbsp;/, ' ');
@@ -290,10 +323,13 @@ if (!window.gAlp) {
 				input = _.compose(getLinks, getStrong),
 				output = _.compose(setLinks, setStrong),
 				exec = function(constr) {
+					/*
 					//restrict splitting to a single para
-					if (!target || gAlp.Util.getNextElement(target.nextSibling)) {
+                    //|| gAlp.Util.getNextElement(target.nextSibling*
+					if (!target)) {
 						return;
 					}
+                    */
 					if (Modernizr.mq(query)) {
 						gAlp.Util.invokeWhen(validate, revert);
 						return;
@@ -314,26 +350,52 @@ if (!window.gAlp) {
 		}, //split
 		width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
 		height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
-		isLandscapeMode = width > height,
-		isPortraitMode = height > width,
-		count = 2,
-		preds = [always(isLandscapeMode), always(isPortraitMode)],
+		count = 1,
+        orient = function(){
+            var width = viewportSize.getWidth(),
+                height = viewportSize.getHeight(),
+                isLandscapeMode = width > height,
+                isPortraitMode = height > width;
+            return isLandscapeMode ? 'landscape' : 'portrait';
+        },
+        handleScroll = function(el, cb) {
+            var threshold = cb(el);
+			if (window.pageYOffset > threshold) {
+                gAlp.Util.addClass('show', el);
+			}
+		},
+        windowWidth = window.viewportSize.getWidth(),
+        windowHeight = window.viewportSize.getHeight(),
+        // ensure we don't fire this handler too often
+		// for a good intro into throttling and debouncing, see:
+		// https://css-tricks.com/debouncing-throttling-explained-examples/
+        handlerSetup = function(anchor){
+            gAlp.Util.addClass('scroll', $('main'));
+            var els = anchor.getElementsByTagName('p'),
+                deferHandle = curry22(handleScroll)(getThreshold),
+                funcs = _.map(els, deferHandle),
+                throttled = _.map(funcs, curry2(_.throttle)(100));
+            _.each(throttled, _.partial(window.addEventListener, 'scroll'));
+            
+        },
+		// now re-check on scroll
 		splitHandler = function() {
-			var command = split.apply(null, arguments),
+            alert(9)
+			//window.addEventListener('scroll', throttledScrollHandler);
+            handlerSetup(readmoretarget);
+            var orientation = orient(),
+                command = split.apply(null, arguments),
 				handler = function() {
-					/*
-                    if(preds[0]()){
-                        count -= 1;
-                    }
-                    else {
-                        preds.reverse();
-                    }
-					(count > 0) && command.execute(window.gAlp.Splitter);
-                    */
-					command.execute(window.gAlp.Splitter);
-				};
+                    count = (orientation !== orient()) ? 1 : count;
+					if (count-- >= 1/* || (windowWidth !== viewportSize.getWidth() || windowHeight !== viewportSize.getHeight() */) {
+						command.execute(window.gAlp.Splitter);
+					}
+				
+					//document.getElementsByTagName('h2')[0].innerHTML = window.pageYOffset > scrollIntoViewThreshold;
+				},
+				ev = 'resize';
 			handler();
-			return gAlp.Util.addHandler('resize', window, _.debounce(handler, 66));
+			return gAlp.Util.addHandler(ev, window, _.debounce(handler, 2000, true));
 		},
 		swapimg = gAlp.Util.getByClass("swap"),
 		getKid = function() {
@@ -364,11 +426,11 @@ if (!window.gAlp) {
 		},
 		factory = function(cond) {
 			var activate = function() {
-							gAlp.Util.makeElement(prepSetStyles({
-								display: "block"
-							}), always(mask_target)).add();
-						},
-                standard = function() {
+					gAlp.Util.makeElement(prepSetStyles({
+						display: "block"
+					}), always(mask_target)).add();
+				},
+				standard = function() {
 					var dorender = _.partial(gAlp.Util.render, mask_target, null),
 						orig = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target),
 						doMask = _.compose(dorender, gAlp.Util.getNewElement),
@@ -448,7 +510,7 @@ if (!window.gAlp) {
 							oldel = gAlp.Util.removeNodeOnComplete(getKid());
 							render('img');
 							highLighter.perform();
-							report.innerHTML = mask_target.childNodes[1].src;
+							//report.innerHTML = mask_target.childNodes[1].src;
 						},
 						undo: function() {
 							gAlp.Util.removeNodeOnComplete(getKid());
@@ -463,14 +525,14 @@ if (!window.gAlp) {
 			return factory(always(swapper));
 		};
 		player = function(command) {
-				var outcomes = [command.undo, command.execute],
-					handler = function() {
-						if (!getPredicate()) {
-                            prepAction(outcomes, true)();
-						}
-					};
-				gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
-				command.init(outcomes)();
+			var outcomes = [command.undo, command.execute],
+				handler = function() {
+					if (!getPredicate()) {
+						prepAction(outcomes, true)();
+					}
+				};
+			gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
+			command.init(outcomes)();
 		};
 		gAlp.Util.addHandler('load', window, _.partial(player, constr()));
 	} //cssmask

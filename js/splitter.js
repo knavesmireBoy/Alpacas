@@ -36,8 +36,6 @@ gAlp.Splitter = (function(gang) {
 		}
 	}
     
-    
-    
 	var global_strong = /\|/g,
 		link = /\[([\S]+)$/,
         open_span = '<span>',
