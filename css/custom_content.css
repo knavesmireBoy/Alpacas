@@ -362,6 +362,19 @@ th:nth-child(odd) {
 td:last-child {
 	border-right-width: 0px solid black;
 }
+
+/* set img color to red */
+#sell a img {
+	color: red;
+}
+/*ie7*/
+*+html #sell a img {
+	color: blue;
+}
+#sell a > img {
+	color: white;
+}
+
 /*"gallery"*/
 
 #thumbnails, ul#thumbnails li a {

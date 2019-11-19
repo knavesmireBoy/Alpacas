@@ -32,6 +32,8 @@ function doHandler(){
     }
 
 
+
+
 gAlp.Util = (function() {
     //https://stackoverflow.com/questions/7068967/css-how-to-make-ie7-respect-min-width
     function fixMinWidthForIE(){
@@ -80,7 +82,6 @@ gAlp.Util = (function() {
          this.constructor.prototype.saved = this.split(' '); 
             str = this.constructor.prototype.saved[1];
         }
-        console.log(str);
         return str;
     }
     
@@ -140,22 +141,23 @@ window.onkeyup = function(e) {
 		return 'ontouchstart' in window // works on most browsers 
 			|| window.navigator.maxTouchPoints; // works on IE10/11 and Surface
 	}
-    //https://medium.com/snips-ai/make-your-next-microsite-beautifully-readable-with-this-simple-javascript-technique-ffa1a18d6de2
-    function getElementOffset(el) {
-        var top = 0,
-            left = 0;
+    
+        function fnull(fun /*, defaults */ ) {
+        var defaults = _.rest(arguments);
+        return function( /* args */ ) {
+            var args = _.map(arguments, function(e, i) {
+                return existy(e) ? e : defaults[i];
+            });
+            return fun.apply(null, args);
+        };
+    }
 
-  // grab the offset of the element relative to it's parent,
-  // then repeat with the parent relative to it's parent,
-  // ... until we reach an element without parents.
-  do {
-    top += el.offsetTop;
-    left += el.offsetLeft;
-    el = el.offsetParent
-  } while (el)
-
-  return { top: top, left: left };
-}
+    function defaults(d) {
+        return function(o, k) {
+            var val = fnull(idty, d[k]);
+            return o && val(o[k]);
+        };
+    }
 
 	function composer() {
 		var args = _.toArray(arguments),
@@ -404,12 +406,34 @@ const curry = fn => (...args) => args.length >= fn.length
 			};
 		};
 	}
+    
+     function curry22(fun) {
+		return function(secondArg) {
+			return function(firstArg) {
+				return function(){
+                    return fun(firstArg, secondArg);
+                };
+			};
+		};
+	}
 
 	function curry3(fun) {
 		return function(last) {
 			return function(middle) {
 				return function(first) {
 					return fun(first, middle, last);
+				};
+			};
+		};
+	}
+    
+    function curry33(fun) {
+		return function(last) {
+			return function(middle) {
+				return function(first) {
+					return function(){
+                        return fun(first, middle, last);
+                    };
 				};
 			};
 		};
@@ -689,10 +713,6 @@ const curry = fn => (...args) => args.length >= fn.length
 		return o;
 	}
 
-	function getset1(s, g, val) {
-		return undef(val) ? g() : s(val);
-	}
-
 	function getset(s, g) {
 		return function(val) {
 			return undef(val) ? g() : s(val);
@@ -713,6 +733,10 @@ const curry = fn => (...args) => args.length >= fn.length
 		//console.log(p,o,k,v)
 		return setprop(p, o, k, v);
 	}
+    
+    function setPropFromHash(o){
+        return setprop(o.property || o.p, o.object || o.o,  o.key || o.k, o.value, o.v);
+    }
 
 	function simpleInvoke(o, m, arg) {
 		return o[m](arg);
@@ -805,6 +829,38 @@ const curry = fn => (...args) => args.length >= fn.length
 	function removeElement(node) {
 		return node.parentNode.removeChild(node);
 	}
+    
+     function getElementOffset(el) {
+         //https://medium.com/snips-ai/make-your-next-microsite-beautifully-readable-with-this-simple-javascript-technique-ffa1a18d6de2
+
+			var top = 0,
+				left = 0;
+			// grab the offset of the element relative to it's parent,
+			// then repeat with the parent relative to it's parent,
+			// ... until we reach an element without parents.
+			do {
+				top += el.offsetTop;
+				left += el.offsetLeft;
+                //https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+				el = el.offsetParent;
+			} while (el)
+			return {
+				top: top,
+				left: left
+			};
+		}
+    
+      function getScrollThreshold(el, percent){
+          try{
+            var elementOffsetTop = getElementOffset(el).top,
+                elementHeight = el.offsetHeight || el.getBoundingClientRect().height,
+                extra = elementHeight * (percent || 0.0); 
+            return (elementOffsetTop - window.innerHeight) + extra;
+          }
+          catch(e){
+              return 0;
+          }
+        }
 
 	function looper(i, collection) {
 		return function(bool) {
@@ -822,11 +878,38 @@ const curry = fn => (...args) => args.length >= fn.length
 		});
 	}
     
-    function proxy(method){
-        if(this.subject[method] && _.isFunction(this.subject[method])){
+    	function applyOn(partial, getargs, o) {
+		//applies the final arguments before fulfilling the function with the supplied object
+		partial.apply(null, getResult(getargs))(o);
+	}
+    
+    function proxy(subject, method){
+        this.getSubject = this.getSubject || function(){ return subject; }
+        this.setSubject = this.setSubject || function(subject){ this.subject = subject; return this;}
+        if(subject[method] && _.isFunction(subject[method])){
         this[method] = function(){
-            return this.subject && this.subject[method] && this.subject[method].apply(this.subject, arguments);
+            return subject[method].apply(subject, arguments);
         };
+        }
+        if(subject[method]){
+            this[method] = subject[method];
+        }
+        return this;
+    }
+    
+    function proxy2(subject, method){
+        if(!this.subject){
+            this.getSubject = function(){ return this.subject; }
+            this.setSubject = function(subject){ this.subject = subject; }
+            this.setSubject(subject);
+        }
+        if(subject[method] && _.isFunction(subject[method])){
+        this[method] = function(){
+            return this.subject[method].apply(this.subject, arguments);
+        };
+        }
+        if(subject[method]){
+            this[method] = subject[method];
         }
         return this;
     }
@@ -855,6 +938,13 @@ const curry = fn => (...args) => args.length >= fn.length
 				return prepareListener(partial, func, el);
 			};
 		},
+        addEvent2: function(handler, func, el) {
+				var partial = el ? _.partial(handler, el) : _.partial(handler);
+				return prepareListener(partial, func, el);
+		},
+        getPredicate: function(cond, predicate){
+            return predicate(getResult(cond)) ? predicate : _.negate(predicate); 
+        },
 		isEqual: function(x, y) {
 			return getResult(x) === getResult(y);
 		},
@@ -874,6 +964,7 @@ const curry = fn => (...args) => args.length >= fn.length
 		setter: setter,
 		setret: setret,
 		setterplus: setterplus,
+        setPropFromHash: setPropFromHash,
 		isset: isset,
 		//setret: setret,
 		simpleInvoke: simpleInvoke,
@@ -893,6 +984,13 @@ const curry = fn => (...args) => args.length >= fn.length
 		returnIndex: function(i, func) {
 			return func.apply(func, _.rest(arguments, 2))[i];
 		},
+        find: function(collection, predicate, i){
+            var m = !isNaN(i) ? 'findIndex' : 'find';
+          return this[m](collection, predicate || always(true));  
+        },
+        getCollection: function(collection, predicate){
+          return this.filter(collection, predicate || always(true));  
+        },
 		//getResult: getResult,
 		byIndex: function(i, arg) {
 			return getResult(arg)[i];
@@ -916,7 +1014,7 @@ const curry = fn => (...args) => args.length >= fn.length
 		getDomParent: curry3(getTargetNode)('parentNode'),
 		invokeWhen: invokeWhen,
 		doWhen: doWhen,
-		doWhenWait: curry2(doWhen),
+		doWhenWait: curry22(doWhen),
 		getClassList: getClassList,
 		setAttrs: _.partial(setFromObject, always(true), 'setAttribute'),
 		setText: curry3(setAdapter)('innerHTML'),
@@ -942,7 +1040,6 @@ const curry = fn => (...args) => args.length >= fn.length
             return o[k];
         },
         switchClass: function(a, b, el){
-            console.log(a,b, el)
            return _.compose(_.partial(this.addClass, b), _.partial(this.removeClass, a))(el);
         },
 		reverse: reverseArray,
@@ -951,6 +1048,53 @@ const curry = fn => (...args) => args.length >= fn.length
 		getBest: best,
 		getBestRight: curry2(best),
 		getBestLeft: best,
+        getOffset: function(bool){
+            var w = window,
+                d = document.documentElement || document.body.parentNode || document.body,
+                x = (w.pageXOffset !== undefined) ? w.pageXOffset : d.scrollLeft,
+                y = (w.pageYOffset !== undefined) ? w.pageYOffset : d.scrollTop;
+            return bool ? x : y;
+        },
+        
+        getRect: function(el){
+           if (el.getBoundingClientRect && _.isFunction(el.getBoundingClientRect)) {
+               return el.getBoundingClientRect();
+           }
+        var d = document,
+            t = d.documentElement || d.body.parentNode, 
+            x = typeof t.scrollLeft == 'number' ? t : d.body.scrollLeft,
+            y = typeof t.scrollTop == 'number' ? t : d.body.scrollTop;
+            return {top: y, left: x};
+        },
+        
+        handleScroll: function(el, cb, klas) {
+            var threshold = cb(el);
+			if (gAlp.Util.getOffset() > threshold) {
+                gAlp.Util.addClass(klas, el);
+			}
+		},
+        
+         getScrollThreshold: function(el, percent){
+          try {
+            var elementOffsetTop = getElementOffset(el).top,
+                elementHeight = el.offsetHeight || el.getBoundingClientRect().height,
+                extra = elementHeight * (percent || 0.0); 
+            return (elementOffsetTop - window.innerHeight) + extra;
+          }
+          catch(e){
+              return 0;
+          }
+        },
+     
+        setScrollHandlers: function(collection, getThreshold){
+            // ensure we don't fire this handler too often
+            // for a good intro into throttling and debouncing, see:
+            // https://css-tricks.com/debouncing-throttling-explained-examples/
+            var deferHandle = curry33(_.bind(this.handleScroll, this))('show')(getThreshold || this.getScrollThreshold),
+                funcs = _.map(collection, deferHandle),
+                throttled = _.map(funcs, curry2(_.throttle)(100));    
+            _.each(throttled, _.partial(this.addHandler, 'scroll', window));
+        },
 		checker: checker,
 		validator: validator,
 		curryMethod: curryMethod,
@@ -991,6 +1135,7 @@ const curry = fn => (...args) => args.length >= fn.length
 		},
         retWhen: curry3(retWhen),
         proxy: proxy,
+        proxy2: proxy2,
 		command: function() {
 			//method: (execute or undo)
 			function prepFactory(method) {

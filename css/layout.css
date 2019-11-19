@@ -101,11 +101,15 @@ a#yag {
 }
 
 .no-js #article hr {
-		display: none;
+    display: none;
 	}
 
-.js .verbose #main div > * {
+.js .verbose #main div > *, .js .verbose #main div p {
 	margin-right: 33%;
+}
+/*make an assumption that the first para does not require indenting. base style for borwser not supporting media queries*/
+.js .verbose  #main #article p {
+	margin-right: 0%;
 }
 
 .no-js .verbose #main div > *, .js .verbose #main #aside > * {
@@ -133,6 +137,7 @@ a#yag {
     margin-top: 1em;
     animation: none;
 }
+
 /* set img color to red */
 #aside img {
 	float: right;

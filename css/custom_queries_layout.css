@@ -19,9 +19,7 @@
 		background-color: hsla(75, 50%, 40%, .3);
 		background-size: 128%;
 	}
-	#controls.static {
-		top: -3.85em;
-	}
+	
 }
 @media (hover: hover) {
 	#controls {
@@ -169,45 +167,21 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     
     #controls {
         top: 1.8em;
-    }
-	
-    
+    }    
 }
 /* iPhone 6, 7, 8 ----------- */
 
-@media only screen and (min-device-width: 375px) and (max-device-height: 667px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2) {
-	#gallery.showtime #controls {
-		font-size: 2em;
-		top: 3.3em;
-        background: orange;
-	}
-}
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
-	#controls {
-		top: -3em;
-        background: pink;
-	}
-	#controls button {
-		font-size: 0.9em;
-		padding: 0px;
-		width: 1.8em;
-		height: 1.8em;
-	}
-}
-@media only screen and (max-device-width: 667px) and (max-device-height: 375px) and (orientation: landscape) {
-	#gallery.showtime #controls {
-		font-size: 2em;
-		top: 3.3em;
-        background: brown;
-	}
+@media screen and (max-device-width: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 1.5){
+.js body#gallery {
+        background: black;
+    }
+	
 	#gallery.showtime #innerwrap {
 		padding-bottom: 7em;
-		padding-bottom: 0em;
 	}
 	#gallery.showtime #footer {
-		margin-top: -5em;
-		margin-top: 0em;
+		margin-top: -7em;
 	}
 	html.js #alpacas_for_sale.sell #sell a.show, html.js #alpacas_for_sale.sell #sell.tog table.show {
 		display: none;
@@ -215,7 +189,8 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	html.js #alpacas_for_sale.sell #sell.tog a.show, html.js #alpacas_for_sale.sell #sell table.show {
 		display: block;
 	}
-}
+
+
 @media only screen and (max-width: 768px) {
 
 	#alpacas_for_sale #innerwrap #main>div#aside {

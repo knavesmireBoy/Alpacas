@@ -152,6 +152,7 @@ String.prototype.capitalize = function() {
 	res = res.map(mapper);
 	return res.join(' ');
 };
+
 String.prototype.honorific = function(h) {
 	"use strict";
 	return h + ' ' + this;

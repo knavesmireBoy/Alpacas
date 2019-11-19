@@ -4,14 +4,14 @@
 /*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
-/*global setTimeout: false */
 if (!window.gAlp) {
     window.gAlp = {};
 }
 (function(article, mq, mobile, desktop) {
-    var Len;
+     /*
     (function() {
         'use strict';
+       
         var start,
             end,
             delta,
@@ -26,27 +26,14 @@ if (!window.gAlp) {
             Len = Math.ceil(delta);
         });
     }());
-    var slice = Array.prototype.slice,
-        con = _.bind(window.console.log, window.console);
-
-    function checkDummy() {
+    */    
+    
+     function checkDummy() {
         var val = gAlp.Util.getComputedStyle(document.getElementById("checkDummy"), "margin-top");
         return val === "1px";
     }
-    String.prototype.capitalize = function() {
-        var res = this.split(' '),
-            mapper = function(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
-        res = res.map(mapper);
-        return res.join(' ');
-    };
 
     function noOp() {}
-
-    function existy(x) {
-        return x != null;
-    }
 
     function always(val) {
         return function() {
@@ -70,40 +57,12 @@ if (!window.gAlp) {
         return iteratee(byIndex(coll));
     }
 
-    function fnull(fun /*, defaults */ ) {
-        var defaults = _.rest(arguments);
-        return function( /* args */ ) {
-            var args = _.map(arguments, function(e, i) {
-                return existy(e) ? e : defaults[i];
-            });
-            return fun.apply(null, args);
-        };
-    }
-
-    function defaults(d) {
-        return function(o, k) {
-            var val = fnull(idty, d[k]);
-            return o && val(o[k]);
-        };
-    }
-
     function drill(arr, o) {
         var prop = arr.shift();
         if (prop && arr.length) {
             return drill(arr, o[prop]);
         }
         return o[prop];
-    }
-
-    function curryRight(fn) {
-        var args = _.rest(arguments);
-        if (args.length >= fn.length) {
-            return fn.apply(null, gAlp.Util.reverse(args));
-        } else {
-            return function() {
-                return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
-            }
-        }
     }
 
     function invoke(f) {
@@ -122,10 +81,6 @@ if (!window.gAlp) {
         }
     }
 
-    function simplewrap(f) {
-        return f.apply(null, _.rest(arguments))
-    }
-
     function invokeBridge(arg, m, o) {
         return simpleInvoke(o, m, arg);
     }
@@ -140,17 +95,6 @@ if (!window.gAlp) {
         return o[p];
     }
 
-    function curryLeft(fn) {
-        var args = slice.call(arguments, 1);
-        if (args.length >= fn.length) {
-            return fn.apply(null, args);
-        } else {
-            return function() {
-                return curryLeft.apply(null, [fn].concat(args, slice.call(arguments)));
-            }
-        }
-    }
-
     function getResult(arg) {
         return _.isFunction(arg) ? arg() : arg;
     }
@@ -158,11 +102,6 @@ if (!window.gAlp) {
     function undef(x) {
         return typeof(x) === 'undefined';
     }
-
-    function pass(action, arg) {
-        return !undef(arg) ? action(arg) : null;
-    }
-
     function run() {
         var f = _.first(arguments),
             rest = _.rest(arguments);
@@ -172,29 +111,41 @@ if (!window.gAlp) {
     function gtThan(a, b) {
         return a > b;
     }
-
-    function curryLeft(fn) {
-        var args = _.rest(arguments);
+        
+    var $ = function(str) {
+            return document.getElementById(str);
+        },
+        slice = Array.prototype.slice,
+        //con = _.bind(window.console.log, window.console),
+        ptL = _.partial,
+        idty = _.identity,
+        curryLeft = function(fn) {
+        var args = slice.call(arguments, 1);
         if (args.length >= fn.length) {
             return fn.apply(null, args);
         } else {
             return function() {
-                return curryLeft.apply(null, [fn].concat(args, _.toArray(arguments)));
+                return curryLeft.apply(null, [fn].concat(args, slice.call(arguments)));
             }
         }
-    }
-    var $ = function(str) {
-            return document.getElementById(str);
         },
-        ptL = _.partial,
-        idty = _.identity,
+        curryRight = function(fn) {
+        var args = _.rest(arguments);
+        if (args.length >= fn.length) {
+            return fn.apply(null, gAlp.Util.reverse(args));
+        } else {
+            return function() {
+                return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
+            }
+        }
+        },
+        curry2 = gAlp.Util.curry2,
         threshold = Number(desktop.query.match(/[^\d]+(\d+)[^\d]+/)[1]),
         anCr = curryRight(gAlp.Util.setAnchor)(gAlp.Util.getNewElement)(null),
         getNewElement = ptL(gAlp.Util.getNewElement),
         clickHandler = ptL(gAlp.Util.addHandler, 'click'),
         setAnchor = gAlp.Util.setAnchor,
         setFromArray = ptL(gAlp.Util.setFromArray, always(true)),
-        curry2 = gAlp.Util.curry2,
         getter = gAlp.Util.getter,
         setText = gAlp.Util.setText,
         exceedsThreshold = ptL(gAlp.Util.gtThan, window.viewportSize.getWidth),
@@ -243,6 +194,7 @@ if (!window.gAlp) {
         querySizeOutcomes = [_.partial(Modernizr.mq, desktop.query), _.partial(exceedsThreshold, threshold)],
         myQuery = gAlp.Util.getBest(always(mq), querySizeOutcomes),
         matchNode = curry2(gAlp.Util.regEx)('i'),
+        tooltip = gAlp.Tooltip($('article'), ["click here...", "...to toggle table and picture"], 2),
         getOtherFactory = function(pairs) {
             return _.compose(gAlp.Util.getZero, _.partial(_.without, pairs));
         },
@@ -605,24 +557,11 @@ if (!window.gAlp) {
             dorender = setAnchor(fig, null, getNewElement);
             _.compose(setCaption, dorender)('figcaption');
         },
-        makeFakeFigure = function(listener, link) {
-            var dorender = setAnchor(listener.getElement(), null, getNewElement),
-                get_prop = curry2(getter)('alt'),
-                fakeFig = ptL(setFromArray, 'add', 'figure'),
-                fig = _.compose(fakeFig, dorender)('div'),
-                img = gAlp.Util.getTargetNode(link, matchNode('img'), 'firstChild'),
-                setCaption = ptL(setText(get_prop(img)));
-            setAnchor(fig, null, idty)(link);
-            dorender = setAnchor(fig, null, getNewElement);
-            _.compose(setCaption, dorender)('div');
-        },
         link2move = ptL(gAlp.Util.invokeRest, 'getElementsByTagName', article, 'a'),
         oldanchor = ptL(gAlp.Util.invokeRest, 'getElementsByTagName', article, 'table'),
         getLinks = ptL(gAlp.Util.toArray, link2move),
         getTables = ptL(gAlp.Util.toArray, oldanchor),
         prepGalleryCommand = function(makeFigure) {
-            var count = 2,
-                tooltip = _.partial(gAlp.Tooltip, $('article'), ["click here...", "...to toggle table and picture"])();
             return {
                 execute: function(loader) {
                     var dorender = setAnchor(article, null, getNewElement),
@@ -650,11 +589,11 @@ if (!window.gAlp) {
                 },
                 undo: function() {
                     var cb = function(coll, el, i) {
-                        gAlp.Util.render(sellDiv, coll[i].nextSibling, el);
+                        coll[i].nextSibling && gAlp.Util.render(sellDiv, coll[i].nextSibling, el);
                     };
-                    if (count-- > 0) {
+                    //if (count-- > 0) {
                         tooltip.init();
-                    }
+                    //}
                     _.each(getLinks(), ptL(cb, getTables()));
                 }
             };
@@ -668,10 +607,6 @@ if (!window.gAlp) {
                 //q1 = '(max-width: 600px), (min-width: 769px) and (max-width: 860px)',
                 getCopy = function(list) {
                     return !isNaN(list) ? list : list.slice(_.random(0, list.length));
-                },
-                getCopy2 = function(list) {
-                    var n = Len >= 5 ? 3 : Len >= 3 ? 2 : Len >= 1 ? 1 : 0;
-                    return list.slice(0, n);
                 },
                 data = getCopy(alpacas),
                 getThreshold = function(getLimit, getMethod, pred) {
@@ -827,6 +762,7 @@ if (!window.gAlp) {
                     onload: function() {
                         this.load(0);
                         setFromArray('add', 'solo', article);
+                        tooltip.init();
                     },
                     load: doLoad1
                 },
@@ -835,6 +771,7 @@ if (!window.gAlp) {
                     onload: onload,
                     doLoad: function(i) {
                         this.load(i);
+                        tooltip.init();
                     },
                     load: _.compose(doLoad2, doLoad1),
                     getNav: getNav,
@@ -904,15 +841,8 @@ if (!window.gAlp) {
             return meLoader(getLen);
         };
     /* only load the javascript if css enabled, a dummy element is placed in html,
-    a property applied in css, which will not be accessible if path to css is wrong */
+    a property applied in css, which will not be accessible if path to css is missing */
     if (checkDummy()) {
-        /*
-        var f = function(){
-          var loader = setup();
-            loader.init();   
-        };
-        setTimeout(f, 10000);
-        */
         var loader = setup();
         loader.init();
         window.loader = loader;

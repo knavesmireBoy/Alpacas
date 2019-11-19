@@ -50,6 +50,9 @@
 #stud_services #main>#aside {
 	width: 90%;
 }
+#stud_services #main #article p {
+    margin-right: 69%;
+}
 #links #main>#aside {
 	width: 110%;
 }
@@ -250,6 +253,9 @@ bottom: -250%;
 		}
      #alpacas_for_sale #innerwrap  #main  div#aside {
          position: absolute;
+    }
+    .no-js #stud_services #main > #aside {
+        width: 90%;
     }
 }
 

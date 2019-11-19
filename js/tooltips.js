@@ -1,6 +1,7 @@
 /*jslint browser: true*/
 /*global window: false */
 /*global document: false */
+/*global Modernizr: false */
 /*global _: false */
 /*global gAlp: false */
 if (!window.gAlp) {
@@ -83,5 +84,30 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 			}
 		};
 		//init.call(timer);
-	return count ? timer : dummytimer;
+	return count && Modernizr.cssanimations ? timer : dummytimer;
 };
+
+gAlp.highLighter = {
+			perform: function() {
+                document.body.style.backgroundColor = 'black';
+                function simpleInvoke(o, m, arg) {
+                    return o[m](arg);
+                }
+
+				if (!gAlp.Util.hasFeature('nthchild')) {
+					this.perform = function() {
+						var getBody = gAlp.Util.curry3(simpleInvoke)('body')('getElementsByTagName'),
+							getLinks = gAlp.Util.curry3(simpleInvoke)('a')('getElementsByTagName'),
+							getTerm = _.compose(gAlp.Util.curry2(gAlp.Util.getter)('id'), _.partial(gAlp.Util.byIndex, 0), getBody),
+							links = _.compose(getLinks, gAlp.Util.curry3(simpleInvoke)('nav')('getElementById'))(document),
+							found = _.partial(_.filter, _.toArray(links), function(link) {
+								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
+							});
+						_.compose(_.partial(gAlp.Util.addClass, 'current'), _.partial(gAlp.Util.byIndex, 0), found)();
+					};
+				} else {
+					this.perform = function() {};
+				}
+				this.perform();
+			}
+		};
