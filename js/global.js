@@ -942,6 +942,7 @@ const curry = fn => (...args) => args.length >= fn.length
 				var partial = el ? _.partial(handler, el) : _.partial(handler);
 				return prepareListener(partial, func, el);
 		},
+        clickHandler: _.partial(this.addHandler, 'click'),
         getPredicate: function(cond, predicate){
             return predicate(getResult(cond)) ? predicate : _.negate(predicate); 
         },
@@ -1048,6 +1049,7 @@ const curry = fn => (...args) => args.length >= fn.length
 		getBest: best,
 		getBestRight: curry2(best),
 		getBestLeft: best,
+        getDefaultAction: _.partial(best, noOp()),
         getOffset: function(bool){
             var w = window,
                 d = document.documentElement || document.body.parentNode || document.body,
@@ -1178,6 +1180,44 @@ const curry = fn => (...args) => args.length >= fn.length
 			return ret;
 			//return clone(ret);
 		},
+        initCommandsHash: function(predicates, ops){
+            var com = gAlp.Util.command(),
+                o = {};
+            if(predicates[0]){
+                o[ops[0]] = predicates[0];
+                o[ops[1]] =  predicates[1] || _.negate(predicates[0]);
+            }
+            else {
+                o[ops[0]] = noOp;
+                o[ops[1]] = noOp;
+            }
+            com.execute(ops[0]);
+            com.undo(ops[1]);                
+            return com;
+            },
+        routeOnEvent: function(e, actions, predicates) {
+            if(!_.isArray(actions)){
+                actions = [noOp, noOp];
+            }
+            if(!_.isArray(predicates)){
+                predicates = [always(false), always(true)];
+            }
+            if(predicates.length === 1){
+                predicates = _.map(actions, function(){
+                    return predicates[0];
+                });
+            }
+            var best1 = _.partial(gAlp.Util.getBest, function(agg) {
+                console.log(arguments)
+                return agg[0](e);
+            }, _.zip(predicates, actions));
+                /*the function supplied to gAlp.Util.getDefaultAction returns undefined
+                this means that the last in a series of arguments will be returned
+                in this case of a so in this case ([predN, actioN]) actioN
+                */
+            //best1 supplies a collection to gAlp.Util.getDefaultAction
+           _.compose(gAlp.Util.getDefaultAction, best1)()();
+        },
         getComputedStyle: function(element, styleProperty) {
                 var computedStyle = null,
                     def = document.defaultView || window;

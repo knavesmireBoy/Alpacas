@@ -80,6 +80,25 @@
     <script src="../js/global.js"></script>
     <script src="../js/basicIterator.js"></script>
     <script src="../js/tooltips.js"></script> 
-    <script src="../js/gallery.js"></script> 
+    <script src="../js/gallery.js"></script>
+    <script>
+    var john = {
+        say: function(){
+            return 'john';
+        }
+    },
+        paul = {
+            say: function(){
+            return 'paul'
+        }
+        },
+            com = gAlp.Util.command().init(john);
+        com.execute('say');
+        
+        console.log(com.execute());
+        com.setObject(paul);
+    console.log(com.execute());
+    
+    </script>
 </body>
 </html>

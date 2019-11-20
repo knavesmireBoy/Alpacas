@@ -127,11 +127,11 @@ if (!window.gAlp) {
 			}
 		}
 	};
-	core.Intaface.Ensures = function () {
+	core.Intaface.ensures = function () {
 		try {
 			core.Intaface.ensureImplements.apply(core.Intaface, arguments);
 		} catch (e) {
-			//console.log(e.message);
+			console.log(e.message);
 		}
 	};
 }(gAlp));

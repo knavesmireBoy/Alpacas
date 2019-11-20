@@ -170,7 +170,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     }    
 }
 /* iPhone 6, 7, 8 ----------- */
-
+/*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/
 
 @media screen and (max-device-width: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 1.5){
 .js body#gallery {
