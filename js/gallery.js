@@ -24,6 +24,10 @@
 	}
 
 	function noOp() {}
+    
+	function add(a, b) {
+        return a + b; 
+    }
 
 	function doOnce() {
 		return function (i) {
@@ -42,11 +46,11 @@
     function drillDown(arr) {
 		var a = arr && arr.slice && arr.slice();
 		if (a && a.length > 0) {
-			return function inner(o, i) {
+			return function drill(o, i) {
 				i = isNaN(i) ? 0 : i;
 				var prop = a[i];
 				if (prop && a[i += 1]) {
-					return inner(o[prop], i);
+					return drill(o[prop], i);
 				}
 				return o[prop];
 			};
@@ -125,6 +129,10 @@
 			return VALUE;
 		};
 	}
+    
+		function passOn(arg) {
+			return arg;
+		}
 
 	function thunk(f) {
 		return f.apply(f, _.rest(arguments));
@@ -173,6 +181,7 @@
 			return el && pred(f1(el)(), f2(str, el)());
 		},
 		isNodeName = _.partial(matchUp, isEqual, isLowerCase, _.partial(gAlp.Util.bindContext, 'toLowerCase')),
+        
 		changeView = function (el, bool, klas, method) {
 			var f = _.partial(gAlp.Util.bindContext, method),
 				args = _.partial(_.identity, [klas]);
@@ -182,9 +191,11 @@
 			deferred(f, args, el);
 		},
 		changeViewRet = function (func, el, bool, klas, method) {
+            con(arguments)
 			func(el, bool, klas, method);
 			return el;
 		},
+ 
 		changeViewWrap = _.wrap(changeView, changeViewRet),
 		prepareView = gAlp.Util.curry4(changeView),
 		doHide = prepareView('remove')(display)(),
@@ -197,9 +208,15 @@
 				clicked = e.clientX - box.left;
 			return clicked >= threshold;
             */
+            //tmp 
 			return function (e) {
-				var box = e.target.getBoundingClientRect();
-				return isGreaterEq(_.partial(subtract, e.clientX, box.left), _.partial(getThreshold, box.right, box.left));
+                try {
+                    var box = e.target.getBoundingClientRect();
+                    return isGreaterEq(_.partial(subtract, e.clientX, box.left), _.partial(getThreshold, box.right, box.left));
+                }
+                catch(e){
+                    return true;
+                }
 			};
 		}(divideBy(2), subtract, greaterOrEqual)),
         prepRoute = gAlp.Util.curry3(gAlp.Util.routeOnEvent)([getLoc, _.negate(getLoc)]),
@@ -210,8 +227,10 @@
 		doInPlay = _.partial(isInPlay, $('wrap')),
 		doNotInPlay = _.partial(isNotInPlay, $('wrap')),
 		dorender = _.partial(gAlp.Util.render, thumbnails, null),
+        
 		getNew = gAlp.Util.getNewElement,
-		setAttrs = gAlp.Util.setAttrs,
+		//setAttrs = gAlp.Util.setAttrs,
+		setAttrs = _.partial(gAlp.Util.setAttrsFix(doc.body.attachEvent), always(true), 'setAttribute'),
 		setText = gAlp.Util.setText,
 		curryView = gAlp.Util.curry4(changeViewWrap),
 		preSet = function (def, preBound, pArgs) {
@@ -289,8 +308,9 @@
 				};
 			return [soPlay, soPause];
 		},
-		fadeUntil = function (myopacity, setStyle, doFade, pred, onDone, el, i) {
-			deferred(gAlp.Util.setStyle, _.partial(doFade, myopacity.getValue(i)), getDomTargetImg(el));
+		fadeUntil = function (myopacity, pred, onDone, el, i) {
+            var currysetter = gAlp.Util.curry3(gAlp.Util.setter)(myopacity.getValue(i))(cssopacity);
+            _.compose(currysetter, _.partial(drillDown(['style']), getDomTargetImg(el)))();
 			invokeOn(_.partial(thunk, pred, i), _.partial(thunk, onDone, el));
 		},
 		nodematch = function (el, validator) {
@@ -350,12 +370,18 @@
 				isButton = gAlp.Util.validator('Please press a button', _.partial(checkIsButton, 'nodeName', /button/i)),
 				swapImgCB = _.compose(_.isNumber, lessOrEqual(0)),
 				preNodeNameBridge = _.partial(nodematchBridge, isButton),
-				fader = _.partial(fadeUntil, gAlp.getOpacity(), gAlp.Util.setStyle, _.partial(doArray, cssopacity), swapImgCB),
+				fader = _.partial(fadeUntil, gAlp.getOpacity(), swapImgCB),
 				doanime = gAlp.Util.doGetSet(countdown, 'anime'),
 				doprog = gAlp.Util.doGetSet(countdown, 'progress'),
 				half = gAlp.getOpacity(50).getValue(),
-				full = gAlp.getOpacity(100).getValue(),
-				fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs([cssopacity, half])), curryView('add')(display)(true)),
+				full = gAlp.getOpacity(120).getValue(),
+                /*
+                fade50 = function(){
+                currysetter = gAlp.Util.curry3(gAlp.Util.setter)(half)(cssopacity),
+                    return _.partial(_.compose(currysetter, drillDown(['style']), bolt('add')(display)(true))());
+                },
+                      */               
+                fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs([cssopacity, half])), curryView('add')(display)(true)),
                 prepNextSlide = function(iterator, slide) {
 					var kid = getDomTargetImg(slide.firstChild),
 						link = getDomTargetLink(slide.firstChild),
@@ -476,7 +502,8 @@
 										}
 									},
                                     copier = _.partial(prepNextSlide, iterator),
-									next = _.compose(doShow, iterator.getNext, doHide, getCurrentSlide),
+                                    shownext = _.compose(doShow, iterator.getNext),
+									next = _.compose(shownext, doHide, getCurrentSlide),
 									baseEl = getBaseElement(dorender, getNew, config),
                                     theorient = isLscp(getCurrentSlide()),
 									pauser = getSlide(baseEl, paused_config(theorient), fade50),
@@ -551,10 +578,9 @@
 					},
                     currysetter = gAlp.Util.curry3(gAlp.Util.setter);
                     doElement = _.partial(gAlp.Util.render, composed.get(), null, createButton);
+                gAlp.Util.compLoop('each', playbuttons, always('id'), gAlp.Util.curry2(add)('button'))(currysetter, doElement);
                 
-                _.each(playbuttons, function (str) {
-					return _.compose(currysetter(str+'button')('id'), doElement)();
-				});
+               
 				/*The above is no longer required as we've had to resort to using a background image sprite
 				given browser inconsistency in rendering arrows. However it is doing no harm*/
 				delegate = function (e) {
@@ -563,7 +589,7 @@
 						this[m]();
 					}, thumbnailsListener);
 					switchView(els, gAlp.Util.reverse);
-					_.each(navigator.getCollection(), doHide);
+					_.each(lis, doHide);
 					this.fire();
 				};
 				handler = _.partial(clickHandler, _.partial(invokeWhen, preNodeNameBridge, delegate));
@@ -575,14 +601,7 @@
                 });
 				composed = gAlp.Util.makeElement(gAlp.Util.curry2(extend)(composed), addEvent, doAttrs, setText('&#x2716'), doElement).add();
 				gAlp.Util.curry2(extend)(composed)(composed.get());
-                
-				try{
-                    enter.call(this, els, navigator.getCurrent());
-                    
-                }
-                catch(e){
-                    report.innerHTML = e.message;
-                }
+				enter.call(this, els, navigator.getCurrent());
 			};
 		},
 		listen1 = listen(_.partial(getNew, 'div'), _.partial(getNew, 'button'));
