@@ -70,6 +70,9 @@
 	#main .read-more-state~.read-more-target p {
 		position: absolute;
 		opacity: 0;
+	}
+    
+    #main.scroll .read-more-state~.read-more-target p {
         -webkit-transition: opacity 2s;
         -o-transition: opacity 2s;
         transition: opacity 2s;

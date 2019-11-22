@@ -4,7 +4,7 @@
 /*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
-(function (doc, slide_config, paused_config, visiblity, mq, query, cssanimations, touchevents, report) {
+(function (doc, visiblity, mq, query, cssanimations, touchevents, report, slide_config, paused_config) {
 	"use strict";
 
 	function getResult(arg) {
@@ -24,6 +24,10 @@
 	}
 
 	function noOp() {}
+    
+	function add(a, b) {
+        return a + b; 
+    }
 
 	function doOnce() {
 		return function (i) {
@@ -32,10 +36,28 @@
 			};
 		};
 	}
-
-	function applyOn(partial, getargs, o) {
-		//applies the final arguments before fulfilling the function with the supplied object
-		partial.apply(null, getResult(getargs))(o);
+    
+    function toCamelCase(variable) {
+		return variable.replace(/-([a-z])/g, function(str, letter) {
+			return letter.toUpperCase();
+		});
+	}
+    
+    function drillDown(arr) {
+		var a = arr && arr.slice && arr.slice();
+		if (a && a.length > 0) {
+			return function drill(o, i) {
+				i = isNaN(i) ? 0 : i;
+				var prop = a[i];
+				if (prop && a[i += 1]) {
+					return drill(o[prop], i);
+				}
+				return o[prop];
+			};
+		}
+		return function(o) {
+			return o;
+		};
 	}
 
 	function withContextRet(bound, context, fArgs) {
@@ -107,14 +129,25 @@
 			return VALUE;
 		};
 	}
+    
+		function passOn(arg) {
+			return arg;
+		}
 
 	function thunk(f) {
 		return f.apply(f, _.rest(arguments));
 	}
+    
 
 	function invokeOn(validater, action) {
 		return validater() && action();
 	}
+    
+     function simpleinvoke2(m, f, v, e) {
+        //con(arguments)
+        return f(e)[m](v);
+	}
+    //var con = window.console.log.bind(window);
 	var enter,
         thumbnailsListener,
         isFunction = function (fn, context) {
@@ -125,6 +158,11 @@
 		$ = function (str) {
 			return document.getElementById(str);
 		},
+         event$ = drillDown(['target', 'id']),
+        stringMatch = _.partial(simpleinvoke2, 'match'),
+        buttonRoutes = _.map([/back/i, /p\w+/i, /Forward/i], function(reg){
+            return _.partial(_.partial(stringMatch, event$), reg);
+        }),
 		cssopacity = gAlp.getOpacity().getKey(),
 		filterSlides = function (el) {
 			return !(el.id);
@@ -138,14 +176,13 @@
 		//https://tutorialzine.com/2014/12/you-dont-need-icons-here-are-100-unicode-symbols-that-you-can-use
 		//buttons_save = ['&#x25c0', '&#x25b7', '&#x25ba'],
 		buttons = ['', '', ''],
-		zippedButtonsRegEx = _.partial(_.zip, [/back/i, /p\w+/i, /Forward/i]),
-		outcomes = ['', ''],
-		getCurrent = _.partial(gAlp.Util.byIndex, 0, _.partial(gAlp.Util.getByClass, '.show')),
+        getCurrentSlide = _.partial(gAlp.Util.byIndex, 0, _.partial(gAlp.Util.getByClass, '.show')),
 		isLowerCase = _.partial(gAlp.Util.bindSub, 'nodeName', 'toLowerCase'),
 		matchUp = function (pred, f1, f2, str, el) {
 			return el && pred(f1(el)(), f2(str, el)());
 		},
 		isNodeName = _.partial(matchUp, isEqual, isLowerCase, _.partial(gAlp.Util.bindContext, 'toLowerCase')),
+        
 		changeView = function (el, bool, klas, method) {
 			var f = _.partial(gAlp.Util.bindContext, method),
 				args = _.partial(_.identity, [klas]);
@@ -158,10 +195,12 @@
 			func(el, bool, klas, method);
 			return el;
 		},
+ 
 		changeViewWrap = _.wrap(changeView, changeViewRet),
 		prepareView = gAlp.Util.curry4(changeView),
 		doHide = prepareView('remove')(display)(),
 		doShow = prepareView('add')(display)(),
+        hideCurrent = _.compose(doHide, getCurrentSlide),
 		getLoc = (function (div, subtract, isGreaterEq) {
 			var getThreshold = _.compose(div, subtract);
 			/*
@@ -169,20 +208,29 @@
 				clicked = e.clientX - box.left;
 			return clicked >= threshold;
             */
+            //tmp 
 			return function (e) {
-				var box = e.target.getBoundingClientRect();
-				return isGreaterEq(_.partial(subtract, e.clientX, box.left), _.partial(getThreshold, box.right, box.left));
+                try {
+                    var box = e.target.getBoundingClientRect();
+                    return isGreaterEq(_.partial(subtract, e.clientX, box.left), _.partial(getThreshold, box.right, box.left));
+                }
+                catch(e){
+                    return true;
+                }
 			};
 		}(divideBy(2), subtract, greaterOrEqual)),
+        prepRoute = gAlp.Util.curry3(gAlp.Util.routeOnEvent)([getLoc, _.negate(getLoc)]),
 		getControls = _.partial($, 'controls'),
-		//togglePlaying = gAlp.Util.curry4(changeViewWrap)('toggle')('playing')(),
+		togglePlaying = gAlp.Util.curry4(changeViewWrap)('toggle')('playing')(),
         isInPlay = gAlp.Util.curry4(changeViewWrap)('add')('inplay')(),
         isNotInPlay = gAlp.Util.curry4(changeViewWrap)('remove')('inplay')(),
 		doInPlay = _.partial(isInPlay, $('wrap')),
 		doNotInPlay = _.partial(isNotInPlay, $('wrap')),
 		dorender = _.partial(gAlp.Util.render, thumbnails, null),
+        
 		getNew = gAlp.Util.getNewElement,
-		setAttrs = gAlp.Util.setAttrs,
+		//setAttrs = gAlp.Util.setAttrs,
+		setAttrs = _.partial(gAlp.Util.setAttrsFix(doc.body.attachEvent), always(true), 'setAttribute'),
 		setText = gAlp.Util.setText,
 		curryView = gAlp.Util.curry4(changeViewWrap),
 		preSet = function (def, preBound, pArgs) {
@@ -195,27 +243,16 @@
 		addMyEvent = gAlp.Util.addEvent,
 		getDomTargetImg = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
 		getDomTargetLink = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('a')),
+        getDomTargetList = gAlp.Util.getDomParent(gAlp.Util.getNodeByTag('li')),
 		invokeWhen = gAlp.Util.invokeWhen,
 		clickHandler = _.partial(gAlp.Util.addHandler, 'click'),
-		touchHandler = _.partial(gAlp.Util.addHandler, 'touchend'),
-		getGallery = function (tgt, pred) {
-			pred = pred || always(true);
-			var index,
-				//CANNOT be LIVE collection, otherwise the li#slide would be added dynamically
-				//coll = _.toArray($('thumbnails').getElementsByTagName('li')),
-				coll = _.toArray(document.querySelectorAll('#thumbnails li')),
-				getParent = gAlp.Util.getDomParent(gAlp.Util.getNodeByTag('li'));
-			coll = _.filter(coll, pred);
-			index = _.findIndex(coll, _.partial(isEqual, getParent(tgt)));
+        iteratorBridge = function(tgt, predicate, coll) {
+			predicate = predicate || always(true);
+			coll = gAlp.Util.getCollection.call(_, coll, predicate);
+			var index = gAlp.Util.find.call(_, coll, _.partial(isEqual, getDomTargetList(tgt)), 0);
 			return gAlp.Iterator(index, coll, always(true), _.partial(modulo, coll.length), always(false));
 		},
-		removingListeners = function (remover, n) {
-			//removes the LAST n listeners that were added
-			while (n) {
-				remover(0, 1);
-				n -= 1;
-			}
-		},
+	
 		countdown = function countdown(cb, x) {
 			var doFadeUntil = _.compose(cb, lessOrEqual(100), isPositive, isNumber),
 				zero = gtOrEq(0),
@@ -241,7 +278,7 @@
 				if (zero(x)) {
 					restart(counter);
 				} else {
-					x = 300;
+					x = 360;
 					counter();
 				}
 			} //nested
@@ -256,14 +293,13 @@
 				prepPause = function (then, pred) {
 					then(pred)();
 				},
-                handler = touchevents ? touchHandler : clickHandler,
 				soPlay = function () {
 					/*hasPlayed returns a reference to the function provided to requestAnimation... set below
 				it is persisted as a property of the outer function or else hasPlayed returns null*/
-					hasPlayed(countdown(_.partial(doFade, onDone, slider.add()), 120));
+					hasPlayed(countdown(_.partial(doFade, onDone, slider.add()), 150));
 					play = _.compose(doInPlay, hasPlayed(), resume);
 					pausedEvent = _.partial(prepPause, gAlp.Util.getBestRight([pause, play]), inProgress);
-					addMyEvent(handler, pausedEvent)(thumbnails);
+					addMyEvent(clickHandler, pausedEvent)(thumbnails);
 					play();
 				},
 				soPause = function () {
@@ -272,8 +308,9 @@
 				};
 			return [soPlay, soPause];
 		},
-		fadeUntil = function (myopacity, setStyle, doFade, pred, onDone, el, i) {
-			deferred(gAlp.Util.setStyle, _.partial(doFade, myopacity.getValue(i)), getDomTargetImg(el));
+		fadeUntil = function (myopacity, pred, onDone, el, i) {
+            var currysetter = gAlp.Util.curry3(gAlp.Util.setter)(myopacity.getValue(i))(cssopacity);
+            _.compose(currysetter, _.partial(drillDown(['style']), getDomTargetImg(el)))();
 			invokeOn(_.partial(thunk, pred, i), _.partial(thunk, onDone, el));
 		},
 		nodematch = function (el, validator) {
@@ -318,82 +355,104 @@
 			};
 		},
 		listen = function (createDiv, createButton) {
-			var isMatch = function (str, agg) {
-					return str.match(agg[0]);
-				},
-				isImg = gAlp.Util.validator('Please click on an image', _.partial(isNodeName, 'IMG')),
+			var lis = _.toArray($('thumbnails').getElementsByTagName('li')),
+                isImg = gAlp.Util.validator('Please click on an image', _.partial(isNodeName, 'IMG')),
 				isLscp = _.partial(function (el) {
 					return gAlp.Util.getClassList(el).contains('portrait');
 				}),
 				checkIsButton = function (attr, regExp, el) {
 					return el[attr].match(regExp);
 				},
-				setButton = function (attr, content) {
-					var toggle = _.partial(_.partial($, 'controls'));
-					return _.compose(toggle, _.partial(setAttrs, {
-						'data-swap': attr
-					}), setText(content));
+                setPlayButton = function () {
+					return togglePlaying(_.partial($, 'controls'));
 				},
-				setPlayButton = _.partial(applyOn, setButton, _.partial(gAlp.Util.reverse, outcomes)),
 				toggleStatic = gAlp.Util.curry4(changeViewWrap)('toggle')('static')(touchevents),
 				isButton = gAlp.Util.validator('Please press a button', _.partial(checkIsButton, 'nodeName', /button/i)),
 				swapImgCB = _.compose(_.isNumber, lessOrEqual(0)),
 				preNodeNameBridge = _.partial(nodematchBridge, isButton),
-				fader = _.partial(fadeUntil, gAlp.getOpacity(), gAlp.Util.setStyle, _.partial(doArray, cssopacity), swapImgCB),
+				fader = _.partial(fadeUntil, gAlp.getOpacity(), swapImgCB),
 				doanime = gAlp.Util.doGetSet(countdown, 'anime'),
 				doprog = gAlp.Util.doGetSet(countdown, 'progress'),
 				half = gAlp.getOpacity(50).getValue(),
 				full = gAlp.getOpacity(100).getValue(),
-				fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs([cssopacity, half])), curryView('add')(display)(true)),
-				inherit = function (iterator, slide) {
+                /*
+                fade50 = function(){
+                currysetter = gAlp.Util.curry3(gAlp.Util.setter)(half)(cssopacity),
+                    return _.partial(_.compose(currysetter, drillDown(['style']), bolt('add')(display)(true))());
+                },
+                      */               
+                fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs([cssopacity, half])), curryView('add')(display)(true)),
+                prepNextSlide = function(iterator, slide) {
 					var kid = getDomTargetImg(slide.firstChild),
 						link = getDomTargetLink(slide.firstChild),
-						cur = getDomTargetImg(iterator.getCurrent().firstChild),
+						current = getDomTargetImg(iterator.getCurrent().firstChild),
 						getAttrs = gAlp.Util.curry2(gAlp.Util.getter),
-						//addOpacity = _.partial(gAlp.Util.setpropAdapter, 'style', 'opacity', 1),
-						addOpacity = _.partial(gAlp.Util.setpropAdapter, 'style', cssopacity, full),
+						config = {
+							property: 'style',
+							key: cssopacity,
+							value: full,
+							object: kid
+						},
+						addOpacity = _.partial(gAlp.Util.setPropFromHash, config),
 						o = {
-							src: getAttrs('src')(cur),
-							alt: getAttrs('alt')(cur)
+							src: getAttrs('src')(current),
+							alt: getAttrs('alt')(current)
 						};
+                    
 					_.compose(_.partial(setAttrs, {
-						href: getAttrs('src')(cur)
+						href: getAttrs('src')(current)
 					}))(link);
-					_.compose(_.partial(setAttrs, o), addOpacity)(kid);
+                    
+					_.compose(_.partial(setAttrs, o), addOpacity)();
 				},
 				enterHandler = _.partial(gAlp.Util.addHandler, 'mouseenter'),
+                locator = null,
 				//touchHandler = _.partial(gAlp.Util.addHandler, 'ontouchstart'),
 				res,
-				tgt,
-				locationhandler,
-				makeNavigator = function (tgt, pred, context) {
-					var iterator = getGallery(tgt, pred),
-						advance = _.compose(doShow, iterator.forward, doHide, getCurrent),
-						retreat = _.compose(doShow, iterator.back, doHide, getCurrent),
-						delegateLocation = function (e) {
-							var best1 = _.partial(gAlp.Util.getBest, function (agg) {
-									return agg[0](e);
-								}, _.zip([getLoc, _.negate(getLoc)], [advance, retreat])),
-								best2 = _.partial(gAlp.Util.getBest, function (agg) {
-									return agg[1];
-								});
-							_.compose(best2, best1)()();
-						};
-					//delegateLocation = alert.bind(window, 99),
-					locationhandler = locationhandler || _.compose(addMyEvent(clickHandler, delegateLocation), _.identity)(context);
+				tgt,                
+                getCommand = function(iterator, exec, undo){
+                    var com = gAlp.Util.command().init(iterator);
+                    com.execute(exec);
+                    com.undo(undo);
+                    return com;
+                },
+                
+				makeNavListener = function(command, element) {
+                    //designed to remove pause, mousein, mouseout events post slideshow
+                    
+                    function removingListeners(remover, n) {
+                        //removes the LAST n listeners that were added
+                        while (n) {
+                            remover(0, 1);
+                            n -= 1;
+                        }
+                    }                    
+					gAlp.Intaface.ensures(command, gAlp.Intaface('command', ['execute', 'undo']));
+					var hideCurrent = _.compose(doHide, getCurrentSlide),
+						advance = _.compose(doShow, command.execute, hideCurrent),
+						retreat = _.compose(doShow, command.undo, hideCurrent),
+                        listener = prepRoute([advance, retreat]);
+                    locator = locator || _.compose(addMyEvent(clickHandler, listener), _.identity)(element);
+
 					return {
-						enter: _.bind(locationhandler.addListener, locationhandler),
-						advance: advance,
-						retreat: retreat,
-						exit: _.partial(removingListeners, gAlp.Util.removeListener(locationhandler)),
-						locationhandler: locationhandler,
-						get: function () {
-							return iterator;
-						}
+						enter: _.bind(locator.addListener, locator),
+						exit: _.partial(removingListeners, gAlp.Util.removeListener(locator)),
+                        remove: function(){
+                            locator.remove(locator);
+                        },
+                        advance: advance,
+						retreat: retreat
+                        
 					};
+				},
+				makeNavigator = function(iterator, element, nav) {
+                    _.extendOwn(nav, makeNavListener(getCommand(iterator, 'forward', 'back'), element));
+					_.each(['getCurrent', 'getNext', 'getCollection'], _.partial(gAlp.Util.proxy, iterator), nav);
+					return nav;
 				};
 			////////////////////////////////////////////////////////////////////////////////////
 			return function (e) {
+                
 				tgt = e.target;
 				res = gAlp.Util.checker(isImg)(tgt);
 				if (negate(_.isEmpty)(res)) {
@@ -401,34 +460,11 @@
 				}
 				// window.alert(document.documentElement.className);
 				/*▲ &#9650; ► &#9658; ▼ &#9660; ◄ &#9668*/
-				var that = this,
-                    myNavigatorFactory = function(){
-                        var o = {
-                            getSubject: function(){
-                                return this.subject;
-                            },
-                            setSubject: function(subject){
-                                this.subject = subject;
-                                //_.each(_.keys(subject), _.partial(gAlp.proxy), this);
-                                return this;
-                            }
-                        };
-                       // _.each(_.keys(subject), _.partial(gAlp.proxy, subject, o));
-                        return o;
-                    },
-                    myNavigator = myNavigatorFactory().setSubject(makeNavigator(tgt, always(true), that)),
-					doElement = _.partial(gAlp.Util.render, this.parentNode, null, createDiv),
-					doAttrs = _.partial(setAttrs, {
-						id: 'controls'
-					}),
-					getPlayIterator = function (iterator, predicate, context) {
-						var pass = predicate(iterator.getCurrent()),
-							filterBy = pass ? predicate : _.negate(predicate);
-						return makeNavigator(iterator.getCurrent(), filterBy, context);
-					},
-					doPlay = function (e, bool) {
-						var doButtonBound = _.partial(setPlayButton, e.target),
-							tooltip_timer,
+                
+				var iterator = iteratorBridge(tgt, always(true), lis),                  
+                    navigator = makeNavigator(iterator, this, {});
+					var machSchau = function (e, bool) {
+						var tooltip_timer,
 							allow = !touchevents ? 2 : 0,
 							enterSlideShow = function () {
                                 //report.innerHTML = $('controls').className+'^^';
@@ -442,81 +478,89 @@
 								mouseenter(getControls()).addListener();
 								mouseleave($('footer')).addListener();
 								toggleStatic(getControls());
-								myNavigator.getSubject().locationhandler.remove(myNavigator.getSubject().locationhandler);
+                                navigator.remove();
                                 tooltip_timer = dotooltip();
 							},
                             
 							best = gAlp.Util.getBest,
 							doNull,
 							once = doOnce(),
-							doListeners = _.partial(best, _.partial(thunk, once(1))),
-							doTool = _.partial(best, _.partial(thunk, once(1))),
-							doAni = _.partial(best, _.partial(thunk, once(1)));
+							addMouseListeners = _.partial(best, _.partial(thunk, once(1))),
+							initToolTip = _.partial(best, _.partial(thunk, once(1))),
+							doSlideShow = _.partial(best, _.partial(thunk, once(1)));
                         
-                        
-						doPlay = function (e, bool) { //memo
-                            try {
-							if (!bool) {
-                                myNavigator.setSubject(getPlayIterator(myNavigator.getSubject().get(), isLscp, thumbnails));
-								var config = {
+						machSchau = function (e, bool) { //memo
+                           
+							if (!bool) {                                
+								var predicate = gAlp.Util.getPredicate(getCurrentSlide(), isLscp),
+                                    iterator = iteratorBridge(getDomTargetImg(getCurrentSlide()), predicate, lis),
+                                    navcommand = getCommand(makeNavigator(iterator, thumbnails, {}), 'enter', 'exit'),
+                                    config = {
 										filter: filterSlides,
 										collection: function () {
 											return _.partial(gAlp.Util.getByClass, display, null, 'li')();
 										}
 									},
-									play_iterator = myNavigator.getSubject().get(),
-									copier = _.partial(inherit, play_iterator),
-									next = _.compose(doShow, play_iterator.getNext, doHide, getCurrent),
+                                    copier = _.partial(prepNextSlide, iterator),
+                                    shownext = _.compose(doShow, iterator.getNext),
+									next = _.compose(shownext, doHide, getCurrentSlide),
 									baseEl = getBaseElement(dorender, getNew, config),
-									pauser = getSlide(baseEl, paused_config, fade50),
-									slider = getSlide(baseEl, slide_config, curryView('remove')(display)(true)),
-									pause = _.compose(doButtonBound, pauser.add, _.partial(doprog, null)),
-									resume = _.compose(doButtonBound, pauser.remove, _.partial(doprog, 1)),
-                                    touchStatic = _.partial(invokeWhen, always(touchevents),_.partial(toggleStatic, e.target.parentNode)),
-									maybeButton = _.partial(gAlp.Util.doWhenWait(_.bind(setPlayButton, null, e.target)), doprog),
+                                    theorient = isLscp(getCurrentSlide()),
+									pauser = getSlide(baseEl, paused_config(theorient), fade50),
+									slider = getSlide(baseEl, slide_config(), curryView('remove')(display)(true)),
+									pause = _.compose(setPlayButton, pauser.add, _.partial(doprog, null)),
+									resume = _.compose(setPlayButton, pauser.remove, _.partial(doprog, 1)),
+                                    touchStatic = _.partial(invokeWhen, always(touchevents), _.partial(toggleStatic, e.target.parentNode)),
+									maybeButton = gAlp.Util.doWhenWait(setPlayButton)(doprog),
 									cleanup = _.compose(touchStatic, doNotInPlay, slider.remove, pauser.remove, _.partial(doprog, null), maybeButton),
-									nullify = _.compose(_.partial(doanime, null), myNavigator.getSubject().enter, cleanup, _.partial(myNavigator.getSubject().exit, 3)),
+									nullify = _.compose(_.partial(doanime, null), navcommand.execute, cleanup, _.partial(navcommand.undo, 3)),//note 3 is hard coded (pause, mousein and mouseout events)
 									play = _.partial(playAway, doprog, doanime, pause, resume, slider);
 								//tooltip_timer becomes an object with run and cancel methods, to enable clearTimeout
-								doListeners([enterSlideShow, noOp])();
+								addMouseListeners([enterSlideShow, noOp])();
 								//returns 'best' options in an array...
-								doAni(play(_.compose(next, copier), fader))();
-								doTool([tooltip_timer.init, noOp])();
+								doSlideShow(play(_.compose(next, copier), fader))();
+								initToolTip([tooltip_timer.init, noOp])();
 								doNull = nullify;
 							} else if (doNull) { //only run post-play doNull is either null or a (exit) function
-								doListeners = _.partial(best, _.partial(thunk, once(1)));
-								doAni = _.partial(best, _.partial(thunk, once(1)));
-								makeNavigator(getDomTargetImg(myNavigator.getSubject().get().getNext(true)), filterSlides, thumbnails);
+								addMouseListeners = _.partial(best, _.partial(thunk, once(1)));
+								doSlideShow = _.partial(best, _.partial(thunk, once(1)));
+                                iterator = iteratorBridge(getDomTargetImg(getCurrentSlide()), filterSlides, lis);
+								navigator = makeNavigator(iterator, thumbnails, {});
 								doNull();
+                                doNull = null;
+                                gAlp.Intaface.ensures(tooltip_timer, gAlp.Intaface('Timer', ['cancel']));
 								tooltip_timer.cancel();
-								doNull = null;
 							}
-                            }
-                            catch(e){
-                                alert(e);
-                            }
 							//EXIT($('boys'));
 						};
-						doPlay(e, bool); //run
-					}, //original doPlay
-					validate = function (el) {
-						return el.innerHTML.match(/play/i);
+						machSchau(e, bool); //run
+					}, //original machSchau
+                        
+                    getOutcomes = function(playcommand, navcommand){
+                          gAlp.Intaface.ensures(playcommand, gAlp.Intaface('command', ['execute', 'undo']));
+                          gAlp.Intaface.ensures(navcommand, gAlp.Intaface('command', ['execute', 'undo']));
+                          var back = _.compose(playcommand.undo, navcommand.undo),
+                              forward = _.compose(playcommand.undo, navcommand.execute);
+                          return [back, playcommand.execute, forward];
+                    },
+                     delegate = function(mynav) {
+                        var nav = gAlp.Util.command().init(mynav);
+                        nav.execute('advance');
+                        nav.undo('retreat');
+                        return function(e){
+                            var play = {
+                                execute: _.partial(machSchau, e),
+                                undo: _.partial(machSchau, e, true)
+                            };
+                            gAlp.Util.routeOnEvent(e, getOutcomes(play, nav), buttonRoutes);
+                        };
 					},
-					valwrapper = function (coll, func, el, i) {
-						gAlp.Util.setter(el, 'id', coll[i] + 'button');
-						return func(el);
-					},
-					delegate = function (e) {
-						var play = _.partial(doPlay, e),
-							endplay = _.partial(doPlay, e, true),
-							best = gAlp.Util.getBest,
-							best1 = _.partial(best, _.partial(isMatch, e.target.id), zippedButtonsRegEx([_.compose(endplay, myNavigator.getSubject().retreat), play, _.compose(endplay, myNavigator.getSubject().advance)])),
-							best2 = _.partial(best, _.isFunction);
-						//zip => [[regEx1, regEx2...], [func1. func2...]
-						//hooks up the method with the button (e.target.innerHTML), returns then calls the method
-						_.compose(best2, best1)()();
-					},
-					handler = _.partial(clickHandler, _.partial(invokeWhen, preNodeNameBridge, delegate)),
+                    
+                    handler = _.partial(clickHandler, _.partial(invokeWhen, preNodeNameBridge, delegate(navigator))),
+                    doElement = _.partial(gAlp.Util.render, this.parentNode, null, createDiv),
+					doAttrs = _.partial(setAttrs, {
+						id: 'controls'
+					}),
 					composed = gAlp.Util.makeElement(_.partial(addingEventRet, handler), toggleStatic, doAttrs, doElement).add(),
 					extend = function (el, sub) {
 						if (!el.subscribe) {
@@ -531,41 +575,33 @@
 					els = {
 						gallery: this,
 						showtime: document.body
-					};
-				///re-use vars....
-				validate = _.wrap(validate, _.partial(valwrapper, playbuttons));
-				doElement = _.partial(gAlp.Util.render, composed.get(), null, createButton);
-				doAttrs = _.partial(setAttrs, {
-					//'data-swap': '&#9660'
-					'data-swap': ''
-				});
-				validate = _.partial(invokeWhen, validate, doAttrs);
-				//setInnerHTML from buttons array
-				_.map(buttons, setText).forEach(function (fn, i) {
-					//we need to pass index which is supplied as SECOND argument after incoming element
-					return _.compose(gAlp.Util.curry2(validate)(i), fn, doElement)();
-				});
+					},
+                    currysetter = gAlp.Util.curry3(gAlp.Util.setter);
+                    doElement = _.partial(gAlp.Util.render, composed.get(), null, createButton);
+                gAlp.Util.compLoop('each', playbuttons, always('id'), gAlp.Util.curry2(add)('button'))(currysetter, doElement);
+                
+               
 				/*The above is no longer required as we've had to resort to using a background image sprite
 				given browser inconsistency in rendering arrows. However it is doing no harm*/
 				delegate = function (e) {
-					doPlay(e, true);
+					machSchau(e, true);
 					_.each(['flush', 'addListener'], function (m) {
 						this[m]();
 					}, thumbnailsListener);
 					switchView(els, gAlp.Util.reverse);
-					_.each(myNavigator.getSubject().get().getCollection(), doHide);
+					_.each(lis, doHide);
 					this.fire();
 				};
 				handler = _.partial(clickHandler, _.partial(invokeWhen, preNodeNameBridge, delegate));
 				addEvent = _.partial(addingEventRet, handler);
+                
 				doElement = _.partial(gAlp.Util.render, this.parentNode, this.parentNode.children[0], createButton);
                 doAttrs = _.partial(setAttrs, {
                     id: 'exit'
                 });
 				composed = gAlp.Util.makeElement(gAlp.Util.curry2(extend)(composed), addEvent, doAttrs, setText('&#x2716'), doElement).add();
 				gAlp.Util.curry2(extend)(composed)(composed.get());
-                console.log(navigator, myNavigator);
-				enter.call(this, els, myNavigator.getSubject().get().getCurrent());
+				enter.call(this, els, navigator.getCurrent());
 			};
 		},
 		listen1 = listen(_.partial(getNew, 'div'), _.partial(getNew, 'button'));
@@ -575,10 +611,11 @@
         switchView(pairs, _.identity);
         doShow(el);
     };
-}(document, {
-	id: 'slide'
-}, {
-	id: 'paused',
-	src: '../assets/pause.png',
-    href: '#'
-}, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
+}(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0], function(){
+    return { id: 'slide'};
+}, function(bool){
+    return {
+      id: 'paused',
+        src: bool ? '../assets/pauseLong.png' : '../assets/pause.png'
+    };
+}));

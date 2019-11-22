@@ -182,7 +182,7 @@
 		top: 3.33em;
 		left: 0em;
 	}
-	.js #article p, .js .read-more-target p, #main #article p, #main .read-more-target p {
+	.js .verbose #main #article p, .js .verbose #main .read-more-target p {
 		margin-right: 0%;
 	}
 	#article p span {
