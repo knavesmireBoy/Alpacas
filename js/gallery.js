@@ -137,6 +137,7 @@
 	function thunk(f) {
 		return f.apply(f, _.rest(arguments));
 	}
+    
 
 	function invokeOn(validater, action) {
 		return validater() && action();
@@ -146,7 +147,7 @@
         //con(arguments)
         return f(e)[m](v);
 	}
-    var con = window.console.log.bind(window);
+    //var con = window.console.log.bind(window);
 	var enter,
         thumbnailsListener,
         isFunction = function (fn, context) {
@@ -191,7 +192,6 @@
 			deferred(f, args, el);
 		},
 		changeViewRet = function (func, el, bool, klas, method) {
-            con(arguments)
 			func(el, bool, klas, method);
 			return el;
 		},
@@ -374,7 +374,7 @@
 				doanime = gAlp.Util.doGetSet(countdown, 'anime'),
 				doprog = gAlp.Util.doGetSet(countdown, 'progress'),
 				half = gAlp.getOpacity(50).getValue(),
-				full = gAlp.getOpacity(120).getValue(),
+				full = gAlp.getOpacity(100).getValue(),
                 /*
                 fade50 = function(){
                 currysetter = gAlp.Util.curry3(gAlp.Util.setter)(half)(cssopacity),
