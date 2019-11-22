@@ -31,7 +31,33 @@ function doHandler(){
         
     }
 
+function passThru(delegatee, subject, config) {
+			function includer(arr, prop) {
+				return arr.indexOf(prop) !== -1;
+			}
 
+			function excluder(arr, prop) {
+				return arr.indexOf(prop) === -1;
+			}
+			config = config || {};
+			var p, delegator = {},
+				factory = function (method) {
+					return function () {
+						return this[subject] && this[subject][method].apply(this[subject], arguments);
+					};
+				},
+				arr = config.exclude || config.include,
+				func = arr && config.exclude ? excluder : arr && config.include ? includer : function () {
+					return true;
+				};
+			for (p in delegatee) {
+				if (func(arr, p)) {
+					delegator[p] = factory(p);
+				}
+			}
+			delegator[subject] = delegatee;
+			return delegator;
+		}
 
 
 gAlp.Util = (function() {
@@ -897,6 +923,18 @@ const curry = fn => (...args) => args.length >= fn.length
         return this;
     }
     
+     function simpleproxy(subject, method){
+        if(subject[method] && _.isFunction(subject[method])){
+        this[method] = function(){
+            return subject[method].apply(subject, arguments);
+        };
+        }
+        if(subject[method]){
+            this[method] = subject[method];
+        }
+        return this;
+    }
+    
     function proxy2(subject, method){
         if(!this.subject){
             this.getSubject = function(){ return this.subject; }
@@ -1208,7 +1246,6 @@ const curry = fn => (...args) => args.length >= fn.length
                 });
             }
             var best1 = _.partial(gAlp.Util.getBest, function(agg) {
-                console.log(arguments)
                 return agg[0](e);
             }, _.zip(predicates, actions));
                 /*the function supplied to gAlp.Util.getDefaultAction returns undefined
@@ -1217,6 +1254,15 @@ const curry = fn => (...args) => args.length >= fn.length
                 */
             //best1 supplies a collection to gAlp.Util.getDefaultAction
            _.compose(gAlp.Util.getDefaultAction, best1)()();
+        },
+        subjectMix: {
+            getSubject: function(){
+                return this.subject;
+            },
+            setSubject: function(subject){
+                this.subject = subject;
+                return this;
+            }
         },
         getComputedStyle: function(element, styleProperty) {
                 var computedStyle = null,
