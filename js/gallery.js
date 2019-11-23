@@ -573,11 +573,8 @@
 				});
 				composed = gAlp.Util.makeElement(gAlp.Util.curry2(extend)(composed), addEvent, doAttrs, setText('&#x2716'), doElement).add();
 				gAlp.Util.curry2(extend)(composed)(composed.get());
-				try {
-					enter.call(this, els, navigator.getCurrent());
-				} catch (er) {
-					report.innerHTML = er.message;
-				}
+                enter.call(this, els, navigator.getCurrent());
+				
 			};
 		},//listen
 		listen1 = listen(_.partial(getNew, 'div'), _.partial(getNew, 'button'));
@@ -588,10 +585,13 @@
 		doShow(el);
 	};
     
-	
-var event = new Event('build');
-thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[4]}));
+try {
+thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
 thumbnailsListener.triggerEvent(thumbnails, 'build');
+}
+    catch(er){
+        report.innerHTML = er.message;
+    }
    
 }(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0], function () {
     "use strict";
