@@ -598,7 +598,7 @@ thumbnailsListener.triggerEvent($('controls'), 'bolt');
 	};
     
 try {
-addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}))(thumbnails);
+addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[3]}))(thumbnails);
 //thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
 thumbnailsListener.triggerEvent(thumbnails, 'build');
 }
