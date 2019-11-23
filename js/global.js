@@ -715,7 +715,7 @@ const curry = fn => (...args) => args.length >= fn.length
 	}
 	//[ovk][vko][vok][kvo][kov]
 	function setter(o, k, v) {
-        console.log(arguments)
+        //console.log(arguments)
 		o[k] = v;
 	}
 
@@ -763,6 +763,11 @@ const curry = fn => (...args) => args.length >= fn.length
 
 	function prefix(p, str) {
 		return str.charAt(0) === p ? str : p + str;
+	}
+    
+    
+	function doArray(k, v) {
+		return [k, v];
 	}
     
     	function setFromFactory(bool) {
