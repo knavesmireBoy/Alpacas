@@ -174,7 +174,7 @@
 		changeView = function (el, bool, klas, method) {
 			var f = _.partial(gAlp.Util.bindContext, method),
 				args = _.partial(_.identity, [klas]);
-            console.log(el.firstChild && el.firstChild.href)
+           //console.log(el.firstChild && el.firstChild.href)
 			//el may be a function. eg awaitng the creation of an element
 			el = gAlp.Util.getClassList(getResult(el));
 			//we don't want to return here as it would break a loop on fading
@@ -387,7 +387,7 @@
 						href: getAttrs('src')(current)
 					}))(link);
 					_.compose(_.partial(setAttrs, o), addOpacity)();
-                    console.log('opacity');
+                    //console.log('opacity');
 				},
 				enterHandler = _.partial(gAlp.Util.addHandler, 'mouseenter'),
 
