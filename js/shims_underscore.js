@@ -144,14 +144,22 @@ String.prototype.abbreviate = function(token) {
 	}
 	return res;
 };
-String.prototype.capitalize = function() {
-	var res = this.split(' '),
+String.prototype.capitalize = function(char) {
+	var splitter = char || ' ',
+        res = this.split(splitter),
 		mapper = function(str) {
 			return str.charAt(0).toUpperCase() + str.slice(1);
 		}
 	res = res.map(mapper);
 	return res.join(' ');
 };
+
+String.prototype.toCamelCase = function (char) {
+    var reg = new RegExp(char+"([a-z])", 'g');
+		return this.replace(reg, function (match, captured) {
+			return captured.toUpperCase();
+		});
+	}
 
 String.prototype.honorific = function(h) {
 	"use strict";

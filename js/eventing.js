@@ -143,7 +143,8 @@ window.gAlp.Eventing = (function (eventing) {
 			getEventTarget: function(e) {
 				e = this.getEventObject(e);
 				return e.target || e.srcElement;
-			}
+			},
+            triggerEvent: triggerEvent
 		};
 	}([]);
 			if (window.addEventListener) {
@@ -164,7 +165,7 @@ window.gAlp.Eventing = (function (eventing) {
                         return config.element;
                     };
                     this.el = config.element+'_'+EventCache.listEvents().length;
-                    _.each(['prevent', 'remove', 'flush'], _.partial(mapper, EventCache, this));
+                    _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 					return _.extendOwn({}, this);
 				};
 			} else if (document.attachEvent) { // IE
@@ -174,10 +175,10 @@ window.gAlp.Eventing = (function (eventing) {
                     var config = sortArgs(fn, el, context),
                         bound;
 					this.addListener = function (el) {
-                        //bound = el ? _.bind(config.func, el) : config.func;
-                        //EventCache.add(this);
-						//config.element.attachEvent('on' + type, bound);
-						config.element.attachEvent('on' + type, config.func);
+                        bound = el ? _.bind(config.func, el) : config.func;
+                        EventCache.add(this);
+						config.element.attachEvent('on' + type, bound);
+						//config.element.attachEvent('on' + type, config.func);
 						return this;
 					};
 					this.removeListener = function () {
@@ -188,7 +189,7 @@ window.gAlp.Eventing = (function (eventing) {
                         return config.element;
                     };
                     this.el = config.element+'_'+EventCache.listEvents().length;
-                    //_.each(['prevent', 'remove', 'flush'], _.partial(mapper, EventCache, this));
+                    _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 					return _.extendOwn({}, this);
 				};
 			} else { // older browsers
@@ -209,7 +210,7 @@ window.gAlp.Eventing = (function (eventing) {
                         return config.element;
                     };
                     this.el = config.element+'_'+EventCache.listEvents().length;
-                    _.each(['prevent', 'remove', 'flush'], _.partial(mapper, EventCache, this));
+                    _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 					return _.extendOwn({}, this);
 				};
 			}
