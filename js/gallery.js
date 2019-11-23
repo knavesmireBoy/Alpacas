@@ -584,7 +584,7 @@ thumbnailsListener.triggerEvent($('controls'), 'bolt');
         report.innerHTML = er.message;
     }
                 
-                console.log(navigator.advance)
+//console.log(navigator.advance)
 
 				
 			};

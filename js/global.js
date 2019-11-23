@@ -365,7 +365,7 @@ const curry = fn => (...args) => args.length >= fn.length
 	}
 
 	function prepareListener(handler, fn, el) {
-        console.log(arguments)
+        //console.log(arguments)
 		var listener,
 			wrapper = function(func) {
 				var args = _.rest(arguments),
