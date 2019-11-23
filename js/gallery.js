@@ -576,7 +576,7 @@
                 enter.call(this, els, navigator.getCurrent());
                 
                                 try {
-addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.advance)($('controls'));
+addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.retreat)($('controls'));
 //thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
 thumbnailsListener.triggerEvent($('controls'), 'bolt');
 }
