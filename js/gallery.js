@@ -574,6 +574,18 @@
 				composed = gAlp.Util.makeElement(gAlp.Util.curry2(extend)(composed), addEvent, doAttrs, setText('&#x2716'), doElement).add();
 				gAlp.Util.curry2(extend)(composed)(composed.get());
                 enter.call(this, els, navigator.getCurrent());
+                
+                                try {
+addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.advance)($('controls'));
+//thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
+thumbnailsListener.triggerEvent($('controls'), 'bolt');
+}
+    catch(er){
+        report.innerHTML = er.message;
+    }
+                
+                console.log(navigator.advance)
+
 				
 			};
 		},//listen
@@ -586,7 +598,8 @@
 	};
     
 try {
-thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
+addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}))(thumbnails);
+//thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
 thumbnailsListener.triggerEvent(thumbnails, 'build');
 }
     catch(er){
