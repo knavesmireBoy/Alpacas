@@ -588,11 +588,11 @@
 		doShow(el);
 	};
     
-	/*
+	
 var event = new Event('build');
 thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[4]}));
 thumbnailsListener.triggerEvent(thumbnails, 'build');
-   */
+   
 }(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0], function () {
     "use strict";
 	return {
