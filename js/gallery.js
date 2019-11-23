@@ -574,7 +574,7 @@
 				composed = gAlp.Util.makeElement(gAlp.Util.curry2(extend)(composed), addEvent, doAttrs, setText('&#x2716'), doElement).add();
 				gAlp.Util.curry2(extend)(composed)(composed.get());
                 enter.call(this, els, navigator.getCurrent());
-                
+                /*
                                 try {
 addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.retreat)($('controls'));
 //thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
@@ -583,7 +583,7 @@ thumbnailsListener.triggerEvent($('controls'), 'bolt');
     catch(er){
         report.innerHTML = er.message;
     }
-                
+            */    
 //console.log(navigator.advance)
 
 				
@@ -596,7 +596,7 @@ thumbnailsListener.triggerEvent($('controls'), 'bolt');
 		switchView(pairs, _.identity);
 		doShow(el);
 	};
-    
+    /*
 try {
 addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[3]}))(thumbnails);
 //thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
@@ -605,7 +605,7 @@ thumbnailsListener.triggerEvent(thumbnails, 'build');
     catch(er){
         report.innerHTML = er.message;
     }
-   
+   */
 }(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0], function () {
     "use strict";
 	return {
