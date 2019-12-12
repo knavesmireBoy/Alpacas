@@ -57,6 +57,9 @@ if (!window.gAlp) {
 				if (!errors) {
 					errors = Number(!validator(arg)) ? errors += 1 : errors;
 				}
+                else {
+                 report.innerHTML = arg;   
+                }
 			});
 			if (!errors) {
 				return fun(arg);
@@ -296,7 +299,7 @@ if (!window.gAlp) {
 						doOdd(_.compose(doOddRow, always(row)));
 					});
 				});
-                report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
+                //report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
 				render = anCr(table.parentNode),
 					addLinkAttrs = _.extend(addLinkAttrs, {
 						href: getPath(subject)
