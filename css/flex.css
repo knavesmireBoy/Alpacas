@@ -1,4 +1,6 @@
-body#alpacas_for_sale {
+html.js body#alpacas_for_sale {
+    background: pink;
+    
 	/*display: flex;
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
