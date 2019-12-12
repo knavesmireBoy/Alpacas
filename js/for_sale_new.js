@@ -55,19 +55,19 @@ if (!window.gAlp) {
 
 	function decorateWhen( /* validators */ ) {
 		var validators = _.toArray(arguments),
-			errors = 0;
+			result = 0;
 		return function(fun, arg) {
 			_.each(validators, function(validator) {
-				if (!errors) {
-					errors = Number(!validator(arg)) ? errors += 1 : errors;
+				if (!result) {
+                    //if passes set to zero
+					result = Number(!validator(arg)) ? result += 1 : result;
 				}
-                else if(!undef(arg)){
-                 report.innerHTML = arg;   
-                }
+                
 			});
-			if (!errors) {
+			if (!result) {
 				return fun(arg);
 			}
+            //report.innerHTML = arg && arg.innerHTML;  
 			return arg;
 		};
 	}
@@ -304,6 +304,7 @@ if (!window.gAlp) {
 					});
 				});
                 //report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
+                report.innerHTML = window.attachEvent; 
 				render = anCr(table.parentNode),
 					addLinkAttrs = _.extend(addLinkAttrs, {
 						href: getPath(subject)
