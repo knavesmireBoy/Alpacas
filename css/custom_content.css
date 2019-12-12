@@ -48,7 +48,7 @@ pre {
 }
 #tooltip {
 	position: absolute;
-    z-index: 22;
+    z-index: 3;
 	bottom: 0em;
 	font-weight: normal;
 	font-size: .7em;
@@ -89,6 +89,7 @@ pre {
 	-webkit-transform: translate(2em, 10em);
 	-ms-transform: translate(2em, 10em);
 	transform: translate(2em, 10em);
+    z-index: 5;
 }
 
 #alpacas_for_sale #tooltip {
@@ -138,13 +139,13 @@ pre {
 	padding: 0.45em 0 .45em 2em;
 	color: white;
 }
-#alpacas_for_sale #article.loop ul a, #extent figure, #extent .figure, #alpacas_for_sale th, #extent div, #alpacas_for_sale #tooltip div:first-child {
+#alpacas_for_sale #article ul.loop a, figcaption, #alpacas_for_sale th, .extent div, #alpacas_for_sale #tooltip div:first-child {
 	color: white;
 	font-weight: bold;
 	background: #7F9933;
 	background: hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale #article.tab ul a {
+#alpacas_for_sale #article ul.tab a{
 	color: #7F9933;
 	color: hsla(75, 50%, 40%, 1);
 	*color: #7F9933;
@@ -153,21 +154,21 @@ pre {
 #alpacas_for_sale #article ul li a:hover {
 	text-decoration: none;
 }
-html.no-nthchild #alpacas_for_sale #article.loop ul li a {
+html.no-nthchild #alpacas_for_sale #article ul.loop li a {
 	border-right: solid 1px white;
 }
-#alpacas_for_sale #article.tab ul {
+#alpacas_for_sale #article ul.tab {
 	border: solid #7F9933 1px;
 	border: solid hsla(75, 50%, 40%, 1) 1px;
 	border-width: 0 0 0px 0px;
 }
-#alpacas_for_sale #article.tab ul a {
+#alpacas_for_sale #article ul.tab a{
 	text-shadow: none;
 }
-#alpacas_for_sale #article.tab ul li a:hover {
+#alpacas_for_sale #article ul.tab li a:hover{
 	color: hsla(75, 50%, 30%, 1);
 }
-#alpacas_for_sale #article.tab ul li.current a:hover {
+#alpacas_for_sale #article ul.tab li.current a:hover{
 	color: hsla(75, 50%, 40%, 1);
 }
 /*
@@ -175,11 +176,11 @@ Following style: left and right borders turned to white when only top rule is re
 ul.breadcrumb  { border-right: white; border-left: white }
 */
 
-#alpacas_for_sale #article.loop ul li a:hover {
+#alpacas_for_sale #article ul.loop li a:hover {
 	color: #EBF2D8;
 	color: hsla(75, 50%, 90%, 1);
 }
-#alpacas_for_sale #article.loop ul li a::before {
+#alpacas_for_sale #article ul.loop li a::before {
 	content: "";
 	margin-left: 1px;
 	border: 2em solid transparent;
@@ -187,7 +188,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	border-left-color: white;
 	border-right-width: 0;
 }
-#alpacas_for_sale #article.loop ul li a::after {
+#alpacas_for_sale #article ul.loop li a::after {
 	content: " ";
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */
@@ -195,30 +196,30 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	border-left: 1.2em solid #7F9933;
 	border-left: 1.2em solid hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale #article.loop ul li:nth-child(2) a {
+#alpacas_for_sale #article ul.loop li:nth-child(2) a {
 	background: #9FBF3F;
 	background: hsla(75, 50%, 50%, 1);
 }
-#alpacas_for_sale #article.loop ul li:nth-child(2) a::after {
+#alpacas_for_sale #article ul.loop li:nth-child(2) a::after {
 	border-left-color: #9FBF3F;
 	border-left-color: hsla(75, 50%, 50%, 1);
 }
-#alpacas_for_sale #article.loop ul li:nth-child(3) a {
+#alpacas_for_sale #article ul.loop li:nth-child(3) a {
 	background: #B2CC65;
 	background: hsla(75, 50%, 60%, 1);
 }
-#alpacas_for_sale #article.loop ul li:nth-child(3) a::after {
+#alpacas_for_sale #article ul.loop li:nth-child(3) a::after {
 	border-left-color: #B2CC65;
 	border-left-color: hsla(75, 50%, 60%, 1);
 }
-#alpacas_for_sale #article.tab ul li a, #extent, #sell, #sell a {
+#alpacas_for_sale #article ul.tab li a, .extent, #sell, #sell a {
 	border: solid 1px black;
 }
-#extent, #sell, #sell a, #sell table, #sell table td {
+.extent, #sell, #sell a, #sell table, #sell table td {
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
 }
-#alpacas_for_sale #article.tab ul li a {
+#alpacas_for_sale #article ul.tab li a{
 	border-color: #7F9933;
 	border-color: hsla(75, 50%, 40%, 1);
 	border-top-left-radius: 4px;
@@ -229,7 +230,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
     -o-transition: background 1.5s;
     transition: background 1.5s;
 }
-#alpacas_for_sale #article.tab ul li.current a {
+#alpacas_for_sale #article ul.tab li.current a{
 	background: hsla(75, 50%, 90%, 1);
 	border-bottom-color: hsla(75, 50%, 90%, 1);
 	border-bottom-color: #EBF2D8;
@@ -244,8 +245,6 @@ ul.breadcrumb  { border-right: white; border-left: white }
 }
 #alpacas_for_sale figcaption {
 	padding: .3em;
-	border-top: solid 1px #EBF2D8;
-	border-top: solid 1px hsla(75, 50%, 90%, 1);
 }
 /* keep for ref
 #alpacas_for_sale.sell #sell {
@@ -253,7 +252,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
 }
 */
 
-#extent, .sell  #sell {
+.extent, .sell  #sell {
 	background: #EBF2D8;
 	background: hsla(75, 50%, 90%, 1);
 }
@@ -274,6 +273,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
 
 #sell table tbody {
 	border: 0px;
+    min-width: 100%;
 }
 #sell table td.nested {
 	padding: 0;
@@ -329,6 +329,12 @@ html.no-nthchild #sell table tr.odd td {
     -ms-transform: scale(1.01);
     transform: scale(1.01);
 }
+#sell.extent a:hover, #sell>table:hover {
+	opacity: 1;
+	-webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
 tr:nth-child(7) td, tr:nth-of-type(1) td {
 	font-weight: bold;
 	text-transform: uppercase;
@@ -354,7 +360,7 @@ th:nth-child(odd) {
 	border-right-color: rgba(255, 255, 255, .2);
 }
 #sell table tr:last-child {
-	font-size: .9em;
+	font-size: 1em;
 }
 #sell table table tr:last-child {
 	font-size: 1em;

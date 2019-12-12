@@ -21,10 +21,6 @@ gAlp.Splitter = (function(gang) {
         return o && o[p];
     }
     
-    function truthy(x) {
-		return (x !== false) && existy(x);
-	}
-    
     function curryLeft(fn) {
 		var args = _.rest(arguments);
 		if (args.length >= fn.length) {
@@ -35,17 +31,10 @@ gAlp.Splitter = (function(gang) {
 			}
 		}
 	}
-    
 	var global_strong = /\|/g,
 		link = /\[([\S]+)$/,
-        open_span = '<span>',
-        close_span = '</span>',
-        def_span = close_span+open_span,
 		getFont = function(size, face, n) {
 			return (size * n) + 'px ' + face;
-		},
-		divide = function(x, y) {
-			return x / y;
 		},
 		isTypeOf = function(typ, arg) {
 			return typeof arg === typ;

@@ -189,19 +189,19 @@
 		display: inline-block;
 		position: relative;
 	}
-	#article p span:nth-of-type(1), #contact_us #article p:nth-of-type(1), #stud_services #article p:nth-of-type(1) {
+	#article p span:nth-of-type(1), #contact_us #article p:nth-of-type(1), #stud_services1 #article p:nth-of-type(1) {
 		-webkit-animation: entry .5s ease-out;
 		animation: entry .5s ease-out;
 	}
-	#article p span:nth-of-type(2), #contact_us #article p:nth-of-type(2), #stud_services #article p:nth-of-type(2) {
+	#article p span:nth-of-type(2), #contact_us #article p:nth-of-type(2), #stud_services1 #article p:nth-of-type(2) {
 		-webkit-animation: entry 1.5s ease-out;
 		animation: entry 1.5s ease-out;
 	}
-	#article p span:nth-of-type(3), #contact_us #article p:nth-of-type(3), #stud_services #article p:nth-of-type(3) {
+	#article p span:nth-of-type(3), #contact_us #article p:nth-of-type(3), #stud_services1 #article p:nth-of-type(3) {
 		-webkit-animation: entry 2.5s ease-out;
 		animation: entry 2.5s ease-out;
 	}
-	#article p span:nth-of-type(4), #contact_us #article p:nth-of-type(4), #stud_services #article p:nth-of-type(4) {
+	#article p span:nth-of-type(4), #contact_us #article p:nth-of-type(4), #stud_services1 #article p:nth-of-type(4) {
 		-webkit-animation: entry 3s ease-in-out;
 		animation: entry 3s ease-in-out;
 	}
@@ -213,6 +213,48 @@
 		-webkit-animation: entry 4s 1 ease-in-out;
 		animation: entry 4s 1 ease-in-out;
 	}
+    
+    #stud_services #article p:nth-of-type(1) span:nth-of-type(1){
+		-webkit-animation: entry .5s ease-out;
+		animation: entry .5s ease-out;
+	}
+    
+    #stud_services #article p:nth-of-type(1) span:nth-of-type(2) {
+		-webkit-animation: entry 1s ease-out;
+		animation: entry 1s ease-out;
+	}
+	#stud_services #article p:nth-of-type(1) span:nth-of-type(3){
+		-webkit-animation: entry 1.5s ease-out;
+		animation: entry 1.5s ease-out;
+	}
+     #stud_services #article p:nth-of-type(2) span:nth-of-type(1){
+		-webkit-animation: entry 2.5s ease-out;
+		animation: entry 2.5s ease-out;
+	}
+    
+    #stud_services #article p:nth-of-type(2) span:nth-of-type(2) {
+		-webkit-animation: entry 3s ease-out;
+		animation: entry 3s ease-out;
+	}
+    
+     #stud_services #article p:nth-of-type(3) span:nth-of-type(1){
+		-webkit-animation: entry 3.5s ease-out;
+		animation: entry 3.5s ease-out;
+	}
+    
+    #stud_services #article p:nth-of-type(3) span:nth-of-type(2) {
+		-webkit-animation: entry 4s ease-out;
+		animation: entry 4s ease-out;
+	}
+    
+    #stud_services #article p:nth-of-type(4) span {
+		-webkit-animation: entry 6s ease-out;
+		animation: entry 6s ease-out;
+	}
+
+    
+    
+    
 	#main #aside {
 		position: static;
 	}

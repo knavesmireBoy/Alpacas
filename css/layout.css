@@ -28,7 +28,7 @@ body {
 }
 #header h2 {
 	/* fix IF supporting screen sizes below width of 800px */
-	margin: 0% 0 0 29%;
+	margin: 4% 0 0 29%;
 }
 #header a {
 	position: absolute;

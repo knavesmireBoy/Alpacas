@@ -7,6 +7,20 @@ if (!window.gAlp) {
 	window.gAlp = {};
 }
 
+	var Universe;
+			(function() {
+				var instance;
+				Universe = function Universe() {
+					if (instance) {
+						return instance;
+					}
+					instance = this;
+					// all the functionality
+					this.start_time = 0;
+					this.bang = "Big";
+				};
+			}());
+
 function doHandler() {
 	function Handler(thunk) {
 		// the cached instance
@@ -192,11 +206,7 @@ window.onkeyup = function(e) {
 
 	function makeElement() {
 		var el,
-			args = arguments,
-			ret = function() {
-				return this;
-			},
-			add = function() {};
+			args = arguments;
 		return {
 			init: function() {},
 			add: function() {
@@ -204,30 +214,14 @@ window.onkeyup = function(e) {
 				return this;
 			},
 			remove: function() {
-				return gAlp.Util.removeNodeOnComplete(el);
+				var removed = gAlp.Util.removeNodeOnComplete(el);
+                el = null;
+                return removed;
 			},
 			get: function() {
+               // console.log(el)
 				return el;
 			}
-		};
-	}
-	//http://adripofjavascript.com/blog/drips/using-apply-to-emulate-javascripts-upcoming-spread-operator.html
-	function spreadify(fn, fnThis) {
-		return function( /* accepts unlimited arguments */ ) {
-			// Holds the processed arguments for use by `fn`
-			var spreadArgs = [];
-			// Caching length
-			var length = arguments.length;
-			var currentArg;
-			for (var i = 0; i < length; i++) {
-				currentArg = arguments[i];
-				if (Array.isArray(currentArg)) {
-					spreadArgs = spreadArgs.concat(currentArg);
-				} else {
-					spreadArgs.push(currentArg);
-				}
-			}
-			fn.apply(fnThis, spreadArgs);
 		};
 	}
 
@@ -327,14 +321,6 @@ window.onkeyup = function(e) {
 		context = arguments.length === 3 ? value : context;
 		return doContext(action, context, _.partial(fArgs, value));
 	}
-
-	function drill(arr, o) {
-		var prop = arr.shift();
-		if (prop && arr.length) {
-			return drill(arr, o[prop]);
-		}
-		return o[prop];
-	}
 	/*
 const curry = fn => (...args) => args.length >= fn.length
   ? fn(...args)
@@ -351,21 +337,8 @@ const curry = fn => (...args) => args.length >= fn.length
 		}
 	}
 
-	function condition1( /* validators */ ) {
-		var validators = _.toArray(arguments);
-		return function(fun, arg) {
-			var errors = mapcat(function(isValid) {
-				return isValid(arg) ? [] : [isValid.message];
-			}, validators);
-			if (!_.isEmpty(errors)) {
-				throw new Error(errors.join(", "));
-			}
-			return fun(arg);
-		};
-	}
-
 	function prepareListener(handler, fn, el) {
-        //console.log(arguments)
+		//console.log(arguments)
 		var listener,
 			wrapper = function(func) {
 				var args = _.rest(arguments),
@@ -525,11 +498,6 @@ const curry = fn => (...args) => args.length >= fn.length
 		return array;
 	}
 
-	function ignoreArgs(n, fn) {
-		var args = _.rest(arguments, n)
-		return fn.apply(null, args)
-	}
-
 	function cat() {
 		var head = _.first(arguments);
 		if (existy(head)) {
@@ -537,6 +505,12 @@ const curry = fn => (...args) => args.length >= fn.length
 		} else {
 			return [];
 		}
+	}
+
+	function mapcat(fun, coll) {
+        var res = _.map(coll, fun);
+        //console.log(res)
+		return cat.apply(null, res);
 	}
 
 	function construct(head, tail) {
@@ -586,9 +560,9 @@ const curry = fn => (...args) => args.length >= fn.length
 	function invokeWhen(validate, action) {
 		var args = _.rest(arguments, 2),
 			res = validate.apply(this || null, args);
-		return res && action.apply(this || null, args);
+		return !undef(res) && action.apply(this || null, args);
 	}
-
+    
 	function retWhen(pred, opt1, opt2) {
 		return getResult(pred) ? getResult(opt1) : getResult(opt2)
 	}
@@ -600,12 +574,25 @@ const curry = fn => (...args) => args.length >= fn.length
 			return undefined;
 		}
 	}
+    
+     function insertAfter(newElement, targetElement) {
+	var parent = targetElement.parentNode;
+	if (parent.lastChild === targetElement) {
+		parent.appendChild(newElement);
+	} else {
+		newElement && parent.insertBefore(newElement, targetElement.nextSibling);
+	}
+}
 
 	function invoker(NAME, METHOD) {
+        //console.log(NAME, METHOD)
 		return function(target /* args ... */ ) {
-			if (!existy(target)) fail("Must provide a target");
-			var targetMethod = target[NAME];
-			var args = _.rest(arguments);
+            //console.log(target, 99)
+			if (!existy(target)) {
+                fail("Must provide a target");
+            }
+			var targetMethod = target[NAME],
+                args = _.rest(arguments);
 			return doWhen((existy(targetMethod) && METHOD === targetMethod), function() {
 				return targetMethod.apply(target, args);
 			});
@@ -628,7 +615,7 @@ const curry = fn => (...args) => args.length >= fn.length
 						return ret;
 					}
 				} catch (e) {
-					//$('report').innerHTML = e.message;
+					//document.getElementsByTagName('h2')[0].innerHTML = e.message;
 				}
 			}
 			return ret;
@@ -643,15 +630,18 @@ const curry = fn => (...args) => args.length >= fn.length
 		return f;
 	}
 
-	function checker() {
+	function checker( /* validators */ ) {
 		var validators = _.toArray(arguments);
 		return function(obj) {
-			return _.reduce(validators, function(errs, doValidate) {
-				if (doValidate(obj)) {
-					return errs;
-				} else {
-					return _.chain(errs).push(doValidate.message).value();
-				}
+			return _.reduce(validators, function(errs, check) {
+				if (check(obj)) {
+                                    console.log(arguments, obj);
+
+                    return errs;
+                }
+				else {
+                    return _.chain(errs).push(check.message).value();
+                }
 			}, []);
 		};
 	}
@@ -664,6 +654,12 @@ const curry = fn => (...args) => args.length >= fn.length
 
 	function render(anc, refnode, el) {
 		return getResult(anc).insertBefore(getResult(el), getResult(refnode));
+	}
+	//get ye this. setAnchor effectively return strategy(getNewElement in reality), which expects one argument
+	//(string, element, null/undef) and returns new element, clone or fragment
+	//getNewElement invokes render with the new element
+	function setAnchor(anchor, refnode, strategy) {
+		return _.compose(_.partial(render, anchor, refnode), strategy);
 	}
 
 	function getNextElement(node) {
@@ -699,6 +695,29 @@ const curry = fn => (...args) => args.length >= fn.length
 		return node;
 	}
 
+	function drillDown(arr) {
+		var a = arr && arr.slice && arr.slice();
+		if (a && a.length > 0) {
+			return function drill(o, i) {
+				i = isNaN(i) ? 0 : i;
+				var prop = a[i];
+				if (prop && a[i += 1]) {
+					return o && drill(o[prop], i);
+				}
+				return o && o[prop];
+			};
+		}
+		return function(o) {
+			return o;
+		};
+	}
+
+	function repeat(times, VALUE) {
+		return _.map(_.range(times), function() {
+			return VALUE;
+		});
+	}
+
 	function getClassList(el) {
 		return el && (el.classList || gAlp.ClassList(el));
 	}
@@ -711,13 +730,16 @@ const curry = fn => (...args) => args.length >= fn.length
 		return f2(f1(item));
 	}
 
+	function subtract(x, y) {
+		return x - y;
+	}
+
 	function isset(o, k, v) {
 		return o[k] === v;
 	}
 	//[ovk][vko][vok][kvo][kov]
 	function setter(o, k, v) {
-        //console.log(arguments)
-		o[k] = v;
+		getResult(o)[k] = v;
 	}
 
 	function getter(o, k) {
@@ -740,7 +762,6 @@ const curry = fn => (...args) => args.length >= fn.length
 	}
 
 	function setprop(p, o, k, v) {
-		//console.log(p,o,k,v)
 		o[p][k] = v;
 		return o;
 	}
@@ -755,23 +776,45 @@ const curry = fn => (...args) => args.length >= fn.length
 	}
 
 	function setPropFromHash(o) {
-		return setprop(o.property || o.p, o.object || o.o, o.key || o.k, o.value, o.v);
+		return setprop(o.property || o.p, o.object || o.o, o.key || o.k, o.value || o.v);
 	}
 
 	function simpleInvoke(o, m, arg) {
 		return o[m](arg);
 	}
 
+	function fromMethod(method, coll, it) {
+		return _[method](coll, it);
+	}
+
+	function invokeThen(validate, action) {
+		var args = _.rest(arguments, 2),
+			res = validate.apply(this || null, args);
+		return !undef(res) && action.call(this || null, res);
+	}
+    
+    function applyMethod(o, m) {
+		return o[m].apply(o, _.rest(arguments, 2));
+	}
+
+	function applyFunction(f, args) {
+		return f.apply(null, args);
+	}
+
+	function ignoreArgs(n, fn) {
+		var args = _.rest(arguments, n)
+		return fn.apply(null, args)
+	}
+
 	function prefix(p, str) {
 		return str.charAt(0) === p ? str : p + str;
 	}
-    
-    
+
 	function doArray(k, v) {
 		return [k, v];
 	}
-    
-    	function setFromFactory(bool) {
+
+	function setFromFactory(bool) {
 		function doEachFactory(config, bound, target, bool) {
 			//ie 6 & 7 have issues with setAttribute, set props instead
 			if (bool) {
@@ -798,7 +841,8 @@ const curry = fn => (...args) => args.length >= fn.length
 			return target;
 		};
 	}
-    
+
+	
 	/*because we may want to add further optional arguments (eg context)
 		we're making validate mandatory defaulting to a predicate that returns true
 		as opposed to querying the length and type of arguments
@@ -818,10 +862,31 @@ const curry = fn => (...args) => args.length >= fn.length
 		//_.each(_.invert(config), tgt[method]);
 		return target;
 	}
+	//http://adripofjavascript.com/blog/drips/using-apply-to-emulate-javascripts-upcoming-spread-operator.html
+	function spreadify(fn, fnThis) {
+		return function( /* accepts unlimited arguments */ ) {
+			// Holds the processed arguments for use by `fn`
+			var i,
+				spreadArgs = [],
+				length = arguments.length,
+				currentArg;
+			for (i = 0; i < length; i++) {
+				currentArg = arguments[i];
+				if (Array.isArray(currentArg)) {
+					spreadArgs = spreadArgs.concat(currentArg);
+				} else {
+					spreadArgs.push(currentArg);
+				}
+			}
+			fn.apply(fnThis, spreadArgs);
+		};
+	}
 
-	function setFromArray(validate, method, arr, target) {
+	function setFromArray(validate, method, classArray, target) {
 		var fn,
-			tgt = getClassList(target);
+			tgt = getClassList(target),
+			args = _.rest(arguments, 3);
+		validate = _.partial(applyFunction, validate, args);
 		if (!tgt) {
 			return target;
 		}
@@ -829,11 +894,11 @@ const curry = fn => (...args) => args.length >= fn.length
 		if (validate) {
 			fn = _.partial(invokeWhen, validate, fn);
 		}
-		_.each(_.flatten([arr]), fn);
+		_.each(_.flatten([classArray]), fn);
 		return target;
 	}
 	//delay to allow for transitions??
-	function setFromArrayAlt(target, arr, method, delay, validate) {
+	function setFromArrayAlt(target, classArray, method, delay, validate) {
 		var fn,
 			tgt = getClassList(target);
 		if (!tgt) {
@@ -844,7 +909,7 @@ const curry = fn => (...args) => args.length >= fn.length
 			fn = _.partial(invokeWhen, validate, fn);
 		}
 		//window.setTimeout(function(){
-		_.each(_.flatten([arr]), fn);
+		_.each(_.flatten([classArray]), fn);
 		//}, delay);
 		return target;
 	}
@@ -918,6 +983,33 @@ const curry = fn => (...args) => args.length >= fn.length
 			return fun(x, y) ? x : y
 		});
 	}
+    
+    function doList(list){
+        
+        function remove(arg) {
+				return _.findIndex(list, (function(cur) {
+					return cur === arg;
+				}));
+			}
+        
+        function safeAddSimpleOrder(tgt){
+            var i = remove(tgt);
+            if(i < 0){
+                list.unshift(tgt);
+            }
+            }
+        
+        function safeAddSimpleOrder(tgt){
+            var i = remove(tgt);
+            if(i < 0){
+                list.splice(i, 1, tgt);
+            }
+            }
+        
+        
+        return safeAddSimpleOrder;
+    }
+
 
 	function applyOn(partial, getargs, o) {
 		//applies the final arguments before fulfilling the function with the supplied object
@@ -943,25 +1035,54 @@ const curry = fn => (...args) => args.length >= fn.length
 		return this;
 	}
 
-	function simpleproxy(subject, method) {
-		if (subject[method] && _.isFunction(subject[method])) {
-			this[method] = function() {
-				return subject[method].apply(subject, arguments);
-			};
-		}
-		if (subject[method]) {
-			this[method] = subject[method];
-		}
-		return this;
-	}
-
 	function byIndex(i, arg) {
 		return getResult(arg)[i];
 	}
 	var classInvokers = [invoker('querySelectorAll', document.querySelectorAll), invoker('getElementsByClassName', document.getElementsByClassName)],
 		getNewElement = dispatch(curry2(cloneNode)(true), _.bind(document.createElement, document), _.bind(document.createDocumentFragment, document));
+	/*
+    String.prototype.mapLinktoTitle = function() {
+    var getHref = curry3(simpleInvoke)(linkEx)('match'),
+        s = _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, gAlp.Util.drillDown(['href']));
+        s.call(this);
+};
+    
+    */
 	return {
+		apply: function(f) {
+			return f.apply(f, _.rest(arguments));
+		},
+        applyMethod: applyMethod,
+		append: function(flag) {
+			if (flag) {
+				return curry33(setAnchor)(getNewElement)(null);
+			}
+			return curry3(setAnchor)(getNewElement)(null);
+		},
+        move: function(flag) {
+			if (flag) {
+				return curry33(setAnchor)(_.identity)(null);
+			}
+			return curry3(setAnchor)(_.identity)(null);
+		},
+		insert: function(flag) {
+			if (flag) {
+				return function(ref, anc) {
+					return curry33(setAnchor)(getNewElement)(ref)(anc);
+				};
+			}
+			return function(ref, anc) {
+				return curry3(setAnchor)(getNewElement)(ref)(anc);
+			};
+		},
+        insertAfter: insertAfter,
 		curry2: curry2,
+		curryTwice: function(flag) {
+			return flag ? curry22 : curry2;
+		},
+		curryThrice: function(flag) {
+			return flag ? curry33 : curry3;
+		},
 		curry3: curry3,
 		curry4: curry4,
 		hasFeature: (function() {
@@ -970,6 +1091,20 @@ const curry = fn => (...args) => args.length >= fn.length
 				return gAlp.Util.getClassList(html).contains(str);
 			}
 		}()),
+		conditional: function( /* validators */ ) {
+			var validators = _.toArray(arguments);
+            
+			return function(fun, arg) {
+				var errors = mapcat(function(isValid) {
+					return isValid(arg) ? [] : [isValid.message];
+				}, validators);
+                
+				if (!_.isEmpty(errors)) {
+					throw new Error(errors.join(", "));
+				}
+				return fun(arg);
+			};
+		},
 		looper: looper,
 		/*handlers MAY need wrapping in a function that calls prevent default, stop propagation etc..
 		which needs to be cross browser see EventCache.prevent */
@@ -988,6 +1123,7 @@ const curry = fn => (...args) => args.length >= fn.length
 			return predicate(getResult(cond)) ? predicate : _.negate(predicate);
 		},
 		isEqual: function(x, y) {
+			//console.log(arguments)
 			return getResult(x) === getResult(y);
 		},
 		gtThan: function(x, y, flag) {
@@ -1026,8 +1162,9 @@ const curry = fn => (...args) => args.length >= fn.length
 		returnIndex: function(i, func) {
 			return func.apply(func, _.rest(arguments, 2))[i];
 		},
+		//called in context of underscore
 		find: function(collection, predicate, i) {
-			var m = !isNaN(i) ? 'findIndex' : 'find';
+			var m = isNaN(i) ? 'find' : 'findIndex';
 			return this[m](collection, predicate || always(true));
 		},
 		getCollection: function(collection, predicate) {
@@ -1038,18 +1175,19 @@ const curry = fn => (...args) => args.length >= fn.length
 			return getResult(arg)[i];
 		},
 		nested: nested,
-		//invoker: invoker,
-		//dispatch: dispatch,
+		invoker: invoker,
+		dispatch: dispatch,
 		render: render,
 		getNewElement: getNewElement,
-		setAnchor: function(anchor, refnode, strategy) {
-			return _.compose(_.partial(render, anchor, refnode), strategy);
-		},
+		setAnchor: setAnchor,
+		drillDown: drillDown,
 		addHandler: addHandler,
 		getNodeByTag: curry2(regExp)('i'),
 		getPreviousElement: getPreviousElement,
 		getNextElement: getNextElement,
 		getNext: _.partial(nested, curry2(getter)('nextSibling'), getNextElement),
+		getChild: _.partial(nested, curry2(getter)('firstChild'), getNextElement),
+		getParent: _.partial(nested, curry2(getter)('parentNode'), getNextElement),
 		getPrevious: _.partial(nested, curry2(getter)('previousSibling'), getPreviousElement),
 		getTargetNode: getTargetNode,
 		getDomChild: curry3(getTargetNode)('firstChild'),
@@ -1059,7 +1197,8 @@ const curry = fn => (...args) => args.length >= fn.length
 		doWhenWait: curry22(doWhen),
 		getClassList: getClassList,
 		setAttrs: _.partial(setFromObject, always(true), 'setAttribute'),
-		setAttrsFix: setFromFactory,
+		setAttributes: _.partial(setFromFactory(window.attachEvent), always(true), 'setAttribute'),
+		setAttrsFix: setFromFactory, //keep as may be in use, but prefer above
 		setText: curry3(setAdapter)('innerHTML'),
 		//getPolyClass: getPolyClass,
 		getByClass: _.partial(getPolyClass, document),
@@ -1074,6 +1213,21 @@ const curry = fn => (...args) => args.length >= fn.length
 		bindContext: bindContext,
 		setFromArray: setFromArray,
 		setFromArrayAlt: curry5(setFromArrayAlt)(always(true))(66),
+		partialSetFromArray: function(a, b, c, d) {
+			var ptL = _.partial,
+				method = gAlp.Util.setFromArray;
+			if (d) {
+				return ptL(method, a, b, c, d);
+			} else if (c) {
+				return ptL(method, a, b, c);
+			} else if (b) {
+				return ptL(method, a, b);
+			} else if (a) {
+				return ptL(method, a);
+			}
+			return ptL(method);
+		},
+		getLastIndex: _.compose(curry2(subtract)(1), drillDown(['length'])),
 		hide: _.partial(setFromArray, always(true), 'remove', ['show']),
 		show: _.partial(setFromArray, always(true), 'add', ['show']),
 		addClass: _.partial(setFromArray, always(true), 'add'),
@@ -1092,6 +1246,9 @@ const curry = fn => (...args) => args.length >= fn.length
 		getBestRight: curry2(best),
 		getBestLeft: best,
 		getDefaultAction: _.partial(best, noOp()),
+		map: function(coll, mapper) {
+			return _.map(coll, mapper);
+		},
 		getOffset: function(bool) {
 			var w = window,
 				d = document.documentElement || document.body.parentNode || document.body,
@@ -1219,6 +1376,12 @@ const curry = fn => (...args) => args.length >= fn.length
 			return ret;
 			//return clone(ret);
 		},
+		getCommand: function(o, exec, undo) {
+			var com = gAlp.Util.command().init(o);
+			com.execute(exec);
+			com.undo(undo);
+			return com;
+		},
 		initCommandsHash: function(predicates, ops) {
 			var com = gAlp.Util.command(),
 				o = {};
@@ -1273,6 +1436,21 @@ const curry = fn => (...args) => args.length >= fn.length
 				});
 			};
 		},
+		wrapTarget: function(wrapee, target) {
+			wrapee.apply(target, _.rest(arguments));
+			return target;
+		},
+        negate: function(pred){
+            return function(cb1, cb2){
+                if(!pred()){
+                    pred = _.negate(pred);
+                    return cb1 && getResult(cb1);
+                }
+                else if(cb2){
+                    return cb2();
+                }
+            }
+        },
 		getComputedStyle: function(element, styleProperty) {
 			var computedStyle = null,
 				def = document.defaultView || window;
@@ -1287,19 +1465,23 @@ const curry = fn => (...args) => args.length >= fn.length
 		}
 	};
 }());
+
 gAlp.Util.Observer.prototype = {
+    
 	subscribe: function(fn) {
 		this.fns.push(fn);
 	},
+    
 	unsubscribe: function(fn) {
-		this.fns = this.fns.filter(function(el) {
-			if (el !== fn) {
-				return el;
+		this.fns = _.filter(this.fns, function(func) {
+			if (func !== fn) {
+				return func;
 			}
 		});
 	},
+
 	fire: function(o) {
-		this.fns.forEach(function(el) {
+        _.each(this.fns, function(el) {
 			el(o);
 		});
 	}

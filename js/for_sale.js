@@ -5,858 +5,704 @@
 /*global gAlp: false */
 /*global _: false */
 if (!window.gAlp) {
-    window.gAlp = {};
+	window.gAlp = {};
 }
-(function(article, mq, mobile, desktop) {
-     /*
-    (function() {
-        'use strict';
-       
-        var start,
-            end,
-            delta,
-            node = document.getElementById("aside");
-        node.addEventListener("mousedown", function() {
-            start = new Date();
-        });
-        node.addEventListener("mouseup", function() {
-            end = new Date();
-            delta = (end - start) / 1000.0;
-            ///alert("Button held for " + delta + " seconds." )
-            Len = Math.ceil(delta);
-        });
-    }());
-    */    
-    
-     function checkDummy() {
-        var val = gAlp.Util.getComputedStyle(document.getElementById("checkDummy"), "margin-top");
-        return val === "1px";
-    }
+(function(query, mq, article, report, displayclass, linkEx, navExes, limits) {
+	/*
+	(function() {
+	    'use strict';
+	   
+	    var start,
+	        end,
+	        delta,
+	        node = document.getElementById("aside");
+	    node.addEventListener("mousedown", function() {
+	        start = new Date();
+	    });
+	    node.addEventListener("mouseup", function() {
+	        end = new Date();
+	        delta = (end - start) / 1000.0;
+	        ///alert("Button held for " + delta + " seconds." )
+	        Len = Math.ceil(delta);
+	    });
+	}());
+	*/
+	function existy(x) {
+		return x != null;
+	}
 
-    function noOp() {}
+	function doRepeat() {
+		return function(i) {
+			return function() {
+				var res = i > 0;
+				i -= 1;
+				return res > 0;
+			};
+		};
+	}
 
-    function always(val) {
-        return function() {
-            return val;
-        };
-    }
+	function getResult(arg) {
+		return _.isFunction(arg) ? arg() : arg;
+	}
 
-    function stringOp(reg, o, m) {
-        return o[m](reg);
-    }
+	function callWith(m, ctxt) {
+		return m.call(ctxt);
+	}
 
-    function fallback(def, arg) {
-        return arg || def;
-    }
+	function decorateWhen( /* validators */ ) {
+		var validators = _.toArray(arguments),
+			errors = 0;
+		return function(fun, arg) {
+			_.each(validators, function(validator) {
+				if (!errors) {
+					errors = Number(!validator(arg)) ? errors += 1 : errors;
+				}
+			});
+			if (!errors) {
+				return fun(arg);
+			}
+			return arg;
+		};
+	}
 
-    function fromMethod(method, coll, it) {
-        return _[method](coll, it);
-    }
+	function checkDummy() {
+		var val = gAlp.Util.getComputedStyle(document.getElementById("checkDummy"), "margin-top");
+		return val === "1px";
+	}
 
-    function zipping(iteratee, byIndex, coll) {
-        return iteratee(byIndex(coll));
-    }
+	function noOp() {}
 
-    function drill(arr, o) {
-        var prop = arr.shift();
-        if (prop && arr.length) {
-            return drill(arr, o[prop]);
-        }
-        return o[prop];
-    }
+	function always(val) {
+		return function() {
+			return val;
+		};
+	}
 
-    function invoke(f) {
-        return f();
-    }
+	function getProp(p, o) {
+		//con(p, o, o[p])
+		return o[p];
+	}
 
-    function getMethod(m, o) {
-        o = getResult(o);
-        //return _.bind(o[m], o, _.rest(arguments, 2));
-        return o[m].bind(o);
-    }
+	function stringOp(reg, o, m) {
+		return o[m](reg);
+	}
 
-    function simpleInvoke(o, m, arg) {
-        if (arguments.length === 3) {
-            return o[m](arg);
-        }
-    }
+	function simpleInvoke(o, m, arg) {
+		if (arguments.length >= 3) { //allow for superfluous arguments 
+			return o[m](arg);
+		}
+	}
 
-    function invokeBridge(arg, m, o) {
-        return simpleInvoke(o, m, arg);
-    }
+	function gtThan(a, b) {
+		return getResult(a) > getResult(b);
+	}
 
-    function invokeThen(validate, action) {
-        var args = _.rest(arguments, 2),
-            res = validate.apply(this || null, args);
-        return !undef(res) && action.call(this || null, res);
-    }
+	function lsThanEq(a, b) {
+		return a <= b;
+	}
 
-    function getProp(p, o) {
-        return o[p];
-    }
+	function caller1(ctxt, ptl, arg, m) {
+		return ptl(ctxt)[m](arg);
+	}
 
-    function getResult(arg) {
-        return _.isFunction(arg) ? arg() : arg;
-    }
-
-    function undef(x) {
-        return typeof(x) === 'undefined';
-    }
-    function run() {
-        var f = _.first(arguments),
-            rest = _.rest(arguments);
-        return f.apply(null, rest);
-    }
-
-    function gtThan(a, b) {
-        return a > b;
-    }
-        
-    var $ = function(str) {
-            return document.getElementById(str);
-        },
-        slice = Array.prototype.slice,
-        //con = _.bind(window.console.log, window.console),
-        ptL = _.partial,
-        idty = _.identity,
-        curryLeft = function(fn) {
-        var args = slice.call(arguments, 1);
-        if (args.length >= fn.length) {
-            return fn.apply(null, args);
-        } else {
-            return function() {
-                return curryLeft.apply(null, [fn].concat(args, slice.call(arguments)));
-            }
-        }
-        },
-        curryRight = function(fn) {
-        var args = _.rest(arguments);
-        if (args.length >= fn.length) {
-            return fn.apply(null, gAlp.Util.reverse(args));
-        } else {
-            return function() {
-                return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
-            }
-        }
-        },
-        curry2 = gAlp.Util.curry2,
-        threshold = Number(desktop.query.match(/[^\d]+(\d+)[^\d]+/)[1]),
-        anCr = curryRight(gAlp.Util.setAnchor)(gAlp.Util.getNewElement)(null),
-        getNewElement = ptL(gAlp.Util.getNewElement),
-        clickHandler = ptL(gAlp.Util.addHandler, 'click'),
-        setAnchor = gAlp.Util.setAnchor,
-        setFromArray = ptL(gAlp.Util.setFromArray, always(true)),
-        getter = gAlp.Util.getter,
-        setText = gAlp.Util.setText,
-        exceedsThreshold = ptL(gAlp.Util.gtThan, window.viewportSize.getWidth),
-        addClassCurry = gAlp.Util.setFromArrayAlt('add'),
-        removeClassCurry = gAlp.Util.setFromArrayAlt('remove'),
-        pIdentity = function() {
-            return ptL(idty, _.rest(arguments));
-        },
-        alpacas = [
-            [
-                ["Granary Grace", "Price on Application"],
-                ["D.O.B:", "24.07.2005"],
-                ["Type:", "Huacaya"],
-                ["Sex:", "Female"],
-                ["Colour:", "Fancy but mainly white", ]["Sire:", "Highlander Lad"],
-                ["Other info:"],
-                ["Grace is an assertive friendly animal, a herd leader. She is an excellent caring mother who has produced three excellent crias (one boy and two girls). She is currently empty but if required she could be covered by our own stud male Granary Carlos who has sired her two female crias. She carries the genetics of Both Highlander and Don Pedro. Price on application."],
-                ["alt", "Grace"],
-                ["src", "../images/sale/grace.jpg"]
-            ],
-            [
-                ["Granary Maria", "Price on Application"],
-                ["D.O.B:", "12.08.2008"],
-                ["Type:", "Huacaya"],
-                ["Sex:", "Female (Maiden)"],
-                ["Colour:", "Solid White"],
-                ["Sire:", "Granary Carlos"],
-                ["Other info:"],
-                ["Unlike her mother (Grace) Maria is a gentle, curious hucaya who likes to be around humans. She is a well fleeced animal who carries the genetics of Highlander and Don Pedro. She is a maiden. Price on application."],
-                ["alt", "Maria"],
-                ["src", "../images/sale/Maria1.jpg"]
-            ],
-            [
-                ["Granary Pilar", "Price on Application"],
-                ["D.O.B:", "26.08.2009"],
-                ["Type:", "Huacaya"],
-                ["Sex:", "Female"],
-                ["Colour:", "Fancy but mainly white"],
-                ["Sire:", "Granary Carlos"],
-                ["Other info:"],
-                ["Pilar is a strikingly marked animal, which goes well with her lively personality. She is well fleeced and good conformation. She is lively, loveable and a perfect pet a favourite with all who meet the herd. She is a maiden who carries the genes of Highlander and Don Pedro. Price on application."],
-                ["alt", "Pilar"],
-                ["src", "../images/sale/Pilar1.jpg"]
-            ]
+	function sortIndexFactory(index, klas, coll) {
+		var drill = doDrillDown(['target']),
+			txt = doDrillDown(['innerHTML']),
+			finder = function(el, item) {
+				return item.match(new RegExp(txt(el), 'i'));
+			},
+			options = {
+				tab: function(e) {
+					var el = drill(e);
+					index = el && el.parentNode ? _.findIndex(coll, _.partial(finder, el)) : index;
+					return index;
+				},
+				loop: function(bool) {
+					return index = _.isBoolean(bool) ? index : (index += 1) % coll.length;
+				},
+				solo: noOp
+			};
+		return options[klas];
+	}
+	var alpacas = [
+			[
+				["Granary Grace", "Price on Application"],
+				["D.O.B:", "24.07.2005"],
+				["Type:", "Huacaya"],
+				["Sex:", "Female"],
+				["Colour:", "Fancy but mainly white"],
+				["Sire:", "Highlander Lad"],
+				["Other info:"],
+				["Grace is an assertive friendly animal, a herd leader. She is an excellent caring mother who has produced three excellent crias (one boy and two girls). She is currently empty but if required she could be covered by our own stud male Granary Carlos who has sired her two female crias. She carries the genetics of Both Highlander and Don Pedro. Price on application."],
+				["alt", "Grace"],
+				["src", "../images/sale/grace.jpg"]
+			],
+			[
+				["Granary Maria", "Price on Application"],
+				["D.O.B:", "12.08.2008"],
+				["Type:", "Huacaya"],
+				["Sex:", "Female (Maiden)"],
+				["Colour:", "Solid White"],
+				["Sire:", "Granary Carlos"],
+				["Other info:"],
+				["Unlike her mother (Grace) Maria is a gentle, curious hucaya who likes to be around humans. She is a well fleeced animal who carries the genetics of Highlander and Don Pedro. She is a maiden. Price on application."],
+				["alt", "Maria"],
+				["src", "../images/sale/Maria1.jpg"]
+			],
+			[
+				["Granary Pilar", "Price on Application"],
+				["D.O.B:", "26.08.2009"],
+				["Type:", "Huacaya"],
+				["Sex:", "Female"],
+				["Colour:", "Fancy but mainly white"],
+				["Sire:", "Granary Carlos"],
+				["Other info:"],
+				["Pilar is a strikingly marked animal, which goes well with her lively personality. She is well fleeced and good conformation. She is lively, loveable and a perfect pet a favourite with all who meet the herd. She is a maiden who carries the genes of Highlander and Don Pedro. Price on application."],
+				["alt", "Pilar"],
+				["src", "../images/sale/Pilar1.jpg"]
+			],
+			[
+				["Granary Juanita", "Price on Application"],
+				["D.O.B:", "29.072006"],
+				["Type:", "Huacaya"],
+				["Sex:", "Female"],
+				["Colour:", "Solid Dark Brown."],
+				["Sire:", "Somerset Peruvian Highlander Lad"],
+				["Other info:"],
+				["Juanita is a lovely natured&nbsp; huacaya who has just produced her first cria, a solid white female, born 13th July 2009. She is for sale with cria at foot and boasts background genetics of Highlander and Don Pedro."],
+				["alt", "Juanita"],
+				["src", "../images/sale/juanita.jpg"]
+			],
+        [
+            ["Newland Becky","Price on Application"],
+            ["D.O.B:", "21.07.2004"],
+            ["Type:", "Huacaya"],
+            ["Sex:", "Female"],
+            ["Colour:", "Solid  White"],
+            ["Sire:", "Somerset Peruvian Highlander of Milend"],
+            ["Other info:"],
+            ["This is a small selection of available breeding animals. We can also offer, pets, herd guards and starter herds, if required. Please ring to arrange a visit"],
+            ["alt", "Becky"],
+            ["src", "../images/sale/becky.jpg"]
         ],
-        querySizeOutcomes = [_.partial(Modernizr.mq, desktop.query), _.partial(exceedsThreshold, threshold)],
-        myQuery = gAlp.Util.getBest(always(mq), querySizeOutcomes),
-        matchNode = curry2(gAlp.Util.regEx)('i'),
-        tooltip = gAlp.Tooltip($('article'), ["click here...", "...to toggle table and picture"], 2),
-        getOtherFactory = function(pairs) {
-            return _.compose(gAlp.Util.getZero, _.partial(_.without, pairs));
-        },
-        Presenter = function(coll, display) {
-            var enable = ptL(gAlp.Util.addClass, display),
-                disable = ptL(gAlp.Util.removeClass, display),
-                collection = getResult(_.toArray(coll)),
-                load = function() {
-                    _.each(collection, disable);
-                };
-            return {
-                enable: function(i) {
-                    if (!isNaN(i)) {
-                        this.load();
-                        enable(collection[i]);
-                        //pass index to other potential 'Presenters'
-                        return i;
-                    }
-                },
-                disable: function(el) {
-                    disable(el);
-                },
-                load: load
-            };
-        },
-        componentComp = function(data, display, flag, iterator) {
-            var func = flag ? componentComp : componentLeaf;
-            data = _.map(_.toArray(getResult(data)), function(element) {
-                return func(element, display);
-            });
-            return {
-                remove: function(arg) {
-                    data = _.filter(data, function(comp) {
-                        return comp !== arg;
-                    });
-                },
-                add: function(arg) {
-                    this.remove(arg);
-                    return data.push(arg);
-                },
-                get: function(i) {
-                    return isNaN(i) ? data : data[i] ? data[i] : null;
-                },
-                enable: function() {
-                    _.each(data, function(comp) {
-                        comp.enable();
-                    });
-                },
-                disable: function() {
-                    _.each(data, function(comp) {
-                        comp.disable();
-                    });
-                },
-                show: function(i) {
-                    i = isNaN(i) ? 0 : i;
-                    this.disable();
-                    this.get(i).enable();
-                },
-                hide: function(i) {
-                    i = isNaN(i) ? 0 : i;
-                    this.get(i).disable();
-                },
-                navigator: function(bool) {
-                    if (!iterator) {
-                        return;
-                    }
-                    this.iterator = this.iterator || iterator(this.get());
-                    return this.iterator(bool);
-                },
-                getIndex: function(bool) {
-                    return this.navigator(bool);
-                },
-                getTarget: function(bool) {
-                    var i = this.navigator(bool);
-                    return this.get(i);
-                },
-                getNext: function() {
-                    this.getTarget(true).disable();
-                    this.getTarget().enable();
-                    return this.getTarget(true);
-                }
-            };
-        },
-        componentLeaf = function(el, display) {
-            var enable = ptL(gAlp.Util.addClass, display),
-                disable = ptL(gAlp.Util.removeClass, display);
-            return {
-                enable: function() {
-                    return enable(el);
-                },
-                disable: function() {
-                    return disable(el);
-                },
-                add: noOp,
-                remove: noOp,
-                get: function() {
-                    return el;
-                }
-            };
-        },
-        sellDiv = _.compose(ptL(gAlp.Util.setAttrs, {
-            id: 'sell'
-        }), anCr(article), ptL(idty, 'div'))(),
-        renderTable = _.compose(anCr(sellDiv), ptL(idty, 'table')),
-        matchFromTable = curry2(gAlp.Util.matchStr)(matchNode('table')),
-        getImages = ptL(curryRight(simpleInvoke)('img')('getElementsByTagName'), sellDiv),
-        iterateTable = function(getAnchor, subject /*, config*/ ) {
-            var table = getAnchor(), //<table></table
-                //optional tbody reqd for IE
-                render = anCr(table),
-                tbody = _.compose(render, ptL(idty))('tbody'),
-                //
-                getHeadOrData = function(pred, arg, options) {
-                    return gAlp.Util.getBest(ptL(pred, arg), options)();
-                },
-                doColspan = ptL(gAlp.Util.setAttrs, {
-                    colspan: 2 //HARD CODE
-                }),
-                matchLength = ptL(_.compose(ptL(gAlp.Util.isEqual, 1), ptL(getProp, 'length'))),
-                getOption = function(pred, arg, op1, op2, o) {
-                    //execute chosen function and return object
-                    gAlp.Util.getBest(ptL(pred, arg), [ptL(op1, o), ptL(op2, o)])();
-                    return o;
-                },
-                //if !nth-child
-                doClass = ptL(gAlp.Util.addClass, 'description'), //HARD CODE
-                doOdd = ptL(gAlp.Util.addClass, 'odd'), //HARD CODE
-                domatch = ptL(invokeBridge, /^other/i, 'match'), //HARD CODE
-                //
-                doRow = _.compose(anCr(tbody)),
-                addTableAttrs,
-                addImgAttrs,
-                addLinkAttrs,
-                tmp;
-            _.each(subject.slice(0, -2), function(tr, j) {
-                var row,
-                    addclass,
-                    addcolspan,
-                    type = getHeadOrData(ptL(gAlp.Util.isEqual, 0), j, [ptL(idty, 'th'), ptL(idty, 'td')]);
-                _.each(tr, function(td, i, data) {
-                    if (i === 0) { //create new row
-                        addclass = ptL(getOption, domatch, td, doClass, pIdentity);
-                        addcolspan = ptL(getOption, matchLength, data, doColspan, pIdentity);
-                        row = _.compose(addclass, doRow)('tr');
-                    }
-                    if (type === 'th' && !i) {
-                        addTableAttrs = ptL(gAlp.Util.setAttrs, {
-                            cellspacing: 0,
-                            title: td.split(' ')[1]
-                        });
-                        addImgAttrs = {
-                            alt: td.split(' ')[1]
-                        };
-                    }
-                    
-                  if(!(gAlp.Util.hasFeature('nthchild')) && j % 2){
-                      doOdd(row);
-                   }
-                    
-                    _.compose(addcolspan, gAlp.Util.setText(td), anCr(row))(type);
-                });
-            });
-            render = anCr(table.parentNode),
-                addLinkAttrs = _.extend({}, {
-                    href: subject.slice(-1)[0][1]
-                });
-            addLinkAttrs = ptL(gAlp.Util.setAttrs, addLinkAttrs);
-            addImgAttrs = _.extend(addImgAttrs, {
-                src: subject.slice(-1)[0][1]
-            });
-            addImgAttrs = ptL(gAlp.Util.setAttrs, addImgAttrs);
-            tmp = _.compose(addLinkAttrs, render, ptL(idty))('a');
-            render = anCr(tmp);
-            _.compose(addImgAttrs, render, ptL(idty))('img');
-            addTableAttrs(table);
-        },
-        loadData = function(data, driver, render) {
-            _.each(data, ptL(driver, render));
-        },
-        displayData = function(coll, display, nav) {
-            var sibling = function(el) {
-                    return gAlp.Util.getPreviousElement(el.parentNode.previousSibling);
-                },
-                parent = function(el) {
-                    return el.parentNode;
-                },
-                i = _.map(getResult(coll), parent),
-                t = _.map(getResult(coll), sibling),
-                zipped = _.zip(i, t),
-                zipper = componentComp([], display, true, nav),
-                mapper = function(zipped) {
-                    return _.map(zipped, function(zip) {
-                        return zipper.add(componentComp(zip, display));
-                    });
-                };
-            mapper(zipped);
-            return zipper;
-        },
-        makeTabs = function() {
-            var deferText = function(tag, f1, f2, text) {
-                    return _.compose(f1(text), f2)(tag);
-                },
-                doSubstring = function(n, str) {
-                    return str.substring(0, str.length - n);
-                },
-                doSub4 = curryLeft(doSubstring)(4),
-                split = function(strategy, str) {
-                    var res = str.split('/'),
-                        ret = res[res.length - 1];
-                    return strategy(ret.replace(/\d/, ''));
-                },
-                output = function(splitter, arg) {
-                    return splitter(arg).capitalize();
-                },
-                doSplit = curryLeft(split)(doSub4),
-                doOutput = curryLeft(output)(doSplit),
-                iteratee = function(p, f1, f2, tgt) {
-                    return f1(f2(tgt[p]));
-                },
-                doGang = function(thunk) {
-                    return _.toArray(thunk());
-                },
-                doIterate = function(converter, it) {
-                    return _.each(converter, it);
-                },
-                list = makeElCommand(article, sellDiv, 'ul', 'list').execute(),
-                dorenderList = anCr(list.getElement()),
-                doRenderLink = anCr(ptL(dorenderList, 'li')),
-                fulfill = curryLeft(deferText)('a')(gAlp.Util.setText)(doRenderLink);
-            curryLeft(doIterate)(curryLeft(doGang)(getImages))(curryLeft(iteratee)('src')(fulfill)(doOutput));
-            return list;
-        },
-        presentTabList = function(comp) {
-            var list = makeTabs(),
-                finder = ptL(fromMethod, 'findIndex', list.getChildren('a')),
-                isEq = ptL(gAlp.Util.isEqual),
-                getTgt = ptL(getProp, 'target'),
-                soFind = function(f1, f2, f3, e) {
-                    return f1(ptL(f2, f3(e)));
-                },
-                validator = function(arg) {
-                    return arg >= 0 ? arg : undefined;
-                },
-                tabs = Presenter(list.getChildren('li'), 'current'),
-                onload = _.compose(_.bind(tabs.enable, tabs)),
-                doShow = _.compose(invoke, ptL(getMethod, 'enable'), comp.get, onload),
-                //doShow = _.compose(invoke, ptL(getMethod, 'show'), comp.show, onload),
-                maybe = _.compose(validator, ptL(soFind, finder, isEq, getTgt)),
-                showEvent = _.wrap(doShow, function(f, res) {
-                    comp.disable();
-                    f(res);
-                });
-            tabs.enable(0);
-            gAlp.Util.addHandler('click', ptL(invokeThen, maybe, showEvent), list.getElement());
-            return list;
-        },
-        delegateListEvents = function(e, regexs, functions) {
-            var strMatch = function(reg, o, m) {
-                    return o[m](reg);
-                },
-                getBest = function(iteratee, byIndex, coll) {
-                    return iteratee(byIndex(coll));
-                },
-                zipped = _.zip(regexs, functions),
-                doMatch = gAlp.Util.curry3(strMatch)('match')(drill(['target', 'innerHTML'], e)),
-                run = ptL(getBest, doMatch, gAlp.Util.getZero);
-            /*NOTE not validating e.target;
-            just obtaining the innerHTML and have a noOp on the UL and actions on the links */
-            getResult(gAlp.Util.byIndex(1, gAlp.Util.getBest(run, zipped)));
-        },
-        getCurrentSubjectIndex = function(target, coll, matcher) {
-            var doMatch = ptL(gAlp.Util.nested, curry2(getter)('nodeName'), matcher),
-                byClass = ptL(gAlp.Util.getByClass, 'show', target),
-                getIndex = function(klas) {
-                    return _.filter(byClass(klas), function(el) {
-                        return doMatch(el);
-                    });
-                },
-                andIndex = ptL(gAlp.Util.byIndex, 0),
-                equals = ptL(gAlp.Util.isEqual, andIndex(ptL(getIndex, 'show'))),
-                i = _.findIndex(coll, function(el) {
-                    return equals(el);
-                }),
-                nav = ptL(gAlp.Util.looper, i),
-                comp = componentComp([], 'show', true, nav);
-            _.each(coll, function(el) {
-                comp.add(componentLeaf(el, 'show'));
-            });
-            return comp;
-        },
-        makeElCommand = function(anchor, target, tag, id) {
-            return {
-                execute: function() {
-                    var dorender = setAnchor(anchor, target, getNewElement),
-                        doAttrs = ptL(gAlp.Util.setAttrs, {
-                            id: id
-                        });
-                    this.el = _.compose(doAttrs, dorender)(tag);
-                    return this;
-                },
-                undo: function() {
-                    gAlp.Util.removeNodeOnComplete(this.el);
-                    this.el = null;
-                },
-                getElement: function() {
-                    return this.el;
-                },
-                getChildren: function(tag) {
-                    return this.el.getElementsByTagName(tag);
-                }
-            };
-        },
-        presentAdvanceList = function(comp, command) {
-            var tables = _.toArray(gAlp.Util.invokeRest('getElementsByTagName', sellDiv, 'table')),
-                regexs = [/sale$/i, /^next/i, /^[^<]/i, /^</],
-                events,
-                doAttrs = ptL(gAlp.Util.setAttrs, {
-                    id: 'current'
-                }),
-                get_prop = curry2(getter)('title'),
-                list = makeElCommand(article, sellDiv, 'ul', 'list').execute(),
-                current = getCurrentSubjectIndex(sellDiv, tables, matchFromTable),
-                setCaption = ptL(setText(get_prop(current.getTarget(true).get()))),
-                dorenderList = setAnchor(list.getElement(), null, getNewElement),
-                //create li on the fly..
-                doRenderLink = setAnchor(ptL(dorenderList, 'li'), null, getNewElement),
-                prepCurrent = _.compose(setCaption, doAttrs, doRenderLink),
-                prepClear = _.compose(setText('Alpacas For Sale'), doRenderLink),
-                prepNext = _.compose(setText('Next Alpaca'), doRenderLink);
-            _.each([prepClear, prepCurrent, prepNext], function(subject) {
-                return subject('a');
-            });
-            events = prepEvents(comp, list, command);
-            ptL(clickHandler, gAlp.Util.curry3(delegateListEvents)(events)(regexs), list.getElement())();
-            return list;
-        },
-        toggleClass = function() {
-            return setFromArray('toggle', ['tog'], sellDiv);
-        },
-        toggleTable = gAlp.Util.addEvent(ptL(clickHandler), toggleClass),
-        prepEvents = function(comp, list, command) {
-            var delegate = function() {
-                    var tbl = comp.getNext().get(1).get();
-                    setText(curry2(getter)('title')(tbl))($('current'));
-                },
-                wrapup = function() {
-                    list.undo();
-                    comp.getTarget(true).disable();
-                    this.execute();
-                };
-            return [_.bind(wrapup, command), delegate, toggleClass, noOp];
-        },
-        makeFigure = function(listener, link) {
-            var dorender = setAnchor(listener.getElement(), null, getNewElement),
-                get_prop = curry2(getter)('alt'),
-                fig = dorender('figure'),
-                img = gAlp.Util.getTargetNode(link, matchNode('img'), 'firstChild'),
-                setCaption = ptL(setText(get_prop(img)));
-            setAnchor(fig, null, idty)(link);
-            dorender = setAnchor(fig, null, getNewElement);
-            _.compose(setCaption, dorender)('figcaption');
-        },
-        link2move = ptL(gAlp.Util.invokeRest, 'getElementsByTagName', article, 'a'),
-        oldanchor = ptL(gAlp.Util.invokeRest, 'getElementsByTagName', article, 'table'),
-        getLinks = ptL(gAlp.Util.toArray, link2move),
-        getTables = ptL(gAlp.Util.toArray, oldanchor),
-        prepGalleryCommand = function(makeFigure) {
-            return {
-                execute: function(loader) {
-                    var dorender = setAnchor(article, null, getNewElement),
-                        isImg = ptL(gAlp.Util.nested, curry2(getter)('nodeName'), curry2(gAlp.Util.matchStr)(matchNode('img'))),
-                        config = {
-                            id: 'extent'
-                        },
-                        that = this,
-                        delegate = function(e) {
-                            if (isImg(e.target)) {
-                                var link = gAlp.Util.getTargetNode(e.target, matchNode('a'), 'parentNode'),
-                                    doDisplay = ptL(setFromArray, 'add', ['show']),
-                                    comp;
-                                that.undo();
-                                doDisplay(link);
-                                doDisplay(gAlp.Util.getPrevious(link));
-                                gAlp.Util.removeNodeOnComplete($('extent'));
-                                comp = getCurrentSubjectIndex(sellDiv, getTables(), matchFromTable);
-                                loader.sub.load(comp.getIndex(true));
-                            }
-                        },
-                        listener = _.compose(gAlp.Util.addEvent(clickHandler, delegate), ptL(gAlp.Util.setAttrs, config), dorender)('div');
-                    _.each(getLinks(), ptL(makeFigure, listener));
-                    removeClassCurry('loop')(article);
-                },
-                undo: function() {
-                    var cb = function(coll, el, i) {
-                        coll[i].nextSibling && gAlp.Util.render(sellDiv, coll[i].nextSibling, el);
-                    };
-                    //if (count-- > 0) {
-                        tooltip.init();
-                    //}
-                    _.each(getLinks(), ptL(cb, getTables()));
-                }
-            };
-        },
-        setup = function() {
-            // desktop.validate = _.compose(alert.bind(window), desktop.validate);
-            var navLayout = ['loop', 'tab'],
-                //last reg (/^$/) not required after refactor Kept as a reminder of how to test for an empty string
-                navReg = [/^l/, /^t/, /^$/],
-                getOther = getOtherFactory(navLayout),
-                //q1 = '(max-width: 600px), (min-width: 769px) and (max-width: 860px)',
-                getCopy = function(list) {
-                    return !isNaN(list) ? list : list.slice(_.random(0, list.length));
-                },
-                data = getCopy(alpacas),
-                getThreshold = function(getLimit, getMethod, pred) {
-                    return _.compose(getLimit, getMethod)(pred());
-                },
-                getMath = function(hi, lo, method) {
-                    return Math[method](hi, lo);
-                },
-                getMathMethod = function(flag) {
-                    return flag ? 'max' : 'min';
-                },
-                prepThreshold = ptL(getThreshold, ptL(getMath, desktop.limit, mobile.limit), ptL(getMathMethod), ptL(Modernizr.mq, desktop.query)),
-                validators = [gAlp.Util.curry2(gtThan)(0), gAlp.Util.curry2(gtThan)(1)],
-                getOutcome = function(validators, post, a, b) {
-                    var res = _.every(validators, gAlp.Util.curry2(run)(getResult(a)));
-                    if (res) {
-                        return post(getResult(a), getResult(b));
-                    }
-                },
-                getLen = _.compose(ptL(getProp, 'length'), ptL(idty, data))(),
-                doBest = function(partial, list, a, b) {
-                    return gAlp.Util.getBest(ptL(partial, a, b), list);
-                },
-                doSale = function() {
-                    return setFromArray('add', 'sell', document.body);
-                    /*return something other than null/indef as
-                    signal that we have at least one item to sell as a precondition to considering more sale items*/
-                },
-                selling = ptL(gAlp.Util.invokeWhen, ptL(validators.slice(0, 1)[0], getLen), doSale),
-                makeSale = ptL(getOutcome, [selling].concat(validators.slice(1)), ptL(doBest, ptL(gtThan), navLayout), getLen, prepThreshold),
-                getLayout = _.compose(ptL(fallback, ''), makeSale),
-                navSuper = {
-                    init: function() {
-                        this.ul = this.ul || this.attach();
-                        this.el = this.ul.el;
-                    },
-                    detach: function() {
-                        this.ul = null;
-                        this.ul.undo();
-                    },
-                    attach: function() {},
-                    toString: function() {
-                        return this.ul.el.className;
-                    }
-                },
-                navfactory = function(o, regexs, functions, str) {
-                    var doMatch = gAlp.Util.curry3(stringOp)('match')(str),
-                        run = ptL(zipping, doMatch, gAlp.Util.getZero);
-                    o.attach = gAlp.Util.byIndex(1, gAlp.Util.getBest(run, _.zip(regexs, functions)));
-                    o.id = str;
-                    return o;
-                },
-                initNav = function(nav) {
-                    nav.init();
-                    addClassCurry(nav.id)(nav.el.parentNode);
-                    return nav;
-                },
-                getWindowState = function() {
-                    return Number(gAlp.Util.getBest(always(mq), querySizeOutcomes)());
-                },
-                test = getWindowState() ? getWindowState : _.negate(getWindowState),
-                handlerFactory = gAlp.Util.retWhen(desktop)(mobile),
-                getList = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('ul')),
-                removeList = _.compose(ptL(gAlp.Util.removeNodeOnComplete), getList),
-                handler = function() {
-                    var myquery;
-                    if (!test()) {
-                        test = _.negate(test);
-                        myquery = handlerFactory(myQuery());
-                        gAlp.Util.invokeWhen(ptL(myquery.validate, this.sub.type), _.bind(this.exit, this));
-                    }
-                },
-                unload = function(flag) {
-                    var type = flag ? getOther(this.type) : this.type;
-                    _.compose(removeList, removeClassCurry([type, 'solo']))(article);
-                },
-                doLoad1 = function(i) {
-                    //a scenario where loop layout is in gallery mode
-                    //could do with a refactor, restoring state to loop mode
-                    //
-                    if (i !== -1) {
-                        this.comp = displayData(getImages, 'show', ptL(gAlp.Util.looper, i));
-                        this.comp.show(i);
-                        return true;
-                    }
-                },
-                doLoad2 = function(bool) {
-                    if (bool) {
-                        if (this.nav) {
-                            this.nav.ul = null;
-                        } else {
-                            unload.call(this, true);
-                        }
-                        this.getNav();
-                    }
-                },
-                init = function() {
-                    toggleTable(sellDiv);
-                    loadData(data, iterateTable, renderTable);
-                    gAlp.Util.addHandler('resize', window, _.debounce(_.bind(handler, this.sup), 66));
-                },
-                init1 = function(command) {
-                    command.execute = ptL(command.execute, this.sup);
-                    this.command = command;
-                },
-                initLoop = ptL(init1, prepGalleryCommand(ptL(makeFigure))),
-                soOnLoad = function() {
-                    this.type = getLayout();
-                    this.onload();
-                },
-                onload = function() {
-                    this.doLoad();
-                },
-                getNav = function() {
-                    var doNav = ptL(navfactory, navSuper, navReg, [ptL(presentAdvanceList, this.comp, this.command), ptL(presentTabList, this.comp)]);
-                    this.nav = initNav(doNav(this.type));
-                },
-                deliverExit = function() {
-                    unload.call(this);
-                    var comp = getCurrentSubjectIndex(sellDiv, getTables(), matchFromTable);
-                    this.type = getOther(this.type);
-                    this.load(comp.getIndex(true));
-                },
-                doExit = function() {
-                    if (this.nav) {
-                        deliverExit.call(this);
-                    }
-                },
-                exitTab = function() {
-                    //desktop to mobile direction 
-                    //if sale quantity does not exceed limit don't switch
-                    if (!myQuery() && (getLen <= mobile.limit)) {
-                        return;
-                    } else {
-                        //provides a command object required for running an exit routine see wrapup
-                        initLoop.call(this);
-                    }
-                    doExit.call(this);
-                },
-                exitLoop = function() {
-                    //mobile to desktop direction
-                    //if sale quantity exceeds limit don't switch
-                    if (myQuery() && (getLen >= desktop.limit)) {
-                        return;
-                    }
-                    doExit.call(this);
-                },
-                nosale = {
-                    init: ptL(gAlp.Util.removeNodeOnComplete, sellDiv)
-                },
-                solo = {
-                    init: _.compose(soOnLoad, init),
-                    onload: function() {
-                        this.load(0);
-                        setFromArray('add', 'solo', article);
-                        tooltip.init();
-                    },
-                    load: doLoad1
-                },
-                tab = {
-                    init: _.compose(soOnLoad, init),
-                    onload: onload,
-                    doLoad: function(i) {
-                        this.load(i);
-                        tooltip.init();
-                    },
-                    load: _.compose(doLoad2, doLoad1),
-                    getNav: getNav,
-                    exit: exitTab
-                },
-                loop = {
-                    init: _.compose(soOnLoad, initLoop, init),
-                    onload: onload,
-                    doLoad: function() {
-                        this.command.execute();
-                    },
-                    load: _.compose(doLoad2, doLoad1),
-                    getNav: getNav,
-                    exit: exitLoop
-                },
-                getSubLoader = function(i) {
-                    var options1 = [nosale, solo],
-                        options2 = [tab, loop],
-                        options3 = [],
-                        dt = myQuery(),
-                        d = i <= desktop.limit,
-                        m = i <= mobile.limit,
-                        t = options1[i],
-                        x = dt ? d : m,
-                        res = t ? t : x ? options2[0] : options2[1],
-                        op = getOtherFactory(options2)(res);
-                    if (t) {
-                        options3.push(t, t);
-                    } else {
-                        options3.push(res, op);
-                    }
-                    return options3;
-                },
-                prepSuperLoader = function(sup, sub) {
-                    var p,
-                        func = function(m) {
-                            return function() {
-                                return this.sub[m].apply(this.sub, arguments);
-                            }
-                        }
-                    for (p in sub) {
-                        if (sub.hasOwnProperty(p)) {
-                            sup[p] = func(p);
-                        }
-                    }
-                    sup.sub = sub;
-                    return sup;
-                },
-                meLoader = function(i) {
-                    var subs = getSubLoader(i),
-                        sup = prepSuperLoader({}, subs[0]);
-                    subs[0].sup = sup;
-                    subs[1].sup = sup;
-                    sup.exit = function() {
-                        //force switch to tab layout in order to maintain state
-                        if (!this.sub.nav) {
-                            this.sub = subs[1];
-                            unload.call(this.sub, true);
-                            this.sub.type = getLayout();
-                        }
-                        //normal switch back to loop
-                        this.sub.exit();
-                    };
-                    sup.sub = subs[0];
-                    return sup;
-                };
-            return meLoader(getLen);
-        };
-    /* only load the javascript if css enabled, a dummy element is placed in html,
-    a property applied in css, which will not be accessible if path to css is missing */
-    if (checkDummy()) {
-        var loader = setup();
-        loader.init();
-        window.loader = loader;
-    }
-}(document.getElementById('article'), Modernizr.mq('only all'), {
-    query: '(max-width: 768px)',
-    validate: _.partial(function(x, y) {
-			return x === y;
-		}, 'loop'),
-    limit: 2
-}, {
-    query: '(min-width: 769px)',
-    validate: _.partial(function(x, y) {
-			return x === y;
-		}, 'tab'),
-    limit: 5
+			[
+				["Granary Enrico", "Price on Application"],
+				["D.O.B:", "20.06.2007"],
+				["Type:", "Huacaya"],
+				["Sex:", "Male"],
+				["Colour:", "Solid White"],
+				["Sire:", "Farrlacey Ivan"],
+				["Other info:"],
+				["Enrico is a fine sturdy boy with a great fleece 18.5micron in 2008. Excellent stud potential."],
+                ["alt", "Rico"],
+				["src", "../images/sale/rico.jpg"]
+			]
+        
+		],
+		sliceArray = function(list, end) {
+			return list.slice(_.random(0, end || list.length));
+		},
+		alpacas_select = sliceArray(alpacas),
+		alp_len = alpacas_select.length,
+		threshold = Number(query.match(/[^\d]+(\d+)[^\d]+/)[1]),
+		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
+		getEnvironment = (function() {
+			if (mq) {
+				return _.partial(Modernizr.mq, query);
+			} else {
+				return isDesktop
+			}
+		}()),
+		$ = function(str) {
+			return document.getElementById(str);
+		},
+		reverse = gAlp.Util.invoker('reverse', Array.prototype.reverse),
+		repeatOnce = doRepeat()(1),
+        validator = gAlp.Util.validator,
+		getNavTypeFactory = function(coll, len, limits) {
+			var pop = gAlp.Util.invoker('pop', Array.prototype.pop),
+				shift = gAlp.Util.invoker('shift', Array.prototype.shift),
+				//reverse = gAlp.Util.invoker('reverse', Array.prototype.reverse),
+				isMobile = validator('loop layout priority', _.negate(getEnvironment)),
+				subHigher = validator('Data length exceeds a tab layout', doTwiceDefer(gtThan)(limits.hi)(len)),
+				subLower = validator('Data length will not require a loop layout', doTwiceDefer(lsThanEq)(limits.lo)(len)),
+				trials = [ptL(decorateWhen(subLower), pop, coll), ptL(decorateWhen(subHigher), shift, coll), ptL(decorateWhen(isMobile), reverse, coll)];
+			_.each(trials, function(f) {
+				return f();
+			});
+			return coll;
+		},
+		ptL = _.partial,
+		idty = _.identity,
+		con = _.bind(window.console.log, window.console),
+		doTwice = gAlp.Util.curryTwice(),
+		doTwiceDefer = gAlp.Util.curryTwice(true),
+		doThrice = gAlp.Util.curryThrice(),
+		anCr = gAlp.Util.append(),
+		anMv = gAlp.Util.move(),
+		anCrIn = gAlp.Util.insert(),
+		setAttrs = gAlp.Util.setAttributes,
+		doAddClass = gAlp.Util.addClass,
+		doDrillDown = gAlp.Util.drillDown,
+		byIndex = gAlp.Util.byIndex,
+		getPerformer = function() {
+			return ptL(gAlp.Util.apply, gAlp.Util.partialSetFromArray.apply(gAlp.Util, arguments));
+		},
+		sellDiv = _.compose(ptL(setAttrs, {
+			id: 'sell'
+		}), anCr(article), always('div'))(),
+		renderTable = _.compose(anCr(sellDiv), always('table')),
+		iterateTable = function(getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
+			return function(getAnchor, subject) {
+				var table = getAnchor(), //<table></table
+					//optional tbody reqd for IE
+					render = anCr(table),
+					tbody = _.compose(render, ptL(idty))('tbody'),
+					c = gAlp.Util.curry4(caller1)('match')(/^other/i)(doDrillDown(['innerHTML'])),
+					addspan,
+					doRow = _.compose(anCr(tbody)),
+					tableconfig = {
+						cellspacing: 0
+					},
+					addTableAttrs = {},
+					addImgAttrs = {},
+					addLinkAttrs = {},
+					tmp;
+				_.each(subject.slice(0, -2), function(tr, j) {
+					var row,
+						type = !j ? 'th' : 'td',
+						supportsNthChild = validator('hard coding class not required', always(!Modernizr.nthchild)),
+						isOdd = validator('is not an odd numbered row', always(j % 2)),
+						isFirstRow = ptL(validator, 'is NOT first row'),
+						isTableHead = ptL(validator, 'is NOT table head'),
+						dospan = ptL(_.compose(ptL(gAlp.Util.isEqual, 1), doDrillDown(['length']))),
+						doOdd = decorateWhen(supportsNthChild, isOdd),
+						provisionalID,
+						assignId = function(str) {
+							//tableconfig.title = addImgAttrs.alt = getId(str);
+							addLinkAttrs.title = addImgAttrs.alt = getId(str);
+							addTableAttrs = ptL(setAttrs, tableconfig);
+						},
+						maybeClass = ptL(decorateWhen(validator('is NOT a single column row', c), supportsNthChild), doDescription);
+					_.each(tr, function(td, i, data) {
+						//partially apply the RETURNED function from decorateWhen with (partially applied) function to invoke
+						addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
+						row = row || doFreshRow(ptL(doRow, 'tr'), i);
+						provisionalID = decorateWhen(isFirstRow(always(!i)), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
+						provisionalID(ptL(assignId, td));
+						_.compose(maybeClass, addspan, gAlp.Util.setText(td), anCr(row))(type);
+						doOdd(_.compose(doOddRow, always(row)));
+					});
+				});
+				render = anCr(table.parentNode),
+					addLinkAttrs = _.extend(addLinkAttrs, {
+						href: getPath(subject)
+					});
+				addLinkAttrs = ptL(setAttrs, addLinkAttrs);
+				addImgAttrs = _.extend(addImgAttrs, {
+					src: getPath(subject)
+				});
+				addImgAttrs = ptL(setAttrs, addImgAttrs);
+				tmp = _.compose(addLinkAttrs, render, always('a'))();
+				render = anCr(tmp);
+				_.compose(addImgAttrs, render, always('img'))();
+				addTableAttrs(table);
+			};
+		},
+		loadData = function(data, driver, render) {
+			_.each(data, ptL(driver, render));
+		};
+	/* only load the javascript if css enabled, a dummy element is placed in html,
+	a property applied in css, which will not be accessible if path to css is missing */
+	if (!alp_len || !checkDummy()) {
+		return;
+	}
+	var getId = _.compose(ptL(byIndex, 1), doThrice(simpleInvoke)(' ')('split')),
+		doRow = decorateWhen(validator('is first row', ptL(gAlp.Util.isEqual, 0))),
+		doColspan = ptL(setAttrs, {
+			colspan: 2
+		}),
+		getPath = function(array) {
+			return array.slice(-1)[0][1];
+		},
+		configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(doAddClass, 'description'), ptL(doAddClass, 'odd'));
+	loadData(alpacas_select, configureTable, renderTable);
+	var routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
+		myconfig = {
+			shower: getPerformer(always(true), 'add'),
+			hider: getPerformer(always(true), 'remove'),
+			klas: 'show',
+			intaface: gAlp.Intaface('Display', ['show', 'hide'])
+		},
+		links = _.toArray(sellDiv.getElementsByTagName('a')),
+		display_elements = _.map(links, function(el) {
+			return [el, gAlp.Util.getPrevious(el)];
+		}),
+		tables = _.map(links, function(el) {
+			return gAlp.Util.getPrevious(el);
+		}),
+		mapLinktoTitle = function(link) {
+			var getHref = doThrice(simpleInvoke)(linkEx)('match');
+			return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
+		},
+		alpacaTitles = _.map(links, mapLinktoTitle),
+		getAlpacaTitles = doTwice(getProp)(alpacaTitles),
+		partialLinks = doTwiceDefer(gAlp.Util.map)(mapLinktoTitle)(links),
+		getLinkDefer = doTwiceDefer(getProp)(links), //awaits integer
+		getDomTargetLink = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('a')),
+		getDomTargetImage = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
+		tooltip = gAlp.Tooltip(article, ["click here...", "to toggle table and picture"], 2),
+		doToolTip = ptL(gAlp.Util.doWhen, repeatOnce, _.bind(tooltip.init, tooltip)),
+		makeLeaf = function(comp, config, el) {
+			var leaf = gAlp.Composite(null, config.intaface);
+			leaf.hide = ptL(config.hider, config.klas, el);
+			leaf.show = ptL(config.shower, config.klas, el);
+			leaf.get = always(el);
+			comp.add(leaf);
+		},
+		makeDisplayer = function(inc, conf) {
+			function setDisplays(inc, comp) {
+				comp.hide = function() {
+					_.each(inc, function(leaf) {
+						leaf.hide();
+					});
+				};
+				comp.show = function(j) {
+					comp.hide();
+					_.each(inc, function(leaf, i) {
+						if (!isNaN(j) && j === i) {
+							leaf.show(); //show pair
+						} else if (isNaN(j)) {
+							leaf.show();
+						}
+					});
+				};
+				return comp;
+			}
+			return setDisplays(inc, gAlp.Composite(inc, conf.intaface));
+		},
+		simpleComp = function(coll, config) {
+			var comp = makeDisplayer([], config),
+				doLeaf = ptL(makeLeaf, comp, config);
+			_.each(coll, doLeaf);
+			return comp;
+		},
+		machDisplayComp = function(coll, config) {
+			var headcomp = makeDisplayer([], config),
+				mycomp = headcomp,
+				recur = function(gang) {
+					_.each(gang, function(arg) {
+						if (_.isArray(arg)) {
+							mycomp = makeDisplayer([], config);
+							headcomp.add(mycomp);
+							recur(arg);
+						} else {
+							makeLeaf(mycomp, config, arg);
+						}
+					});
+				};
+			headcomp.handle = function(e) {
+				var i = this.strategy(e);
+				if (i >= 0) {
+					this.show(i);
+					this.fire(i);
+				}
+			};
+			headcomp.getIndex = function() {
+				return this.strategy && this.strategy(true) || 0;
+			};
+			recur(coll);
+			_.extend(headcomp, new gAlp.Util.Observer());
+			headcomp.subscribe(doToolTip);
+			return headcomp;
+		},
+		getDisplayComp = ptL(machDisplayComp, display_elements, myconfig),
+		tabFactory = function(gallery, index) {
+			if (isNaN(index)) {
+				return;
+			}
+
+			function prepTitles() {
+				return ['Alpacas For Sale', mapLinktoTitle(getLink()), 'Next Alpaca'];
+			}
+
+			function prepNav(ancor, refnode) {
+				return gAlp.Util.makeElement(ptL(setAttrs, {
+					id: 'list'
+				}), anCrIn(ancor, refnode), always('ul'));
+			}
+
+			function getLI() {
+				var nav = !($nav.get()) ? $nav.add().get() : $nav.get();
+				return _.compose(anCr, _.compose(anCr(nav), always('li')))();
+			}
+
+			function doTabs(doLI, str) {
+				return _.compose(gAlp.Util.setText(str.capitalize()), doLI())('a');
+			}
+
+			function doTabsLoop(doLI, str, i) {
+				///REMEMBER a new decorateWhen PER LOOP
+				var v = validator('wrong link', ptL(gAlp.Util.isEqual, 1, i)),
+					doParent = _.compose(ptL(doAddClass, 'current'), doDrillDown(['parentNode'])),
+					doWhen = ptL(decorateWhen(v), doParent);
+				return _.compose(doWhen, gAlp.Util.setText(str.capitalize()), doLI())('a');
+			}
+
+			function throttler(callback) {
+				if (!getEnvironment()) {
+					getEnvironment = _.negate(getEnvironment);
+				}
+				var handler = function() {
+					if (!getEnvironment() && $nav.get()) {
+						con('ch...')
+						getEnvironment = _.negate(getEnvironment);
+						callback();
+					}
+				};
+				return gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
+			}
+
+			function addHandler(id, cb) {
+				return _.compose(_.identity, ptL(prepHandle, cb), ptL(doAddClass, id))($nav.get());
+			}
+
+			function doAddHandler(f) {
+				this.handle = f();
+				//this.handle = gAlp.Util.addHandler('click', window.alert.bind(window, 'bond'), mynav);
+			}
+			var I = 0,
+				$nav = prepNav(sellDiv, article),
+				ctxt = getDisplayComp(index),
+				getLink = getLinkDefer(index),
+				resizerinc = [],
+				resizercomp = makeDisplayer(resizerinc, myconfig),
+				doTabNav = _.compose(ptL(doTabs, getLI)),
+				doLoopNav = _.compose(ptL(doTabsLoop, getLI)),
+				prepHandle = ptL(gAlp.Util.addHandler, 'click'),
+				init = function(coll, iteratee) {
+					_.each(coll(), iteratee);
+				},
+				hide = function() {
+					$nav.remove();
+				},
+				doExit = function(i) {
+					$nav.remove();
+					ctxt.fire(i);
+				},
+				exiting = function(subject, i) {
+					ctxt.unsubscribe(subject);
+					doExit(i);
+				},
+				prepLoop = function() {
+					var handler = function(e) {
+							var events = [ctxt.handle.bind(ctxt), _.compose(_.bind(gallery.execute, gallery), $nav.remove), noOp, noOp],
+								composed = _.compose(doThrice(stringOp)('match'), doDrillDown(['target', 'innerHTML']))(e),
+								best = ptL(gAlp.Util.getBest, function(arr) {
+									return composed(arr[0]);
+								}, _.zip(navExes, events));
+							_.compose(gAlp.Util.getDefaultAction, best)()();
+						},
+						nextLoop = function() {
+							var fromClass = _.compose(getDomTargetLink, ptL(byIndex, 0), ptL(gAlp.Util.getByClass, 'current')),
+								pre_prepped = _.compose(ptL(gAlp.Util.setter, fromClass, 'innerHTML'), getAlpacaTitles),
+								isNotEmpty = function(arg) {
+									return arg;
+								},
+								prepped = _.compose(ptL(gAlp.Util.invokeWhen, _.compose(isNotEmpty, fromClass), pre_prepped)),
+								exit = ptL(exiting, prepped);
+							return function(i) {
+								this.exit = exit;
+								ctxt.subscribe(prepped);
+								ctxt.fire(i);
+							};
+						},
+						looper = {
+							init: ptL(init, prepTitles, doLoopNav),
+							id: 'loop',
+							addHandler: ptL(doAddHandler, ptL(addHandler, 'loop', handler)),
+							hide: hide,
+							doNext: nextLoop(),
+							delegate: ptL(simpleInvoke, ctxt, 'handle', false)
+						};
+					return looper;
+				},
+				prepTab = function() {
+					var nextTab = function(i) {
+							var navbar = simpleComp($nav.get().childNodes, _.extend(myconfig, {
+									klas: 'current'
+								})),
+								boundNav = _.bind(navbar.show, navbar);
+							ctxt.subscribe(boundNav);
+							ctxt.fire(i);
+							this.exit = function(i) {
+								ctxt.unsubscribe(boundNav);
+								doExit(i);
+							};
+						},
+						tabber = {
+							init: ptL(init, partialLinks, doTabNav),
+							id: 'tab',
+							addHandler: ptL(doAddHandler, ptL(addHandler, 'tab', ctxt.handle.bind(ctxt))),
+							hide: hide,
+							doNext: nextTab,
+							delegate: ptL(simpleInvoke, ctxt, 'handle')
+						};
+					return tabber;
+				},
+				layouts = {
+					loop: prepLoop(),
+					tab: prepTab(),
+				},
+				prepareLayout = function(comp) {
+					if (!comp) {
+						return;
+					}
+					_.extend(comp, gAlp.Composite([], myconfig.intaface));
+					comp.show = function(j) {
+						var i = isNaN(j) ? index : j;
+						this.init(i);
+						ctxt.strategy = sortIndexFactory(i, this.id, alpacaTitles);
+						this.addHandler();
+						this.delegate(i); //ie show current
+						this.doNext(i); //prep observers
+					};
+					comp.add(ctxt);
+					resizercomp.add(comp);
+					return comp;
+				},
+				mecallback = function() {
+					return function() {
+						resizerinc[I].exit(ctxt.getIndex());
+						I = (I += 1) % resizerinc.length;
+						resizerinc[I].show(ctxt.getIndex());
+					};
+				},
+				prepHandler = function(cb) {
+					this.handle = throttler(cb);
+				},
+				resize_callback = mecallback(I),
+				sortLayouts = function() {
+					var mylayouts = [layouts[routes[0]]],
+						alt = layouts[routes[1]],
+						action = _.compose(ptL(prepHandler, resize_callback), ptL(simpleInvoke, mylayouts, 'push', alt)),
+						deferred = ptL(gAlp.Util.invokeWhen, always(alt), _.bind(action, resizercomp));
+					deferred();
+					_.each(mylayouts, prepareLayout);
+					mylayouts = [];
+				};
+			sortLayouts();
+			//memoize...
+			tabFactory = function(gallery, index) {
+				if (isNaN(index)) {
+					return;
+				}
+				$nav = prepNav(sellDiv, article);
+				getLink = getLinkDefer(index);
+				//IF user resizes while in gallery mode, we CHOOSE NOT to update the predicate until this moment...
+				if (!getEnvironment()) {
+					getEnvironment = _.negate(getEnvironment);
+					resize_callback();
+				} else {
+					resizercomp.get(I).show(index);
+				}
+			};
+			resizercomp.get(0).show(index);
+		}, //orig tabFactory
+		makeFigure = function(ancor, el) {
+			var grabAlt = _.compose(doDrillDown(['alt']), getDomTargetImage),
+				preptext = _.compose(gAlp.Util.setText, grabAlt)(el);
+			return {
+				execute: function() {
+					doAddClass('extent', ancor);
+					var fig = _.compose(anCr(ancor), always('figure'))();
+					this.subject = gAlp.Util.makeElement(ptL(idty, fig), preptext, anCr(fig), always('figcaption'), anMv(fig), ptL(idty, el)).add();
+					return this;
+				},
+				find: function(e) {
+					var myimg_alt = _.compose(doDrillDown(['alt']), getDomTargetImage)(this.subject.get()),
+						tgt_alt = doDrillDown(['target', 'alt'])(e);
+					return (myimg_alt === tgt_alt);
+				},
+				undo: function(i) {
+					gAlp.Util.removeClass('extent', ancor);
+					var link = _.compose(getDomTargetLink)(this.subject.get());
+					gAlp.Util.insertAfter(link, tables[i]);
+					this.subject.remove();
+				}
+			};
+		},
+		loader = function(coll, layout, target_node, proxy) {
+			_.compose(ptL(doAddClass, 'sell'), always(document.body))();
+			var goFigure = ptL(makeFigure, target_node),
+				getFigs = function() {
+					return _.map(coll, function(el) {
+						return goFigure(el).execute();
+					});
+				},
+				toggleTable = function() {
+					var f = ptL(gAlp.Util.toggleClass, ['tog'], target_node);
+					//f = window.confirm.bind(window, 'proceed');
+					return gAlp.Util.addEvent(ptL(gAlp.Util.addHandler, 'click'), f)(target_node);
+				},
+				delBridge = function(action, e) {
+					var getText = doDrillDown(['target', 'nodeName']),
+						val = _.compose(doThrice(simpleInvoke)(/img/i)('match'), getText),
+						isImg = gAlp.Util.validator('Please click on an image', val);
+					try {
+						return gAlp.Util.conditional(isImg)(action, e);
+					} catch (e) {
+						//report.innerHTML = e.message;
+						true;
+					}
+				},
+				delegate = function(coll, ctxt, e) {
+					var j;
+					_.each(getResult(coll), function($el, i) {
+						if ($el.find(e)) {
+							j = i;
+						}
+						$el.undo(i);
+					});
+					ctxt.handler && ctxt.handler.remove(ctxt.handler);
+					ctxt.handler = toggleTable();
+					return j;
+				},
+				execs = function(base) {
+					var layouts = {
+						loop: {
+							execute: function() {
+								base.handler && base.handler.remove(base.handler);
+								var figs = getFigs(),
+									pred = ptL(delBridge, ptL(delegate, figs, base)),
+									action = ptL(tabFactory, proxy),
+									pred_action = _.compose(action, pred);
+								//pred_action = doTwice(gAlp.Util.doWhen)(action);
+								//pred_action = _.compose(pred_action, pred);                                
+								base.handler = gAlp.Util.addEvent(ptL(gAlp.Util.addHandler, 'click'), pred_action)(target_node);
+							}
+						},
+						tab: {
+							execute: function() {
+								base.handler && base.handler.remove(base.handler);
+								tabFactory(layouts.loop, 0);
+								base.handler = toggleTable();
+							}
+						}
+					};
+					return _.extend(base, layouts[layout]);
+				};
+			return execs({});
+		}, //loader
+		myloader = { // a proxy that persists and is responsible for instatiating subjects
+			execute: function() {
+				this.subject && this.subject.handler.remove(this.subject.handler);
+				this.subject = loader(links, routes[0], sellDiv, this);
+				this.subject.execute();
+			}
+		};
+	myloader.execute();
+}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\./i, [/^next/i, /sale$/i, /^[^<]/i, /^</], {
+	lo: 3,
+	hi: 5
 }));

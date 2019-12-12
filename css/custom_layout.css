@@ -12,7 +12,7 @@
 #alpacas_for_sale #article ul, #alpacas_for_sale #article ul li>a, #alpacas_for_sale #main #aside, #extent, ul#thumbnails, #gallery #main, #controls {
 	position: relative;
 }
-#alpacas_for_sale #article ul, #extent, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
+#alpacas_for_sale #article ul, .extent, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
 	overflow: hidden;
 }
 #alpacas_for_sale #main #aside {
@@ -35,31 +35,30 @@
 	z-index: 0;
 	margin-bottom: 1em;
 }
-#extent {
+.extent {
 	left: 0;
 	margin: 0 auto;
 	padding: 1.5%;
 	*padding: .6em .3em;
 	*height: 1%;
 }
-#extent figure {
+.extent figure {
 	width: 31.8%;
 	margin: 0 1%;
 	*margin: 0 .3em;
 	float: left;
+    overflow: hidden;
 }
-#alpacas_for_sale figcaption {
-	padding: .3em;
-}
-#extent {
+
+.extent {
 	display: table;
 	border-spacing: .75em;
 }
-#extent figure {
+.extent figure {
 	display: table-cell;
 	float: none;
 }
-#extent figure {
+.extent figure {
 	*display: inline-block;
 	zoom: 1;
 	*float: none;
@@ -85,10 +84,10 @@
 	float: left;
 	padding: 0.7em 1.3em;
 }
-#alpacas_for_sale #article.loop ul li a {
+#alpacas_for_sale #article ul.loop li a {
 	padding: 0.7em .5em 0.7em 2em;
 }
-#alpacas_for_sale #article ul li:first-child a {
+#alpacas_for_sale #article ul.loop li:first-child a {
 	float: left;
 	padding-left: 0.7em;
 }
@@ -98,27 +97,27 @@
 #alpacas_for_sale #article ul li>a {
 	display: table-cell;
 }
-.nthchild #alpacas_for_sale #article.loop ul li:first-child a {
+.nthchild #alpacas_for_sale #article ul.loop li:first-child a {
 	padding-left: 1em;
 }
-.tab ul li {
+ ul.tab li {
 	float: left;
 	margin: 0 1em 0 0;
 }
-#alpacas_for_sale #article ul {
+#alpacas_for_sale #article ul.loop {
 	left: -100%;
 	transition: left .4s;
 }
-#alpacas_for_sale #article.tab ul, #alpacas_for_sale #article.loop ul {
+#alpacas_for_sale #article ul.tab, #alpacas_for_sale #article ul.loop {
 	left: 0%;
 }
-.nthchild .loop ul li a {
+.nthchild ul.loop li a {
 	padding: .7em 0 .7em 1.8em;
 }
-.nthchild #alpacas_for_sale .loop ul li:first-child a {
+.nthchild #alpacas_for_sale ul.loop li:first-child a {
 	padding-left: .7em;
 }
-.loop ul li a::after, .loop ul li a::before {
+ul.loop li a::after, ul.loop li a::before {
 	/*border arrows */
 	display: block;
 	position: absolute;
@@ -129,15 +128,15 @@
 	height: 0;
 	margin-top: -2em;
 }
-.no-nthchild #alpacas_for_sale .loop ul li a {
+.no-nthchild #alpacas_for_sale ul.loop li a {
 	padding: 2em;
 }
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
 
-html.js #article #sell>*, #article #sell, #article #sell.tog table, html.js #article #sell.tog table, .sell #aside {
+html.js #article #sell>*, #sell, #article #sell.tog table, html.js #article #sell.tog table, .sell #aside, html.js #article #sell.extent > *.show  {
 	display: none;
 }
-#article.tab #sell, #article.solo #sell, #article.loop #sell, html.js #article #sell>*.show {
+.sell #sell, html.js #article #sell>*.show, html.js #article #sell.extent figure {
 	display: block;
 }
 html.js #article #sell a, html.js #article #sell table {
@@ -155,9 +154,11 @@ html.js #article #sell a.show, html.js #article #sell table.show {
 	height: 1%;
 	*clear: left;
 }
-#article.tab #sell {
-	margin-top: -1px;
+
+.tab + #sell {
+    margin-top: -1px;
 }
+
 #sell a {
 	display: block;
 	padding: 1.6%;
@@ -249,9 +250,11 @@ ul#thumbnails li {
 
 ul#thumbnails li {
 	display: none;
+    opacity: 0;
 }
 ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thumbnails li#paused {
 	display: block;
+    opacity: 1;
 	*display: inline;
 }
 #gallery #footer {

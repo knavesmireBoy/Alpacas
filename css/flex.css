@@ -4,78 +4,6 @@ body#alpacas_for_sale {
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 
-@supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)){
-  
-/*
-         /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
-    /*
-    .no-js #main #article div#sell a {
-        margin: 0 0 2% 2%;
-    }
-    .no-js #main #article div#sell a:last-child {
-        margin: 0 0 0% 2%;
-    }
-    */
-    
-    .no-js #article #sell {
-        flex-wrap: wrap;
-    }   
-            
-
-.sell #article.loop #sell {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-}
-    /*
-#article.solo #sell, #article.loop #sell, #article.tab #sell {
-	position: static;
-}
-    */
-#article #sell>* {
-	align-self: flex-start;
-    /*required for ie 11*/
-    -webkit-box-flex: 1;
-	-ms-flex: 1 1;
-	flex: 1 1 40%;
-}
-
-    #article div#sell a {
-	/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
-	padding: .825em;
-}
-  
-#sell.tog {
-	padding: 3%;
-}
-#sell.tog a {
-	margin: 0%;
-}
-
-#article #extent {
-	display: flex;
-	justify-content: space-between;
-	padding: 2% 1%;
-}
-#extent figure {
-	-webkit-box-flex: 1;
-	-ms-flex: 1 1 1%;
-	flex: 1 1 1%;
-	margin: 0 1%;
-}
-#controls {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	justify-content: center;
-}
-#controls button {
-	-webkit-box-flex: 0;
-	-ms-flex: 0 0 auto;
-	flex: 0 0 auto;
-}
-}
-
 .flexboxlegacy .sell #sell {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -96,7 +24,7 @@ body#alpacas_for_sale {
 }
 /*https://css-tricks.com/using-flexbox/*/
 
-.flexboxlegacy #extent {
+.flexboxlegacy .extent {
 	display: -webkit-box;
 	/* OLD - iOS 6-, Safari 3.1-6 */
 	display: -moz-box;
@@ -108,7 +36,7 @@ body#alpacas_for_sale {
 	display: flex;
 	/* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
-.flexboxlegacy #extent figure {
+.flexboxlegacy .extent figure {
 	margin: 0 1%;
 	-webkit-box-flex: 1;
 	/* OLD - iOS 6-, Safari 3.1-6 */
@@ -123,6 +51,104 @@ body#alpacas_for_sale {
 	flex: 1;
 	/* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
+
+@supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)){
+  
+/*
+         /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
+    /*
+    .no-js #main #article div#sell a {
+        margin: 0 0 2% 2%;
+    }
+    .no-js #main #article div#sell a:last-child {
+        margin: 0 0 0% 2%;
+    }
+    */
+    
+    .no-js #article #sell {
+        flex-wrap: wrap;
+    }   
+            
+
+.sell #sell, #article #sell.extent {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+    flex-wrap: wrap;    
+}
+    /*
+#article.solo #sell, #article.loop #sell, #article.tab #sell {
+	position: static;
+}
+    */
+#article #sell>* {
+	align-self: flex-start;
+    /*required for ie 11*/
+    -webkit-box-flex: 1;
+	-ms-flex: 1 1;
+	flex: 1 1 40%;
+}
+    
+     #article #sell.extent figure {
+	align-self: flex-start;
+    /*required for ie 11*/
+    -webkit-box-flex: 1;
+	-ms-flex: 1 1 1%;
+	flex: 1 1 1%;
+	flex: 1 0 30%;
+     margin: 1%;
+}
+    
+    @media only screen and (max-width: 767px) {
+        
+        .sell #sell, #article #sell.extent {
+            flex-wrap: nowrap;
+        }
+        
+        #article #sell.extent figure{
+            flex: 1 1 30%;
+        }
+    }
+    
+
+
+#article div#sell a {
+	/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
+	padding: .825em;
+}
+    
+    #article div#sell.extent a {
+	/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
+	padding: 0em;
+}
+  
+#sell.tog {
+	padding: 3%;
+}
+#sell.tog a {
+	margin: 0%;
+}
+
+#sell .extent {
+	display: flex;
+	justify-content: space-between;
+	padding: 2% 1%;
+}
+
+#controls {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	justify-content: center;
+}
+#controls button {
+	-webkit-box-flex: 0;
+	-ms-flex: 0 0 auto;
+	flex: 0 0 auto;
+}
+}
+
+
 @media only screen {
 	@supports (display: grid) {
 		#main ul#thumbnails.gallery li {

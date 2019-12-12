@@ -69,6 +69,17 @@ gAlp.ClassList = (function () {
 		f.message = message;
 		return f;
 	}
+    function getOtherFactory(pairs) {
+        return _.compose(gAlp.Util.getZero, _.partial(_.without, pairs));
+    }
+    function getOther(el, pairs) {
+        var dopairs = getOtherFactory(pairs);
+        return function() {
+            //make cross-browser
+            el.classList.replace(article.className, dopairs(article.className));
+        };
+    }
+    
     var  constr = function(node){
          var set = _.partial(setter, node, 'className'),
 				superset = _.partial(setterplus, node, 'className'),
@@ -93,6 +104,10 @@ gAlp.ClassList = (function () {
 						best(_.partial(_.negate(contains), klas), outcomes)(klas);
 					}
 				},
+                replace = function(oldklas, newklas){
+                    var pattern = new RegExp('(^| )' + oldklas + '( |$)');
+					set(node.className.replace(pattern, '$1').replace(/ $/, newklas));
+                },
 				outcomes = [add, remove],
 				notEmpty = function(klas) {
 					return !/^\s+$/.test(klas);
@@ -104,6 +119,7 @@ gAlp.ClassList = (function () {
                     return {
 				contains: contains,
 				add: _.partial(valid1, add),
+				replace: _.partial(valid, replace),
 				remove: _.partial(valid, remove),
 				toggle: toggle,
 				getNode: function() {

@@ -13,9 +13,10 @@ if (!window.gAlp) {
 	"use strict";
 	/*
 	var COR = {
-		init: function (strategy, key, exec) {
-			this.strategy = strategy;
-			this.exec = exec;
+		init: function (predicate, key, action) {
+        //ie add,replace,remove
+			this.predicate = predicate;
+			this.action = action;
 			this.key = key;
 			return this;
 		},
@@ -23,8 +24,8 @@ if (!window.gAlp) {
 			this.successor = s;
 		},
 		handle: function () {
-			if (this.strategy.apply(this, arguments)) {
-				return this.exec.apply(this, arguments);
+			if (this.predicate.apply(this, arguments)) {
+				return this.action.apply(this, arguments);
 			} else if (this.successor) {
 				return this.successor.handle.apply(this.successor, arguments);
 			}
@@ -58,23 +59,6 @@ if (!window.gAlp) {
 		_.each(_.invert(_.rest(args)[0]), chain.handle, chain);
 	}
     */
-    
-
-    
-    
-    function curry22(fun) {
-		return function(secondArg) {
-			return function(firstArg) {
-				return function(){
-                    return fun(firstArg, secondArg);
-                };
-			};
-		};
-	}
-
-	function undef(x) {
-		return typeof(x) === 'undefined';
-	}
 
 	function returnIndex(i, func) {
 		return func.apply(func, _.rest(arguments, 2))[i];
@@ -97,35 +81,8 @@ if (!window.gAlp) {
 	}
 
 	function setter(o, k, v) {
-		o[k] = v;
-	}
-
-	function getDimensions(dim) {
-		// dim = dim.capitalize();
-		return window['inner' + dim] || document.documentElement['client' + dim] || document.body['client' + dim];
-	}
-
-	function getWidth(el) {
-		if (el.getBoundingClientRect && _.isFunction(el.getBoundingClientRect)) {
-			var box = el.getBoundingClientRect();
-			return box.width || (box.right - box.left);
-		} else {
-			try {
-				report.innerHTML = gAlp.Util.getComputedStyle(el, 'width');
-			} catch (e) {
-				report.innerHTML = e.message();
-			}
-			return getDimensions('Width');
-		}
-	}
-
-	function setMargin(el) {
-		var w = getWidth(el.parentNode.parentNode);
-		el.style.marginRight = w ? "-" + w + "px" : "-100%";
-		//css-101.org/negative-margin/
-		//btw: increasing the value (eg -120%) has no effect in ie6/7
-		el.style.marginRight = "-100%";
-	}
+        o[k] = v;
+    }
 
 	function awaitingTarget(m) {
 		var args = _.rest(arguments);
@@ -144,34 +101,6 @@ if (!window.gAlp) {
 			};
 		}
 	}
-	function doEachFactory(config, bound, target, bool) {
-		//ie 6 & 7 have issues with setAttribute, set props instead
-		if (bool) {
-			return _.partial(_.extendOwn, target, config);
-		}
-		return function() {
-			_.forEach(_.invert(config), bound);
-		};
-	}
-
-	function setFromFactory(bool) {
-		return function(validate, method, config, target) {
-			var unbound = function() {
-					target[method].apply(target, arguments);
-				},
-				bound;
-			try {
-				bound = _.bind(target[method], target);
-			} catch (e) {
-				bound = unbound;
-				//$('report').innerHTML = '!'+e.message;
-			}
-			bound = unbound;
-			bound = _.partial(gAlp.Util.invokeWhen, validate, bound);
-			doEachFactory(config, bound, target, bool)();
-			return target;
-		};
-	}
 
 	function invoke(ctxt, m, k, v) {
 		if (!k) {
@@ -179,6 +108,7 @@ if (!window.gAlp) {
 		}
 		if (!m) {
 			setter(ctxt, toCamelCase(k), v);
+            //setter(ctxt, k.toCamelCase('-'), v);
 		} else {
 			ctxt[m].call(ctxt, k, v);
 		}
@@ -187,23 +117,6 @@ if (!window.gAlp) {
 	function construct(drill, args, o) {
 		var context = drill(o);
 		_.each(_.invert(_.rest(args)[0]), _.partial(invoke, context, _.head(args)));
-	}
-
-	function drillDown(arr) {
-		var a = arr && arr.slice && arr.slice();
-		if (a && a.length > 0) {
-			return function inner(o, i) {
-				i = isNaN(i) ? 0 : i;
-				var prop = a[i];
-				if (prop && a[i += 1]) {
-					return inner(o[prop], i);
-				}
-				return o[prop];
-			};
-		}
-		return function(o) {
-			return o;
-		};
 	}
 
 	function isBig(n) {
@@ -247,14 +160,13 @@ if (!window.gAlp) {
 		prepSetStyles = function(config) {
 			//ie < 9 doesn't support setProperty just as they don't support media queries (mq)
 			var method = mq ? 'setProperty' : '';
-			return _.partial(doConstruct, drillDown(['style']), [method, config]);
+			return _.partial(doConstruct, gAlp.Util.drillDown(['style']), [method, config]);
 		},
         readmoretarget = gAlp.Util.getByClass('read-more-target')[0],
 		constr,
 		player,
 		anCr = curryRight(gAlp.Util.setAnchor)(gAlp.Util.getNewElement)(null),
-       
-		split = function(hyper, paras, target, copy) {
+		doSplitz = function(hyper, paras, target, copy) {
 			var store = function(match, attrs, content) {
 					content = content.replace(/&nbsp;/, ' ');
 					hyper[content] = attrs;
@@ -270,6 +182,7 @@ if (!window.gAlp) {
 					paras = {};
 					hyper = {};
 				},
+                
 				validate = _.partial(_.negate(_.isEmpty), paras),
 				//pipe is used to surround text that will be emphasised so <strong>Sampson</strong> becomes |Strong|
 				getStrong = awaitingTarget('replace', /<\/?[^a>]+>/g, '|'),
@@ -279,22 +192,15 @@ if (!window.gAlp) {
 				setLinks = awaitingTarget('replace', /\[(.+?)\]/g, retrieve),
 				input = _.compose(getLinks, getStrong),
 				output = _.compose(setLinks, setStrong),
-				exec = function(constr) {
-					/*
-					//restrict splitting to a single para
-                    //|| gAlp.Util.getNextElement(target.nextSibling*
-					if (!target)) {
-						return;
-					}
-                    */
+				exec = function() {
 					if (Modernizr.mq(query)) {
 						gAlp.Util.invokeWhen(validate, revert);
 						return;
 					}
 					var face = gAlp.Util.getComputedStyle(target, 'font-family').split(',')[0],
 						size = Math.round(parseFloat(gAlp.Util.getComputedStyle(target, 'font-size'))),
-						splitter = constr();
-					gAlp.Util.invokeWhen(validate, revert);
+						splitter = window.gAlp.Splitter();
+					//gAlp.Util.invokeWhen(validate, revert);
 					//could be a simple boolean not a property of an object
 					paras.p = paras.p || target.innerHTML;
 					target.innerHTML = input(target.innerHTML);
@@ -314,22 +220,27 @@ if (!window.gAlp) {
         },
 		// now re-check on scroll
 		splitHandler = function() {
-             if(window.innerHeight){
+            try{
+             if(window.innerHeight && readmoretarget){
                 gAlp.Util.setScrollHandlers(readmoretarget.getElementsByTagName('p'), curry2(gAlp.Util.getScrollThreshold)(0.2));
                 gAlp.Util.addClass('scroll', $('main'));
              }
            
             var orientation = orient(),
-                command = split.apply(null, arguments),
+                command = doSplitz.apply(null, arguments),
 				handler = function() {
                     if(orientation !== orient()){
                         count = 1;
                         orientation = orient();
                     }
 					if (count-- >= 1) {
-						command.execute(window.gAlp.Splitter);
+						command.execute();
 					}
 				};
+            }
+            catch(er){
+                report.innerHTML = er;
+            }
 			handler();
 			return gAlp.Util.addHandler('resize', window, _.debounce(handler, 2000, true));
 		},
@@ -367,23 +278,14 @@ if (!window.gAlp) {
 					}), always(mask_target)).add();
 				},
 				standard = function() {
-					var dorender = _.partial(gAlp.Util.render, mask_target, null),
-						orig = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target),
-						doMask = _.compose(dorender, gAlp.Util.getNewElement),
+					var orig = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
 						config = {
 							alt: '',
 							src: gAlp.Util.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
 						},
-						doAttrs = _.partial(gAlp.Util.setAttrs, config),
-						execSAFE = function() {
-							mask_target.style.display = "block";
-							var mask = mask_target.appendChild(kid.cloneNode());
-							mask.src = orig.src.replace(/\.\w+$/, '_mask8.png');
-							mask.style.marginRight = "-" + mask_target.currentStyle.width;
-						},
 						exec = function() {
-							var setAttrs = setFromFactory(ie6 || ie7),
+							var setAttrs = gAlp.Util.setAttrsFix(ie6 || ie7),
 								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
 							gAlp.Util.makeElement(prepSetStyles({
 								"margin-right": margin
@@ -419,19 +321,11 @@ if (!window.gAlp) {
 					};
 				},
 				swap = function() {
-					var changeView = function(bool, klas, el) {
-							var tgt = gAlp.Util.getClassList(el),
-								action = _.bind(tgt.toggle, tgt);
-							action(klas, bool);
-						},
-						config = {
+					var config = {
 							src: "../images/honcho.jpg",
 							alt: "Alpacas sitting on ground"
 						},
-						hide = _.partial(changeView, false, 'desktop'),
-						show = _.partial(changeView, true, 'desktop'),
-						orig = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target),
-						setAttrs = setFromFactory(ie6 || ie7),
+						setAttrs = gAlp.Util.setAttrsFix(ie6 || ie7),
 						render = _.compose(_.partial(gAlp.Util.addClass, 'swap'), _.partial(setAttrs, always(true), 'setAttribute', config), anCr(mask_target)),
 						oldel;
 					return {
@@ -474,10 +368,13 @@ if (!window.gAlp) {
 	if (touchevents && cssanimations) {
 		var byIndex = _.partial(returnIndex, 0),
 			test = $('article').getElementsByTagName('p'),
-			para = test ? byIndex(always(test)) : null;
+			para = test ? byIndex(always(test)) : null,
+            splithandler = function(para){
+                splitHandler({}, {}, para);
+            };
+        //report.innerHTML = para;
 		//invokes handler and adds resize event listener
-		if (para) {
-			splitHandler({}, {}, para, para.parentNode.innerHTML);
-		}
+        _.each(test, splithandler);
+		//if (para) { splitHandler({}, {}, para, para.parentNode.innerHTML);}
 	}
 }(document, document.getElementById('aside'), document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));

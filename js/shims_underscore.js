@@ -159,7 +159,10 @@ String.prototype.toCamelCase = function (char) {
 		return this.replace(reg, function (match, captured) {
 			return captured.toUpperCase();
 		});
-	}
+	};
+
+
+
 
 String.prototype.honorific = function(h) {
 	"use strict";

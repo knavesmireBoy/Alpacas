@@ -77,11 +77,14 @@ window.gAlp.Eventing = (function (eventing) {
                 });
                 list.unshift(tgt);
             },
-          
-			splice = function() {
-				var res = list.splice.apply(list, arguments);
-				return res[0];
-			},
+            
+            safeAddSimpleOrder = function(tgt){
+            var i = remove(list, tgt);
+            if(i < 0){
+                list.unshift(tgt);
+            }
+            },
+            
             getList = function(){
                 return list;
             };
@@ -91,11 +94,11 @@ window.gAlp.Eventing = (function (eventing) {
 			listEvents: function(){
                 return list;
             },
-			add1: function(o) {
+			add: function(o) {
 				o && list.unshift(o);
 				//list.unshift(_.toArray(arguments));
 			},
-			add: safeAddSimple,
+			add2: safeAddSimple,
 			flush: function() {
 				var i;
 				for (i = list.length - 1; i >= 0; i = i - 1) {
@@ -114,7 +117,7 @@ window.gAlp.Eventing = (function (eventing) {
                     list.splice(remove(list, o), 1)[0].removeListener();
                 }
                 else {
-                    try{
+                    try {
                     list.splice.apply(list, arguments)[0].removeListener();
                     }
                     catch(e){
@@ -155,6 +158,7 @@ window.gAlp.Eventing = (function (eventing) {
                         bound = el ? _.bind(config.func, el) : config.func;
 						config.element.addEventListener(type, bound, false);
 						EventCache.add(this);
+                        this.el = config.element+'_'+EventCache.listEvents().length;
 						return this;
 					};
 					this.removeListener = function () {
@@ -164,7 +168,6 @@ window.gAlp.Eventing = (function (eventing) {
 					this.getElement = function(){
                         return config.element;
                     };
-                    this.el = config.element+'_'+EventCache.listEvents().length;
                     _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 					return _.extendOwn({}, this);
 				};
