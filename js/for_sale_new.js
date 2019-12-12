@@ -304,7 +304,7 @@ if (!window.gAlp) {
 					});
 				});
                 //report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
-                report.innerHTML = window.attachEvent; 
+                report.innerHTML = window.addEventListener; 
 				render = anCr(table.parentNode),
 					addLinkAttrs = _.extend(addLinkAttrs, {
 						href: getPath(subject)
