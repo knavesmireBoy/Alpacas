@@ -288,7 +288,7 @@ if (!window.gAlp) {
 					_.each(tr, function(td, i, data) {
 						//partially apply the RETURNED function from decorateWhen with (partially applied) function to invoke
 						//addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
-						addspan = ptL(decorateWhen(validator('is NOT a single column row', always(true))), doSpan);
+						addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
 						provisionalID = decorateWhen(isFirstRow(always(!i)), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
 						provisionalID(ptL(assignId, td));
