@@ -702,7 +702,7 @@ if (!window.gAlp) {
 			}
 		};
 	myloader.execute();
-}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\./i, [/^next/i, /sale$/i, /^[^<]/i, /^</], {
+}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, /^[^<]/i, /^</], {
 	lo: 3,
 	hi: 5
 }));
