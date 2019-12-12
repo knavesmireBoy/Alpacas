@@ -509,7 +509,6 @@ const curry = fn => (...args) => args.length >= fn.length
 
 	function mapcat(fun, coll) {
         var res = _.map(coll, fun);
-        //console.log(res)
 		return cat.apply(null, res);
 	}
 
