@@ -296,6 +296,7 @@ if (!window.gAlp) {
 						doOdd(_.compose(doOddRow, always(row)));
 					});
 				});
+                report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
 				render = anCr(table.parentNode),
 					addLinkAttrs = _.extend(addLinkAttrs, {
 						href: getPath(subject)

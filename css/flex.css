@@ -1,5 +1,5 @@
 html.js body#alpacas_for_sale {
-    background-color: orange;
+    background-color: navajowhite;
     
 	/*display: flex;
 	flex-direction: column;
@@ -99,8 +99,8 @@ html.js body#alpacas_for_sale {
 	-webkit-box-flex: 1;
 	-ms-flex: 1 1 1%;
 	        flex: 1 1 1%;
-	-ms-flex: 1 0 30%;
-	    flex: 1 0 30%;
+	-ms-flex: 1 0 25%;
+	    flex: 1 0 25%;
      margin: 1%;
 }
     
