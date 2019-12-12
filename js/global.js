@@ -814,9 +814,9 @@ const curry = fn => (...args) => args.length >= fn.length
 	}
 
 	function setFromFactory(bool) {
-		function doEachFactory(config, bound, target, bool) {
+		function doEachFactory(config, bound, target, booly) {
 			//ie 6 & 7 have issues with setAttribute, set props instead
-			if (bool) {
+			if (booly) {
 				return _.partial(_.extendOwn, target, config);
 			}
 			return function() {
@@ -836,7 +836,7 @@ const curry = fn => (...args) => args.length >= fn.length
 			}
 			bound = unbound;
 			bound = _.partial(gAlp.Util.invokeWhen, validate, bound);
-			doEachFactory(config, bound, target, bool)();
+			doEachFactory(config, bound, target, bool)();    
 			return target;
 		};
 	}
@@ -1196,7 +1196,7 @@ const curry = fn => (...args) => args.length >= fn.length
 		doWhenWait: curry22(doWhen),
 		getClassList: getClassList,
 		setAttrs: _.partial(setFromObject, always(true), 'setAttribute'),
-		setAttributes: _.partial(setFromFactory(window.attachEvent), always(true), 'setAttribute'),
+		setAttributes: _.partial(setFromFactory(!window.addEventListener), always(true), 'setAttribute'),
 		setAttrsFix: setFromFactory, //keep as may be in use, but prefer above
 		setText: curry3(setAdapter)('innerHTML'),
 		//getPolyClass: getPolyClass,
