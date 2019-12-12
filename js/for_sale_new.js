@@ -27,6 +27,10 @@ if (!window.gAlp) {
 	    });
 	}());
 	*/
+    function undef(x) {
+		return typeof(x) === 'undefined';
+	}
+    
 	function existy(x) {
 		return x != null;
 	}
@@ -57,7 +61,7 @@ if (!window.gAlp) {
 				if (!errors) {
 					errors = Number(!validator(arg)) ? errors += 1 : errors;
 				}
-                else {
+                else if(!undef(arg)){
                  report.innerHTML = arg;   
                 }
 			});
@@ -293,7 +297,7 @@ if (!window.gAlp) {
 						//addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
-						provisionalID = decorateWhen(isFirstRow(always(!i)), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
+						provisionalID = decorateWhen(isFirstRow(always(Number(!i))), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
 						provisionalID(ptL(assignId, td));
 						_.compose(maybeClass, addspan, gAlp.Util.setText(td), anCr(row))(type);
 						doOdd(_.compose(doOddRow, always(row)));
