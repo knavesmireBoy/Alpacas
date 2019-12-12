@@ -12,12 +12,12 @@ body#alpacas_for_sale {
 	-ms-flex-align: start;
 	align-items: flex-start;
 }
-.flexboxlegacy .sell #sell table {
+.flexboxlegacy .sell #sell > table {
 	-webkit-box-flex: 1;
 	-ms-flex: 1 1 auto;
 	flex: 1 0 auto;
 }
-.flexboxlegacy .sell #sell a {
+.flexboxlegacy .sell #sell > a {
 	-webkit-box-flex: 1;
 	-ms-flex: 1 1 auto;
 	flex: 2 1 auto;
@@ -72,9 +72,10 @@ body#alpacas_for_sale {
 
 .sell #sell, #article #sell.extent {
 	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-    flex-wrap: wrap;    
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;  
 }
     /*
 #article.solo #sell, #article.loop #sell, #article.tab #sell {
@@ -90,23 +91,28 @@ body#alpacas_for_sale {
 }
     
      #article #sell.extent figure {
-	align-self: flex-start;
     /*required for ie 11*/
-    -webkit-box-flex: 1;
+   -ms-flex-item-align: start;
+	align-self: flex-start;
+	-webkit-box-flex: 1;
 	-ms-flex: 1 1 1%;
-	flex: 1 1 1%;
-	flex: 1 0 30%;
+	        flex: 1 1 1%;
+	-ms-flex: 1 0 30%;
+	    flex: 1 0 30%;
      margin: 1%;
 }
     
     @media only screen and (max-width: 767px) {
         
         .sell #sell, #article #sell.extent {
-            flex-wrap: nowrap;
+            -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
         }
         
         #article #sell.extent figure{
-            flex: 1 1 30%;
+            -webkit-box-flex: 1;
+                -ms-flex: 1 1 30%;
+                    flex: 1 1 30%;
         }
     }
     
