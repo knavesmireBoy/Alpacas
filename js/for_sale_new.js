@@ -279,7 +279,7 @@ if (!window.gAlp) {
 						doOdd = decorateWhen(supportsNthChild, isOdd),
 						provisionalID,
 						assignId = function(str) {
-                            console.log(str)
+                            //console.log(str)
 							//tableconfig.title = addImgAttrs.alt = getId(str);
 							addLinkAttrs.title = addImgAttrs.alt = getId(str);
 							addTableAttrs = ptL(setAttrs, tableconfig);
