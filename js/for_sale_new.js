@@ -279,14 +279,16 @@ if (!window.gAlp) {
 						doOdd = decorateWhen(supportsNthChild, isOdd),
 						provisionalID,
 						assignId = function(str) {
+                            console.log(str)
 							//tableconfig.title = addImgAttrs.alt = getId(str);
 							addLinkAttrs.title = addImgAttrs.alt = getId(str);
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
-						maybeClass = ptL(decorateWhen(validator('is NOT a single column row', c), supportsNthChild), doDescription);
+						maybeClass = ptL(decorateWhen(validator('no match found', c), supportsNthChild), doDescription);
 					_.each(tr, function(td, i, data) {
 						//partially apply the RETURNED function from decorateWhen with (partially applied) function to invoke
-						addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
+						//addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
+						addspan = ptL(decorateWhen(validator('is NOT a single column row', always(true))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
 						provisionalID = decorateWhen(isFirstRow(always(!i)), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
 						provisionalID(ptL(assignId, td));
