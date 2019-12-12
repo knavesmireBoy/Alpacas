@@ -234,7 +234,7 @@ if (!window.gAlp) {
 		},
 		ptL = _.partial,
 		idty = _.identity,
-		con = _.bind(window.console.log, window.console),
+		//con = _.bind(window.console.log, window.console),
 		doTwice = gAlp.Util.curryTwice(),
 		doTwiceDefer = gAlp.Util.curryTwice(true),
 		doThrice = gAlp.Util.curryThrice(),
@@ -455,7 +455,7 @@ if (!window.gAlp) {
 				}
 				var handler = function() {
 					if (!getEnvironment() && $nav.get()) {
-						con('ch...')
+						//con('ch...')
 						getEnvironment = _.negate(getEnvironment);
 						callback();
 					}
