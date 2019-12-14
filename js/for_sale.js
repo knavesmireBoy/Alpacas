@@ -27,6 +27,10 @@ if (!window.gAlp) {
 	    });
 	}());
 	*/
+    function undef(x) {
+		return typeof(x) === 'undefined';
+	}
+    
 	function existy(x) {
 		return x != null;
 	}
@@ -51,16 +55,19 @@ if (!window.gAlp) {
 
 	function decorateWhen( /* validators */ ) {
 		var validators = _.toArray(arguments),
-			errors = 0;
+			result = 0;
 		return function(fun, arg) {
 			_.each(validators, function(validator) {
-				if (!errors) {
-					errors = Number(!validator(arg)) ? errors += 1 : errors;
+				if (!result) {
+                    //if passes set to zero
+					result = Number(!validator(arg)) ? result += 1 : result;
 				}
+                
 			});
-			if (!errors) {
+			if (!result) {
 				return fun(arg);
 			}
+            //report.innerHTML = arg && arg.innerHTML;  
 			return arg;
 		};
 	}
@@ -166,7 +173,7 @@ if (!window.gAlp) {
 				["D.O.B:", "29.072006"],
 				["Type:", "Huacaya"],
 				["Sex:", "Female"],
-				["Colour:", "Solid Dark Brown."],
+				["Colour:", "Solid Dark Brown"],
 				["Sire:", "Somerset Peruvian Highlander Lad"],
 				["Other info:"],
 				["Juanita is a lovely natured&nbsp; huacaya who has just produced her first cria, a solid white female, born 13th July 2009. She is for sale with cria at foot and boasts background genetics of Highlander and Don Pedro."],
@@ -181,7 +188,7 @@ if (!window.gAlp) {
             ["Colour:", "Solid  White"],
             ["Sire:", "Somerset Peruvian Highlander of Milend"],
             ["Other info:"],
-            ["This is a small selection of available breeding animals. We can also offer, pets, herd guards and starter herds, if required. Please ring to arrange a visit"],
+            ["Becky is a proven breeding female (2) currently pregnant by Granary Carlos."],
             ["alt", "Becky"],
             ["src", "../images/sale/becky.jpg"]
         ],
@@ -234,7 +241,7 @@ if (!window.gAlp) {
 		},
 		ptL = _.partial,
 		idty = _.identity,
-		con = _.bind(window.console.log, window.console),
+		//con = _.bind(window.console.log, window.console),
 		doTwice = gAlp.Util.curryTwice(),
 		doTwiceDefer = gAlp.Util.curryTwice(true),
 		doThrice = gAlp.Util.curryThrice(),
@@ -279,21 +286,25 @@ if (!window.gAlp) {
 						doOdd = decorateWhen(supportsNthChild, isOdd),
 						provisionalID,
 						assignId = function(str) {
+                            //console.log(str)
 							//tableconfig.title = addImgAttrs.alt = getId(str);
 							addLinkAttrs.title = addImgAttrs.alt = getId(str);
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
-						maybeClass = ptL(decorateWhen(validator('is NOT a single column row', c), supportsNthChild), doDescription);
+						maybeClass = ptL(decorateWhen(validator('no match found', c), supportsNthChild), doDescription);
 					_.each(tr, function(td, i, data) {
 						//partially apply the RETURNED function from decorateWhen with (partially applied) function to invoke
+						//addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
-						provisionalID = decorateWhen(isFirstRow(always(!i)), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
+						provisionalID = decorateWhen(isFirstRow(always(Number(!i))), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
 						provisionalID(ptL(assignId, td));
 						_.compose(maybeClass, addspan, gAlp.Util.setText(td), anCr(row))(type);
 						doOdd(_.compose(doOddRow, always(row)));
 					});
 				});
+                //report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
+                //report.innerHTML = window.addEventListener; 
 				render = anCr(table.parentNode),
 					addLinkAttrs = _.extend(addLinkAttrs, {
 						href: getPath(subject)
@@ -353,6 +364,59 @@ if (!window.gAlp) {
 		getDomTargetImage = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
 		tooltip = gAlp.Tooltip(article, ["click here...", "to toggle table and picture"], 2),
 		doToolTip = ptL(gAlp.Util.doWhen, repeatOnce, _.bind(tooltip.init, tooltip)),
+        
+        
+        mynav = function(){
+            
+            function prepNav(ancor, refnode) {
+                return gAlp.Util.makeElement(ptL(setAttrs, {
+					id: 'list'
+                }), anCrIn(ancor, refnode), always('ul'));
+            }
+            
+            function throttler(callback) {
+				if (!getEnvironment()) {
+					getEnvironment = _.negate(getEnvironment);
+				}
+				var handler = function() {
+					if (!getEnvironment()) {
+						//con('ch...')
+						getEnvironment = _.negate(getEnvironment);
+						callback();
+					}
+				};
+                this.handle = gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
+			}
+            
+            return {
+            
+            add: function(){
+                throttler();
+                return this.subject.add();
+            },
+            
+            remove: function(){
+                this.handle && this.handle.remove(this.handle);
+                return this.subject.remove();
+            },
+            
+            get: function(){
+                var el = this.subject.get();
+                if(el){
+                    return el;
+                }
+                this.set();
+                this.add().get();
+            },
+            
+            set: function(){
+                this.subject = prepNav(sellDiv, article);
+            }
+            
+        };
+        },
+        
+        
 		makeLeaf = function(comp, config, el) {
 			var leaf = gAlp.Composite(null, config.intaface);
 			leaf.hide = ptL(config.hider, config.klas, el);
@@ -455,7 +519,7 @@ if (!window.gAlp) {
 				}
 				var handler = function() {
 					if (!getEnvironment() && $nav.get()) {
-						con('ch...')
+						//con('ch...')
 						getEnvironment = _.negate(getEnvironment);
 						callback();
 					}
@@ -472,7 +536,7 @@ if (!window.gAlp) {
 				//this.handle = gAlp.Util.addHandler('click', window.alert.bind(window, 'bond'), mynav);
 			}
 			var I = 0,
-				$nav = prepNav(sellDiv, article),
+                $nav = prepNav(sellDiv, article),
 				ctxt = getDisplayComp(index),
 				getLink = getLinkDefer(index),
 				resizerinc = [],
@@ -702,7 +766,7 @@ if (!window.gAlp) {
 			}
 		};
 	myloader.execute();
-}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\./i, [/^next/i, /sale$/i, /^[^<]/i, /^</], {
+}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, /^[^<]/i, /^</], {
 	lo: 3,
 	hi: 5
 }));

@@ -9,10 +9,10 @@
 #alpacas_for_sale.sell #main #aside {
 	display: none;
 }
-#alpacas_for_sale #article ul, #alpacas_for_sale #article ul li>a, #alpacas_for_sale #main #aside, #extent, ul#thumbnails, #gallery #main, #controls {
+#alpacas_for_sale ul, #alpacas_for_sale ul.loop li a, #alpacas_for_sale #main #aside, ul#thumbnails, #gallery #main, #controls {
 	position: relative;
 }
-#alpacas_for_sale #article ul, .extent, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
+#alpacas_for_sale ul, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
 	overflow: hidden;
 }
 #alpacas_for_sale #main #aside {
@@ -42,21 +42,20 @@
 	*padding: .6em .3em;
 	*height: 1%;
 }
+/*
 .extent figure {
-	width: 31.8%;
 	margin: 0 1%;
 	*margin: 0 .3em;
 	float: left;
-    overflow: hidden;
+	overflow: hidden;
 }
-
+*/
 .extent {
 	display: table;
-	border-spacing: .75em;
+    border-spacing: 10px;
 }
 .extent figure {
 	display: table-cell;
-	float: none;
 }
 .extent figure {
 	*display: inline-block;
@@ -70,53 +69,67 @@
 }
 */
 
-#alpacas_for_sale #article ul {
-	margin: 0;
-	padding: 0;
-	left: 0;
-}
-#alpacas_for_sale #article ul li {
+
+ul#list li {
 	display: inline-block;
 	display: inline;
 	zoom: 1;
 }
-#alpacas_for_sale #article ul li a {
-	float: left;
+
+ul#list li {
+    display: table-cell;
+    float: left;
+}
+
+ul#list a  {
+	display: table-cell;
+    float: left;
+}
+
+
+
+#alpacas_for_sale ul.tab li {
+   padding: 0 1em 0 0; 
+}
+
+#alpacas_for_sale ul.tab a {
 	padding: 0.7em 1.3em;
 }
-#alpacas_for_sale #article ul.loop li a {
+
+#alpacas_for_sale ul.loop li a {
+	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	padding: 0.7em .5em 0.7em 2em;
+	color: white;
 }
-#alpacas_for_sale #article ul.loop li:first-child a {
+/*
+.nthchild #alpacas_for_sale ul.loop li a {
+	padding: .7em 0 .7em 1.8em;
+}
+*/
+  
+}
+#alpacas_for_sale ul.loop li:first-child a {
 	float: left;
 	padding-left: 0.7em;
 }
-#alpacas_for_sale #article ul>li {
-	display: table-cell;
-}
-#alpacas_for_sale #article ul li>a {
-	display: table-cell;
-}
-.nthchild #alpacas_for_sale #article ul.loop li:first-child a {
+
+.nthchild #alpacas_for_sale ul.loop li:first-child a {
 	padding-left: 1em;
 }
- ul.tab li {
-	float: left;
-	margin: 0 1em 0 0;
+
+ul#list.tab {
+    display: block;
+    transform: translateX(-1000px);
+    -webkit-transition: left 1s;
+	-o-transition: left 1s;
+	transition: all 1s;
 }
-#alpacas_for_sale #article ul.loop {
-	left: -100%;
-	transition: left .4s;
+
+ul#list.loop, ul#list.tab {
+    transform: translateX(0px);
 }
-#alpacas_for_sale #article ul.tab, #alpacas_for_sale #article ul.loop {
-	left: 0%;
-}
-.nthchild ul.loop li a {
-	padding: .7em 0 .7em 1.8em;
-}
-.nthchild #alpacas_for_sale ul.loop li:first-child a {
-	padding-left: .7em;
-}
+
+
 ul.loop li a::after, ul.loop li a::before {
 	/*border arrows */
 	display: block;
@@ -132,52 +145,71 @@ ul.loop li a::after, ul.loop li a::before {
 	padding: 2em;
 }
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
+#sell {
+  display: none;  
+}
+.sell #sell {
+  display: block;  
+}
+#sell table,  #sell.tog table.show, #sell.extent table.show, .sell #aside {
+    position: absolute;
+    left: -9999px;
+}
+#sell a {
+    display: none;
+}
+#sell table.show {
+    position: static;
+    left: 0px;
+}
 
-html.js #article #sell>*, #sell, #article #sell.tog table, html.js #article #sell.tog table, .sell #aside, html.js #article #sell.extent > *.show  {
-	display: none;
+#sell a.show, #sell.extent a{
+    display: block;
 }
-.sell #sell, html.js #article #sell>*.show, html.js #article #sell.extent figure {
-	display: block;
+
+#sell.extent figure {
+    display: table-cell;
 }
-html.js #article #sell a, html.js #article #sell table {
+
+
+html.js #sell a, html.js #sell table {
 	*display: none;
 }
-html.js #article #sell a.show, html.js #article #sell table.show {
+html.js #sell a.show, html.js #sell table.show {
 	*display: block;
 }
 #alpacas_for_sale #article {
 	position: relative;
-    width: 100%;
+	width: 100%;
 }
 #sell {
 	padding: 2%;
 	height: 1%;
 	*clear: left;
 }
-
-.tab + #sell {
-    margin-top: -1px;
+.tab+#sell {
+	margin-top: -1px;
 }
-
 #sell a {
-	display: block;
 	padding: 1.6%;
 	*height: 1%;
 }
 
-.sell #article #sell.tog a {
-       margin-left: 0; 
-    }
+#sell.extent a {
+	padding: 0;
+}
 
+.sell #sell.tog a {
+	margin-left: 0;
+}
 #sell table {
 	table-layout: fixed;
 	float: left;
 }
 #sell table {
-    width: 46.5%;
-    margin-right: 2.5%;
-    }
-
+	width: 46.5%;
+	margin-right: 2.5%;
+}
 #sell table table {
 	margin-right: 0%;
 	width: 100%;
@@ -188,13 +220,14 @@ html.js #article #sell a.show, html.js #article #sell table.show {
 #sell table.abbr th:last-child {
 	width: 50%;
 }
-  /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
-    .no-js #article div#sell a {
-        margin: 0 0 2% 2%;
-    }
-.no-js #article div#sell a:last-child {
-        margin: 0 0 0% 2%;
-    }
+/*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
+
+.no-js div#sell a {
+	margin: 0 0 2% 2%;
+}
+.no-js div#sell a:last-child {
+	margin: 0 0 0% 2%;
+}
 /* end of sale */
 
 /* G A L L E R Y */
@@ -207,54 +240,54 @@ ul#thumbnails {
 	/*clear*/
 	width: 90%;
 	font-size: 1.03em;
-    padding: 1.2em;
-    /*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
-    _padding: 1.2em 1.2em .4em 1.2em;
+	padding: 1.2em;
+	/*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
+	_padding: 1.2em 1.2em .4em 1.2em;
 }
 ul#thumbnails.gallery {
-		padding: 4px;
-		padding: 0.3em;
-	}
+	padding: 4px;
+	padding: 0.3em;
+}
 ul#thumbnails.gallery li.portrait {
-    float: right;
-    width: 4.3em;
-    _width: 4.62em;
+	float: right;
+	width: 4.3em;
+	_width: 4.62em;
 }
 ul#thumbnails.gallery li {
-    margin: 0.3em;
-    width: 5.7em;
-    _width: 6.1em;
-    display: inline;
+	margin: 0.3em;
+	width: 5.7em;
+	_width: 6.1em;
+	display: inline;
 }
 ul#thumbnails li {
 	float: left;
 	width: 100%;
 	display: block;
 }
-
 /* https://keithclark.co.uk/articles/moving-ie-specific-css-into-media-blocks/media-tests/ */
+
 @media screen only {
 	ul#thumbnails.gallery {
 		padding: 3%;
 	}
 	ul#thumbnails.gallery li {
-        width: 79px;
-        width: 6.4em;
+		width: 79px;
+		width: 6.4em;
 	}
 	ul#thumbnails.gallery li.portrait {
-        width: 60px;
-        width: 4.75em;
+		width: 60px;
+		width: 4.75em;
 	}
 }
 /**/
 
 ul#thumbnails li {
 	display: none;
-    opacity: 0;
+	opacity: 0;
 }
 ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thumbnails li#paused {
 	display: block;
-    opacity: 1;
+	opacity: 1;
 	*display: inline;
 }
 #gallery #footer {
@@ -268,12 +301,11 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 	padding: 3.5% 5%;
 	border-width: 0px;
 }
-
-#gallery #footer ul > * {
-    -webkit-transition: all 1s;
-    -o-transition: all 1s;
-    transition: all 1s;
-    opacity: 1;
+#gallery #footer ul>* {
+	-webkit-transition: all 1s;
+	-o-transition: all 1s;
+	transition: all 1s;
+	opacity: 1;
 }
 /* G A L L E R Y | S H O W T I M E */
 
@@ -283,13 +315,13 @@ ul#thumbnails li#slide, li#paused {
 #controls {
 	margin: 0 auto;
 	-webkit-transition: all 1s;
-    -o-transition: all 1s;
-    transition: all 1s;
+	-o-transition: all 1s;
+	transition: all 1s;
 	top: 0em;
 	z-index: 2;
 }
 #controls.static {
-	top: -3.5em;       
+	top: -3.5em;
 }
 #gallery #main {
 	padding: 0;
@@ -312,8 +344,8 @@ button#exit {
 	margin: 0.33em;
 	line-height: 1;
 	-webkit-transition: all 1s;
-    -o-transition: all 1s;
-    transition: all 1s;
+	-o-transition: all 1s;
+	transition: all 1s;
 	float: right;
 }
 /*IE5Mac Band Pass Filter NOTES*/

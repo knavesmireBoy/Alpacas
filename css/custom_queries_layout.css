@@ -34,11 +34,23 @@
 /*https://css-tricks.com/logic-in-media-queries/*/
 
 @media only screen and (max-width: 600px)/*, (min-width: 769px) and (max-width: 820px) */{
-	.sell #article #sell table.show, .sell #article #sell.tog a.show, .sell #article #sell.extent a.show{
-		display: block;
+
+    /*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
+	#sell.tog table.show {
+		position: absolute;
+        left: -9999px;
 	}
-	.sell #article #sell.tog table.show, .sell #article #sell a.show {
-		display: none;
+    
+    #sell a.show {
+        display: none;
+    }
+    
+    #sell.tog a.show, #sell.extent a.show  {
+        display: block;
+    }
+    #sell table.show{
+		position: static;
+        left: 0px;
 	}
     
 	sell #sell {
@@ -49,6 +61,11 @@
 		width: 100%;
         margin: 0;
 	}
+    
+     ul.loop li a {
+        font-size: 1em;
+        padding: 1em .5em 1em 2em;
+    }
 }
 
 
@@ -83,9 +100,14 @@
 		width: 100%;
 	}
     
-    #article div#sell a {
+    #sell a {
         margin-left: 2%;
     }
+    #sell.tog a.show {
+        margin: 0;
+        display: block;
+    }    
+    
     #article div#sell figure a {
         margin-left: 0%;
     }

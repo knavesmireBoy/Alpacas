@@ -127,45 +127,77 @@ pre {
 	border-top: 12px solid white;
 	margin: -1px 0px 0px 5em;
 }
-#alpacas_for_sale #tooltip div:first-child {
+
+body#alpacas_for_sale {
+font: bold 0.8em "Bookman Old Style", sans-serif;
+}
+
+#alpacas_for_sale ul li a {
+    font-size: 1.2em;
+}
+    
+#alpacas_for_sale  #tooltip div:first-child {
 	text-shadow: 1px 1px 1px black;
 }
 #alpacas_for_sale #tooltip #triangle {
 	border-top: 12px solid #7F9933;
 	border-top: 12px solid hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale #article ul li a {
+#alpacas_for_sale #article.loop ul li a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
-	padding: 0.45em 0 .45em 2em;
 	color: white;
 }
-#alpacas_for_sale #article ul.loop a, figcaption, #alpacas_for_sale th, .extent div, #alpacas_for_sale #tooltip div:first-child {
+#alpacas_for_sale ul.loop a, #alpacas_for_sale th, #alpacas_for_sale #tooltip div:first-child{
 	color: white;
 	font-weight: bold;
 	background: #7F9933;
 	background: hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale #article ul.tab a{
+
+figcaption {
+    text-align: center;
+    border-top: solid 1px;
+    font-weight: bold;
+    padding: .3em;
+    background: hsl(61, 38%, 70%);
+    color: hsl(30, 60%, 24%);
+    text-shadow: 1px 1px 2px white;
+}
+
+figure {
+    box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
+}
+
+figure:hover {
+    background: hsla(75, 50%, 30%, .9);
+    color: white;
+}
+
+#sell.extent {
+    background: white;
+}
+
+
+#alpacas_for_sale ul.tab a{
 	color: #7F9933;
 	color: hsla(75, 50%, 40%, 1);
 	*color: #7F9933;
+    text-transform: uppercase;
 	background: white;
 }
 #alpacas_for_sale #article ul li a:hover {
 	text-decoration: none;
 }
-html.no-nthchild #alpacas_for_sale #article ul.loop li a {
+html.no-nthchild #alpacas_for_sale ul.loop li a {
 	border-right: solid 1px white;
 }
-#alpacas_for_sale #article ul.tab {
+#alpacas_for_sale ul.tab {
 	border: solid #7F9933 1px;
 	border: solid hsla(75, 50%, 40%, 1) 1px;
 	border-width: 0 0 0px 0px;
 }
-#alpacas_for_sale #article ul.tab a{
-	text-shadow: none;
-}
-#alpacas_for_sale #article ul.tab li a:hover{
+
+#alpacas_for_sale ul.tab li a:hover{
 	color: hsla(75, 50%, 30%, 1);
 }
 #alpacas_for_sale #article ul.tab li.current a:hover{
@@ -176,11 +208,11 @@ Following style: left and right borders turned to white when only top rule is re
 ul.breadcrumb  { border-right: white; border-left: white }
 */
 
-#alpacas_for_sale #article ul.loop li a:hover {
+#alpacas_for_sale ul.loop li a:hover {
 	color: #EBF2D8;
 	color: hsla(75, 50%, 90%, 1);
 }
-#alpacas_for_sale #article ul.loop li a::before {
+#alpacas_for_sale ul.loop li a::before {
 	content: "";
 	margin-left: 1px;
 	border: 2em solid transparent;
@@ -188,7 +220,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	border-left-color: white;
 	border-right-width: 0;
 }
-#alpacas_for_sale #article ul.loop li a::after {
+#alpacas_for_sale ul.loop li a::after {
 	content: " ";
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */
@@ -196,30 +228,34 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	border-left: 1.2em solid #7F9933;
 	border-left: 1.2em solid hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale #article ul.loop li:nth-child(2) a {
+#alpacas_for_sale ul.loop li:nth-child(2) a {
 	background: #9FBF3F;
 	background: hsla(75, 50%, 50%, 1);
 }
-#alpacas_for_sale #article ul.loop li:nth-child(2) a::after {
+#alpacas_for_sale ul.loop li:nth-child(2) a::after {
 	border-left-color: #9FBF3F;
 	border-left-color: hsla(75, 50%, 50%, 1);
 }
-#alpacas_for_sale #article ul.loop li:nth-child(3) a {
+#alpacas_for_sale ul.loop li:nth-child(3) a {
 	background: #B2CC65;
 	background: hsla(75, 50%, 60%, 1);
 }
-#alpacas_for_sale #article ul.loop li:nth-child(3) a::after {
+#alpacas_for_sale ul.loop li:nth-child(3) a::after {
 	border-left-color: #B2CC65;
 	border-left-color: hsla(75, 50%, 60%, 1);
 }
-#alpacas_for_sale #article ul.tab li a, .extent, #sell, #sell a {
+#alpacas_for_sale ul.tab li a, #sell, #sell a, #sell figure {
 	border: solid 1px black;
+}
+
+#sell figure a {
+	border-width: 0px;
 }
 .extent, #sell, #sell a, #sell table, #sell table td {
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
 }
-#alpacas_for_sale #article ul.tab li a{
+#alpacas_for_sale ul.tab li a{
 	border-color: #7F9933;
 	border-color: hsla(75, 50%, 40%, 1);
 	border-top-left-radius: 4px;
@@ -229,8 +265,10 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	-webkit-transition: background 1.5s;
     -o-transition: background 1.5s;
     transition: background 1.5s;
+    text-shadow: 2px 2px 2px white;
 }
-#alpacas_for_sale #article ul.tab li.current a{
+/* DO NOT SET #SELL TO POSITION RELATIVE OTHERWISE BOTTOM BORDER GETS CHOPPED*/
+#alpacas_for_sale #article ul.tab li.current a {
 	background: hsla(75, 50%, 90%, 1);
 	border-bottom-color: hsla(75, 50%, 90%, 1);
 	border-bottom-color: #EBF2D8;
@@ -243,28 +281,26 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	color: #900;
 	color: hsla(0, 100%, 30%, 1);
 }
-#alpacas_for_sale figcaption {
-	padding: .3em;
-}
 /* keep for ref
 #alpacas_for_sale.sell #sell {
   box-shadow: inset 0 0 0em hsla(75, 50%, 50%, 1);
 }
 */
 
-.extent, .sell  #sell {
+#sell {
 	background: #EBF2D8;
 	background: hsla(75, 50%, 90%, 1);
 }
 #sell>a {
 	background-color: rgba(255, 255, 255, .9);
-	box-shadow: 0px 0px 5px rgba(255, 255, 255, .8);
+	box-shadow: 2px 2px 5px rgba(255, 255, 255, 1);
 	opacity: 1;
 }
+
 #sell table {
-	font-size: .825em;
 	padding: 0px;
 }
+
 #sell table td, #sell table table td {
 	border-width: 1px 0 0;
 	padding: .5em;
@@ -329,14 +365,10 @@ html.no-nthchild #sell table tr.odd td {
     -ms-transform: scale(1.01);
     transform: scale(1.01);
 }
-#sell.extent a:hover, #sell>table:hover {
-	opacity: 1;
-	-webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-}
-tr:nth-child(7) td, tr:nth-of-type(1) td {
+
+tr:nth-child(7) td{
 	font-weight: bold;
+    font-size: 1.1em;
 	text-transform: uppercase;
 	color: #900;
 	color: hsla(0, 100%, 30%, 1);
@@ -346,7 +378,7 @@ tr:nth-child(7) td, tr:nth-of-type(1) td {
 }
 #sell table th {
 	vertical-align: middle;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	text-transform: uppercase;
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	border-width: 0;

@@ -1,11 +1,12 @@
 html.js body#alpacas_for_sale {
-    background-color: teal;
-    
+	background-color: white;
 	/*display: flex;
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
-
+html.flexboxlegacy body#alpacas_for_sale {
+	background-color: yellow;
+}
 .flexboxlegacy .sell #sell {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -14,12 +15,12 @@ html.js body#alpacas_for_sale {
 	-ms-flex-align: start;
 	align-items: flex-start;
 }
-.flexboxlegacy .sell #sell > table {
+.flexboxlegacy .sell #sell>table {
 	-webkit-box-flex: 1;
 	-ms-flex: 1 1 auto;
 	flex: 1 0 auto;
 }
-.flexboxlegacy .sell #sell > a {
+.flexboxlegacy .sell #sell>a {
 	-webkit-box-flex: 1;
 	-ms-flex: 1 1 auto;
 	flex: 2 1 auto;
@@ -53,12 +54,13 @@ html.js body#alpacas_for_sale {
 	flex: 1;
 	/* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
-
-@supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)){
-  
-/*
+@supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)) {
+	html.js body#alpacas_for_sale {
+		background-color: lavender;
+	}
+	/*
          /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
-    /*
+	/*
     .no-js #main #article div#sell a {
         margin: 0 0 2% 2%;
     }
@@ -66,97 +68,76 @@ html.js body#alpacas_for_sale {
         margin: 0 0 0% 2%;
     }
     */
-    
-    .no-js #article #sell {
-        flex-wrap: wrap;
-    }   
-            
-
-.sell #sell, #article #sell.extent {
-	display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;  
+	.no-js #article #sell {
+		flex-wrap: wrap;
+	}
+	.sell #sell, #article #sell.extent {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+	#article #sell>* {
+		align-self: flex-start;
+		/*required for ie 11*/
+		-webkit-box-flex: 1;
+		-ms-flex: 1 1;
+		flex: 1 1 40%;
+	}
+	#article #sell.extent figure {
+		/*required for ie 11*/
+		-ms-flex-item-align: start;
+		align-self: flex-start;
+		-webkit-box-flex: 1;
+		-ms-flex: 1 1 1%;
+		flex: 1 1 1%;
+		-ms-flex: 1 0 25%;
+		flex: 1 0 25%;
+		margin: 1%;
+	}
+	@media only screen and (max-width: 767px) {
+		.sell #sell, #article #sell.extent {
+			-ms-flex-wrap: nowrap;
+			flex-wrap: nowrap;
+		}
+		#article #sell.extent figure {
+			-webkit-box-flex: 1;
+			-ms-flex: 1 1 30%;
+			flex: 1 1 30%;
+		}
+	}
+	#article div#sell a {
+		/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
+		padding: .825em;
+	}
+	#article div#sell.extent a {
+		/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
+		padding: 0em;
+	}
+	#sell.tog {
+		padding: 3%;
+	}
+	#sell.tog a {
+		margin: 0%;
+	}
+	#sell .extent {
+		display: flex;
+		justify-content: space-between;
+		padding: 2% 1%;
+	}
+	#controls {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		justify-content: center;
+	}
+	#controls button {
+		-webkit-box-flex: 0;
+		-ms-flex: 0 0 auto;
+		flex: 0 0 auto;
+	}
 }
-    /*
-#article.solo #sell, #article.loop #sell, #article.tab #sell {
-	position: static;
-}
-    */
-#article #sell>* {
-	align-self: flex-start;
-    /*required for ie 11*/
-    -webkit-box-flex: 1;
-	-ms-flex: 1 1;
-	flex: 1 1 40%;
-}
-    
-     #article #sell.extent figure {
-    /*required for ie 11*/
-   -ms-flex-item-align: start;
-	align-self: flex-start;
-	-webkit-box-flex: 1;
-	-ms-flex: 1 1 1%;
-	        flex: 1 1 1%;
-	-ms-flex: 1 0 25%;
-	    flex: 1 0 25%;
-     margin: 1%;
-}
-    
-    @media only screen and (max-width: 767px) {
-        
-        .sell #sell, #article #sell.extent {
-            -ms-flex-wrap: nowrap;
-                flex-wrap: nowrap;
-        }
-        
-        #article #sell.extent figure{
-            -webkit-box-flex: 1;
-                -ms-flex: 1 1 30%;
-                    flex: 1 1 30%;
-        }
-    }
-    
-
-
-#article div#sell a {
-	/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
-	padding: .825em;
-}
-    
-    #article div#sell.extent a {
-	/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
-	padding: 0em;
-}
-  
-#sell.tog {
-	padding: 3%;
-}
-#sell.tog a {
-	margin: 0%;
-}
-
-#sell .extent {
-	display: flex;
-	justify-content: space-between;
-	padding: 2% 1%;
-}
-
-#controls {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	justify-content: center;
-}
-#controls button {
-	-webkit-box-flex: 0;
-	-ms-flex: 0 0 auto;
-	flex: 0 0 auto;
-}
-}
-
-
 @media only screen {
 	@supports (display: grid) {
 		#main ul#thumbnails.gallery li {
