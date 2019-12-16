@@ -7,37 +7,14 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function(query, mq, article, report, displayclass, linkEx, navExes, limits) {
-	/*
-	(function() {
-	    'use strict';
-	   
-	    var start,
-	        end,
-	        delta,
-	        node = document.getElementById("aside");
-	    node.addEventListener("mousedown", function() {
-	        start = new Date();
-	    });
-	    node.addEventListener("mouseup", function() {
-	        end = new Date();
-	        delta = (end - start) / 1000.0;
-	        ///alert("Button held for " + delta + " seconds." )
-	        Len = Math.ceil(delta);
-	    });
-	}());
-	*/
-	function undef(x) {
-		return typeof(x) === 'undefined';
-	}
+(function (query, mq, article, report, displayclass, linkEx, navExes, limits) {
+	"use strict";
 
-	function existy(x) {
-		return x != null;
-	}
+	function noOp() {}
 
 	function doRepeat() {
-		return function(i) {
-			return function() {
+		return function (i) {
+			return function () {
 				var res = i > 0;
 				i -= 1;
 				return res > 0;
@@ -49,15 +26,23 @@ if (!window.gAlp) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
 
+	function gtThan(a, b) {
+		return getResult(a) > getResult(b);
+	}
+
+	function lsThanEq(a, b) {
+		return a <= b;
+	}
+
 	function callWith(m, ctxt) {
 		return m.call(ctxt);
 	}
 
-	function decorateWhen( /* validators */ ) {
+	function onValidation() {
 		var validators = _.toArray(arguments),
 			result = 0;
-		return function(fun, arg) {
-			_.each(validators, function(validator) {
+		return function (fun, arg) {
+			_.each(validators, function (validator) {
 				if (!result) {
 					//if passes set to zero
 					result = Number(!validator(arg)) ? result += 1 : result;
@@ -76,16 +61,7 @@ if (!window.gAlp) {
 		return val === "1px";
 	}
 
-	function noOp() {}
-
-	function always(val) {
-		return function() {
-			return val;
-		};
-	}
-
 	function getProp(p, o) {
-		//con(p, o, o[p])
 		return o[p];
 	}
 
@@ -99,34 +75,26 @@ if (!window.gAlp) {
 		}
 	}
 
-	function gtThan(a, b) {
-		return getResult(a) > getResult(b);
-	}
-
-	function lsThanEq(a, b) {
-		return a <= b;
-	}
-
 	function caller1(ctxt, ptl, arg, m) {
 		return ptl(ctxt)[m](arg);
 	}
 
 	function sortIndexFactory(index, klas, coll) {
-		var drill = doDrillDown(['target']),
-			txt = doDrillDown(['innerHTML']),
-			finder = function(el, item) {
+		var drill = gAlp.Util.drillDown(['target']),
+			txt = gAlp.Util.drillDown(['innerHTML']),
+			finder = function (el, item) {
 				return item.match(new RegExp(txt(el), 'i'));
 			},
 			options = {
-				tab: function(e) {
+				tab: function (e) {
 					var el = drill(e);
 					index = el && el.parentNode ? _.findIndex(coll, _.partial(finder, el)) : index;
 					return index;
 				},
-				loop: function(bool) {
-					return index = _.isBoolean(bool) ? index : (index += 1) % coll.length;
-				},
-				solo: noOp
+				loop: function (bool) {
+					index = _.isBoolean(bool) ? index : (index += 1) % coll.length;
+					return index;
+				}
 			};
 		return options[klas];
 	}
@@ -204,39 +172,27 @@ if (!window.gAlp) {
 				["src", "../images/sale/rico.jpg"]
 			]
 		],
-		sliceArray = function(list, end) {
+		sliceArray = function (list, end) {
 			return list.slice(_.random(0, end || list.length));
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
 		threshold = Number(query.match(/[^\d]+(\d+)[^\d]+/)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
-		getEnvironment = (function() {
+		getEnvironment = (function () {
 			if (mq) {
 				return _.partial(Modernizr.mq, query);
 			} else {
-				return isDesktop
+				return isDesktop;
 			}
 		}()),
-		$ = function(str) {
+		$ = function (str) {
 			return document.getElementById(str);
 		},
+		always = gAlp.Util.always,
 		reverse = gAlp.Util.invoker('reverse', Array.prototype.reverse),
 		repeatOnce = doRepeat()(1),
 		validator = gAlp.Util.validator,
-		getNavTypeFactory = function(coll, len, limits) {
-			var pop = gAlp.Util.invoker('pop', Array.prototype.pop),
-				shift = gAlp.Util.invoker('shift', Array.prototype.shift),
-				//reverse = gAlp.Util.invoker('reverse', Array.prototype.reverse),
-				isMobile = validator('loop layout priority', _.negate(getEnvironment)),
-				subHigher = validator('Data length exceeds a tab layout', doTwiceDefer(gtThan)(limits.hi)(len)),
-				subLower = validator('Data length will not require a loop layout', doTwiceDefer(lsThanEq)(limits.lo)(len)),
-				trials = [ptL(decorateWhen(subLower), pop, coll), ptL(decorateWhen(subHigher), shift, coll), ptL(decorateWhen(isMobile), reverse, coll)];
-			_.each(trials, function(f) {
-				return f();
-			});
-			return coll;
-		},
 		ptL = _.partial,
 		idty = _.identity,
 		//con = _.bind(window.console.log, window.console),
@@ -250,15 +206,28 @@ if (!window.gAlp) {
 		doAddClass = gAlp.Util.addClass,
 		doDrillDown = gAlp.Util.drillDown,
 		byIndex = gAlp.Util.byIndex,
-		getPerformer = function() {
+		getNavTypeFactory = function (coll, len, limits) {
+			var pop = gAlp.Util.invoker('pop', Array.prototype.pop),
+				shift = gAlp.Util.invoker('shift', Array.prototype.shift),
+				//reverse = gAlp.Util.invoker('reverse', Array.prototype.reverse),
+				isMobile = validator('loop layout priority', _.negate(getEnvironment)),
+				subHigher = validator('Data length exceeds a tab layout', doTwiceDefer(gtThan)(limits.hi)(len)),
+				subLower = validator('Data length will not require a loop layout', doTwiceDefer(lsThanEq)(limits.lo)(len)),
+				trials = [ptL(onValidation(subLower), pop, coll), ptL(onValidation(subHigher), shift, coll), ptL(onValidation(isMobile), reverse, coll)];
+			_.each(trials, function (f) {
+				return f();
+			});
+			return coll;
+		},
+		getPerformer = function () {
 			return ptL(gAlp.Util.apply, gAlp.Util.partialSetFromArray.apply(gAlp.Util, arguments));
 		},
 		sellDiv = _.compose(ptL(setAttrs, {
 			id: 'sell'
 		}), anCr(article), always('div'))(),
 		renderTable = _.compose(anCr(sellDiv), always('table')),
-		iterateTable = function(getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
-			return function(getAnchor, subject) {
+		iterateTable = function (getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
+			return function (getAnchor, subject) {
 				var table = getAnchor(), //<table></table
 					//optional tbody reqd for IE
 					render = anCr(table),
@@ -273,7 +242,7 @@ if (!window.gAlp) {
 					addImgAttrs = {},
 					addLinkAttrs = {},
 					tmp;
-				_.each(subject.slice(0, -2), function(tr, j) {
+				_.each(subject.slice(0, -2), function (tr, j) {
 					var row,
 						type = !j ? 'th' : 'td',
 						supportsNthChild = validator('hard coding class not required', always(!Modernizr.nthchild)),
@@ -281,21 +250,21 @@ if (!window.gAlp) {
 						isFirstRow = ptL(validator, 'is NOT first row'),
 						isTableHead = ptL(validator, 'is NOT table head'),
 						dospan = ptL(_.compose(ptL(gAlp.Util.isEqual, 1), doDrillDown(['length']))),
-						doOdd = decorateWhen(supportsNthChild, isOdd),
+						doOdd = onValidation(supportsNthChild, isOdd),
 						provisionalID,
-						assignId = function(str) {
+						assignId = function (str) {
 							//console.log(str)
 							//tableconfig.title = addImgAttrs.alt = getId(str);
 							addLinkAttrs.title = addImgAttrs.alt = getId(str);
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
-						maybeClass = ptL(decorateWhen(validator('no match found', c), supportsNthChild), doDescription);
-					_.each(tr, function(td, i, data) {
-						//partially apply the RETURNED function from decorateWhen with (partially applied) function to invoke
-						//addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
-						addspan = ptL(decorateWhen(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
+						maybeClass = ptL(onValidation(validator('no match found', c), supportsNthChild), doDescription);
+					_.each(tr, function (td, i, data) {
+						//partially apply the RETURNED function from onValidation with (partially applied) function to invoke
+						//addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
+						addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
-						provisionalID = decorateWhen(isFirstRow(always(Number(!i))), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
+						provisionalID = onValidation(isFirstRow(always(Number(!i))), isTableHead(ptL(gAlp.Util.isEqual, type, 'th')));
 						provisionalID(ptL(assignId, td));
 						_.compose(maybeClass, addspan, gAlp.Util.setText(td), anCr(row))(type);
 						doOdd(_.compose(doOddRow, always(row)));
@@ -318,7 +287,7 @@ if (!window.gAlp) {
 				addTableAttrs(table);
 			};
 		},
-		loadData = function(data, driver, render) {
+		loadData = function (data, driver, render) {
 			_.each(data, ptL(driver, render));
 		};
 	/* only load the javascript if css enabled, a dummy element is placed in html,
@@ -327,11 +296,11 @@ if (!window.gAlp) {
 		return;
 	}
 	var getId = _.compose(ptL(byIndex, 1), doThrice(simpleInvoke)(' ')('split')),
-		doRow = decorateWhen(validator('is first row', ptL(gAlp.Util.isEqual, 0))),
+		doRow = onValidation(validator('is first row', ptL(gAlp.Util.isEqual, 0))),
 		doColspan = ptL(setAttrs, {
 			colspan: 2
 		}),
-		getPath = function(array) {
+		getPath = function (array) {
 			return array.slice(-1)[0][1];
 		},
 		configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(doAddClass, 'description'), ptL(doAddClass, 'odd'));
@@ -344,13 +313,13 @@ if (!window.gAlp) {
 			intaface: gAlp.Intaface('Display', ['show', 'hide'])
 		},
 		links = _.toArray(sellDiv.getElementsByTagName('a')),
-		display_elements = _.map(links, function(el) {
+		display_elements = _.map(links, function (el) {
 			return [el, gAlp.Util.getPrevious(el)];
 		}),
-		tables = _.map(links, function(el) {
+		tables = _.map(links, function (el) {
 			return gAlp.Util.getPrevious(el);
 		}),
-		mapLinktoTitle = function(link) {
+		mapLinktoTitle = function (link) {
 			var getHref = doThrice(simpleInvoke)(linkEx)('match');
 			return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
 		},
@@ -362,54 +331,66 @@ if (!window.gAlp) {
 		getDomTargetImage = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
 		tooltip = gAlp.Tooltip(article, ["click here...", "to toggle table and picture"], 2),
 		doToolTip = ptL(gAlp.Util.doWhen, repeatOnce, _.bind(tooltip.init, tooltip)),
-		mynav = (function() {
+		mynav = (function () {
 			function prepNav(ancor, refnode) {
 				return gAlp.Util.makeElement(ptL(setAttrs, {
 					id: 'list'
 				}), anCrIn(ancor, refnode), always('ul'));
 			}
+
+			function throttler(callback) {
+				if (!getEnvironment()) {
+					getEnvironment = _.negate(getEnvironment);
+				}
+				var handler = function () {
+					if (!getEnvironment()) {
+						//con('ch...')
+						getEnvironment = _.negate(getEnvironment);
+						callback();
+					}
+				};
+				return gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
+			}
 			return {
-				init: function() {
+				init: function (cb) {
 					this.subject = this.subject || prepNav(sellDiv, article);
+					this.handle = throttler(ptL(gAlp.Util.doWhen, _.bind(this.subject.get, this.subject), cb));
 					return this;
 				},
-				add: function() {
-					//throttler();
+				add: function () {
 					return this.subject.add();
 				},
-				remove: function() {
+				remove: function () {
 					//this.handle && this.handle.remove(this.handle);
 					return this.subject.remove();
 				},
-				get: function() {
+				get: function () {
 					var el = this.subject.get();
 					if (el) {
 						return el;
 					} else {
-						//this.init();
 						return this.add().get();
 					}
 				}
 			};
 		}()),
-		makeLeaf = function(comp, config, el) {
+		makeLeaf = function (comp, config, el) {
 			var leaf = gAlp.Composite(null, config.intaface);
 			leaf.hide = ptL(config.hider, config.klas, el);
 			leaf.show = ptL(config.shower, config.klas, el);
 			leaf.get = always(el);
 			comp.add(leaf);
 		},
-		makeDisplayer = function(inc, conf, bool) {
-            
+		makeDisplayer = function (inc, conf, bool) {
 			function setDisplays(inc, comp) {
-				comp.hide = function() {
-					_.each(inc, function(leaf) {
+				comp.hide = function () {
+					_.each(inc, function (leaf) {
 						leaf.hide();
 					});
 				};
-				comp.show = function(j) {
+				comp.show = function (j) {
 					comp.hide();
-					_.each(inc, function(leaf, i) {
+					_.each(inc, function (leaf, i) {
 						if (!isNaN(j) && j === i) {
 							leaf.show(); //show pair
 						} else if (isNaN(j)) {
@@ -417,22 +398,21 @@ if (!window.gAlp) {
 						}
 					});
 				};
-                return bool ? _.extend(comp, new gAlp.Util.Observer()) : comp;
+				return bool ? _.extend(comp, new gAlp.Util.Observer()) : comp;
 			}
-            
 			return setDisplays(inc, gAlp.Composite(inc, conf.intaface));
 		},
-		simpleComp = function(coll, config) {
+		simpleComp = function (coll, config) {
 			var comp = makeDisplayer([], config),
 				doLeaf = ptL(makeLeaf, comp, config);
 			_.each(coll, doLeaf);
 			return comp;
 		},
-		machDisplayComp = function(coll, config) {
+		machDisplayComp = function (coll, config) {
 			var headcomp = makeDisplayer([], config, true),
 				mycomp = headcomp,
-				recur = function(gang) {
-					_.each(gang, function(arg) {
+				recur = function (gang) {
+					_.each(gang, function (arg) {
 						if (_.isArray(arg)) {
 							mycomp = makeDisplayer([], config);
 							headcomp.add(mycomp);
@@ -442,14 +422,14 @@ if (!window.gAlp) {
 						}
 					});
 				};
-			headcomp.handle = function(e) {
+			headcomp.handle = function (e) {
 				var i = this.strategy(e);
 				if (i >= 0) {
 					this.show(i);
 					this.fire(i);
 				}
 			};
-			headcomp.getIndex = function() {
+			headcomp.getIndex = function () {
 				return this.strategy && this.strategy(true) || 0;
 			};
 			recur(coll);
@@ -457,7 +437,7 @@ if (!window.gAlp) {
 			return headcomp;
 		},
 		getDisplayComp = ptL(machDisplayComp, display_elements, myconfig),
-		tabFactory = function(gallery, index) {
+		tabFactory = function (gallery, index) {
 			if (isNaN(index)) {
 				return;
 			}
@@ -475,25 +455,11 @@ if (!window.gAlp) {
 			}
 
 			function doTabsLoop(doLI, str, i) {
-				///REMEMBER a new decorateWhen PER LOOP
+				///REMEMBER a new onValidation PER LOOP
 				var v = validator('wrong link', ptL(gAlp.Util.isEqual, 1, i)),
 					doParent = _.compose(ptL(doAddClass, 'current'), doDrillDown(['parentNode'])),
-					doWhen = ptL(decorateWhen(v), doParent);
+					doWhen = ptL(onValidation(v), doParent);
 				return _.compose(doWhen, gAlp.Util.setText(str.capitalize()), doLI())('a');
-			}
-
-			function throttler(callback) {
-				if (!getEnvironment()) {
-					getEnvironment = _.negate(getEnvironment);
-				}
-				var handler = function() {
-					if (!getEnvironment() && $nav.get()) {
-						//con('ch...')
-						getEnvironment = _.negate(getEnvironment);
-						callback();
-					}
-				};
-				return gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
 			}
 
 			function addHandler(id, cb) {
@@ -505,7 +471,6 @@ if (!window.gAlp) {
 				//this.handle = gAlp.Util.addHandler('click', window.alert.bind(window, 'bond'), mynav);
 			}
 			var I = 0,
-				$nav = mynav.init(),
 				ctxt = getDisplayComp(index),
 				getLink = getLinkDefer(index),
 				resizerinc = [],
@@ -513,38 +478,38 @@ if (!window.gAlp) {
 				doTabNav = _.compose(ptL(doTabs, getLI)),
 				doLoopNav = _.compose(ptL(doTabsLoop, getLI)),
 				prepHandle = ptL(gAlp.Util.addHandler, 'click'),
-				init = function(coll, iteratee) {
+				init = function (coll, iteratee) {
 					_.each(coll(), iteratee);
 				},
-				hide = function() {
+				hide = function () {
 					$nav.remove();
 				},
-				doExit = function(i) {
+				doExit = function (i) {
 					$nav.remove();
 					ctxt.fire(i);
 				},
-				exiting = function(subject, i) {
+				exiting = function (subject, i) {
 					ctxt.unsubscribe(subject);
 					doExit(i);
 				},
-				prepLoop = function() {
-					var handler = function(e) {
+				prepLoop = function () {
+					var handler = function (e) {
 							var events = [ctxt.handle.bind(ctxt), _.compose(_.bind(gallery.execute, gallery), _.bind($nav.remove, $nav)), noOp, noOp],
 								composed = _.compose(doThrice(stringOp)('match'), doDrillDown(['target', 'innerHTML']))(e),
-								best = ptL(gAlp.Util.getBest, function(arr) {
+								best = ptL(gAlp.Util.getBest, function (arr) {
 									return composed(arr[0]);
 								}, _.zip(navExes, events));
 							_.compose(gAlp.Util.getDefaultAction, best)()();
 						},
-						nextLoop = function() {
+						nextLoop = function () {
 							var fromClass = _.compose(getDomTargetLink, ptL(byIndex, 0), ptL(gAlp.Util.getByClass, 'current')),
 								pre_prepped = _.compose(ptL(gAlp.Util.setter, fromClass, 'innerHTML'), getAlpacaTitles),
-								isNotEmpty = function(arg) {
+								isNotEmpty = function (arg) {
 									return arg;
 								},
 								prepped = _.compose(ptL(gAlp.Util.invokeWhen, _.compose(isNotEmpty, fromClass), pre_prepped)),
 								exit = ptL(exiting, prepped);
-							return function(i) {
+							return function (i) {
 								this.exit = exit;
 								ctxt.subscribe(prepped);
 								ctxt.fire(i);
@@ -560,15 +525,15 @@ if (!window.gAlp) {
 						};
 					return looper;
 				},
-				prepTab = function() {
-					var nextTab = function(i) {
+				prepTab = function () {
+					var nextTab = function (i) {
 							var navbar = simpleComp($nav.get().childNodes, _.extend(myconfig, {
 									klas: 'current'
 								})),
 								boundNav = _.bind(navbar.show, navbar);
 							ctxt.subscribe(boundNav);
 							ctxt.fire(i);
-							this.exit = function(i) {
+							this.exit = function (i) {
 								ctxt.unsubscribe(boundNav);
 								doExit(i);
 							};
@@ -587,12 +552,12 @@ if (!window.gAlp) {
 					loop: prepLoop(),
 					tab: prepTab(),
 				},
-				prepareLayout = function(comp) {
+				prepareLayout = function (comp) {
 					if (!comp) {
 						return;
 					}
 					_.extend(comp, gAlp.Composite([], myconfig.intaface));
-					comp.show = function(j) {
+					comp.show = function (j) {
 						var i = isNaN(j) ? index : j;
 						this.init(i);
 						ctxt.strategy = sortIndexFactory(i, this.id, alpacaTitles);
@@ -604,60 +569,50 @@ if (!window.gAlp) {
 					resizercomp.add(comp);
 					return comp;
 				},
-				mecallback = function() {
-					return function() {
+				mecallback = function () {
+					return function () {
 						resizerinc[I].exit(ctxt.getIndex());
 						I = (I += 1) % resizerinc.length;
 						resizerinc[I].show(ctxt.getIndex());
 					};
 				},
-				prepHandler = function(cb) {
-					this.handle = throttler(cb);
-				},
-				resize_callback = mecallback(I),
-				sortLayouts = function() {
+				sortLayouts = function () {
 					var mylayouts = [layouts[routes[0]]],
-						alt = layouts[routes[1]],
-						action = _.compose(ptL(prepHandler, resize_callback), ptL(simpleInvoke, mylayouts, 'push', alt)),
-						deferred = ptL(gAlp.Util.invokeWhen, always(alt), _.bind(action, resizercomp));
-					deferred();
+						alt = layouts[routes[1]];
+					if (alt) {
+						mylayouts.push(alt);
+					}
 					_.each(mylayouts, prepareLayout);
 					mylayouts = [];
-				};
+				},
+				$nav = mynav.init(mecallback(I));
 			sortLayouts();
 			//memoize...
-			tabFactory = function(gallery, index) {
+			tabFactory = function (gallery, index) {
 				if (isNaN(index)) {
 					return;
 				}
-				//$nav = mynav.init();
 				getLink = getLinkDefer(index);
-				//IF user resizes while in gallery mode, we CHOOSE NOT to update the predicate until this moment...
-				if (!getEnvironment()) {
-					getEnvironment = _.negate(getEnvironment);
-					resize_callback();
-				} else {
-					resizercomp.get(I).show(index);
-				}
+				resizercomp.get(I).show(index);
 			};
 			resizercomp.get(0).show(index);
 		}, //orig tabFactory
-		makeFigure = function(ancor, el) {
+		makeFigure = function (ancor, el) {
 			var grabAlt = _.compose(doDrillDown(['alt']), getDomTargetImage),
 				preptext = _.compose(gAlp.Util.setText, grabAlt)(el);
 			return {
-				execute: function() {
+				execute: function () {
 					doAddClass('extent', ancor);
 					var fig = _.compose(anCr(ancor), always('figure'))();
 					this.subject = gAlp.Util.makeElement(ptL(idty, fig), preptext, anCr(fig), always('figcaption'), anMv(fig), ptL(idty, el)).add();
 					return this;
 				},
-				find: function(e) {
+				find: function (e) {
 					var myimg_alt = _.compose(doDrillDown(['alt']), getDomTargetImage)(this.subject.get()),
 						tgt_alt = doDrillDown(['target', 'alt'])(e);
 					return (myimg_alt === tgt_alt);
 				},
-				undo: function(i) {
+				undo: function (i) {
 					gAlp.Util.removeClass('extent', ancor);
 					var link = _.compose(getDomTargetLink)(this.subject.get());
 					gAlp.Util.insertAfter(link, tables[i]);
@@ -665,20 +620,20 @@ if (!window.gAlp) {
 				}
 			};
 		},
-		loader = function(coll, layout, target_node, proxy) {
+		loader = function (coll, layout, target_node, proxy) {
 			_.compose(ptL(doAddClass, 'sell'), always(document.body))();
 			var goFigure = ptL(makeFigure, target_node),
-				getFigs = function() {
-					return _.map(coll, function(el) {
+				getFigs = function () {
+					return _.map(coll, function (el) {
 						return goFigure(el).execute();
 					});
 				},
-				toggleTable = function() {
+				toggleTable = function () {
 					var f = ptL(gAlp.Util.toggleClass, ['tog'], target_node);
 					//f = window.confirm.bind(window, 'proceed');
 					return gAlp.Util.addEvent(ptL(gAlp.Util.addHandler, 'click'), f)(target_node);
 				},
-				delBridge = function(action, e) {
+				delBridge = function (action, e) {
 					var getText = doDrillDown(['target', 'nodeName']),
 						val = _.compose(doThrice(simpleInvoke)(/img/i)('match'), getText),
 						isImg = gAlp.Util.validator('Please click on an image', val);
@@ -689,9 +644,9 @@ if (!window.gAlp) {
 						true;
 					}
 				},
-				delegate = function(coll, ctxt, e) {
+				delegate = function (coll, ctxt, e) {
 					var j;
-					_.each(getResult(coll), function($el, i) {
+					_.each(getResult(coll), function ($el, i) {
 						if ($el.find(e)) {
 							j = i;
 						}
@@ -701,10 +656,10 @@ if (!window.gAlp) {
 					ctxt.handler = toggleTable();
 					return j;
 				},
-				execs = function(base) {
+				execs = function (base) {
 					var layouts = {
 						loop: {
-							execute: function() {
+							execute: function () {
 								base.handler && base.handler.remove(base.handler);
 								var figs = getFigs(),
 									pred = ptL(delBridge, ptL(delegate, figs, base)),
@@ -716,7 +671,7 @@ if (!window.gAlp) {
 							}
 						},
 						tab: {
-							execute: function() {
+							execute: function () {
 								base.handler && base.handler.remove(base.handler);
 								tabFactory(layouts.loop, 0);
 								base.handler = toggleTable();
@@ -728,7 +683,7 @@ if (!window.gAlp) {
 			return execs({});
 		}, //loader
 		myloader = { // a proxy that persists and is responsible for instatiating subjects
-			execute: function() {
+			execute: function () {
 				this.subject && this.subject.handler.remove(this.subject.handler);
 				this.subject = loader(links, routes[0], sellDiv, this);
 				this.subject.execute();

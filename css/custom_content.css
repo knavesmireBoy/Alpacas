@@ -157,11 +157,13 @@ font: bold 0.8em "Bookman Old Style", sans-serif;
 figcaption {
     text-align: center;
     border-top: solid 1px;
-    font-weight: bold;
+    font-weight: normal;
     padding: .3em;
+    /*
     background: hsl(61, 38%, 70%);
     color: hsl(30, 60%, 24%);
     text-shadow: 1px 1px 2px white;
+    */
 }
 
 figure {
@@ -172,11 +174,6 @@ figure:hover {
     background: hsla(75, 50%, 30%, .9);
     color: white;
 }
-
-#sell.extent {
-    background: white;
-}
-
 
 #alpacas_for_sale ul.tab a{
 	color: #7F9933;
@@ -200,7 +197,7 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 #alpacas_for_sale ul.tab li a:hover{
 	color: hsla(75, 50%, 30%, 1);
 }
-#alpacas_for_sale #article ul.tab li.current a:hover{
+#alpacas_for_sale ul.tab li.current a:hover{
 	color: hsla(75, 50%, 40%, 1);
 }
 /*

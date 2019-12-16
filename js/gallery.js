@@ -7,19 +7,11 @@
 (function(doc, visiblity, mq, query, cssanimations, touchevents, report, slide_config, paused_config) {
 	"use strict";
 
-	function undef(x) {
-		return typeof(x) === 'undefined';
-	}
-
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
 
 	function noOp() {}
-
-	function add(a, b) {
-		return a + b;
-	}
 
 	function doOnce() {
 		return function(i) {
@@ -50,6 +42,10 @@
 			return (x >= i) ? x : undefined;
 		};
 	}
+    
+    function add(a, b) {
+		return a + b;
+	}
 
 	function subtract(x, y) {
 		return x - y;
@@ -73,28 +69,12 @@
 		return i % n;
 	}
 
-	function always(VALUE) {
-		return function() {
-			return VALUE;
-		};
-	}
-
-	function thunk(f) {
-		return f.apply(f, _.rest(arguments));
-	}
-
-	function invokeOn(validater, action) {
-		return validater() && action();
-	}
-
 	function simpleinvoke(m, f, v, e) {
 		return f(e)[m](v);
 	}
 
-	function caller(f1, f2, context) {
-		return f1(context).call(f2(context));
-	}
 	var enter,
+        always = gAlp.Util.always,
 		thumbnailsListener,
 		//https://tutorialzine.com/2014/12/you-dont-need-icons-here-are-100-unicode-symbols-that-you-can-use
 		//buttons_save = ['&#x25c0', '&#x25b7', '&#x25ba'],
@@ -106,6 +86,8 @@
 		$ = function(str) {
 			return document.getElementById(str);
 		},
+        drillDown = gAlp.Util.drillDown,
+        thunk = gAlp.Util.thunk,
 		event$ = drillDown(['target', 'id']),
 		getNew = gAlp.Util.getNewElement,
 		invokeWhen = gAlp.Util.invokeWhen,
@@ -246,7 +228,7 @@
 		fadeUntil = function(myopacity, pred, onDone, el, i) {
 			var currysetter = gAlp.Util.curry3(gAlp.Util.setter)(myopacity.getValue(i))(cssopacity);
 			_.compose(currysetter, _.partial(drillDown(['style']), getDomTargetImg(el)))();
-			invokeOn(_.partial(thunk, pred, i), _.partial(thunk, onDone, el));
+			gAlp.Util.invokeOn(_.partial(thunk, pred, i), _.partial(thunk, onDone, el));
 		},
 		nodematch = function(el, validator) {
 			var res = gAlp.Util.checker(validator)(el),
@@ -277,7 +259,7 @@
 				clone = gAlp.Util.makeElement(deco || _.identity, _.partial(setAttrs, p_attrs), anCr2Thumbs, getCurrentSlide);
 			clone.add = _.wrap(clone.add, function(f) {
 				f();
-				invokeOn(_.partial(negate(_.isEmpty), c_attrs), _.partial(setsrc, clone.get()));
+				gAlp.Util.invokeOn(_.partial(negate(_.isEmpty), c_attrs), _.partial(setsrc, clone.get()));
 				return clone.get();
 			});
 			return clone;
@@ -322,7 +304,7 @@
 					_.compose(_.partial(setAttrs, {
 						href: getAttrs('src')(current)
 					}))(link);
-					_.compose(fade100)(kid);
+                   _.compose(fade100)(kid);
 				},
 				makeNavListener = function(command, element) {
 					//designed to remove pause, mousein, mouseout events post slideshow
@@ -442,9 +424,7 @@
 						return [back, playcommand.execute, forward];
 					},
 					delegate = function(mynav) {
-						var nav = gAlp.Util.command().init(mynav);
-						nav.execute('advance');
-						nav.undo('retreat');
+                        var nav = gAlp.Util.getCommand(mynav, 'advance', 'retreat');
 						return function(e) {
 							var play = {
 								execute: _.partial(machSchau, e),

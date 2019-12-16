@@ -168,10 +168,8 @@ bottom: -250%;
 	}
 }
 @media screen and (min-width: 769px) {
-	/*(DOOZY) IF javascript is disabled allow these rules to apply if masking is supported
-        @supports(mask-image: url("")) {*/
-        @supports (mask-size: cover) or (-webkit-mask-size: cover) {
-        
+       /* @supports(mask-image:  url('')) {*/
+           /* @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
         .no-js body.verbose {
             background-color: lavender;
         }
@@ -226,8 +224,8 @@ bottom: -250%;
 		.cssmask #about_us #wrap #main #aside {
 			z-index: 0;
 		}
-	}
     
+    /*}*/
     #alpacas_for_sale #wrap #main #aside {
             z-index: 1;
 		}

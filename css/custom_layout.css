@@ -42,51 +42,15 @@
 	*padding: .6em .3em;
 	*height: 1%;
 }
-/*
-.extent figure {
-	margin: 0 1%;
-	*margin: 0 .3em;
-	float: left;
-	overflow: hidden;
-}
-*/
-.extent {
-	display: table;
-    border-spacing: 10px;
-}
-.extent figure {
-	display: table-cell;
-}
-.extent figure {
-	*display: inline-block;
-	zoom: 1;
-	*float: none;
-}
-/*
-#extent figcaption{
-	display: inline-block;
-	padding: .3em .6em;
-}
-*/
-
 
 ul#list li {
-	display: inline-block;
-	display: inline;
+    float: left;
 	zoom: 1;
 }
 
-ul#list li {
-    display: table-cell;
+ul#list li a {
     float: left;
 }
-
-ul#list a  {
-	display: table-cell;
-    float: left;
-}
-
-
 
 #alpacas_for_sale ul.tab li {
    padding: 0 1em 0 0; 
@@ -101,24 +65,15 @@ ul#list a  {
 	padding: 0.7em .5em 0.7em 2em;
 	color: white;
 }
-/*
-.nthchild #alpacas_for_sale ul.loop li a {
-	padding: .7em 0 .7em 1.8em;
-}
-*/
-  
-}
 #alpacas_for_sale ul.loop li:first-child a {
 	float: left;
 	padding-left: 0.7em;
 }
-
 .nthchild #alpacas_for_sale ul.loop li:first-child a {
 	padding-left: 1em;
 }
 
 ul#list.tab {
-    display: block;
     transform: translateX(-1000px);
     -webkit-transition: left 1s;
 	-o-transition: left 1s;
@@ -128,7 +83,6 @@ ul#list.tab {
 ul#list.loop, ul#list.tab {
     transform: translateX(0px);
 }
-
 
 ul.loop li a::after, ul.loop li a::before {
 	/*border arrows */
@@ -166,11 +120,16 @@ ul.loop li a::after, ul.loop li a::before {
 #sell a.show, #sell.extent a{
     display: block;
 }
-
-#sell.extent figure {
-    display: table-cell;
+#sell.extent {
+    display: table;
+    border-spacing: 1em;
+    height: 1%;
 }
-
+/*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
+#sell.extent figure{
+    display: table-cell;
+   vertical-align: top;
+}
 
 html.js #sell a, html.js #sell table {
 	*display: none;
