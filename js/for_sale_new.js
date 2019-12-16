@@ -75,7 +75,7 @@ if (!window.gAlp) {
 		}
 	}
 
-	function caller1(ctxt, ptl, arg, m) {
+	function caller(ctxt, ptl, arg, m) {
 		return ptl(ctxt)[m](arg);
 	}
 
@@ -177,7 +177,8 @@ if (!window.gAlp) {
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
-		threshold = Number(query.match(/[^\d]+(\d+)[^\d]+/)[1]),
+		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
+		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
 		getEnvironment = (function () {
 			if (mq) {
@@ -186,16 +187,14 @@ if (!window.gAlp) {
 				return isDesktop;
 			}
 		}()),
-		$ = function (str) {
-			return document.getElementById(str);
-		},
+		//$ = function (str) {return document.getElementById(str);},
+        //con = _.bind(window.console.log, window.console),
 		always = gAlp.Util.always,
 		reverse = gAlp.Util.invoker('reverse', Array.prototype.reverse),
 		repeatOnce = doRepeat()(1),
 		validator = gAlp.Util.validator,
 		ptL = _.partial,
 		idty = _.identity,
-		//con = _.bind(window.console.log, window.console),
 		doTwice = gAlp.Util.curryTwice(),
 		doTwiceDefer = gAlp.Util.curryTwice(true),
 		doThrice = gAlp.Util.curryThrice(),
@@ -219,6 +218,9 @@ if (!window.gAlp) {
 			});
 			return coll;
 		},
+		checkDataLength = validator('no alpacas for sale', always(alp_len)),
+		checkJSenabled = validator('javascript is not enabled', checkDummy),
+		maybeLoad = gAlp.Util.silent_conditional(checkDataLength, checkJSenabled),
 		getPerformer = function () {
 			return ptL(gAlp.Util.apply, gAlp.Util.partialSetFromArray.apply(gAlp.Util, arguments));
 		},
@@ -232,7 +234,7 @@ if (!window.gAlp) {
 					//optional tbody reqd for IE
 					render = anCr(table),
 					tbody = _.compose(render, ptL(idty))('tbody'),
-					c = gAlp.Util.curry4(caller1)('match')(/^other/i)(doDrillDown(['innerHTML'])),
+					c = gAlp.Util.curry4(caller)('match')(/^other/i)(doDrillDown(['innerHTML'])),
 					addspan,
 					doRow = _.compose(anCr(tbody)),
 					tableconfig = {
@@ -272,10 +274,10 @@ if (!window.gAlp) {
 				});
 				//report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
 				//report.innerHTML = window.addEventListener; 
-				render = anCr(table.parentNode),
-					addLinkAttrs = _.extend(addLinkAttrs, {
-						href: getPath(subject)
-					});
+				render = anCr(table.parentNode);
+				addLinkAttrs = _.extend(addLinkAttrs, {
+					href: getPath(subject)
+				});
 				addLinkAttrs = ptL(setAttrs, addLinkAttrs);
 				addImgAttrs = _.extend(addImgAttrs, {
 					src: getPath(subject)
@@ -287,25 +289,24 @@ if (!window.gAlp) {
 				addTableAttrs(table);
 			};
 		},
-		loadData = function (data, driver, render) {
-			_.each(data, ptL(driver, render));
-		};
-	/* only load the javascript if css enabled, a dummy element is placed in html,
-	a property applied in css, which will not be accessible if path to css is missing */
-	if (!alp_len || !checkDummy()) {
-		return;
-	}
-	var getId = _.compose(ptL(byIndex, 1), doThrice(simpleInvoke)(' ')('split')),
-		doRow = onValidation(validator('is first row', ptL(gAlp.Util.isEqual, 0))),
-		doColspan = ptL(setAttrs, {
-			colspan: 2
-		}),
-		getPath = function (array) {
-			return array.slice(-1)[0][1];
+		doLoad = function (coll, cb) {
+			var loadData = function (data, render, driver) {
+					_.each(data, ptL(driver, render));
+				},
+				getId = _.compose(ptL(byIndex, 1), doThrice(simpleInvoke)(' ')('split')),
+				doRow = onValidation(validator('is first row', ptL(gAlp.Util.isEqual, 0))),
+				doColspan = ptL(setAttrs, {
+					colspan: 2
+				}),
+				getPath = function (array) {
+					return array.slice(-1)[0][1];
+				},
+				configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(doAddClass, 'description'), ptL(doAddClass, 'odd'));
+			loadData(coll, cb, configureTable);
+			return true;
 		},
-		configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(doAddClass, 'description'), ptL(doAddClass, 'odd'));
-	loadData(alpacas_select, configureTable, renderTable);
-	var routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
+		loaded = maybeLoad(ptL(doLoad, alpacas_select, renderTable)),
+		routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
 		myconfig = {
 			shower: getPerformer(always(true), 'add'),
 			hider: getPerformer(always(true), 'remove'),
@@ -329,8 +330,14 @@ if (!window.gAlp) {
 		getLinkDefer = doTwiceDefer(getProp)(links), //awaits integer
 		getDomTargetLink = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('a')),
 		getDomTargetImage = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
-		tooltip = gAlp.Tooltip(article, ["click here...", "to toggle table and picture"], 2),
+		tooltip = gAlp.Tooltip(article, ["click...", "to toggle table and picture"], 2),
 		doToolTip = ptL(gAlp.Util.doWhen, repeatOnce, _.bind(tooltip.init, tooltip)),
+		//doToolTip = _.bind(tooltip.init, tooltip),
+        mytooltip = {
+            load: tooltip.init,
+            unload: tooltip.cancel
+        },
+        tooltip_command = gAlp.Util.getCommand(mytooltip, 'load', 'unload'),
 		mynav = (function () {
 			function prepNav(ancor, refnode) {
 				return gAlp.Util.makeElement(ptL(setAttrs, {
@@ -402,11 +409,11 @@ if (!window.gAlp) {
 			}
 			return setDisplays(inc, gAlp.Composite(inc, conf.intaface));
 		},
-		simpleComp = function (coll, config) {
+		simpleComp = function (coll, config, bool) {
 			var comp = makeDisplayer([], config),
 				doLeaf = ptL(makeLeaf, comp, config);
 			_.each(coll, doLeaf);
-			return comp;
+			return bool ? _.extend(comp, new gAlp.Util.Observer()) : comp;
 		},
 		machDisplayComp = function (coll, config) {
 			var headcomp = makeDisplayer([], config, true),
@@ -430,24 +437,17 @@ if (!window.gAlp) {
 				}
 			};
 			headcomp.getIndex = function () {
-				return this.strategy && this.strategy(true) || 0;
+				return this.strategy && (this.strategy(true) || 0);
 			};
 			recur(coll);
 			headcomp.subscribe(doToolTip);
+			//headcomp.subscribe(tooltip_command.execute);
 			return headcomp;
 		},
 		getDisplayComp = ptL(machDisplayComp, display_elements, myconfig),
 		tabFactory = function (gallery, index) {
 			if (isNaN(index)) {
 				return;
-			}
-
-			function prepTitles() {
-				return ['Alpacas For Sale', mapLinktoTitle(getLink()), 'Next Alpaca'];
-			}
-
-			function getLI() {
-				return _.compose(anCr, _.compose(anCr($nav.get()), always('li')))();
 			}
 
 			function doTabs(doLI, str) {
@@ -461,23 +461,32 @@ if (!window.gAlp) {
 					doWhen = ptL(onValidation(v), doParent);
 				return _.compose(doWhen, gAlp.Util.setText(str.capitalize()), doLI())('a');
 			}
-
-			function addHandler(id, cb) {
-				return _.compose(_.identity, ptL(prepHandle, cb), ptL(doAddClass, id))($nav.get());
-			}
-
-			function doAddHandler(f) {
-				this.handle = f();
-				//this.handle = gAlp.Util.addHandler('click', window.alert.bind(window, 'bond'), mynav);
-			}
 			var I = 0,
-				ctxt = getDisplayComp(index),
-				getLink = getLinkDefer(index),
 				resizerinc = [],
+				ctxt = getDisplayComp(index),
+				mecallback = function () {
+					return function () {
+						resizerinc[I].exit(ctxt.getIndex());
+						I = (I += 1) % resizerinc.length;
+						resizerinc[I].show(ctxt.getIndex());
+					};
+				},
+				$nav = mynav.init(mecallback(I)),
+				getLI = function () {
+					return _.compose(anCr, _.compose(anCr($nav.get()), always('li')))();
+				},
+				prepHandle = ptL(gAlp.Util.addHandler, 'click'),
+				addHandler = function (id, cb) {
+					this.handle = _.compose(_.identity, ptL(prepHandle, cb), ptL(doAddClass, id))($nav.get());
+				},
+			
+				getLink = getLinkDefer(index),
+				prepTitles = function () {
+					return ['Alpacas For Sale', mapLinktoTitle(getLink()), 'Next Alpaca'];
+				},
 				resizercomp = makeDisplayer(resizerinc, myconfig, true),
 				doTabNav = _.compose(ptL(doTabs, getLI)),
 				doLoopNav = _.compose(ptL(doTabsLoop, getLI)),
-				prepHandle = ptL(gAlp.Util.addHandler, 'click'),
 				init = function (coll, iteratee) {
 					_.each(coll(), iteratee);
 				},
@@ -500,6 +509,7 @@ if (!window.gAlp) {
 									return composed(arr[0]);
 								}, _.zip(navExes, events));
 							_.compose(gAlp.Util.getDefaultAction, best)()();
+                        //this.fire();
 						},
 						nextLoop = function () {
 							var fromClass = _.compose(getDomTargetLink, ptL(byIndex, 0), ptL(gAlp.Util.getByClass, 'current')),
@@ -518,12 +528,16 @@ if (!window.gAlp) {
 						looper = {
 							init: ptL(init, prepTitles, doLoopNav),
 							id: 'loop',
-							addHandler: ptL(doAddHandler, ptL(addHandler, 'loop', handler)),
+							addHandler: function(){
+                                //this.subscribe(tooltip_command.undo);
+                                _.compose(_.identity, ptL(prepHandle, _.bind(handler, this)), ptL(doAddClass, this.id))($nav.get());
+                            },
 							hide: hide,
 							doNext: nextLoop(),
 							delegate: ptL(simpleInvoke, ctxt, 'handle', false)
 						};
-					return looper;
+                    return _.extend(looper, new gAlp.Util.Observer());
+					//return looper;
 				},
 				prepTab = function () {
 					var nextTab = function (i) {
@@ -541,7 +555,8 @@ if (!window.gAlp) {
 						tabber = {
 							init: ptL(init, partialLinks, doTabNav),
 							id: 'tab',
-							addHandler: ptL(doAddHandler, ptL(addHandler, 'tab', ctxt.handle.bind(ctxt))),
+							//addHandler: ptL(doAddHandler, ptL(addHandler, 'tab', ctxt.handle.bind(ctxt))),
+							addHandler: ptL(addHandler, 'tab', ctxt.handle.bind(ctxt)),
 							hide: hide,
 							doNext: nextTab,
 							delegate: ptL(simpleInvoke, ctxt, 'handle')
@@ -550,7 +565,7 @@ if (!window.gAlp) {
 				},
 				layouts = {
 					loop: prepLoop(),
-					tab: prepTab(),
+					tab: prepTab()
 				},
 				prepareLayout = function (comp) {
 					if (!comp) {
@@ -569,13 +584,6 @@ if (!window.gAlp) {
 					resizercomp.add(comp);
 					return comp;
 				},
-				mecallback = function () {
-					return function () {
-						resizerinc[I].exit(ctxt.getIndex());
-						I = (I += 1) % resizerinc.length;
-						resizerinc[I].show(ctxt.getIndex());
-					};
-				},
 				sortLayouts = function () {
 					var mylayouts = [layouts[routes[0]]],
 						alt = layouts[routes[1]];
@@ -584,8 +592,7 @@ if (!window.gAlp) {
 					}
 					_.each(mylayouts, prepareLayout);
 					mylayouts = [];
-				},
-				$nav = mynav.init(mecallback(I));
+				};
 			sortLayouts();
 			//memoize...
 			tabFactory = function (gallery, index) {
@@ -639,9 +646,8 @@ if (!window.gAlp) {
 						isImg = gAlp.Util.validator('Please click on an image', val);
 					try {
 						return gAlp.Util.conditional(isImg)(action, e);
-					} catch (e) {
-						//report.innerHTML = e.message;
-						true;
+					} catch (er) {
+						//true;
 					}
 				},
 				delegate = function (coll, ctxt, e) {
@@ -652,7 +658,9 @@ if (!window.gAlp) {
 						}
 						$el.undo(i);
 					});
-					ctxt.handler && ctxt.handler.remove(ctxt.handler);
+					if (ctxt.handler) {
+						ctxt.handler.remove(ctxt.handler);
+					}
 					ctxt.handler = toggleTable();
 					return j;
 				},
@@ -660,19 +668,21 @@ if (!window.gAlp) {
 					var layouts = {
 						loop: {
 							execute: function () {
-								base.handler && base.handler.remove(base.handler);
+								if (base.handler) {
+									base.handler.remove(base.handler);
+								}
 								var figs = getFigs(),
 									pred = ptL(delBridge, ptL(delegate, figs, base)),
 									action = ptL(tabFactory, proxy),
 									pred_action = _.compose(action, pred);
-								//pred_action = doTwice(gAlp.Util.doWhen)(action);
-								//pred_action = _.compose(pred_action, pred);                                
 								base.handler = gAlp.Util.addEvent(ptL(gAlp.Util.addHandler, 'click'), pred_action)(target_node);
 							}
 						},
 						tab: {
 							execute: function () {
-								base.handler && base.handler.remove(base.handler);
+								if (base.handler) {
+									base.handler.remove(base.handler);
+								}
 								tabFactory(layouts.loop, 0);
 								base.handler = toggleTable();
 							}
@@ -684,13 +694,17 @@ if (!window.gAlp) {
 		}, //loader
 		myloader = { // a proxy that persists and is responsible for instatiating subjects
 			execute: function () {
-				this.subject && this.subject.handler.remove(this.subject.handler);
+				if (this.subject) {
+					this.subject.handler.remove(this.subject.handler);
+				}
 				this.subject = loader(links, routes[0], sellDiv, this);
 				this.subject.execute();
 			}
 		};
-	myloader.execute();
-}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, /^[^<]/i, /^</], {
+	if (loaded) {
+		myloader.execute();
+	}
+}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
 }));

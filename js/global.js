@@ -147,9 +147,11 @@ gAlp.Util = (function() {
 	}
 
 	function setter(o, k, v) {
-		var ctxt = getResult(o);
-		ctxt = _.isFunction(ctxt) ? o : ctxt;
-		ctxt[k] = v;
+		getResult(o)[k] = v;
+	}
+    
+    function simple_setter(o, k, v) {
+		o[k] = v;
 	}
 
 	function getter(o, k) {
@@ -1035,7 +1037,7 @@ gAlp.Util = (function() {
 			return _.toArray(getResult(coll));
 		},
 		doGetSet: function(context, property) {
-			var set = _.partial(doPartial, setter, context),
+			var set = _.partial(doPartial, simple_setter, context),
 				get = _.partial(doPartial, getter, context);
 			return getset(set(property), get(property));
 		},
@@ -1158,6 +1160,19 @@ gAlp.Util = (function() {
 				}, validators);
 				if (!_.isEmpty(errors)) {
 					throw new Error(errors.join(", "));
+				}
+				return fun(arg);
+			};
+		},
+        silent_conditional: function( /* validators */ ) {
+			var validators = _.toArray(arguments);
+			return function(fun, arg) {
+				var errors = mapcat(function(isValid) {
+					return isValid(arg) ? [] : [isValid.message];
+				}, validators);
+				if (!_.isEmpty(errors)) {
+                    return;
+					//throw new Error(errors.join(", "));
 				}
 				return fun(arg);
 			};

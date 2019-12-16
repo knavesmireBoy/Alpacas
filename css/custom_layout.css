@@ -280,7 +280,7 @@ ul#thumbnails li#slide, li#paused {
 	z-index: 2;
 }
 #controls.static {
-	top: -3.5em;
+	top: -4em;
 }
 #gallery #main {
 	padding: 0;
@@ -292,6 +292,7 @@ ul#thumbnails li#slide, li#paused {
 }
 #controls {
 	display: table;
+    width: auto;
 	border-spacing: .5em;
 }
 #gallery #controls button {

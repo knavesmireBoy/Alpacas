@@ -31,11 +31,12 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 				d = _.partial(add, ['tb2']),
 				git = function() {
                     if(instr[1]){
-                      //  try {
-                            //$('tooltip') may not exit if cancel has been called
-					var tgt = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('div'))($('tooltip').firstChild);
-					gAlp.Util.makeElement(setText(instr[1]), _.partial(_.identity, tgt)).add();
-                      //  } catch(e){}
+                        //$('tooltip') may not exist if cancel has been called
+					var parent = $('tooltip'),
+                        tgt = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('div'));
+                          if(parent){
+                              gAlp.Util.makeElement(setText(instr[1]), _.partial(_.identity, tgt(parent.firstChild))).add();
+                          }
                     }
 				},
 				wrap = function(f, el) {
@@ -84,7 +85,7 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 			}
 		};
 		//init.call(timer);
-	return count && Modernizr.cssanimations ? timer : dummytimer;
+	return count-- && Modernizr.cssanimations ? timer : dummytimer;
 };
 
 gAlp.highLighter = {

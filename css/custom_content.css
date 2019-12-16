@@ -65,6 +65,11 @@ pre {
 	-o-transition-duration: 2s;
 	transition-duration: 2s;
 }
+
+#sell.extent + #tooltip {
+    visibility: hidden;
+}
+
 @-webkit-keyframes animatedBackground {
 	0% {
 		background-position: 50% 0%
