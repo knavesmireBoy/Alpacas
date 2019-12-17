@@ -1,6 +1,5 @@
 @supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)) {
 	html.js body#alpacas_for_sale {
-		background-color: lavender;
 	}
 	/*
          /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
