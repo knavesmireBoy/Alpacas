@@ -132,14 +132,6 @@ pre {
 	border-top: 12px solid white;
 	margin: -1px 0px 0px 5em;
 }
-
-body#alpacas_for_sale {
-font: bold 0.8em  "Bookman Old Style", "Palatino", serif;
-}
-
-#alpacas_for_sale ul li a {
-    font-size: 1.2em;
-}
     
 #alpacas_for_sale  #tooltip div:first-child {
 	text-shadow: 1px 1px 1px black;
@@ -148,6 +140,15 @@ font: bold 0.8em  "Bookman Old Style", "Palatino", serif;
 	border-top: 12px solid #7F9933;
 	border-top: 12px solid hsla(75, 50%, 40%, 1);
 }
+
+body#alpacas_for_sale {
+font: bold 0.8em  "Bookman Old Style", "Palatino", serif;
+}
+
+#alpacas_for_sale ul li a {
+    font-size: 1.2em;
+}
+
 #alpacas_for_sale #article.loop ul li a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	color: white;

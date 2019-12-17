@@ -233,6 +233,7 @@
 	}
     
     #stud_services #article p:nth-of-type(2) span:nth-of-type(2) {
+        background-color: violet;
 		-webkit-animation: entry 3s ease-out;
 		animation: entry 3s ease-out;
 	}

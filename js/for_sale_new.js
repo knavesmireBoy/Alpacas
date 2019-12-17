@@ -331,7 +331,7 @@ if (!window.gAlp) {
 		getLinkDefer = doTwiceDefer(getProp)(links), //awaits integer
 		getDomTargetLink = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('a')),
 		getDomTargetImage = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
-		tooltip = gAlp.Tooltip(article, ["click...", "to toggle table and picture"], 2),
+		tooltip = gAlp.Tooltip(article, ["click table/picture", "to toggle the display"], 2),
 		doToolTip = ptL(gAlp.Util.doWhen, repeatOnce, _.bind(tooltip.init, tooltip)),
 		//doToolTip = _.bind(tooltip.init, tooltip),
         mytooltip = {

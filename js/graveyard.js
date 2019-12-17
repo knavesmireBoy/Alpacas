@@ -440,3 +440,51 @@ thumbnailsListener.triggerEvent(thumbnails, 'build');
         report.innerHTML = er.message;
     }
    */
+	/*
+	var COR = {
+		init: function (predicate, key, action) {
+        //ie add,replace,remove
+			this.predicate = predicate;
+			this.action = action;
+			this.key = key;
+			return this;
+		},
+		setSuccessor: function (s) {
+			this.successor = s;
+		},
+		handle: function () {
+			if (this.predicate.apply(this, arguments)) {
+				return this.action.apply(this, arguments);
+			} else if (this.successor) {
+				return this.successor.handle.apply(this.successor, arguments);
+			}
+		}
+	};
+    
+    function setUp(invoke, vals) {
+		var i,
+			L = vals.length,
+			collect = [];
+		for (i = 0; i < L; i += 1) {
+			collect.push(_.extend({}, COR).init(vals[i][0], vals[i][1], invoke));
+			if (i) {
+                collect[i - 1].setSuccessor(collect[i]);
+            }
+		}
+		return collect[0];
+	}
+    
+    function invoke1(ctxt, m, k, v) {
+		if (k) {
+			ctxt[m].call(ctxt, k, v);
+		}
+	}
+
+
+	function constructValidate(drill, args, o) {
+		var context = drill(o),
+			checker = _.partial(invoke, context, _.head(args)),
+			chain = setUp(checker, vals);
+		_.each(_.invert(_.rest(args)[0]), chain.handle, chain);
+	}
+    */

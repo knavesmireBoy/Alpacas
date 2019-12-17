@@ -198,7 +198,10 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     
     #controls {
         top: 1.8em;
-    }    
+    }
+    #alpacas_for_sale #tooltip {
+	bottom: 23em;
+    }
 }
 /* iPhone 6, 7, 8 ----------- */
 /*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/

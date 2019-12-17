@@ -78,75 +78,78 @@
 }
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
 	.flexboxlegacy #sell.extent {
-		border-spacing: .5em;
-		padding: 0;
+		padding: 3% 0% 0 1%;
 	}
-	@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
-		.flexboxlegacy #sell.extent figure {
-			padding: 0;
-		}
-		@supports (display: grid) {
-			ul#thumbnails.gallery li {
-				width: auto;
-				margin: 0px;
-			}
-		}
+	.flexboxlegacy #sell.extent figure {
+		display: block;
+		float: left;
+		margin: 0 0 4% 4%;
+		padding: 4% 4% 0;
+		width: 37%;
 	}
-	@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
-		.flexboxlegacy #sell.extent figure {
-			padding: .25em;
-			margin: 0;
-		}
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+	.flexboxlegacy #sell.extent figure a {
+		-webkit-box-shadow: none;
+		box-shadow: none;
 	}
 	@supports (display: grid) {
-		#main ul#thumbnails.gallery li {
-			margin: 0px;
+		ul#thumbnails.gallery li {
 			width: auto;
+			margin: 0px;
 		}
-		ul#thumbnails.gallery {
-			display: -ms-grid;
-			display: grid;
-			grid-template-columns: repeat(5, 1.377fr) 1fr;
-			/*
+	}
+}
+s @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {}
+@supports (display: grid) {
+	#main ul#thumbnails.gallery li {
+		margin: 0px;
+		width: auto;
+	}
+	ul#thumbnails.gallery {
+		display: -ms-grid;
+		display: grid;
+		grid-template-columns: repeat(5, 1.377fr) 1fr;
+		/*
         superfluous and buggers up layout in Chrome
         grid-template-rows: repeat(6, 16.666%);
         */
-			grid-gap: .33em;
-		}
-		ul#thumbnails.gallery li:nth-child(-n+5) {
-			-ms-grid-row: 1;
-			-ms-grid-row-span: 2;
-			grid-row: 1 / 3;
-		}
-		/*http://nthmaster.com/ -n+11 ???
+		grid-gap: .33em;
+	}
+	ul#thumbnails.gallery li:nth-child(-n+5) {
+		-ms-grid-row: 1;
+		-ms-grid-row-span: 2;
+		grid-row: 1 / 3;
+	}
+	/*http://nthmaster.com/ -n+11 ???
 	ul#thumbnails.gallery li:nth-child(n+7):nth-child(-n+11) {
 		grid-row: 3 / 5;
 	}
     */
-		ul#thumbnails.gallery li:nth-child(n+7) {
-			-ms-grid-row: 3;
-			-ms-grid-row-span: 2;
-			grid-row: 3 / 5;
-		}
-		ul#thumbnails.gallery li:nth-child(n+13) {
-			-ms-grid-row: 5;
-			-ms-grid-row-span: 2;
-			grid-row: 5 / 7;
-		}
-		ul#thumbnails.gallery li:nth-child(6) {
-			-ms-grid-column: 6;
-			-ms-grid-column-span: 1;
-			grid-column: 6 / 7;
-			-ms-grid-row-span: 3;
-			grid-row: span 3;
-			/* OR..
+	ul#thumbnails.gallery li:nth-child(n+7) {
+		-ms-grid-row: 3;
+		-ms-grid-row-span: 2;
+		grid-row: 3 / 5;
+	}
+	ul#thumbnails.gallery li:nth-child(n+13) {
+		-ms-grid-row: 5;
+		-ms-grid-row-span: 2;
+		grid-row: 5 / 7;
+	}
+	ul#thumbnails.gallery li:nth-child(6) {
+		-ms-grid-column: 6;
+		-ms-grid-column-span: 1;
+		grid-column: 6 / 7;
+		-ms-grid-row-span: 3;
+		grid-row: span 3;
+		/* OR..
         grid-area: 1 / 6 / 4 / 7;
         */
-		}
-		ul#thumbnails.gallery li:nth-child(12) {
-			/*grid-column: 6 / 7; superfluous as it defaults to the remaining available space*/
-			-ms-grid-row: 4;
-			-ms-grid-row-span: 3;
-			grid-row: 4 / 7;
-		}
 	}
+	ul#thumbnails.gallery li:nth-child(12) {
+		/*grid-column: 6 / 7; superfluous as it defaults to the remaining available space*/
+		-ms-grid-row: 4;
+		-ms-grid-row-span: 3;
+		grid-row: 4 / 7;
+	}
+}
