@@ -134,7 +134,7 @@ pre {
 }
 
 body#alpacas_for_sale {
-font: bold 0.8em "Bookman Old Style", sans-serif;
+font: bold 0.8em  "Bookman Old Style", "Palatino", serif;
 }
 
 #alpacas_for_sale ul li a {

@@ -257,7 +257,8 @@ if (!window.gAlp) {
 						assignId = function (str) {
 							//console.log(str)
 							//tableconfig.title = addImgAttrs.alt = getId(str);
-							addLinkAttrs.title = addImgAttrs.alt = getId(str);
+							//addLinkAttrs.title = addImgAttrs.alt = getId(str);
+							addImgAttrs.alt = getId(str);
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
 						maybeClass = ptL(onValidation(validator('no match found', c), supportsNthChild), doDescription);

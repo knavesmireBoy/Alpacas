@@ -172,6 +172,15 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 */
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5)/*, (min-resolution: 192dpi)*/ {
+    
+    body#alpacas_for_sale ul#list.loop{
+        font-size: 0.8em;
+    }
+    
+    figure a {
+        box-shadow: none;
+    }
+    
 	ul#thumbnails.gallery li {
 		width: 16%;
 		margin: 1%;
