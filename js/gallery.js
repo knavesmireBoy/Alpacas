@@ -10,14 +10,14 @@
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-    
-    function noOp() {}
-    
-    function doOnce() {
+
+	function noOp() {}
+
+	function doOnce() {
 		return function (i) {
 			return function () {
 				var res = i > 0;
-                i -= 1;
+				i -= 1;
 				return res > 0;
 			};
 		};
@@ -35,28 +35,8 @@
 		return _.partial(_.identity, filter(getResult(coll), pred)[0]);
 	}
 
-
 	function add(a, b) {
 		return a + b;
-	}
-
-	function withContextRet(bound, context, fArgs) {
-		bound(context).apply(context, fArgs());
-		return context;
-	}
-	/*deferred is a wrapper around withContext, bound awaits a context
-    context = context || context = context[subproperty]
-    arguments = fArgs();
-   context[method].apply(null, arguments)
-    */
-	function deferred(action, fArgs, value, context) {
-		//con(arguments)
-		/* both value and context are optional, they may have already been partially applied
-		if exactly three arguments are supplied the third argument MAY be a primitive (a value) OR a context object
-		if the latter: value SHOULD have been partially applied and it is hoped fArgs will ignore the additional argument!
-		*/
-		context = arguments.length === 3 ? value : context;
-		return withContextRet(action, context, _.partial(fArgs, value));
 	}
 
 	function isNumber(x) {
@@ -101,16 +81,6 @@
 		return i % n;
 	}
 
-	function always(VALUE) {
-		return function () {
-			return VALUE;
-		};
-	}
-
-	function thunk(f) {
-		return f.apply(f, _.rest(arguments));
-	}
-
 	function invokeOn(validater, action) {
 		return validater() && action();
 	}
@@ -119,8 +89,28 @@
 		//con(arguments)
 		return f(e)[m](v);
 	}
+
+	function withContextRet(bound, context, fArgs) {
+		bound(context).apply(context, fArgs());
+		return context;
+	}
+	/*deferred is a wrapper around withContext, bound awaits a context
+    context = context || context = context[subproperty]
+    arguments = fArgs();
+   context[method].apply(null, arguments)
+    */
+	function deferred(action, fArgs, value, context) {
+		//con(arguments)
+		/* both value and context are optional, they may have already been partially applied
+		if exactly three arguments are supplied the third argument MAY be a primitive (a value) OR a context object
+		if the latter: value SHOULD have been partially applied and it is hoped fArgs will ignore the additional argument!
+		*/
+		context = arguments.length === 3 ? value : context;
+		return withContextRet(action, context, _.partial(fArgs, value));
+	}
 	//var con = window.console.log.bind(window);
 	var enter,
+		always = gAlp.Util.always,
 		thumbnailsListener,
 		isFunction = function (fn, context) {
 			return _.isFunction(fn) || isFunction(context[fn]) || isFunction(fn[context]);
@@ -130,7 +120,8 @@
 		$ = function (str) {
 			return document.getElementById(str);
 		},
-        drillDown = gAlp.Util.drillDown,
+		drillDown = gAlp.Util.drillDown,
+		thunk = gAlp.Util.thunk,
 		event$ = drillDown(['target', 'id']),
 		stringMatch = _.partial(simpleinvoke2, 'match'),
 		buttonRoutes = _.map([/back/i, /p\w+/i, /Forward/i], function (reg) {
@@ -154,18 +145,19 @@
 			return el && pred(f1(el)(), f2(str, el)());
 		},
 		isNodeName = _.partial(matchUp, isEqual, isLowerCase, _.partial(gAlp.Util.bindContext, 'toLowerCase')),
-		changeView = function (el, bool, klas, method) {
+		changeView = function ($el, bool, klas, method) {
+			//console.log(arguments)
 			var f = _.partial(gAlp.Util.bindContext, method),
 				args = _.partial(_.identity, [klas]);
-           //console.log(el.firstChild && el.firstChild.href)
-			//el may be a function. eg awaitng the creation of an element
-			el = gAlp.Util.getClassList(getResult(el));
+			//console.log($el.firstChild && $el.firstChild.href)
+			//$el may be a function. eg awaitng the creation of an element
+			$el = gAlp.Util.getClassList(getResult($el));
 			//we don't want to return here as it would break a loop on fading
-			deferred(f, args, el);
+			deferred(f, args, $el);
 		},
-		changeViewRet = function (func, el, bool, klas, method) {
-			func(el, bool, klas, method);
-			return el;
+		changeViewRet = function (func, $el, bool, klas, method) {
+			func($el, bool, klas, method);
+			return $el;
 		},
 		changeViewWrap = _.wrap(changeView, changeViewRet),
 		prepareView = gAlp.Util.curry4(changeView),
@@ -197,28 +189,17 @@
 		doNotInPlay = _.partial(isNotInPlay, $('wrap')),
 		dorender = _.partial(gAlp.Util.render, thumbnails, null),
 		getNew = gAlp.Util.getNewElement,
-		//setAttrs = gAlp.Util.setAttrs,
-		//setAttrs = _.partial(gAlp.Util.setAttrsFix(doc.body.attachEvent), always(true), 'setAttribute'),
 		setAttrs = gAlp.Util.setAttributes,
 		setText = gAlp.Util.setText,
 		curryView = gAlp.Util.curry4(changeViewWrap),
-		preSet = function (def, preBound, pArgs) {
-			return _.partial(def, preBound, pArgs);
-		},
-		preArgs = function (args, pFunc) {
-			pFunc = pFunc || _.identity;
-			return _.partial(pFunc, args);
-		},
 		addMyEvent = gAlp.Util.addEvent,
 		getDomTargetImg = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img')),
 		getDomTargetLink = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('a')),
 		getDomTargetList = gAlp.Util.getDomParent(gAlp.Util.getNodeByTag('li')),
-        clickHandler = _.partial(gAlp.Util.addHandler, 'click'),
+		clickHandler = _.partial(gAlp.Util.addHandler, 'click'),
 		touchHandler = _.partial(gAlp.Util.addHandler, 'touchend'),
 		enterHandler = _.partial(gAlp.Util.addHandler, 'mouseenter'),
-        anCr2Thumbs = gAlp.Util.append()(thumbnails),
 		invokeWhen = gAlp.Util.invokeWhen,
-		clickHandler = _.partial(gAlp.Util.addHandler, 'click'),
 		iteratorBridge = function (tgt, predicate, coll) {
 			predicate = predicate || always(true);
 			coll = gAlp.Util.getCollection.call(_, coll, predicate);
@@ -256,7 +237,7 @@
 			} //nested
 			return counter;
 		},
-		playAway = function (doProgress, hasPlayed, pause, resume, slider, onDone, doFade) {
+		playAway = function (doProgress, hasPlayed, pause, resume, slider, doFade, onDone) {
 			var pausedEvent,
 				play,
 				inProgress = _.partial(function (pred) {
@@ -265,7 +246,7 @@
 				prepPause = function (then, pred) {
 					then(pred)();
 				},
-                handler = touchevents ? touchHandler : clickHandler,
+				handler = touchevents ? touchHandler : clickHandler,
 				soPlay = function () {
 					/*hasPlayed returns a reference to the function provided to requestAnimation... set below
 				it is persisted as a property of the outer function or else hasPlayed returns null*/
@@ -327,23 +308,9 @@
 				}
 			};
 		},
-        /*
-        cloneSlide = function(attrs, deco) {
-			var p_attrs = prepAttrs(attrs, 'src'),
-				c_attrs = prepAttrs(attrs, 'id'),
-				setsrc = _.compose(_.partial(setAttrs, c_attrs), getDomTargetImg),
-				clone = gAlp.Util.makeElement(deco || _.identity, _.partial(setAttrs, p_attrs), anCr2Thumbs, getCurrentSlide);
-			clone.add = _.wrap(clone.add, function(f) {
-				f();
-				gAlp.Util.invokeOn(_.partial(negate(_.isEmpty), c_attrs), _.partial(setsrc, clone.get()));
-				return clone.get();
-			});
-			return clone;
-		},
-        */
 		listen = function (createDiv, createButton) {
 			var locator = null,
-                lis = _.toArray($('thumbnails').getElementsByTagName('li')),
+				lis = _.toArray($('thumbnails').getElementsByTagName('li')),
 				isImg = gAlp.Util.validator('Please click on an image', _.partial(isNodeName, 'IMG')),
 				isPortrait = _.partial(function (el) {
 					return gAlp.Util.getClassList(el).contains('portrait');
@@ -361,66 +328,29 @@
 				fader = _.partial(fadeUntil, gAlp.getOpacity(), swapImgCB),
 				doanime = gAlp.Util.doGetSet(countdown, 'anime'),
 				doprog = gAlp.Util.doGetSet(countdown, 'progress'),
-				//half = gAlp.getOpacity(50).getValue(),
-				//full = gAlp.getOpacity(100).getValue(),
-                fadeNow = function(i, el) {
+				fadeNow = function (i, el) {
 					var currysetter = gAlp.Util.curry3(gAlp.Util.setret)(i)(cssopacity);
 					//el.style object would be returned from currysetter, need to return acutal element
 					_.compose(currysetter, gAlp.Util.drillDown(['style']))(gAlp.Util.show(el));
 					return el;
 				},
-				/*
-				fade50 = function (){
-				currysetter = gAlp.Util.curry3(gAlp.Util.setter)(half)(cssopacity),
-				    return _.partial(_.compose(currysetter, drillDown(['style']), bolt('add')(display)(true))());
-				},
-				      */
-				//fade50 = _.compose(preSet(deferred, gAlp.Util.setStyle, preArgs([cssopacity, half])), curryView('add')(display)(true)),
-                fade50 = _.partial(fadeNow, gAlp.getOpacity(50).getValue()),
-                /*
+				fade50 = _.partial(fadeNow, gAlp.getOpacity(50).getValue()),
 				prepNextSlide = function (iterator, slide) {
 					var kid = getDomTargetImg(slide.firstChild),
 						link = getDomTargetLink(slide.firstChild),
 						current = getDomTargetImg(iterator.getCurrent().firstChild),
 						getAttrs = gAlp.Util.curry2(gAlp.Util.getter),
-						config = {
-							property: 'style',
-							key: cssopacity,
-							value: full,
-							object: kid
-						},
-						addOpacity = _.partial(gAlp.Util.setPropFromHash, config),
-						o = {
-							src: getAttrs('src')(current),
-							alt: getAttrs('alt')(current)
-						};
-					_.compose(_.partial(setAttrs, {
-						href: getAttrs('src')(current)
-					}))(link);
-					_.compose(_.partial(setAttrs, o), addOpacity)();
-                    //console.log('opacity');
-				},
-                */
-                prepNextSlide = function(iterator, slide) {
-                    //console.log(arguments)
-					var kid = getDomTargetImg(slide.firstChild),
-						link = getDomTargetLink(slide.firstChild),
-						current = getDomTargetImg(iterator.getCurrent().firstChild),
-						getAttrs = gAlp.Util.curry2(gAlp.Util.getter),
-						fade100 = _.partial(fadeNow, gAlp.getOpacity(100).getValue());
-					//if opacity is set to 1 BEFORE the new image is assigned,
-					//a flash of the previous image will be witnessed, nasty
-					//DOM0...
-                    kid = gAlp.Util.removeNodeOnComplete(kid);
+						fade100 = _.partial(fadeNow, gAlp.getOpacity(100).getValue()),
+						show_next = _.compose(doShow, iterator.getNext),
+						next = _.compose(show_next, doHide, getCurrentSlide);
 					kid.src = getAttrs('src')(current);
 					kid.alt = getAttrs('alt')(current);
 					_.compose(_.partial(setAttrs, {
 						href: getAttrs('src')(current)
 					}))(link);
-                    link.appendChild(kid);
-                   _.compose(fade100)(kid);
+					_.compose(fade100)(kid);
+					next();
 				},
-				//enterHandler = _.partial(gAlp.Util.addHandler, 'mouseenter'),
 				makeNavListener = function (command, element) {
 					//designed to remove pause, mousein, mouseout events post slideshow
 					function removingListeners(remover, n) {
@@ -451,23 +381,21 @@
 					_.each(['getCurrent', 'getNext', 'getCollection'], _.partial(gAlp.Util.proxy, iterator), nav);
 					return nav;
 				},
-                
-				//touchHandler = _.partial(gAlp.Util.addHandler, 'ontouchstart'),
 				res,
 				tgt;
 			////////////////////////////////////////////////////////////////////////////////////
 			return function (e) {
 				tgt = e.target;
 				res = gAlp.Util.checker(isImg)(tgt);
-				report.innerHTML = tgt;
+				//report.innerHTML = tgt;
 				if (negate(_.isEmpty)(res)) {
 					return window.alert(res);
 				}
 				// window.alert(document.documentElement.className);
 				/*▲ &#9650; ► &#9658; ▼ &#9660; ◄ &#9668*/
-                var iterator = iteratorBridge(tgt, always(true), lis),
-                    navigator = makeNavigator(iterator, this, {}),
-                    machSchau = function (e, bool) {
+				var iterator = iteratorBridge(tgt, always(true), lis),
+					navigator = makeNavigator(iterator, this, {}),
+					machSchau = function (e, bool) {
 						var tooltip_timer,
 							allow = !touchevents ? 2 : 0,
 							enterSlideShow = function () {
@@ -490,7 +418,6 @@
 							addMouseListeners = _.partial(best, _.partial(thunk, once(1))),
 							initToolTip = _.partial(best, _.partial(thunk, once(1))),
 							doSlideShow = _.partial(best, _.partial(thunk, once(1)));
-                    
 						machSchau = function (e, bool) { //memo
 							if (!bool) {
 								var predicate = gAlp.Util.getPredicate(getCurrentSlide(), isPortrait),
@@ -503,8 +430,6 @@
 										}
 									},
 									copier = _.partial(prepNextSlide, playiterator),
-									shownext = _.compose(doShow, playiterator.getNext),
-									next = _.compose(shownext, doHide, getCurrentSlide),
 									baseEl = getBaseElement(dorender, getNew, config),
 									theorient = isPortrait(getCurrentSlide()),
 									pauser = getSlide(baseEl, paused_config(theorient), fade50),
@@ -519,7 +444,7 @@
 								//tooltip_timer becomes an object with run and cancel methods, to enable clearTimeout
 								addMouseListeners([enterSlideShow, noOp])();
 								//returns 'best' options in an array...
-								doSlideShow(play(_.compose(next, copier), fader))();
+								doSlideShow(play(fader, _.compose(copier)))();
 								initToolTip([tooltip_timer.init, noOp])();
 								doNull = nullify;
 							} else if (doNull) { //only run post-play doNull is either null or a (exit) function
@@ -595,22 +520,9 @@
 				});
 				composed = gAlp.Util.makeElement(gAlp.Util.curry2(extend)(composed), addEvent, doAttrs, setText('&#x2716'), doElement).add();
 				gAlp.Util.curry2(extend)(composed)(composed.get());
-                enter.call(this, els, navigator.getCurrent());
-                /*
-                                try {
-addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.retreat)($('controls'));
-//thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
-thumbnailsListener.triggerEvent($('controls'), 'bolt');
-}
-    catch(er){
-        report.innerHTML = er.message;
-    }
-            */    
-//console.log(navigator.advance)
-
-				
+				enter.call(this, els, navigator.getCurrent());
 			};
-		},//listen
+		}, //listen
 		listen1 = listen(_.partial(getNew, 'div'), _.partial(getNew, 'button'));
 	thumbnailsListener = addMyEvent(clickHandler, listen1)(thumbnails);
 	enter = function (pairs, el) {
@@ -618,23 +530,13 @@ thumbnailsListener.triggerEvent($('controls'), 'bolt');
 		switchView(pairs, _.identity);
 		doShow(el);
 	};
-    /*
-try {
-addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[3]}))(thumbnails);
-//thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
-thumbnailsListener.triggerEvent(thumbnails, 'build');
-}
-    catch(er){
-        report.innerHTML = er.message;
-    }
-   */
 }(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0], function () {
-    "use strict";
+	"use strict";
 	return {
 		id: 'slide'
 	};
 }, function (bool) {
-    "use strict";
+	"use strict";
 	return {
 		id: 'paused',
 		src: bool ? '../assets/pauseLong.png' : '../assets/pause.png'

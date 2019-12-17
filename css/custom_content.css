@@ -161,7 +161,6 @@ font: bold 0.8em "Bookman Old Style", sans-serif;
 
 figcaption {
     text-align: center;
-    border-top: solid 1px;
     font-weight: normal;
     padding: .3em;
     /*
@@ -173,10 +172,11 @@ figcaption {
 
 figure {
     box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
+    background: white;
 }
 
 figure:hover {
-    background: hsla(75, 50%, 30%, .9);
+    background: hsla(75, 50%, 30%, .55);
     color: white;
 }
 
@@ -251,7 +251,12 @@ ul.breadcrumb  { border-right: white; border-left: white }
 }
 
 #sell figure a {
-	border-width: 0px;
+	border: solid 1px black;
+    box-shadow: 0px 0px 2px black;
+}
+
+#sell figure:hover a {
+	border: solid 1px white;
 }
 .extent, #sell, #sell a, #sell table, #sell table td {
 	border-color: hsla(75, 50%, 40%, 1);

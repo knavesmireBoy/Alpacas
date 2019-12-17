@@ -129,6 +129,7 @@ ul.loop li a::after, ul.loop li a::before {
 #sell.extent figure{
     display: table-cell;
    vertical-align: top;
+    padding: 1em 1em 0;
 }
 
 html.js #sell a, html.js #sell table {

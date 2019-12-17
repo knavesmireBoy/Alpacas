@@ -418,3 +418,25 @@ const curry = fn => (...args) => args.length >= fn.length
 	function caller(f1, f2, context) {
 		return f1(context).call(f2(context));
 	}
+
+                /*
+                                try {
+addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.retreat)($('controls'));
+//thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
+thumbnailsListener.triggerEvent($('controls'), 'bolt');
+}
+    catch(er){
+        report.innerHTML = er.message;
+    }
+            */    
+//console.log(navigator.advance)
+    /*
+try {
+addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[3]}))(thumbnails);
+//thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
+thumbnailsListener.triggerEvent(thumbnails, 'build');
+}
+    catch(er){
+        report.innerHTML = er.message;
+    }
+   */

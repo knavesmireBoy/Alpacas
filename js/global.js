@@ -147,6 +147,7 @@ gAlp.Util = (function() {
 	}
 
 	function setter(o, k, v) {
+        //console.log(arguments)
 		getResult(o)[k] = v;
 	}
     
