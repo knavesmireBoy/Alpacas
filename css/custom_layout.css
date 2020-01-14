@@ -244,10 +244,13 @@ ul#thumbnails li {
 	display: none;
 	opacity: 0;
 }
-ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thumbnails li#paused {
+ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thumbnails li#paused, ul#thumbnails li#base {
 	display: block;
 	opacity: 1;
 	*display: inline;
+}
+ul#thumbnails li.go {
+    visibility: hidden;
 }
 #gallery #footer {
 	padding-top: 0%;
@@ -268,7 +271,7 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 }
 /* G A L L E R Y | S H O W T I M E */
 
-ul#thumbnails li#slide, li#paused {
+li#slide, li#paused {
 	margin-left: -100%;
 }
 #controls {

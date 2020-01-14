@@ -9,7 +9,7 @@
 
 window.gAlp.Eventing = (function (eventing) {  
     
-    
+    var count = 0;
     
 	function triggerEvent(el, type) {
 		if ('createEvent' in document) {
@@ -32,23 +32,7 @@ window.gAlp.Eventing = (function (eventing) {
         };
     }
     }
-    
-    
-    function getEvent(e){
-        var e = e || window.event;
-        var src = e.target || e.srcElement;
-        try {
-            e.preventDefault();
-        }
-        catch (ex) {
-            e.returnValue = false;
-        }
-    }
 
-    
-    function isfound(i, j) {
-		return (i !== -1) ? i : j;
-	}
     function isfunc(fn, context) {
         //return _.isFunction(fn) || context && isfunc(context[fn]) || context && isfunc(fn[context]);
         return _.isFunction(fn);
@@ -129,9 +113,6 @@ window.gAlp.Eventing = (function (eventing) {
 				return e || window.event;
 			},
             
-            getEventTarget: function(e) {
-				return e.target || e.srcElement;
-			},
 			prevent: function(e) {
                 e.preventDefault();
 				e = this.getEventObject(e);
@@ -158,7 +139,6 @@ window.gAlp.Eventing = (function (eventing) {
                         bound = el ? _.bind(config.func, el) : config.func;
 						config.element.addEventListener(type, bound, false);
 						EventCache.add(this);
-                        this.el = config.element+'_'+EventCache.listEvents().length;
 						return this;
 					};
 					this.removeListener = function () {
@@ -168,7 +148,10 @@ window.gAlp.Eventing = (function (eventing) {
 					this.getElement = function(){
                         return config.element;
                     };
+
                     _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
+                                        this.el = config.element+'_'+window.gAlp.Eventing.listEvents().length+'_'+count++;
+
 					return _.extendOwn({}, this);
 				};
 			} else if (document.attachEvent) { // IE
@@ -181,7 +164,6 @@ window.gAlp.Eventing = (function (eventing) {
                         bound = el ? _.bind(config.func, el) : config.func;
                         EventCache.add(this);
 						config.element.attachEvent('on' + type, bound);
-						//config.element.attachEvent('on' + type, config.func);
 						return this;
 					};
 					this.removeListener = function () {
@@ -191,7 +173,7 @@ window.gAlp.Eventing = (function (eventing) {
                     this.getElement = function(){
                         return config.element;
                     };
-                    this.el = config.element+'_'+EventCache.listEvents().length;
+                    this.el = config.element+'_'+count++;
                     _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 					return _.extendOwn({}, this);
 				};
@@ -212,7 +194,7 @@ window.gAlp.Eventing = (function (eventing) {
                     this.getElement = function(){
                         return config.element;
                     };
-                    this.el = config.element+'_'+EventCache.listEvents().length;
+                    this.el = config.element+'_'+count++;
                     _.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 					return _.extendOwn({}, this);
 				};

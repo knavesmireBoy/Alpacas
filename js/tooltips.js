@@ -12,10 +12,11 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 	var $ = function(str) {
 			return document.getElementById(str);
 		},
-		setText = gAlp.Util.setText,
-		setAttrs = gAlp.Util.setAttrs,
-		createDiv = _.partial(gAlp.Util.getNewElement, 'div'),
-		doElement = _.partial(gAlp.Util.render, anchor, null, createDiv),
+        utils = gAlp.Util,
+		setText = utils.setText,
+		setAttrs = utils.setAttrs,
+		createDiv = _.partial(utils.getNewElement, 'div'),
+		doElement = _.partial(utils.render, anchor, null, createDiv),
 		doAttrs = _.partial(setAttrs, {
 			id: 'tooltip'
 		}),
@@ -24,18 +25,18 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 		},
 		prep = function() {
 			var gang = [],
-				add = gAlp.Util.addClass,
+				add = utils.addClass,
 				a = _.partial(add, ['tip']),
-				b = _.partial(gAlp.Util.removeClass, ['tip']),
+				b = _.partial(utils.removeClass, ['tip']),
 				c = _.partial(add, ['tb1']),
 				d = _.partial(add, ['tb2']),
 				git = function() {
                     if(instr[1]){
                         //$('tooltip') may not exist if cancel has been called
 					var parent = $('tooltip'),
-                        tgt = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('div'));
+                        tgt = utils.getDomChild(utils.getNodeByTag('div'));
                           if(parent){
-                              gAlp.Util.makeElement(setText(instr[1]), _.partial(_.identity, tgt(parent.firstChild))).add();
+                              utils.makeElement(setText(instr[1]), _.partial(_.identity, tgt(parent.firstChild))).add();
                           }
                     }
 				},
@@ -50,14 +51,16 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 			return gang;
 		},
         init = function(){
-            //this.cancel();
-            var tip = gAlp.Util.makeElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).add().get(),
-                doDiv = _.partial(gAlp.Util.render, tip, null, createDiv),
+           // console.log(count)
+            if(count--){
+            var tip = utils.makeElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).add().get(),
+                doDiv = _.partial(utils.render, tip, null, createDiv),
                 doAttr = _.partial(setAttrs, {
                     id: 'triangle'
                 });
-                gAlp.Util.makeElement(setText(instr[0]), doDiv).add();
-                gAlp.Util.makeElement(doAttr, doDiv).add();
+                utils.makeElement(setText(instr[0]), doDiv).add();
+                utils.makeElement(doAttr, doDiv).add();
+            }
             return this;
             },
         
@@ -81,11 +84,10 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 			cancel: function() {
 				_.each(this.ids, window.clearTimeout);
 				this.ids = [];
-				gAlp.Util.removeNodeOnComplete($('tooltip'));
+				utils.removeNodeOnComplete($('tooltip'));
 			}
 		};
-		//init.call(timer);
-	return count-- && Modernizr.cssanimations ? timer : dummytimer;
+        return Modernizr.cssanimations ? timer : dummytimer;
 };
 
 gAlp.highLighter = {
@@ -94,17 +96,18 @@ gAlp.highLighter = {
                 function simpleInvoke(o, m, arg) {
                     return o[m](arg);
                 }
-
-				if (!gAlp.Util.hasFeature('nthchild')) {
+				if (!gAlp.Util.hasFeature('nthchild')) {// utils.hasFeature('nthchild') || Modernizr.nthchild
 					this.perform = function() {
-						var getBody = gAlp.Util.curry3(simpleInvoke)('body')('getElementsByTagName'),
-							getLinks = gAlp.Util.curry3(simpleInvoke)('a')('getElementsByTagName'),
-							getTerm = _.compose(gAlp.Util.curry2(gAlp.Util.getter)('id'), _.partial(gAlp.Util.byIndex, 0), getBody),
-							links = _.compose(getLinks, gAlp.Util.curry3(simpleInvoke)('nav')('getElementById'))(document),
-							found = _.partial(_.filter, _.toArray(links), function(link) {
+						var utils = utils,
+                            ptL = _.partial,
+                            getBody = utils.curry3(simpleInvoke)('body')('getElementsByTagName'),
+							getLinks = utils.curry3(simpleInvoke)('a')('getElementsByTagName'),
+							getTerm = _.compose(utils.curry2(utils.getter)('id'), ptL(utils.byIndex, 0), getBody),
+							links = _.compose(getLinks, utils.curry3(simpleInvoke)('nav')('getElementById'))(document),
+							found = ptL(_.filter, _.toArray(links), function(link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});
-						_.compose(_.partial(gAlp.Util.addClass, 'current'), _.partial(gAlp.Util.byIndex, 0), found)();
+						_.compose(ptL(utils.addClass, 'current'), ptL(utils.byIndex, 0), found)();
 					};
 				} else {
 					this.perform = function() {};

@@ -1,3 +1,30 @@
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+    
+	.flexboxlegacy .extent {
+		padding: 3% 0% 0 1%;
+	}
+	.flexboxlegacy  figure {
+		display: block;
+		float: left;
+		margin: 0 0 4% 4%;
+		padding: 4% 4% 0;
+		width: 37%;
+	}
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+	.flexboxlegacy figure a {
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+	@supports (display: grid) {
+		ul#thumbnails.gallery li {
+			width: auto;
+			margin: 0px;
+		}
+	}
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {}
+
 @supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)) {
 	html.js body#alpacas_for_sale {
 	}
@@ -15,10 +42,8 @@
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
-		/*
 		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
-        */
 	}
 	#sell>* {
 		align-self: flex-start;
@@ -34,13 +59,12 @@
 		-webkit-box-flex: 1;
 		-ms-flex: 1 1 1%;
 		flex: 1 1 1%;
-		margin: 1%;
 	}
-	div#sell a {
+	div#sell > a {
 		/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
 		padding: .825em;
 	}
-	#sell.extent a {
+	#sell.extent > a {
 		/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
 		padding: 0em;
 	}
@@ -52,9 +76,16 @@
 	}
 	#sell.extent {
 		display: flex;
-		justify-content: space-between;
-		padding: 2% 1%;
+		justify-content: space-around;
+		padding: 3% 1.5%;
 	}
+    
+    .js #sell.extent figure {
+        width: auto;
+        flex: 1 1 25%;
+        margin: 1.5%;
+    }
+    
 	#controls {
 		display: -webkit-box;
 		display: -ms-flexbox;
@@ -75,31 +106,15 @@
 		}
 	}
 }
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
-	.flexboxlegacy #sell.extent {
-		padding: 3% 0% 0 1%;
-	}
-	.flexboxlegacy #sell.extent figure {
-		display: block;
-		float: left;
-		margin: 0 0 4% 4%;
-		padding: 4% 4% 0;
-		width: 37%;
-	}
+
+@media screen and (max-device-width: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 1.5){
+  
+    #alpacas_for_sale.sell ul#list.loop  {
+        font-size: .95em;
+    }
 }
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
-	.flexboxlegacy #sell.extent figure a {
-		-webkit-box-shadow: none;
-		box-shadow: none;
-	}
-	@supports (display: grid) {
-		ul#thumbnails.gallery li {
-			width: auto;
-			margin: 0px;
-		}
-	}
-}
-s @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {}
+
+
 @supports (display: grid) {
 	#main ul#thumbnails.gallery li {
 		margin: 0px;

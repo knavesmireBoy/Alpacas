@@ -60,8 +60,8 @@ gAlp.Util = (function() {
 	function noOp() {
 		return function() {};
 	}
-    
-    function isNumber(x) {
+
+	function isNumber(x) {
 		return (_.isNumber(x)) ? x : undefined;
 	}
 
@@ -106,7 +106,8 @@ gAlp.Util = (function() {
 	function subtract(x, y) {
 		return x - y;
 	}
-    function add(a, b) {
+
+	function add(a, b) {
 		return a + b;
 	}
 
@@ -147,12 +148,12 @@ gAlp.Util = (function() {
 	}
 
 	function setter(o, k, v) {
-        //console.log(arguments)
+    //console.log(arguments)
 		getResult(o)[k] = v;
 	}
-    
-    function simple_setter(o, k, v) {
-		o[k] = v;
+
+	function simple_setter(o, k, v) {
+        o[k] = v;
 	}
 
 	function getter(o, k) {
@@ -197,6 +198,7 @@ gAlp.Util = (function() {
 	}
 
 	function simpleInvoke(o, m, arg) {
+		//console.log(arguments)
 		return o[m](arg);
 	}
 
@@ -207,13 +209,38 @@ gAlp.Util = (function() {
 	function applyFunction(f, args) {
 		return f.apply(null, args);
 	}
-    
-    function thunk(f) {
+
+	function thunk(f) {
 		return f.apply(f, _.rest(arguments));
 	}
 
 	function prefix(p, str) {
 		return str.charAt(0) === p ? str : p + str;
+	}
+    
+    function doOnce() {
+		return function(i) {
+			return function() {
+				var res = i > 0;
+				i -= 1;
+				return res > 0;
+			};
+		};
+	}
+    
+    function doAlternate() {
+		function alternate(i, n) {
+			return function() {
+				i = (i += 1) % n;
+				return i;
+			};
+		}
+		return function(actions) {
+			var f = _.partial(thunk, alternate(0, 2));
+			return function() {
+				return gAlp.Util.getBest(f, actions)();
+			};
+		};
 	}
 
 	function getElement(arg) {
@@ -242,6 +269,7 @@ gAlp.Util = (function() {
 	}
 
 	function render(anc, refnode, el) {
+        //console.log(arguments)
 		return getResult(anc).insertBefore(getResult(el), getResult(refnode));
 	}
 	//get ye this. setAnchor effectively return strategy(getNewElement in reality), which expects one argument
@@ -288,6 +316,7 @@ gAlp.Util = (function() {
 		var a = arr && arr.slice && arr.slice();
 		if (a && a.length > 0) {
 			return function drill(o, i) {
+				// console.log(arr, o)
 				i = isNaN(i) ? 0 : i;
 				var prop = a[i];
 				if (prop && a[i += 1]) {
@@ -392,6 +421,20 @@ gAlp.Util = (function() {
 		};
 	}
 
+	function curry44(fun) {
+		return function(fourth) {
+			return function(third) {
+				return function(second) {
+					return function(first) {
+						return function() {
+							return fun(first, second, third, fourth);
+						};
+					};
+				};
+			};
+		};
+	}
+
 	function curry5(fun) {
 		return function(fifth) {
 			return function(fourth) {
@@ -418,6 +461,7 @@ gAlp.Util = (function() {
 		}
 		return function(validate, method, config, target) {
 			var unbound = function() {
+                    //console.log(validate, method, config, target)
 					target[method].apply(target, arguments);
 				},
 				bound;
@@ -454,8 +498,10 @@ gAlp.Util = (function() {
 	}
 
 	function setFromArray(validate, method, classArray, target) {
+        //console.log(arguments)
+		//target may be a function returning a target element
 		var fn,
-			tgt = getClassList(target),
+			tgt = getClassList(getResult(target)),
 			args = _.rest(arguments, 3);
 		validate = _.partial(applyFunction, validate, args);
 		if (!tgt) {
@@ -542,8 +588,10 @@ gAlp.Util = (function() {
 	}
 
 	function composer() {
+		//console.log(arguments)
 		var args = _.toArray(arguments),
 			//may just be creating/selecting an unadorned element
+			/* if more than on argument get the last argument, otherwise get then only argument*/
 			select = args[1] ? args.splice(-1, 1)[0] : args[0];
 		return _.compose.apply(null, args)(select());
 	}
@@ -609,13 +657,14 @@ gAlp.Util = (function() {
 	}
 
 	function addHandler(type, func, el) {
+        //console.log(arguments)
 		return gAlp.Eventing.init.call(gAlp.Eventing, type, func, el).addListener();
 	}
 
 	function invokeWhen(validate, action) {
 		var args = _.rest(arguments, 2),
 			res = validate.apply(this || null, args);
-		return !undef(res) && action.apply(this || null, args);
+		return res && action.apply(this || null, args);
 	}
 
 	function retWhen(pred, opt1, opt2) {
@@ -629,8 +678,8 @@ gAlp.Util = (function() {
 			return undefined;
 		}
 	}
-    
-    function invokeOn(validater, action) {
+
+	function invokeOn(validater, action) {
 		return validater() && action();
 	}
 
@@ -672,6 +721,7 @@ gAlp.Util = (function() {
 
 	function validator(message, fun) {
 		var f = function() {
+			//console.log(arguments)
 			return fun.apply(fun, arguments);
 		};
 		f.message = message;
@@ -713,62 +763,131 @@ gAlp.Util = (function() {
 			this[method] = function() {
 				return subject[method].apply(subject, arguments);
 			};
-		}
-		if (subject[method]) {
+		} else if (subject[method]) {
 			this[method] = subject[method];
 		}
 		return this;
 	}
+    
+    function mock(subject) {
+        
+		this.getSubject = function() {
+			return subject;
+		}
+		this.setSubject = function(subject) {
+			this.subject = subject;
+			return this;
+		}
+        this.setSubject(subject);
+        for(var p in subject){
+		if (subject[p] && subject.hasOwnProperty(p) && _.isFunction(subject[p])) {
+			this[p] = function() {
+				return this.subject[p].apply(this.subject, arguments);
+			};
+        }
+        }
+        return this;
+    }
 	//note a function that ignores any state of x or y will return the first element if true and last if false
 	function best(fun, coll) {
 		return _.reduce(_.toArray(coll), function(x, y) {
 			return fun(x, y) ? x : y
 		});
 	}
-    
-    function command() {
-			//method: (execute or undo)
-			function prepFactory(method) {
-				//command: init, toString, whatevers
-				return function(command) {
-					var that = this,
-						args = _.rest(arguments);
-					//rewrite execute/undo
-					this[method] = function() {
-						if (command && that.object && that.object[command]) {
-							var newargs = args.concat(_.toArray(arguments));
-							return that.object[command].apply(that.object, newargs);
-						}
-					}; //invoked method
-					return this;
-				}; //closure
-			} //factory
-			var ret = {
-				init: function(object) {
-					this.setObject(object);
-					/* prepFactory returns a function as the first version of execute or undo
-					This function expects at least a command as a STRING and returns the rewritten
-					execute/undo which calls the method of the supplied object to init IF the STRING is not empty 
-					*/
-					this.execute = prepFactory('execute');
-					this.undo = prepFactory('undo');
-					return this;
-				},
-				getObject: function() {
-					return this.object;
-				},
-				setObject: function(object) {
-					this.object = object;
-				},
-				toString: function() {
-					return 'A Command Object';
-				}
-			};
-			//clone??
-			return ret;
-			//return clone(ret);
+
+	function adapter(allmethods, proxy, subject) {
+        
+		function reducer(mapped) {
+			_.reduce(mapped, function(agg, neu) {
+				return undef(agg) ? neu : agg;
+			})
 		}
+
+		function adaptermap(k, v) {
+			proxy[k] = function() {
+				return _.bind(subject[v], subject);
+			};
+			return proxy;
+		}
+		var ret;
+		_.each(allmethods, function(methodpairs) {
+			var ptl;
+			ret = _.map(methodpairs, function(method, i) {
+				ptl = ptl ? ptl(method) : _.partial(adaptermap, method);
+				return !_.isFunction(ptl) ? ptl : undefined;
+			});
+		});
+		return _.filter(ret, function(item) {
+			return !undef(item);
+		})[0];
+	}
     
+    function simpleAdapter(allpairs, adapter, subject) {
+        /*expects eg: [['shout', 'cry'],['bark', 'whine']]
+        NOT [['shout', 'bark'],['cry', 'whine']]
+        ALSO no arguments are assumed. It is simple*/
+		var ptl,
+			prepPairs = function(allpairs) {
+				return _.zip(allpairs[0], allpairs[1]);
+			},
+			performer = function(that, subject, method) {
+				subject[method]();
+				return that;
+			};
+		_.each(prepPairs(allpairs), function(pairs) {
+			_.each(pairs, function(method, i) {
+				if (!i) {
+					ptl = method;
+				} else {
+					adapter[ptl] = _.partial(performer, adapter, subject, method);
+				}
+			});
+		});
+		return adapter;
+	}
+
+	function command() {
+		//method: (execute or undo)
+		function prepFactory(method) {
+			//command: init, toString, whatevers
+			return function(command) {
+				var that = this,
+					args = _.rest(arguments);
+				//rewrite execute/undo
+				this[method] = function() {
+					if (command && that.object && that.object[command]) {
+						var newargs = args.concat(_.toArray(arguments));
+						return that.object[command].apply(that.object, newargs);
+					}
+				}; //invoked method
+				return this;
+			}; //closure
+		} //factory
+		var ret = {
+			init: function(object) {
+				this.setObject(object);
+				/* prepFactory returns a function as the first version of execute or undo
+				This function expects at least a command as a STRING and returns the rewritten
+				execute/undo which calls the method of the supplied object to init IF the STRING is not empty 
+				*/
+				this.execute = prepFactory('execute');
+				this.undo = prepFactory('undo');
+				return this;
+			},
+			getObject: function() {
+				return this.object;
+			},
+			setObject: function(object) {
+				this.object = object;
+			},
+			toString: function() {
+				return 'A Command Object';
+			}
+		};
+		//clone??
+		return ret;
+		//return clone(ret);
+	}
 	var classInvokers = [invoker('querySelectorAll', document.querySelectorAll), invoker('getElementsByClassName', document.getElementsByClassName)],
 		getNewElement = dispatch(curry2(cloneNode)(true), _.bind(document.createElement, document), _.bind(document.createDocumentFragment, document)),
 		removeNodeOnComplete = _.wrap(removeElement, function(f, node) {
@@ -776,13 +895,18 @@ gAlp.Util = (function() {
 				return f(node);
 			}
 		}),
+		slice = Array.prototype.slice,
 		makeElement = function() {
 			var el,
-				args = arguments;
+				args = slice.call(arguments);
 			return {
 				init: function() {},
 				add: function() {
 					el = composer.apply(null, args);
+					return this;
+				},
+				add2: function(e) {
+					el = composer.apply(null, args.concat(always(e)));
 					return this;
 				},
 				remove: function() {
@@ -794,10 +918,34 @@ gAlp.Util = (function() {
 					return el;
 				}
 			};
+		},
+        machElement = function() {
+			var el,
+				args = slice.call(arguments);
+			return {
+				init: function() {},
+				render: function(e) {
+                    /*don't do this: args = args.concat(always(e))
+                    add 'select' argument on-the-fly (see composer)
+                    fresh argument to the persisted Element object */
+                    el = composer.apply(null, e ? args.concat(always(e)) : args);
+					return this;
+				},
+				unrender: function() {
+					var removed = removeNodeOnComplete(getResult(el));
+					el = null;
+					return removed;
+				},
+				get: function() {
+					return el;
+				}
+			};
 		};
 	return {
 		always: always,
-        curry2: curry2,
+		adapter: adapter,
+        simpleAdapter: simpleAdapter,
+		curry2: curry2,
 		curry3: curry3,
 		curry4: curry4,
 		curryTwice: function(flag) {
@@ -805,6 +953,9 @@ gAlp.Util = (function() {
 		},
 		curryThrice: function(flag) {
 			return flag ? curry33 : curry3;
+		},
+		curryFourFold: function(flag) {
+			return flag ? curry44 : curry4;
 		},
 		hasFeature: (function() {
 			var html = document.documentElement || document.getElementsByTagName('html')[0];
@@ -839,6 +990,14 @@ gAlp.Util = (function() {
 			};
 		},
 		insertAfter: insertAfter,
+		each: function(o, m, coll) {
+			o[m] = function() {
+				var args = arguments;
+				_.each(coll, function(member) {
+					return member[m].apply(member, args);
+				});
+			};
+		},
 		looper: looper,
 		/*handlers MAY need wrapping in a function that calls prevent default, stop propagation etc..
 		which needs to be cross browser see EventCache.prevent */
@@ -851,6 +1010,16 @@ gAlp.Util = (function() {
 		addEvent2: function(handler, func, el) {
 			var partial = el ? _.partial(handler, el) : _.partial(handler);
 			return prepareListener(partial, func, el);
+		},
+		addEventOnce: function($ev) {
+			//assumes receiving an eventer object NOT an element object
+			if ($ev && $ev.addListener) {
+				var el = $ev.getElement(),
+					$el = gAlp.Util.makeElement(always(el));
+				//create an element object in order to provide access to the remove method which encapsulates the remove action
+				$el.add();
+				gAlp.Util.addEvent(_.partial(gAlp.Util.addHandler, 'click'), $el.remove)(el);
+			}
 		},
 		clickHandler: _.partial(this.addHandler, 'click'),
 		getPredicate: function(cond, predicate) {
@@ -901,6 +1070,9 @@ gAlp.Util = (function() {
 			var m = !isNaN(i) ? 'findIndex' : 'find';
 			return this[m](collection, predicate || always(true));
 		},
+		findIndex: function(collection, predicate) {
+			return _.findIndex(collection, predicate || always(true));
+		},
 		getCollection: function(collection, predicate) {
 			return this.filter(collection, predicate || always(true));
 		},
@@ -910,9 +1082,10 @@ gAlp.Util = (function() {
 		},
 		nested: nested,
 		invoker: invoker,
-        invokeOn: invokeOn,
-        doNtimes: doNtimes,
-        thunk: thunk,
+		invokeOn: invokeOn,
+		doNtimes: doNtimes,
+		thunk: thunk,
+        doAlternate: doAlternate,
 		dispatch: dispatch,
 		render: render,
 		getNewElement: getNewElement,
@@ -1001,6 +1174,9 @@ gAlp.Util = (function() {
 				left: x
 			};
 		},
+        getBody: function(){
+            return document.body || document.getElementsByTagName('body')[0];
+        },
 		handleScroll: function(el, cb, klas) {
 			var threshold = cb(el);
 			if (gAlp.Util.getOffset() > threshold) {
@@ -1046,6 +1222,7 @@ gAlp.Util = (function() {
 			this.fns = [];
 		},
 		makeElement: makeElement,
+		machElement: machElement,
 		getElement: getElement,
 		withContext: deferred,
 		removeListener: function(handler) {
@@ -1066,7 +1243,6 @@ gAlp.Util = (function() {
 		},
 		retWhen: curry3(retWhen),
 		proxy: proxy,
-		
 		getCommand: function(o, exec, undo) {
 			var com = command().init(o);
 			com.execute(exec);
@@ -1104,7 +1280,7 @@ gAlp.Util = (function() {
 			}, _.zip(predicates, actions));
 			/*the function supplied to gAlp.Util.getDefaultAction returns undefined
 			this means that the last in a series of arguments will be returned
-			in this case of a so in this case ([predN, actioN]) actioN
+			so in this case ([predN, actioN]) actioN
 			*/
 			//best1 supplies a collection to gAlp.Util.getDefaultAction
 			_.compose(gAlp.Util.getDefaultAction, best1)()();
@@ -1165,22 +1341,36 @@ gAlp.Util = (function() {
 				return fun(arg);
 			};
 		},
-        silent_conditional: function( /* validators */ ) {
+		silent_conditional: function( /* validators */ ) {
 			var validators = _.toArray(arguments);
 			return function(fun, arg) {
 				var errors = mapcat(function(isValid) {
 					return isValid(arg) ? [] : [isValid.message];
 				}, validators);
 				if (!_.isEmpty(errors)) {
-                    return;
+					return;
 					//throw new Error(errors.join(", "));
 				}
 				return fun(arg);
 			};
-		}
+		},
+		shout: function(m, a, b) {
+			return _.bind(window[m], window, a, b);
+		},
+        
+        getDummyTarget: function(k, v){
+            var tgt = {};
+            tgt[k] = v;
+            return {target: tgt};
+        },
+        mockElement: function(s){
+            this.setSubject(s);
+        },
+        mock: mock
 	};
 }());
 gAlp.Util.Observer.prototype = {
+    constructor: gAlp.Util.Observer,
 	subscribe: function(fn) {
 		this.fns.push(fn);
 	},
@@ -1197,3 +1387,22 @@ gAlp.Util.Observer.prototype = {
 		});
 	}
 };
+
+gAlp.Util.mockElement.prototype = {
+    constructor: gAlp.Util.mockElement,
+    render: function(){
+        this.subject.render();
+    },
+     unrender: function(){
+        this.subject.unrender();
+    },
+    get: function(){
+        this.subject.get();
+    },
+    getSubject: function(){
+        return this.subject;
+    },
+    setSubject: function(s){
+        this.subject = s;
+    }
+}
