@@ -23,6 +23,9 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 		timeout = function(fn, delay, el) {
 			return window.setTimeout(_.bind(fn, null, el), delay);
 		},
+        isPos = function(i){
+            return i > 0;
+        },
 		prep = function() {
 			var gang = [],
 				add = utils.addClass,
@@ -51,8 +54,8 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 			return gang;
 		},
         init = function(){
-           // console.log(count)
-            if(count--){
+          //console.log('tool: '+count)
+            if(isPos(count--)){
             var tip = utils.makeElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).add().get(),
                 doDiv = _.partial(utils.render, tip, null, createDiv),
                 doAttr = _.partial(setAttrs, {

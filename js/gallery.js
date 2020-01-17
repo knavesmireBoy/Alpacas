@@ -123,7 +123,7 @@
 			return grabSource(li).match(grabSource(f()));
 		},
 		getNextAction = function (m) {
-			return _.compose(utils.show, utils[m], utils.getZero, ptL(_.filter, lis, ptL(findCurrent, ptL($, 'slide'))));
+			return _.compose(utils.show, utils[m], utils.getZero, ptL(_.filter, lis, ptL(findCurrent, ptL($, 'base'))));
 		},
 		isPortrait = ptL(function (el) {
 			return utils.getClassList(el).contains('portrait');
@@ -170,6 +170,9 @@
 				makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
 			});
 		},
+		makeLeaf = function (obj) {
+			return _.extend(gAlp.Composite(), obj);
+		},
 		//curry as subject arrives last and override MAY be optional
 		adaptHandlers = function (subject, adapter, allpairs, override) {
 			adapter = adapter || {};
@@ -187,6 +190,9 @@
 		presenter = (function (inc) {
 			return gAlp.Composite(inc);
 		}([])),
+		stage_one_rpt = (function (inc) {
+			return gAlp.Composite(inc);
+		}([])),
 		stage_one_comp = (function (inc) {
 			var comp = gAlp.Composite(inc),
 				//all arguments must be functions...hence always
@@ -200,7 +206,20 @@
 				controlsconf = {
 					id: 'controls'
 				},
-				$exit = makeElement(doTwice(utils.getter)('getElement'), ptL(clicker, ptL(invokemethod, presenter, null, 'unrender')), utils.setText('&#x2716'), ptL(setAttrs, exitconf), anCrIn(thumbs, $('main')), always('button')),
+				fixcache = function () {
+					stage_one_rpt.remove();
+					//remove exit listener from event_cache
+					var list = gAlp.Eventing.listEvents(),
+						res = _.findIndex(list, function (item) {
+							return item.el.match(/button/i);
+						});
+                    //is res always 1???
+					if (!failed(res)) {
+						gAlp.Eventing.remove(res, 1);
+					}
+				},
+				presenter_unrender = ptL(invokemethod, presenter, null, 'unrender'),
+				$exit = makeElement(doTwice(utils.getter)('getElement'), ptL(clicker, _.compose(fixcache, presenter_unrender)), utils.setText('&#x2716'), ptL(setAttrs, exitconf), anCrIn(thumbs, $('main')), always('button')),
 				$controls = makeElement(ptL(klasAdd, 'static'), ptL(setAttrs, controlsconf), anCr($('main')), always('div'));
 			comp.add(_.extend(gAlp.Composite(), $thumbs, {
 				unrender: ptL(klasAdd, 'gallery', thumbs)
@@ -222,9 +241,6 @@
 		var stage_two_comp = (function (inc) {
 				return gAlp.Composite(inc);
 			}([])),
-			stage_one_rpt = (function (inc) {
-				return gAlp.Composite(inc);
-			}([])),
 			stage_two_rpt = (function (inc) {
 				return gAlp.Composite(inc);
 			}([])),
@@ -242,19 +258,6 @@
 					return utils.getBest(f, actions)();
 				};
 			},
-			prepRoutes = function () {
-				var getId = drill(['target', 'id']),
-					passive = _.map([/^ba/i, /^For/i], function (reg) {
-						return _.compose(stringmatch(reg), getId);
-					}),
-					active = _.map([/^p\w+/i], function (reg) {
-						return _.compose(stringmatch(reg), getId);
-					}),
-					coll = [passive, active];
-				return function (arg) {
-					return arg ? coll.reverse()[0] : coll[0];
-				};
-			},
 			fadeNow = function (el, i) {
 				var currysetter = doThrice(setter)(i)(cssopacity);
 				_.compose(currysetter, drill(['style']))(el);
@@ -263,52 +266,56 @@
 			},
 			fade50 = doTwiceDefer(fadeNow)(gAlp.getOpacity(50).getValue()),
 			fade100 = doTwiceDefer(fadeNow)(gAlp.getOpacity(100).getValue()),
-			dofading = function (myopacity, pred, onDone, counter, i) {
-				var currysetter = doThrice(utils.setter)(myopacity.getValue(i))(cssopacity);
-				_.compose(currysetter, ptL(drill(['style']), getSlide()))();
-				utils.invokeWhen(ptL(pred, i), ptL(onDone, counter));
+			dofading = function (myopacity, pred, swapper, counter, i) {
+				var currysetter = doThrice(utils.setter)(myopacity.getValue(i))(cssopacity),
+					el = getSlide();
+				if (el) {
+					_.compose(currysetter, ptL(drill(['style']), el))();
+					utils.invokeWhen(ptL(pred, i), ptL(swapper.swap, counter), swapper);
+				}
 			},
 			swapImgCB = _.compose(_.isNumber, lessOrEqual(0)),
 			countdown = function countdown(cb, x) {
-				//cb === dofading
 				//restarting counter is delegated to an onDone function, passed as an argument here..
 				function counter() {
 					if (countdown.resume) {
 						countdown.resume = null;
 					}
 					if (countdown.progress === null) {
-                        window.cancelAnimationFrame(countdown.progress);
+						window.cancelAnimationFrame(countdown.progress);
 						countdown.resume = x;
 						return;
 					}
 					x -= 1;
-					//doFadeUntil...
-                    utils.invokeWhen(lessOrEqual(100), ptL(cb, counter), x);
+					utils.invokeWhen(lessOrEqual(100), ptL(cb, counter), x);
 					if (isPositive(x)) {
-                        countdown.progress = window.requestAnimationFrame(counter);
+						countdown.progress = window.requestAnimationFrame(counter);
 					} else {
-						x = 360;
+						x = 300;
 					}
 				}
 				return counter;
 			},
-			baserender = function ($el, it) {
-				var li = $el.get(),
-					link = getDomTargetLink(li),
-					img = getDomTargetImg(li),
-					mysrc = _.compose(ptL(setter, img, 'src'), getsrc, it.getNext),
-					myalt = _.compose(ptL(setter, img, 'alt'), getalt, it.getCurrent),
-					myhref = _.compose(ptL(setter, link, 'href'), gethref, it.getCurrent);
-				_.compose(myhref, myalt, mysrc)();
+			baserender = function (it) {
+				return function () {
+					var li = $('base'),
+						link = getDomTargetLink(li),
+						img = getDomTargetImg(li),
+						mysrc = _.compose(ptL(setter, img, 'src'), getsrc, it.getNext),
+						myalt = _.compose(ptL(setter, img, 'alt'), getalt, it.getCurrent),
+						myhref = _.compose(ptL(setter, link, 'href'), gethref, it.getCurrent);
+					_.compose(myhref, myalt, mysrc)();
+				};
 			},
-			sliderender = function ($el, base) {
-				var li = $el.get(),
+			sliderender = function () {
+				var li = $('slide'),
 					link = getDomTargetLink(li),
 					img = getDomTargetImg(li),
+					base = always(utils.getPrevious(li)),
 					mysrc1 = _.compose(ptL(setter, img, 'src'), always('')),
-					mysrc2 = _.compose(ptL(setter, img, 'src'), getsrc, base.get),
-					myalt = _.compose(ptL(setter, img, 'alt'), getalt, base.get),
-					myhref = _.compose(ptL(setter, link, 'href'), gethref, base.get);
+					mysrc2 = _.compose(ptL(setter, img, 'src'), getsrc, base),
+					myalt = _.compose(ptL(setter, img, 'alt'), getalt, base),
+					myhref = _.compose(ptL(setter, link, 'href'), gethref, base);
 				img.onload = fade100(li);
 				//slide img gets set to base img src.
 				//On first run these are the SAME. So first set src to empty string to trigger onload event
@@ -328,7 +335,7 @@
 						img.src = isPortrait(clone) ? '../assets/pauseLong.png' : '../assets/pause.png';
 						return pause;
 					},
-					//dummy pause
+					//dummy pause, gets rewitten after first run
 					pause = {
 						unrender: noOp
 					},
@@ -387,23 +394,50 @@
 					};
 				return _.extend(gAlp.Composite(), ret);
 			},
-			mediator = (function (coll) {
-				return {
-					add: function (i) {
-						coll[i] = [];
-						coll[i].push.apply(coll[i], _.rest(arguments));
-					},
-					execute: function (i, arg) {
-						if (arg) {
-							coll.reverse();
+			myrouter = function (index, reg_def, reg_alt, getVal) {
+				var passive = _.map(reg_def, function (reg) {
+						return _.compose(stringmatch(reg), getVal);
+					}),
+					active = _.map(reg_alt, function (reg) {
+						return _.compose(stringmatch(reg), getVal);
+					}),
+					coll = [passive, active],
+					ret = {
+						render: function (arg) {
+							index = arg ? Number(!index) : index;
+							return coll[index];
+						},
+						unrender: function () {
+							index = 0;
 						}
-						return coll[0][i];
-					}
-				};
+					};
+				return makeLeaf(ret);
+			},
+			mediator = (function (coll, index) {
+				var router = myrouter(0, [/^ba/i, /^For/i], [/^p\w+/i], drill(['target', 'id'])),
+					render = function (i, arg) {
+						index = arg ? Number(!index) : index;
+						return coll[index][i];
+					},
+					ret = {
+						validate: function (e, arg) {
+							return _.compose(ptL(_.findIndex, router.render(arg), doTwice(invoke)(e)))();
+						},
+						add: function (i) {
+							coll[i] = [];
+							coll[i].push.apply(coll[i], _.rest(arguments));
+						},
+						render: render,
+						unrender: function () {
+							index = 0;
+							router.unrender();
+						}
+					};
+				return makeLeaf(ret);
 			}([
 				[],
 				[]
-			])),
+			], 0)),
 			addLocator = function (cb) {
 				var adapter = adapterFactory();
 				_.compose(stage_one_rpt.add, adapter, utils.addEvent(clicker, cb))(thumbs);
@@ -414,7 +448,6 @@
 			},
 			play = noOp,
 			initplay = ptL(invokeWhen, once(1)),
-			getRoutes = prepRoutes(),
 			toggle_command = (function (o, klas, cb) {
 				var tog = _.compose(ptL(klasRem, klas), cb),
 					clear = function () {
@@ -428,17 +461,18 @@
 							window.setTimeout(clear, 3500);
 						},
 						unrender: function () {
-							_.compose(clear, untog);
+							_.compose(clear, untog)();
 						}
 					};
-				return _.extend(gAlp.Composite(), ret);
+				return makeLeaf(ret);
 			}({
 				timer: null
 			}, 'static', getControls)),
 			prepToggler = function (command) {
 				var func = ptL(klasAdd, 'static', getControls);
-				_.compose(stage_two_persist.add, adapterFactory(), utils.addEvent(enterHandler, func), getControls)();
-				stage_two_persist.add(command);
+				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, func), getControls)();
+				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, ptL(klasRem, 'static', getControls)))($('footer'));
+				stage_two_rpt.add(command);
 			},
 			makeToolTip = function () {
 				return gAlp.Tooltip($('thumbnails'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"], allow);
@@ -446,9 +480,10 @@
 			prepSlideElements = function () {
 				var comp = stage_one_rpt.get(false);
 				comp.unrender(); //remove location handler 
-				stage_one_rpt.remove(comp); //remove from composite
+				stage_one_rpt.remove(comp); //remove from composite, it will be added again later
+				prepToggler(toggle_command);
 				stage_two_comp.render();
-				//true gets passed to next function, critical: _.compose(function_awaiting_flag, always(true))
+				//true gets passed to next function, critical: _.compose(a_function_awaiting_flag, always(true))
 				return true;
 			},
 			prepareNavHandlers = function () {
@@ -465,80 +500,96 @@
 						if (!validate(e)) {
 							return;
 						}
-						var res = _.findIndex(getRoutes(), doTwice(invoke)(e));
+						var res = mediator.validate(e);
 						if (failed(res)) {
-							initplay(play); //move into stage three
-							res = _.findIndex(getRoutes(true), doTwice(invoke)(e));
-							//the default mediator.execute returns a callback function
-							//the wrapped version invokes the function in sequence with a pre/post function
-							//the true flag gets passed to the inital AND callback function
-							mediator.execute(res, true);
+							initplay(play); //move into stage three, happens once per page load
+							//render gets wrapped after initplay
+							res = mediator.validate(e, true);
+							mediator.render(res, true)();
 							return;
 						}
-						//BUT at this point mediator.execute is unwrapped unless play has ben initialised
-						//so the callback function is returned (in both wrapped and unwrapped cases) THEN invoked
-						mediator.execute(res)();
+						mediator.render(res)();
 					};
 				mediator.add(0, doPrevious, doNext);
 				addRouter(handler);
 				addLocator(callback);
+			},
+			tooltip_pairs = [
+				['render', 'unrender'],
+				['init', 'cancel']
+			],
+			tooltip_adapter = ptL(utils.simpleAdapter, tooltip_pairs, gAlp.Composite()),
+			stage_two_persister = _.compose(stage_two_persist.add, makeLeaf),
+			synchroniserFactory = function (enter, exiter) {
+				var doAlt = utils.doAlternate();
+				return {
+					enter: doAlt([enter, always(true)]),
+					exit: doAlt([noOp, exiter])
+				};
+			},
+			get_play_iterator = function () {
+				var predicate = utils.getPredicate(getCurrentSlide(), isPortrait);
+				return makeIterator(_.filter(lis, predicate))();
+			},
+			makeMyEl = function (myid) {
+				return makeElement(utils.hide, ptL(setAttrs, {
+					id: myid
+				}), anCr(thumbs), getCurrentSlide);
+			},
+			$current = {
+				render: hideCurrent,
+				unrender: noOp
+			},
+			makeSwapper = function () {
+				var ret = {
+					swap: function (counter) {
+						_.compose(ret.baserender, sliderender)();
+						getDomTargetImg($('base')).onload = counter;
+					},
+					render: function () {
+						//this.baserender = baserender(get_play_iterator()); doesn't work
+						ret.baserender = baserender(get_play_iterator());//for this relief much thanks
+					},
+					unrender: noOp
+				};
+				return ret;
 			};
 		play = function () {
-			var predicate = utils.getPredicate(getCurrentSlide(), isPortrait),
-				iterator = makeIterator(_.filter(lis, predicate))(),
-				$base = makeElement(ptL(klasRem, 'show'), ptL(setAttrs, {
-					id: 'base'
-				}), anCr(thumbs), getCurrentSlide),
-				$slide = makeElement(ptL(klasRem, 'show'), ptL(setAttrs, {
-					id: 'slide'
-				}), anCr(thumbs), getCurrentSlide),
-				$current = {
-					render: hideCurrent,
-					unrender: noOp
-				},
-				swap = function (counter) {
-					_.compose(ptL(baserender, $base, iterator), ptL(sliderender, $slide, $base))();
-					getDomTargetImg($base.get()).onload = counter;
-				},
-				fader = ptL(dofading, gAlp.getOpacity(), swapImgCB, swap),
+			var swapper = makeSwapper(),
+				$base = makeMyEl('base'),
+				$slide = makeMyEl('slide'),
+				fader = ptL(dofading, gAlp.getOpacity(), swapImgCB, swapper),
 				player = controller(countdown, fader, 101),
-				tooltip_pairs = [
-					['render', 'unrender'],
-					['init', 'cancel']
-				],
-				tooltip_adapter = ptL(utils.simpleAdapter, tooltip_pairs, gAlp.Composite()),
-				addEvent = utils.addEvent,
-				exit = function () {
-					stage_two_comp.unrender();
+				cleanup = function () {
 					player.unrender();
-					var comp = stage_one_rpt.get(false);
-					comp.unrender();
-					stage_one_rpt.remove(comp);
-					prepareNavHandlers();
+					stage_two_comp.unrender();
+					stage_one_rpt.remove(stage_one_rpt.get(false)).unrender();
+					stage_two_rpt.remove(); //unrendered on line one of function
 				},
-				prepStart = utils.doAlternate()([prepSlideElements, always(true)]),
-				prepEnd = utils.doAlternate()([noOp, exit]);
+				exit = _.compose(prepareNavHandlers, cleanup),
+				mysync = synchroniserFactory(prepSlideElements, exit),
+				syncho = makeLeaf({
+					unrender: function () {
+						cleanup();
+						mysync = synchroniserFactory(prepSlideElements, exit);
+					},
+					render: noOp
+				});
 			mediator.add(1, _.bind(player.render, player));
-			mediator.execute = _.wrap(mediator.execute, function (f, i, bool) {
-				return bool ? _.compose(prepEnd, f(i, bool), prepStart)() : f(i);
+			mediator.render = _.wrap(mediator.render, function (med_render, i, bool) {
+				return bool ? _.compose(mysync.exit, med_render(i, bool), mysync.enter) : med_render(i);
 			});
-			stage_two_rpt.add(_.extend(gAlp.Composite(), $base));
-			stage_two_rpt.add(_.extend(gAlp.Composite(), $slide));
-			prepToggler(toggle_command);
-			_.compose(stage_two_persist.add, adapterFactory(), addEvent(enterHandler, ptL(klasRem, 'static', getControls)))($('footer'));
-			_.compose(stage_two_persist.add, adapterFactory(), addEvent(clicker, _.bind(player.render, player)))(thumbs);
+			stage_two_persister(swapper);
+			stage_two_persister($base);
+			stage_two_persister($slide);
+			stage_two_persister($current);
+			_.compose(stage_two_persist.add, adapterFactory(), utils.addEvent(clicker, _.bind(player.render, player)))(thumbs);
 			_.compose(stage_two_persist.add, tooltip_adapter, makeToolTip)();
-			stage_two_persist.add(_.extend(gAlp.Composite(), $current));
-			presenter.add(stage_two_comp);
-			presenter.add(player);
+			presenter.addAll(player, mediator, syncho);
 		};
-		//init...
-		(function () {
-			presenter.add(stage_one_comp);
-			presenter.add(stage_one_rpt);
-			stage_two_comp.add(stage_two_rpt);
-			stage_two_comp.add(stage_two_persist);
-			//presenter->stage_one_comp stage_one_rpt stage_two_comp->stage_two_rpt stage_two_persist; ->player
+		(function () {//init..
+			presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
+			stage_two_comp.addAll(stage_two_rpt, stage_two_persist);
 			var func = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
 			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, func)))(thumbs);
 		}());

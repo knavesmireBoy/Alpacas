@@ -15,12 +15,9 @@ gAlp.Iterator = function(rev) {
 				return index;
 			},
 			switchDirection = function() {
-                //console.log('sw..')
-                //console.log(coll[0].firstChild.href)
 				coll = gAlp.Util.reverse(coll);
                 //coll.reverse();
 				index = coll.length - 1 - index;
-                //console.log(coll[0].firstChild.href)
 				rev = !rev;
 			},
 			isReversed = function() {
@@ -138,6 +135,9 @@ gAlp.Composite = (function() {
 		if (included && _.isArray(included)) {
 			composite = {
 				add: doAdd,
+				addAll: function(){
+                    _.each(_.toArray(arguments), doAdd);
+                },
 				remove: comp_remove,
 				get: comp_get,
 				find: comp_find,

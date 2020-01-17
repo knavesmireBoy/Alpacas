@@ -229,6 +229,7 @@ gAlp.Util = (function() {
 	}
     
     function doAlternate() {
+        
 		function alternate(i, n) {
 			return function() {
 				i = (i += 1) % n;
@@ -591,7 +592,7 @@ gAlp.Util = (function() {
 		//console.log(arguments)
 		var args = _.toArray(arguments),
 			//may just be creating/selecting an unadorned element
-			/* if more than on argument get the last argument, otherwise get then only argument*/
+			/* if more than one argument get the last argument, otherwise get then only argument*/
 			select = args[1] ? args.splice(-1, 1)[0] : args[0];
 		return _.compose.apply(null, args)(select());
 	}
@@ -661,10 +662,11 @@ gAlp.Util = (function() {
 		return gAlp.Eventing.init.call(gAlp.Eventing, type, func, el).addListener();
 	}
 
-	function invokeWhen(validate, action) {
+	function invokeWhen(validate, action, context) {
 		var args = _.rest(arguments, 2),
 			res = validate.apply(this || null, args);
-		return res && action.apply(this || null, args);
+        context = context || null;
+		return res && action.apply(context, args);
 	}
 
 	function retWhen(pred, opt1, opt2) {
@@ -925,6 +927,7 @@ gAlp.Util = (function() {
 			return {
 				init: function() {},
 				render: function(e) {
+                    //console.log(e && e.target && e.target.src)
                     /*don't do this: args = args.concat(always(e))
                     add 'select' argument on-the-fly (see composer)
                     fresh argument to the persisted Element object */
