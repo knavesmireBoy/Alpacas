@@ -124,18 +124,18 @@
 				doIterator = prepIterator(ptL(modulo, coll.length))(always(true))(coll);
 			return _.compose(doIterator, findIndex, doTwice(utils.isEqual), getCurrentSlide);
 		},
-        Element = gAlp.Intaface('Display', ['render', 'unrender']),
+		Element = gAlp.Intaface('Display', ['render', 'unrender']),
 		makeLeafComp = function (obj) {
 			return _.extend(gAlp.Composite(), obj);
 		},
-        adaptHandlers = function (subject, adapter, allpairs, override) {
-            adapter = adapter || {};
-            adapter = utils.simpleAdapter(allpairs, adapter, subject);
-            adapter[override] = function () {
-                subject.remove(subject);
-            };
-            return adapter;
-        },
+		adaptHandlers = function (subject, adapter, allpairs, override) {
+			adapter = adapter || {};
+			adapter = utils.simpleAdapter(allpairs, adapter, subject);
+			adapter[override] = function () {
+				subject.remove(subject);
+			};
+			return adapter;
+		},
 		handlerpair = ['addListener', 'remove'],
 		renderpair = ['render', 'unrender'],
 		adapterFactory = function () {
@@ -151,7 +151,7 @@
 		}([])),
 		stage_one_comp = (function (inc) {
 			var comp = gAlp.Composite(inc, Element),
-                anCrIn = utils.insert(),
+				anCrIn = utils.insert(),
 				getDomTargetList = utils.getDomParent(utils.getNodeByTag('li')),
 				//all arguments must be functions...hence always
 				$thumbs = makeElement(ptL(klasRem, 'gallery'), always(thumbs)),
@@ -258,10 +258,11 @@
 					var li = $('base'),
 						link = getDomTargetLink(li),
 						img = getDomTargetImg(li),
-						mysrc = _.compose(ptL(setter, img, 'src'), getsrc, it.getNext),
+						//mysrc1 = _.compose(ptL(setter, img, 'src'), always('')),
+						mysrc2 = _.compose(ptL(setter, img, 'src'), getsrc, it.getNext),
 						myalt = _.compose(ptL(setter, img, 'alt'), getalt, it.getCurrent),
 						myhref = _.compose(ptL(setter, link, 'href'), gethref, it.getCurrent);
-					_.compose(myhref, myalt, mysrc)();
+					return _.compose(mysrc2, myhref, myalt);
 				};
 			},
 			sliderender = function () {
@@ -273,13 +274,13 @@
 					mysrc2 = _.compose(ptL(setter, img, 'src'), getsrc, base),
 					myalt = _.compose(ptL(setter, img, 'alt'), getalt, base),
 					myhref = _.compose(ptL(setter, link, 'href'), gethref, base);
-				img.onload = fade100(li);
+				//img.onload = fade100(li);
 				//slide img gets set to base img src.
 				//On first run these are the SAME. So first set src to empty string to trigger onload event
 				_.compose(mysrc2, mysrc1, myhref, myalt)();
 			},
-            //attempted to simplify this using alternate functions, but it's a good example of the state pattern...
-            //https://robdodson.me/take-control-of-your-app-with-the-javascript-state-patten/
+			//attempted to simplify this using alternate functions, but it's a good example of the state pattern...
+			//https://robdodson.me/take-control-of-your-app-with-the-javascript-state-patten/
 			controller = function (mycountdown, cb, x) {
 				var counter = mycountdown(cb, x),
 					control = getControls(),
@@ -384,9 +385,9 @@
 							coll[i].push.apply(coll[i], _.rest(arguments));
 						},
 						render: function (i, arg) {
-                            index = arg ? Number(!index) : index;
-                            return coll[index][i];
-                        },
+							index = arg ? Number(!index) : index;
+							return coll[index][i];
+						},
 						unrender: function () {
 							index = 0;
 							router.unrender();
@@ -463,8 +464,8 @@
 					}, _.zip([getLoc, _.negate(getLoc)], [forward, back]));
 				};
 			},
-            initplay = ptL(invokeWhen, once(1)),
-            default_iterator = makeIterator(lis),
+			initplay = ptL(invokeWhen, once(1)),
+			default_iterator = makeIterator(lis),
 			prepareNavHandlers = function () {
 				var iterator = default_iterator(),
 					forward = doThriceDefer(invokemethod)('forward')(null)(iterator),
@@ -526,11 +527,20 @@
 			makeSwapper = function () {
 				var ret = {
 					swap: function (counter) {
-						_.compose(ret.baserender, sliderender)();
-						getDomTargetImg($('base')).onload = counter;
+						//swap image on slide while opacity is zero
+						sliderender();
+						var base_cb = ret.baserender(),
+							slide = getSlide();
+						//await load event on image
+						getDomTargetImg(slide).onload = function () {
+							//this sequence is critical, make slide opaque BEFORE setting NEXT image on base
+							fade100(slide)();
+							base_cb();
+							counter();
+						};
 					},
 					render: function () {
-                        //we need a fresh iterator every time we enter into slideshow, index set to clicked image
+						//we need a fresh iterator every time we enter into slideshow, index set to clicked image
 						//this.baserender = baserender(get_play_iterator()); doesn't work???
 						ret.baserender = baserender(get_play_iterator()); //for this relief much thanks
 					},
@@ -540,11 +550,11 @@
 			};
 		play = function () {
 			var swapper = makeSwapper(),
-                makeEl = function (myid) {
-                    return makeElement(utils.hide, ptL(setAttrs, {
-                        id: myid
-                    }), anCr(thumbs), getCurrentSlide);
-                },
+				makeEl = function (myid) {
+					return makeElement(utils.hide, ptL(setAttrs, {
+						id: myid
+					}), anCr(thumbs), getCurrentSlide);
+				},
 				$base = makeEl('base'),
 				$slide = makeEl('slide'),
 				fader = ptL(dofading, gAlp.getOpacity(), _.compose(_.isNumber, lessOrEqual(0)), swapper),
@@ -560,7 +570,7 @@
 				syncho = makeLeafComp({
 					unrender: function () {
 						cleanup();
-                        //fresh instance required if "forced exit" a result of clicking exit button whilst inplay
+						//fresh instance required if "forced exit" a result of clicking exit button whilst inplay
 						mysync = synchroniserFactory(enter_slideshow, exit);
 					},
 					render: noOp
@@ -578,15 +588,15 @@
 			presenter.addAll(player, mediator, syncho);
 		};
 		(function () { //init..
-            var makeButtons = function (tgt) {
-                _.each(['back', 'play', 'forward'], function (str) {
-                    var conf = {};
-                    conf.id = str + 'button';
-                    makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
-                });
-            },
-                handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
-            presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
+			var makeButtons = function (tgt) {
+					_.each(['back', 'play', 'forward'], function (str) {
+						var conf = {};
+						conf.id = str + 'button';
+						makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
+					});
+				},
+				handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
+			presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
 			stage_two_comp.addAll(stage_two_rpt, stage_two_persist);
 			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, handler)))(thumbs);
 		}());

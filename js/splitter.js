@@ -69,7 +69,7 @@ gAlp.Splitter = (function (gang) {
 			return 0;
 		},
 		hasIndex = function (i) {
-			return i && i !== -1;
+			return !isNaN(i) && i !== -1;
 		},
 		spaceOrStop = function (num, percent) {
 			var string = this.remaining_text.slice(0, num),

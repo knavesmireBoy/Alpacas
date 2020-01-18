@@ -46,10 +46,10 @@ if (!window.gAlp) {
 	function curryRight(fn) {
 		var args = _.rest(arguments);
 		if (args.length >= fn.length) {
-			return fn.apply(null, gAlp.Util.reverse(args));
+			return fn.apply(null, utils.reverse(args));
 		} else {
 			return function () {
-				return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
+				return curryRight.apply(null, [fn].concat(args, utils.reverse(arguments)));
 			};
 		}
 	}
@@ -75,8 +75,9 @@ if (!window.gAlp) {
 		return window.viewportSize.getWidth() > n;
 	}
     
-	var curry2 = gAlp.Util.curry2,
-		curry3 = gAlp.Util.curry3,
+	var utils = gAlp.Util,
+        curry2 = utils.curry2,
+		curry3 = utils.curry3,
 		$ = function (str) {
 			return document.getElementById(str);
 		},
@@ -113,12 +114,12 @@ if (!window.gAlp) {
 		prepSetStyles = function (config) {
 			//ie < 9 doesn't support setProperty just as they don't support media queries (mq)
 			var method = mq ? 'setProperty' : '';
-			return _.partial(doConstruct, gAlp.Util.drillDown(['style']), [method, config]);
+			return _.partial(doConstruct, utils.drillDown(['style']), [method, config]);
 		},
-		readmoretarget = gAlp.Util.getByClass('read-more-target')[0],
+		readmoretarget = utils.getByClass('read-more-target')[0],
 		constr,
 		player,
-		anCr = curryRight(gAlp.Util.setAnchor)(gAlp.Util.getNewElement)(null),
+		anCr = curryRight(utils.setAnchor)(utils.getNewElement)(null),
 		doSplitz = function (hyper, paras, target, copy) {
 			var store = function (match, attrs, content) {
 					content = content.replace(/&nbsp;/, ' ');
@@ -131,7 +132,7 @@ if (!window.gAlp) {
 				//doStrong
 				revert = function () {
 					target.parentNode.innerHTML = copy;
-					target = gAlp.Util.getNextElement($('article').firstChild);
+					target = utils.getNextElement($('article').firstChild);
 					paras = {};
 					hyper = {};
 				},
@@ -146,13 +147,13 @@ if (!window.gAlp) {
 				output = _.compose(setLinks, setStrong),
 				exec = function () {
 					if (Modernizr.mq(query)) {
-						gAlp.Util.invokeWhen(validate, revert);
+						utils.invokeWhen(validate, revert);
 						return;
 					}
-					var face = gAlp.Util.getComputedStyle(target, 'font-family').split(',')[0],
-						size = Math.round(parseFloat(gAlp.Util.getComputedStyle(target, 'font-size'))),
+					var face = utils.getComputedStyle(target, 'font-family').split(',')[0],
+						size = Math.round(parseFloat(utils.getComputedStyle(target, 'font-size'))),
 						splitter = window.gAlp.Splitter();
-					//gAlp.Util.invokeWhen(validate, revert);
+					//utils.invokeWhen(validate, revert);
 					//could be a simple boolean not a property of an object
 					paras.p = paras.p || target.innerHTML;
 					target.innerHTML = input(target.innerHTML);
@@ -174,8 +175,8 @@ if (!window.gAlp) {
 		splitHandler = function () {
 			try {
 				if (window.innerHeight && readmoretarget) {
-					gAlp.Util.setScrollHandlers(readmoretarget.getElementsByTagName('p'), curry2(gAlp.Util.getScrollThreshold)(0.2));
-					gAlp.Util.addClass('scroll', $('main'));
+					utils.setScrollHandlers(readmoretarget.getElementsByTagName('p'), curry2(utils.getScrollThreshold)(0.2));
+					utils.addClass('scroll', $('main'));
 				}
 				var orientation = orient(),
 					command = doSplitz.apply(null, arguments),
@@ -192,28 +193,28 @@ if (!window.gAlp) {
 				report.innerHTML = er;
 			}
 			handler();
-			return gAlp.Util.addHandler('resize', window, _.debounce(handler, 2000, true));
+			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
 		},
-		swapimg = gAlp.Util.getByClass("swap"),
+		swapimg = utils.getByClass("swap"),
 		getKid = function () {
-			return gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target.firstChild);
+			return utils.getDomChild(utils.getNodeByTag('img'))(mask_target.firstChild);
 		},
 		kid = getKid(),
 		//https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet
-		ie6 = gAlp.Util.getComputedStyle(kid, 'color') === 'red' ? true : false,
-		ie7 = gAlp.Util.getComputedStyle(kid, 'color') === 'blue' ? true : false,
+		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
+		ie7 = utils.getComputedStyle(kid, 'color') === 'blue' ? true : false,
 		highLighter = {
 			perform: function () {
-				if (!gAlp.Util.hasFeature('nthchild')) {
+				if (!utils.hasFeature('nthchild')) {
 					this.perform = function () {
 						var getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
 							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
-							getTerm = _.compose(curry2(gAlp.Util.getter)('id'), _.partial(gAlp.Util.byIndex, 0), getBody),
+							getTerm = _.compose(curry2(utils.getter)('id'), _.partial(utils.byIndex, 0), getBody),
 							links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
 							found = _.partial(_.filter, _.toArray(links), function (link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});
-						_.compose(_.partial(gAlp.Util.addClass, 'current'), _.partial(gAlp.Util.byIndex, 0), found)();
+						_.compose(_.partial(utils.addClass, 'current'), _.partial(utils.byIndex, 0), found)();
 					};
 				} else {
 					this.perform = function () {};
@@ -223,21 +224,21 @@ if (!window.gAlp) {
 		},
 		factory = function (cond) {
 			var activate = function () {
-					gAlp.Util.makeElement(prepSetStyles({
+					utils.makeElement(prepSetStyles({
 						display: "block"
 					}), always(mask_target)).add();
 				},
 				standard = function () {
-					var orig = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target),
+					var orig = utils.getDomChild(utils.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
 						config = {
 							alt: '',
-							src: gAlp.Util.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
+							src: utils.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
 						},
 						exec = function () {
-							var setAttrs = gAlp.Util.setAttrsFix(ie6 || ie7),
+							var setAttrs = utils.setAttrsFix(ie6 || ie7),
 								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
-							gAlp.Util.makeElement(prepSetStyles({
+							utils.makeElement(prepSetStyles({
 								"margin-right": margin
 							}), _.partial(setAttrs, always(true), 'setAttribute', config), anCr(mask_target), always(kid)).add();
 							setTimeout(activate, 500);
@@ -265,7 +266,7 @@ if (!window.gAlp) {
 							}
 						},
 						undo: function () {
-							mask_target.removeChild(gAlp.Util.getNextElement(orig.nextSibling));
+							mask_target.removeChild(utils.getNextElement(orig.nextSibling));
 						}
 					};
 				},
@@ -274,8 +275,8 @@ if (!window.gAlp) {
 							src: "../images/honcho.jpg",
 							alt: "Alpacas sitting on ground"
 						},
-						setAttrs = gAlp.Util.setAttrsFix(ie6 || ie7),
-						render = _.compose(_.partial(gAlp.Util.addClass, 'swap'), _.partial(setAttrs, always(true), 'setAttribute', config), anCr(mask_target)),
+						setAttrs = utils.setAttrsFix(ie6 || ie7),
+						render = _.compose(_.partial(utils.addClass, 'swap'), _.partial(setAttrs, always(true), 'setAttribute', config), anCr(mask_target)),
 						oldel;
 					return {
 						init: function (outcomes) {
@@ -286,17 +287,17 @@ if (!window.gAlp) {
 						},
 						execute: function () {
 							activate();
-							oldel = gAlp.Util.removeNodeOnComplete(getKid());
+							oldel = utils.removeNodeOnComplete(getKid());
 							render('img');
 							highLighter.perform();
 						},
 						undo: function () {
-							gAlp.Util.removeNodeOnComplete(getKid());
+							utils.removeNodeOnComplete(getKid());
 							anCr(mask_target)(oldel);
 						}
 					};
 				};
-			return gAlp.Util.getBest(cond, [swap, standard])();
+			return utils.getBest(cond, [swap, standard])();
 		};
 	if (!cssmask || swapimg[0]) {
 		constr = function () {
@@ -309,21 +310,21 @@ if (!window.gAlp) {
 						prepAction(outcomes, true)();
 					}
 				};
-			gAlp.Util.addHandler('resize', window, _.throttle(handler, 66));
+			utils.addHandler('resize', window, _.throttle(handler, 66));
 			command.init(outcomes)();
 		};
-		gAlp.Util.addHandler('load', window, _.partial(player, constr()));
+		utils.addHandler('load', window, _.partial(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && readmoretarget) {
 		var byIndex = _.partial(returnIndex, 0),
 			test = $('article').getElementsByTagName('p'),
 			para = test ? byIndex(always(test)) : null,
-			splithandler = function (para) {
+			split_handler = function (para) {
 				splitHandler({}, {}, para);
 			};
 		//report.innerHTML = para;
 		//invokes handler and adds resize event listener
-		_.each(test, splithandler);
+		_.each(test, split_handler);
 		//if (para) { splitHandler({}, {}, para, para.parentNode.innerHTML);}
 	}
 }(document, document.getElementById('aside'), document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));

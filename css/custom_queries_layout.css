@@ -281,10 +281,10 @@ and (max-device-width : 1024px) {
 		z-index: 2;
 	}
 	.inplay #controls {
-		top: 2.8em;
+		top: 2.2em;
 	}
-	#controls {
-		top: -4em;
+	#controls.static {
+		top: -3.5em;
 	}
 	#gallery.showtime #innerwrap {
 		padding-bottom: 4.5em;
