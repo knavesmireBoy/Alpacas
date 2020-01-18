@@ -413,14 +413,18 @@
 						window.clearTimeout(o.timer);
 						o.timer = null;
 					},
-					add = ptL(utils.doWhen, o.timer, _.compose(ptL(klasAdd, klas), cb)),
+					add = _.compose(ptL(klasAdd, klas), cb),
+					doAdd = ptL(utils.doWhen, o.timer, add),
+					//doTouchAdd = ptL(utils.doWhen, _.negate(always(o.timer)), add),
+					desktop = _.compose(clear, doAdd),
 					ret = {
 						render: function () {
 							o.timer = window.setTimeout(rem, 3000);
 							window.setTimeout(clear, 3500);
 						},
 						unrender: function () {
-							_.compose(clear, add)();
+							var cb = touchevents ? add : desktop;
+							cb();
 						}
 					};
 				return makeLeafComp(ret);
