@@ -15,8 +15,9 @@ gAlp.Iterator = function(rev) {
 				return index;
 			},
 			switchDirection = function() {
+				//console.log('sw..')
 				coll = gAlp.Util.reverse(coll);
-                //coll.reverse();
+				//coll.reverse();
 				index = coll.length - 1 - index;
 				rev = !rev;
 			},
@@ -24,7 +25,7 @@ gAlp.Iterator = function(rev) {
 				return (rev === true);
 			},
 			getnext = function(isRev, bool) {
-                //console.log('next..')
+				//console.log('next..', isRev())
 				gAlp.Util.doWhen(isRev(), switchDirection);
 				return coll[loop(bool)];
 			},
@@ -34,7 +35,7 @@ gAlp.Iterator = function(rev) {
 			forward = _.partial(getnext, isReversed),
 			back = _.partial(getnext, _.negate(isReversed)),
 			invoke = function(bool) {
-                //console.log('invoke..')
+				console.log('invoke..')
 				return gAlp.Util.getBest(isReversed, [_.bind(back, null, bool), _.bind(forward, null, bool)])();
 			},
 			ret = {
@@ -61,7 +62,6 @@ gAlp.Iterator = function(rev) {
 		return ret;
 	};
 };
-
 gAlp.Composite = (function() {
 	function noOp() {}
 	return function(included /*, intaface*/ ) {
@@ -75,40 +75,38 @@ gAlp.Composite = (function() {
 			},
 			composite,
 			tmp,
-            getOutcomes = function(key, i){
-                var outcomes =  {
-                   intg: included[i],
-                    pos: included[0],
-                    neg: included[included.length-1],
-                    all: included
-                };
-                return outcomes[key];
-            },
+			getOutcomes = function(key, i) {
+				var outcomes = {
+					intg: included[i],
+					pos: included[0],
+					neg: included[included.length - 1],
+					all: included
+				};
+				return outcomes[key];
+			},
 			comp_add = function(comp) {
 				intafaces.unshift(comp);
 				gAlp.Intaface.ensures.apply(gAlp.Intaface, intafaces);
 				included.push(intafaces.shift(comp));
-				//safeAdd(intafaces.shift(comp));
 				comp.parent = this;
 			},
 			comp_remove = function(comp) {
-                if(!comp){
-                    included = [];
-                }
-                else {
-				included = _.filter(included, function(n_comp) {
-					if (n_comp !== comp) {
-						return n_comp;
-					}
-				});
-                    return comp;
-			}
-            },            
+				if (!comp) {
+					included = [];
+				} else {
+					included = _.filter(included, function(n_comp) {
+						if (n_comp !== comp) {
+							return n_comp;
+						}
+					});
+					return comp;
+				}
+			},
 			comp_get = function(i) {
-                //DON'T FORGET isNaN will cast a boolean to a number ONLY supplying undefined will return a NaN
-                var str = i && _.isBoolean(i) ? 'pos' : !i && _.isBoolean(i) ? 'neg' : !isNaN(i) ? 'intg' : 'all',
-                    ret = getOutcomes(str, i);
-                return ret;
+				//DON'T FORGET isNaN will cast a boolean to a number ONLY supplying undefined will return a NaN
+				var str = i && _.isBoolean(i) ? 'pos' : !i && _.isBoolean(i) ? 'neg' : !isNaN(i) ? 'intg' : 'all',
+					ret = getOutcomes(str, i);
+				return ret;
 				//return !isNaN(i) ? included[i] : included;
 			},
 			comp_find = _.partial(gAlp.Util.find, included),
@@ -119,25 +117,25 @@ gAlp.Composite = (function() {
 					comp_add(_.extend(leaf, comp));
 				}
 			},
-            render = function(){
-               var args = arguments;
-			_.each(included, function(member) {
-				member.render && member.render.apply(member, args);
-			}); 
-            },
-            unrender = function(){
-               var args = arguments;
-			_.each(included, function(member) {
-				member.unrender && member.unrender.apply(member, args);
-			}); 
-            };
+			render = function() {
+				var args = arguments;
+				_.each(included, function(member) {
+					member.render && member.render.apply(member, args);
+				});
+			},
+			unrender = function() {
+				var args = arguments;
+				_.each(included, function(member) {
+					member.unrender && member.unrender.apply(member, args);
+				});
+			};
 		intafaces.unshift(comp_intaface);
 		if (included && _.isArray(included)) {
 			composite = {
 				add: doAdd,
-				addAll: function(){
-                    _.each(_.toArray(arguments), doAdd);
-                },
+				addAll: function() {
+					_.each(_.toArray(arguments), doAdd);
+				},
 				remove: comp_remove,
 				get: comp_get,
 				find: comp_find,

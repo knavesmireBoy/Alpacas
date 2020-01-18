@@ -939,7 +939,7 @@ gAlp.Util = (function() {
 					el = null;
 					return removed;
 				},
-				get: function() {
+				getEl: function() {
 					return el;
 				}
 			};

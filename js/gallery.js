@@ -50,7 +50,7 @@
 	}
 
 	function invokemethod(o, arg, m) {
-		//con(arguments)
+		//con(arguments);
 		return o[m](arg);
 	}
 
@@ -96,35 +96,20 @@
 		doThriceDefer = utils.curryThrice(true),
 		drill = utils.drillDown,
 		invokeWhen = utils.invokeWhen,
-		renderpair = ['render', 'unrender'],
-		handlerpair = ['addListener', 'remove'],
 		setAttrs = utils.setAttributes,
 		cssopacity = gAlp.getOpacity().getKey(),
-		anCrIn = utils.insert(),
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
 		clicker = touchevents ? ptL(utils.addHandler, 'touchend') : ptL(utils.addHandler, 'click'),
-		enterHandler = ptL(utils.addHandler, 'mouseenter'),
 		makeElement = utils.machElement,
-		getDomTargetList = utils.getDomParent(utils.getNodeByTag('li')),
 		getDomTargetLink = utils.getDomChild(utils.getNodeByTag('a')),
 		getDomTargetImg = utils.getDomChild(utils.getNodeByTag('img')),
 		getControls = ptL($, 'controls'),
 		getSlide = ptL($, 'slide'),
-		playbuttons = ['back', 'play', 'forward'],
 		thumbs = $('thumbnails'),
-		livelist = thumbs.getElementsByTagName('li'),
-		lis = _.toArray(livelist),
-		prepIterator = doQuart(gAlp.Iterator(false)),
+		lis = _.toArray(thumbs.getElementsByTagName('li')),
 		getCurrentSlide = _.compose(utils.getZero, ptL(utils.getByClass, 'show', thumbs, 'li')),
-		grabSource = _.compose(drill(['src']), getDomTargetImg),
-		findCurrent = function (f, li) {
-			return grabSource(li).match(grabSource(f()));
-		},
-		getNextAction = function (m) {
-			return _.compose(utils.show, utils[m], utils.getZero, ptL(_.filter, lis, ptL(findCurrent, ptL($, 'base'))));
-		},
 		isPortrait = ptL(function (el) {
 			return utils.getClassList(el).contains('portrait');
 		}),
@@ -133,55 +118,26 @@
 			hideCurrent();
 			utils.show(next);
 		},
-		stringmatch = doThrice(invokemethod)('match'),
-		buttonmatch = doThrice(invokemethod)('match')(/button/i),
-		validate = _.compose(buttonmatch, utils.drillDown(['target', 'nodeName'])),
-		getAction = doThrice(invokemethod)(1)(null),
-		prepForward = doThriceDefer(invokemethod)('forward')(null),
-		prepBack = doThriceDefer(invokemethod)('back')(null),
 		makeIterator = function (coll) {
 			var findIndex = ptL(utils.findIndex, coll),
+				prepIterator = doQuart(gAlp.Iterator(false)),
 				doIterator = prepIterator(ptL(modulo, coll.length))(always(true))(coll);
 			return _.compose(doIterator, findIndex, doTwice(utils.isEqual), getCurrentSlide);
 		},
-		default_iterator = makeIterator(lis),
-		locator = function (iterator, forward, back) {
-			var getLoc = (function (div, subtract, isGreaterEq) {
-				var getThreshold = _.compose(div, subtract);
-				return function (e) {
-					try {
-						var box = e.target.getBoundingClientRect();
-						return isGreaterEq(ptL(subtract, e.clientX, box.left), ptL(getThreshold, box.right, box.left));
-					} catch (er) {
-						return true;
-					}
-				};
-			}(divideBy(2), subtract, greaterOrEqual));
-			return function (e) {
-				return utils.getBest(function (agg) {
-					return agg[0](e);
-				}, _.zip([getLoc, _.negate(getLoc)], [forward, back]));
-			};
-		},
-		makeButtons = function (tgt) {
-			_.each(playbuttons, function (str) {
-				var conf = {};
-				conf.id = str + 'button';
-				makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
-			});
-		},
-		makeLeaf = function (obj) {
+        Element = gAlp.Intaface('Display', ['render', 'unrender']),
+		makeLeafComp = function (obj) {
 			return _.extend(gAlp.Composite(), obj);
 		},
-		//curry as subject arrives last and override MAY be optional
-		adaptHandlers = function (subject, adapter, allpairs, override) {
-			adapter = adapter || {};
-			adapter = utils.simpleAdapter(allpairs, adapter, subject);
-			adapter[override] = function () {
-				subject.remove(subject);
-			};
-			return adapter;
-		},
+        adaptHandlers = function (subject, adapter, allpairs, override) {
+            adapter = adapter || {};
+            adapter = utils.simpleAdapter(allpairs, adapter, subject);
+            adapter[override] = function () {
+                subject.remove(subject);
+            };
+            return adapter;
+        },
+		handlerpair = ['addListener', 'remove'],
+		renderpair = ['render', 'unrender'],
 		adapterFactory = function () {
 			//fresh instance of curried function per adapter
 			return doQuart(adaptHandlers)('unrender')([renderpair, handlerpair.slice(0)])(gAlp.Composite());
@@ -194,7 +150,9 @@
 			return gAlp.Composite(inc);
 		}([])),
 		stage_one_comp = (function (inc) {
-			var comp = gAlp.Composite(inc),
+			var comp = gAlp.Composite(inc, Element),
+                anCrIn = utils.insert(),
+				getDomTargetList = utils.getDomParent(utils.getNodeByTag('li')),
 				//all arguments must be functions...hence always
 				$thumbs = makeElement(ptL(klasRem, 'gallery'), always(thumbs)),
 				$body = makeElement(ptL(klasAdd, 'showtime'), always(utils.getBody)),
@@ -213,7 +171,7 @@
 						res = _.findIndex(list, function (item) {
 							return item.el.match(/button/i);
 						});
-                    //is res always 1???
+					//is res always 1???
 					if (!failed(res)) {
 						gAlp.Eventing.remove(res, 1);
 					}
@@ -274,7 +232,6 @@
 					utils.invokeWhen(ptL(pred, i), ptL(swapper.swap, counter), swapper);
 				}
 			},
-			swapImgCB = _.compose(_.isNumber, lessOrEqual(0)),
 			countdown = function countdown(cb, x) {
 				//restarting counter is delegated to an onDone function, passed as an argument here..
 				function counter() {
@@ -321,6 +278,8 @@
 				//On first run these are the SAME. So first set src to empty string to trigger onload event
 				_.compose(mysrc2, mysrc1, myhref, myalt)();
 			},
+            //attempted to simplify this using alternate functions, but it's a good example of the state pattern...
+            //https://robdodson.me/take-control-of-your-app-with-the-javascript-state-patten/
 			controller = function (mycountdown, cb, x) {
 				var counter = mycountdown(cb, x),
 					control = getControls(),
@@ -330,8 +289,8 @@
 							pause = makeElement(ptL(setAttrs, {
 								id: 'paused'
 							}), anCr(thumbs), always(clone)).render(),
-							img = getDomTargetImg(pause.get());
-						img.onload = fade50(pause.get());
+							img = getDomTargetImg(pause.getElement());
+						img.onload = fade50(pause.getElement());
 						img.src = isPortrait(clone) ? '../assets/pauseLong.png' : '../assets/pause.png';
 						return pause;
 					},
@@ -395,7 +354,8 @@
 				return _.extend(gAlp.Composite(), ret);
 			},
 			myrouter = function (index, reg_def, reg_alt, getVal) {
-				var passive = _.map(reg_def, function (reg) {
+				var stringmatch = doThrice(invokemethod)('match'),
+					passive = _.map(reg_def, function (reg) {
 						return _.compose(stringmatch(reg), getVal);
 					}),
 					active = _.map(reg_alt, function (reg) {
@@ -411,14 +371,10 @@
 							index = 0;
 						}
 					};
-				return makeLeaf(ret);
+				return makeLeafComp(ret);
 			},
 			mediator = (function (coll, index) {
 				var router = myrouter(0, [/^ba/i, /^For/i], [/^p\w+/i], drill(['target', 'id'])),
-					render = function (i, arg) {
-						index = arg ? Number(!index) : index;
-						return coll[index][i];
-					},
 					ret = {
 						validate: function (e, arg) {
 							return _.compose(ptL(_.findIndex, router.render(arg), doTwice(invoke)(e)))();
@@ -427,13 +383,16 @@
 							coll[i] = [];
 							coll[i].push.apply(coll[i], _.rest(arguments));
 						},
-						render: render,
+						render: function (i, arg) {
+                            index = arg ? Number(!index) : index;
+                            return coll[index][i];
+                        },
 						unrender: function () {
 							index = 0;
 							router.unrender();
 						}
 					};
-				return makeLeaf(ret);
+				return makeLeafComp(ret);
 			}([
 				[],
 				[]
@@ -447,37 +406,37 @@
 				_.compose(stage_one_rpt.add, adapter, utils.addEvent(clicker, cb))($('controls'));
 			},
 			play = noOp,
-			initplay = ptL(invokeWhen, once(1)),
 			toggle_command = (function (o, klas, cb) {
-				var tog = _.compose(ptL(klasRem, klas), cb),
+				var rem = _.compose(ptL(klasRem, klas), cb),
 					clear = function () {
 						window.clearTimeout(o.timer);
 						o.timer = null;
 					},
-					untog = ptL(utils.doWhen, o.timer, _.compose(ptL(klasAdd, klas), cb)),
+					add = ptL(utils.doWhen, o.timer, _.compose(ptL(klasAdd, klas), cb)),
 					ret = {
 						render: function () {
-							o.timer = window.setTimeout(tog, 3000);
+							o.timer = window.setTimeout(rem, 3000);
 							window.setTimeout(clear, 3500);
 						},
 						unrender: function () {
-							_.compose(clear, untog)();
+							_.compose(clear, add)();
 						}
 					};
-				return makeLeaf(ret);
+				return makeLeafComp(ret);
 			}({
 				timer: null
 			}, 'static', getControls)),
 			prepToggler = function (command) {
-				var func = ptL(klasAdd, 'static', getControls);
-				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, func), getControls)();
+				var enterHandler = ptL(utils.addHandler, 'mouseenter'),
+					handler = ptL(klasAdd, 'static', getControls);
+				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, handler), getControls)();
 				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, ptL(klasRem, 'static', getControls)))($('footer'));
 				stage_two_rpt.add(command);
 			},
 			makeToolTip = function () {
 				return gAlp.Tooltip($('thumbnails'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"], allow);
 			},
-			prepSlideElements = function () {
+			enter_slideshow = function () {
 				var comp = stage_one_rpt.get(false);
 				comp.unrender(); //remove location handler 
 				stage_one_rpt.remove(comp); //remove from composite, it will be added again later
@@ -486,18 +445,47 @@
 				//true gets passed to next function, critical: _.compose(a_function_awaiting_flag, always(true))
 				return true;
 			},
+			locator = function (iterator, forward, back) {
+				var getLoc = (function (div, subtract, isGreaterEq) {
+					var getThreshold = _.compose(div, subtract);
+					return function (e) {
+						try {
+							var box = e.target.getBoundingClientRect();
+							return isGreaterEq(ptL(subtract, e.clientX, box.left), ptL(getThreshold, box.right, box.left));
+						} catch (er) {
+							return true;
+						}
+					};
+				}(divideBy(2), subtract, greaterOrEqual));
+				return function (e) {
+					return utils.getBest(function (agg) {
+						return agg[0](e);
+					}, _.zip([getLoc, _.negate(getLoc)], [forward, back]));
+				};
+			},
+            initplay = ptL(invokeWhen, once(1)),
+            default_iterator = makeIterator(lis),
 			prepareNavHandlers = function () {
 				var iterator = default_iterator(),
-					forward = prepForward(iterator),
-					back = prepBack(iterator),
+					forward = doThriceDefer(invokemethod)('forward')(null)(iterator),
+					back = doThriceDefer(invokemethod)('back')(null)(iterator),
 					getDirection = locator(iterator, forward, back),
+					getNextAction = function (m) {
+						var get_src = _.compose(drill(['src']), getDomTargetImg),
+							findCurrent = function (f, li) {
+								return get_src(li).match(get_src(f()));
+							};
+						return _.compose(utils.show, utils[m], utils.getZero, ptL(_.filter, lis, ptL(findCurrent, ptL($, 'base'))));
+					},
 					getPrevEl = getNextAction('getPreviousElement'),
 					getNextEl = getNextAction('getNextElement'),
-					callback = _.compose(doShow, getAction, getDirection),
+					getAction = doThrice(invokemethod)(1)(null),
 					doPrevious = exitShow([getPrevEl, _.compose(doShow, back)]),
 					doNext = exitShow([getNextEl, _.compose(doShow, forward)]),
+					buttonmatch = doThrice(invokemethod)('match')(/button/i),
+					isButton = _.compose(buttonmatch, drill(['target', 'nodeName'])),
 					handler = function (e) {
-						if (!validate(e)) {
+						if (!isButton(e)) {
 							return;
 						}
 						var res = mediator.validate(e);
@@ -512,14 +500,14 @@
 					};
 				mediator.add(0, doPrevious, doNext);
 				addRouter(handler);
-				addLocator(callback);
+				addLocator(_.compose(doShow, getAction, getDirection));
 			},
 			tooltip_pairs = [
 				['render', 'unrender'],
 				['init', 'cancel']
 			],
 			tooltip_adapter = ptL(utils.simpleAdapter, tooltip_pairs, gAlp.Composite()),
-			stage_two_persister = _.compose(stage_two_persist.add, makeLeaf),
+			stage_two_persister = _.compose(stage_two_persist.add, makeLeafComp),
 			synchroniserFactory = function (enter, exiter) {
 				var doAlt = utils.doAlternate();
 				return {
@@ -530,11 +518,6 @@
 			get_play_iterator = function () {
 				var predicate = utils.getPredicate(getCurrentSlide(), isPortrait);
 				return makeIterator(_.filter(lis, predicate))();
-			},
-			makeMyEl = function (myid) {
-				return makeElement(utils.hide, ptL(setAttrs, {
-					id: myid
-				}), anCr(thumbs), getCurrentSlide);
 			},
 			$current = {
 				render: hideCurrent,
@@ -547,8 +530,9 @@
 						getDomTargetImg($('base')).onload = counter;
 					},
 					render: function () {
-						//this.baserender = baserender(get_play_iterator()); doesn't work
-						ret.baserender = baserender(get_play_iterator());//for this relief much thanks
+                        //we need a fresh iterator every time we enter into slideshow, index set to clicked image
+						//this.baserender = baserender(get_play_iterator()); doesn't work???
+						ret.baserender = baserender(get_play_iterator()); //for this relief much thanks
 					},
 					unrender: noOp
 				};
@@ -556,9 +540,14 @@
 			};
 		play = function () {
 			var swapper = makeSwapper(),
-				$base = makeMyEl('base'),
-				$slide = makeMyEl('slide'),
-				fader = ptL(dofading, gAlp.getOpacity(), swapImgCB, swapper),
+                makeEl = function (myid) {
+                    return makeElement(utils.hide, ptL(setAttrs, {
+                        id: myid
+                    }), anCr(thumbs), getCurrentSlide);
+                },
+				$base = makeEl('base'),
+				$slide = makeEl('slide'),
+				fader = ptL(dofading, gAlp.getOpacity(), _.compose(_.isNumber, lessOrEqual(0)), swapper),
 				player = controller(countdown, fader, 101),
 				cleanup = function () {
 					player.unrender();
@@ -567,11 +556,12 @@
 					stage_two_rpt.remove(); //unrendered on line one of function
 				},
 				exit = _.compose(prepareNavHandlers, cleanup),
-				mysync = synchroniserFactory(prepSlideElements, exit),
-				syncho = makeLeaf({
+				mysync = synchroniserFactory(enter_slideshow, exit),
+				syncho = makeLeafComp({
 					unrender: function () {
 						cleanup();
-						mysync = synchroniserFactory(prepSlideElements, exit);
+                        //fresh instance required if "forced exit" a result of clicking exit button whilst inplay
+						mysync = synchroniserFactory(enter_slideshow, exit);
 					},
 					render: noOp
 				});
@@ -587,11 +577,18 @@
 			_.compose(stage_two_persist.add, tooltip_adapter, makeToolTip)();
 			presenter.addAll(player, mediator, syncho);
 		};
-		(function () {//init..
-			presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
+		(function () { //init..
+            var makeButtons = function (tgt) {
+                _.each(['back', 'play', 'forward'], function (str) {
+                    var conf = {};
+                    conf.id = str + 'button';
+                    makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
+                });
+            },
+                handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
+            presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
 			stage_two_comp.addAll(stage_two_rpt, stage_two_persist);
-			var func = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
-			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, func)))(thumbs);
+			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, handler)))(thumbs);
 		}());
 	}());
 }(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents));

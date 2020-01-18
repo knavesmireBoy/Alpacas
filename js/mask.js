@@ -9,7 +9,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function(doc, mask_target, swapper, states, mq, query, cssmask, cssanimations, touchevents, report) {
+(function (doc, mask_target, swapper, states, mq, query, cssmask, cssanimations, touchevents, report) {
 	"use strict";
 
 	function returnIndex(i, func) {
@@ -17,7 +17,7 @@ if (!window.gAlp) {
 	}
 
 	function always(VALUE) {
-		return function() {
+		return function () {
 			return VALUE;
 		};
 	}
@@ -27,18 +27,18 @@ if (!window.gAlp) {
 	}
 
 	function toCamelCase(variable) {
-		return variable.replace(/-([a-z])/g, function(str, letter) {
+		return variable.replace(/-([a-z])/g, function (str, letter) {
 			return letter.toUpperCase();
 		});
 	}
 
 	function setter(o, k, v) {
-        o[k] = v;
-    }
+		o[k] = v;
+	}
 
 	function awaitingTarget(m) {
 		var args = _.rest(arguments);
-		return function(o) {
+		return function (o) {
 			return o[m].apply(o, args);
 		};
 	}
@@ -48,7 +48,7 @@ if (!window.gAlp) {
 		if (args.length >= fn.length) {
 			return fn.apply(null, gAlp.Util.reverse(args));
 		} else {
-			return function() {
+			return function () {
 				return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
 			};
 		}
@@ -60,7 +60,7 @@ if (!window.gAlp) {
 		}
 		if (!m) {
 			setter(ctxt, toCamelCase(k), v);
-            //setter(ctxt, k.toCamelCase('-'), v);
+			//setter(ctxt, k.toCamelCase('-'), v);
 		} else {
 			ctxt[m].call(ctxt, k, v);
 		}
@@ -74,67 +74,67 @@ if (!window.gAlp) {
 	function isBig(n) {
 		return window.viewportSize.getWidth() > n;
 	}
+    
 	var curry2 = gAlp.Util.curry2,
 		curry3 = gAlp.Util.curry3,
-		$ = function(str) {
+		$ = function (str) {
 			return document.getElementById(str);
 		},
 		threshold = Number(query.match(/[^\d]+(\d+)[^\d]+/)[1]),
-		getIndex = (function() {
+		getIndex = (function () {
 			if (mq) {
-				return function() {
+				return function () {
 					return Number(Modernizr.mq(query));
 				};
 			}
-			return function() {
+			return function () {
 				return isBig(threshold) ? 1 : 0;
 			};
 		}()),
-		getPredicate = (function() {
+		getPredicate = (function () {
 			if (mq) {
 				return _.partial(Modernizr.mq, query);
 			} else {
 				return _.partial(isBig, threshold);
 			}
 		}()),
-		switchAction = function(collection, bool) {
+		switchAction = function (collection, bool) {
 			var i = bool ? Number(!getIndex()) : getIndex();
 			return collection[i];
 		},
-		prepAction = function() {
+		prepAction = function () {
 			getPredicate = _.negate(getPredicate);
 			return switchAction.apply(null, arguments);
 		},
-		doConstruct = _.wrap(construct, function(wrapped, drill, args, o) {
+		doConstruct = _.wrap(construct, function (wrapped, drill, args, o) {
 			wrapped(drill, args, o);
 			return o;
 		}),
-		prepSetStyles = function(config) {
+		prepSetStyles = function (config) {
 			//ie < 9 doesn't support setProperty just as they don't support media queries (mq)
 			var method = mq ? 'setProperty' : '';
 			return _.partial(doConstruct, gAlp.Util.drillDown(['style']), [method, config]);
 		},
-        readmoretarget = gAlp.Util.getByClass('read-more-target')[0],
+		readmoretarget = gAlp.Util.getByClass('read-more-target')[0],
 		constr,
 		player,
 		anCr = curryRight(gAlp.Util.setAnchor)(gAlp.Util.getNewElement)(null),
-		doSplitz = function(hyper, paras, target, copy) {
-			var store = function(match, attrs, content) {
+		doSplitz = function (hyper, paras, target, copy) {
+			var store = function (match, attrs, content) {
 					content = content.replace(/&nbsp;/, ' ');
 					hyper[content] = attrs;
 					return '[' + content + ']';
 				},
-				retrieve = function(match, content) {
+				retrieve = function (match, content) {
 					return '<a' + hyper[content] + '>' + content + '</a>';
 				},
 				//doStrong
-				revert = function() {
+				revert = function () {
 					target.parentNode.innerHTML = copy;
 					target = gAlp.Util.getNextElement($('article').firstChild);
 					paras = {};
 					hyper = {};
 				},
-                
 				validate = _.partial(_.negate(_.isEmpty), paras),
 				//pipe is used to surround text that will be emphasised so <strong>Sampson</strong> becomes |Strong|
 				getStrong = awaitingTarget('replace', /<\/?[^a>]+>/g, '|'),
@@ -144,7 +144,7 @@ if (!window.gAlp) {
 				setLinks = awaitingTarget('replace', /\[(.+?)\]/g, retrieve),
 				input = _.compose(getLinks, getStrong),
 				output = _.compose(setLinks, setStrong),
-				exec = function() {
+				exec = function () {
 					if (Modernizr.mq(query)) {
 						gAlp.Util.invokeWhen(validate, revert);
 						return;
@@ -164,40 +164,38 @@ if (!window.gAlp) {
 			};
 		}, //split
 		count = 1,
-        orient = function(){
-            var width = viewportSize.getWidth(),
-                height = viewportSize.getHeight(),
-                isLandscapeMode = width >= height;
-            return isLandscapeMode ? 'landscape' : 'portrait';
-        },
+		orient = function () {
+			var width = viewportSize.getWidth(),
+				height = viewportSize.getHeight(),
+				isLandscapeMode = width >= height;
+			return isLandscapeMode ? 'landscape' : 'portrait';
+		},
 		// now re-check on scroll
-		splitHandler = function() {
-            try{
-             if(window.innerHeight && readmoretarget){
-                gAlp.Util.setScrollHandlers(readmoretarget.getElementsByTagName('p'), curry2(gAlp.Util.getScrollThreshold)(0.2));
-                gAlp.Util.addClass('scroll', $('main'));
-             }
-           
-            var orientation = orient(),
-                command = doSplitz.apply(null, arguments),
-				handler = function() {
-                    if(orientation !== orient()){
-                        count = 1;
-                        orientation = orient();
-                    }
-					if (count-- >= 1) {
-						command.execute();
-					}
-				};
-            }
-            catch(er){
-                report.innerHTML = er;
-            }
+		splitHandler = function () {
+			try {
+				if (window.innerHeight && readmoretarget) {
+					gAlp.Util.setScrollHandlers(readmoretarget.getElementsByTagName('p'), curry2(gAlp.Util.getScrollThreshold)(0.2));
+					gAlp.Util.addClass('scroll', $('main'));
+				}
+				var orientation = orient(),
+					command = doSplitz.apply(null, arguments),
+					handler = function () {
+						if (orientation !== orient()) {
+							count = 1;
+							orientation = orient();
+						}
+						if (count-- >= 1) {
+							command.execute();
+						}
+					};
+			} catch (er) {
+				report.innerHTML = er;
+			}
 			handler();
 			return gAlp.Util.addHandler('resize', window, _.debounce(handler, 2000, true));
 		},
 		swapimg = gAlp.Util.getByClass("swap"),
-		getKid = function() {
+		getKid = function () {
 			return gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target.firstChild);
 		},
 		kid = getKid(),
@@ -205,38 +203,38 @@ if (!window.gAlp) {
 		ie6 = gAlp.Util.getComputedStyle(kid, 'color') === 'red' ? true : false,
 		ie7 = gAlp.Util.getComputedStyle(kid, 'color') === 'blue' ? true : false,
 		highLighter = {
-			perform: function() {
+			perform: function () {
 				if (!gAlp.Util.hasFeature('nthchild')) {
-					this.perform = function() {
+					this.perform = function () {
 						var getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
 							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
 							getTerm = _.compose(curry2(gAlp.Util.getter)('id'), _.partial(gAlp.Util.byIndex, 0), getBody),
 							links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
-							found = _.partial(_.filter, _.toArray(links), function(link) {
+							found = _.partial(_.filter, _.toArray(links), function (link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});
 						_.compose(_.partial(gAlp.Util.addClass, 'current'), _.partial(gAlp.Util.byIndex, 0), found)();
 					};
 				} else {
-					this.perform = function() {};
+					this.perform = function () {};
 				}
 				this.perform();
 			}
 		},
-		factory = function(cond) {
-			var activate = function() {
+		factory = function (cond) {
+			var activate = function () {
 					gAlp.Util.makeElement(prepSetStyles({
 						display: "block"
 					}), always(mask_target)).add();
 				},
-				standard = function() {
+				standard = function () {
 					var orig = gAlp.Util.getDomChild(gAlp.Util.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
 						config = {
 							alt: '',
 							src: gAlp.Util.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
 						},
-						exec = function() {
+						exec = function () {
 							var setAttrs = gAlp.Util.setAttrsFix(ie6 || ie7),
 								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
 							gAlp.Util.makeElement(prepSetStyles({
@@ -250,29 +248,28 @@ if (!window.gAlp) {
 					but CSSStyleDeclaration.style.setProperty accepts css/hyphen type property names without conversion
 					to camelCase*/
 					return {
-						init: function() {
+						init: function () {
 							if (getPredicate()) {
 								return this.execute;
 							}
 							getPredicate = _.negate(getPredicate);
 							return activate;
 						},
-						execute: function() {
+						execute: function () {
 							try {
 								highLighter.perform();
 								//window.alert(report);
-								//report.innerHTML = 'from russia with love';
 								exec();
 							} catch (e) {
 								report.innerHTML = e.message;
 							}
 						},
-						undo: function() {
+						undo: function () {
 							mask_target.removeChild(gAlp.Util.getNextElement(orig.nextSibling));
 						}
 					};
 				},
-				swap = function() {
+				swap = function () {
 					var config = {
 							src: "../images/honcho.jpg",
 							alt: "Alpacas sitting on ground"
@@ -281,19 +278,19 @@ if (!window.gAlp) {
 						render = _.compose(_.partial(gAlp.Util.addClass, 'swap'), _.partial(setAttrs, always(true), 'setAttribute', config), anCr(mask_target)),
 						oldel;
 					return {
-						init: function(outcomes) {
+						init: function (outcomes) {
 							if (!getPredicate()) {
 								return prepAction(outcomes, true);
 							}
 							return activate;
 						},
-						execute: function() {
+						execute: function () {
 							activate();
 							oldel = gAlp.Util.removeNodeOnComplete(getKid());
 							render('img');
 							highLighter.perform();
 						},
-						undo: function() {
+						undo: function () {
 							gAlp.Util.removeNodeOnComplete(getKid());
 							anCr(mask_target)(oldel);
 						}
@@ -302,12 +299,12 @@ if (!window.gAlp) {
 			return gAlp.Util.getBest(cond, [swap, standard])();
 		};
 	if (!cssmask || swapimg[0]) {
-		constr = function() {
+		constr = function () {
 			return factory(always(swapper));
 		};
-		player = function(command) {
+		player = function (command) {
 			var outcomes = [command.undo, command.execute],
-				handler = function() {
+				handler = function () {
 					if (!getPredicate()) {
 						prepAction(outcomes, true)();
 					}
@@ -321,12 +318,12 @@ if (!window.gAlp) {
 		var byIndex = _.partial(returnIndex, 0),
 			test = $('article').getElementsByTagName('p'),
 			para = test ? byIndex(always(test)) : null,
-            splithandler = function(para){
-                splitHandler({}, {}, para);
-            };
-        //report.innerHTML = para;
+			splithandler = function (para) {
+				splitHandler({}, {}, para);
+			};
+		//report.innerHTML = para;
 		//invokes handler and adds resize event listener
-        _.each(test, splithandler);
+		_.each(test, splithandler);
 		//if (para) { splitHandler({}, {}, para, para.parentNode.innerHTML);}
 	}
 }(document, document.getElementById('aside'), document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
