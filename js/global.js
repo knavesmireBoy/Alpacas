@@ -273,7 +273,7 @@ gAlp.Util = (function() {
         //console.log(arguments)
 		return getResult(anc).insertBefore(getResult(el), getResult(refnode));
 	}
-	//get ye this. setAnchor effectively return strategy(getNewElement in reality), which expects one argument
+	//get ye this. setAnchor effectively returns strategy(getNewElement in reality), which expects one argument
 	//(string, element, null/undef) and returns new element, clone or fragment
 	//getNewElement invokes render with the new element
 	function setAnchor(anchor, refnode, strategy) {
@@ -656,6 +656,27 @@ gAlp.Util = (function() {
 		listener = handler(wrapped);
 		return listener;
 	}
+    
+    
+    function detectTouchscreen() {
+  var result = false;
+  if (window.PointerEvent && ('maxTouchPoints' in window.navigator)) {
+    // if Pointer Events are supported, just check maxTouchPoints
+    if (window.navigator.maxTouchPoints > 0) {
+      result = true;
+    }
+  } else {
+    // no Pointer Events...
+    if (window.matchMedia && window.matchMedia("(any-pointer:coarse)").matches) {
+      // check for any-pointer:coarse which mostly means touchscreen
+      result = true;
+    } else if (window.TouchEvent || ('ontouchstart' in window)) {
+      // last resort - check for exposed touch events API / event handler
+      result = true;
+    }
+  }
+  return result;
+}
 
 	function addHandler(type, func, el) {
         //console.log(arguments)
@@ -1357,8 +1378,13 @@ gAlp.Util = (function() {
 				return fun(arg);
 			};
 		},
-		shout: function(m, a, b) {
-			return _.bind(window[m], window, a, b);
+		shout: function(m) {
+            var applier = function(f, args){
+                    return function(){
+                        f['apply'](null, args);
+                };
+            };
+            return applier(_.bind(window[m], window), _.rest(arguments));
 		},
         
         getDummyTarget: function(k, v){
@@ -1369,7 +1395,8 @@ gAlp.Util = (function() {
         mockElement: function(s){
             this.setSubject(s);
         },
-        mock: mock
+        mock: mock,
+        detectTouchscreen: detectTouchscreen
 	};
 }());
 gAlp.Util.Observer.prototype = {

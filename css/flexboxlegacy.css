@@ -4,7 +4,27 @@ html.js body#alpacas_for_sale {
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
+/*
+html.flexboxlegacy body#gallery {
+	background-color: antiquewhite
+}
 
+html.flexboxtweener body#gallery {
+	background-color: honeydew;
+}
+
+html.flexwrap body#gallery {
+	background-color: azure;
+}
+
+html.flexbox body#gallery {
+	background-color: royalblue;
+}
+
+html.cssgrid body#gallery {
+	background-color: turquoise;
+}
+*/
 .flexboxlegacy .sell #sell {
 	display: -webkit-box;
 	/* OLD - iOS 6-, Safari 3.1-6 */
@@ -26,11 +46,7 @@ html.js body#alpacas_for_sale {
 	-ms-flex: 1 1 auto;
 	flex: 1 0 auto;
 }
-.flexboxlegacy .sell #sell>a {
-	-webkit-box-flex: 1;
-	-ms-flex: 1 1 auto;
-	flex: 2 1 auto;
-}
+
 /*https://css-tricks.com/using-flexbox/*/
 
 .flexboxlegacy #sell.extent figure {

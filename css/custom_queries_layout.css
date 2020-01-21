@@ -21,7 +21,10 @@
 	}
 	
 }
-@media (hover: hover) {
+/*@media (hover: hover) {*/
+/*  https://stackoverflow.com/questions/40532204/media-query-for-devices-supporting-hover 
+@media not all and (hover: none){*/
+
 	#controls {
 		opacity: 0;
 	}
@@ -29,7 +32,7 @@
     #controls.static {
 		opacity: 1;
 	}
-}
+
 /*https://css-tricks.com/logic-in-media-queries/*/
 
 @media only screen and (max-width: 600px)/*, (min-width: 769px) and (max-width: 820px) */{
@@ -140,6 +143,7 @@
     #controls {
         top: 2em;
         border-spacing: .25em;
+        opacity: 1;
     }
 	#controls button {
 		width: 1.5em;
@@ -157,8 +161,8 @@
 	#gallery.showtime #footer {
 		margin-top: -3.3em;
 	}
-	
-    #wrap.inplay #footer ul > * {
+    
+     #wrap.inplay #footer ul > * {
         opacity: 0;
     }
 }
@@ -281,11 +285,13 @@ and (max-device-width : 1024px) {
 		z-index: 2;
 	}
 	.inplay #controls {
-		top: 2.2em;
+		top: 2em;
+         opacity: 1;
 	}
 	#controls.static {
 		top: -3.5em;
 	}
+    
 	#gallery.showtime #innerwrap {
 		padding-bottom: 4.5em;
 	}
@@ -294,7 +300,12 @@ and (max-device-width : 1024px) {
 		padding-bottom: 3em;
 		padding-bottom: 0em;
         background: black;
-	}    
+	}  
+    
+    #wrap.inplay #footer ul > * {
+        opacity: 0;
+    }
+    
 }
 
 @media only screen and (max-width: 800px) {
@@ -316,7 +327,3 @@ and (max-device-width : 1024px) {
 		margin-right: 0%;
 	}
 }
-
-.touchevents #wrap.inplay #footer ul > * {
-        opacity: 0;
-    }

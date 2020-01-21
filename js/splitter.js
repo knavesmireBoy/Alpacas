@@ -21,17 +21,8 @@ gAlp.Splitter = (function (gang) {
 		return o && o[p];
 	}
 
-	function curryLeft(fn) {
-		var args = _.rest(arguments);
-		if (args.length >= fn.length) {
-			return fn.apply(null, args);
-		} else {
-			return function () {
-				return curryLeft.apply(null, [fn].concat(args, _.toArray(arguments)));
-			};
-		}
-	}
-	var global_strong = /\|/g,
+	var ptL = _.partial,
+        global_strong = /\|/g,
 		link = /\[([\S]+)$/,
 		getFont = function (size, face, n) {
 			return (size * n) + 'px ' + face;
@@ -53,7 +44,6 @@ gAlp.Splitter = (function (gang) {
 			this.context = this.context || document.createElement("canvas").getContext("2d");
 			this.context.font = this.font || this.context.font;
 			var metric = this.context.measureText(this.remaining_text);
-			//return Math.floor(metric.width);
 			return Math.ceil(metric.width);
 		},
 		getEndIndex = function () {
@@ -61,6 +51,7 @@ gAlp.Splitter = (function (gang) {
 				remChar = this.remaining_text.length,
 				charWidth,
 				char_per_line;
+            
 			if (this.line < max) {
 				charWidth = max / remChar;
 				char_per_line = this.line / charWidth;
@@ -74,7 +65,8 @@ gAlp.Splitter = (function (gang) {
 		spaceOrStop = function (num, percent) {
 			var string = this.remaining_text.slice(0, num),
 				L = string.length,
-				end = string.lastIndexOf('.') + 1; //ie 0 ie false
+				end = string.lastIndexOf('.') + 1; // ie(-1 + 1) ie 0 ie false   
+                        
 			if (!end || end < (L * percent)) {
 				end = string.lastIndexOf(' ');
 			}
@@ -91,17 +83,17 @@ gAlp.Splitter = (function (gang) {
 				copy = el[dim] || window.innerWidth;
 			return Math.ceil(copy);
 		},
-		hasLength = curryLeft(getProp, 'length'),
-		isOdd = curryLeft(modulo, 2),
+		hasLength = ptL(getProp, 'length'),
+		isOdd = ptL(modulo, 2),
 		orphan_tags = _.compose(isOdd, hasLength, existy),
 		process = function (num) {
-			//this.end = this.remaining_text.slice(0, num).lastIndexOf(' ');
 			this.end = spaceOrStop.call(this, num, 1);
 			if (!hasIndex(this.end)) {
 				gang.push(this.remaining_text);
 			} else {
 				this.saved_text = this.remaining_text.substring(0, this.end);
 				this.remaining_text = this.remaining_text.substring(this.end);
+                
 				if (orphan_tags(this.saved_text.match(global_strong))) {
 					//complete the tag on current line
 					this.saved_text += '|';

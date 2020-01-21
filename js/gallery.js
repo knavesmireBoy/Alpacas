@@ -4,7 +4,7 @@
 /*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
-(function (doc, visiblity, mq, query, cssanimations, touchevents) {
+(function (doc, visiblity, mq, query, cssanimations, touchevents, report) {
 	"use strict";
 
 	function getResult(arg) {
@@ -101,7 +101,8 @@
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
-		clicker = touchevents ? ptL(utils.addHandler, 'touchend') : ptL(utils.addHandler, 'click'),
+		//clicker = touchevents ? ptL(utils.addHandler, 'touchend') : ptL(utils.addHandler, 'click'),
+		clicker = ptL(utils.addHandler, 'click'),
 		makeElement = utils.machElement,
 		getDomTargetLink = utils.getDomChild(utils.getNodeByTag('a')),
 		getDomTargetImg = utils.getDomChild(utils.getNodeByTag('img')),
@@ -285,15 +286,16 @@
 				var counter = mycountdown(cb, x),
 					control = getControls(),
 					klas = 'playing',
+                    shutdown = _.compose(ptL(setter, mycountdown, 'progress', null), ptL(klasRem, klas, control)),
 					pauserender = function () {
 						var clone = getSlide(),
-							pause = makeElement(ptL(setAttrs, {
+							pauser = makeElement(ptL(setAttrs, {
 								id: 'paused'
 							}), anCr(thumbs), always(clone)).render(),
-							img = getDomTargetImg(pause.getElement());
-						img.onload = fade50(pause.getElement());
+							img = getDomTargetImg(pauser.getElement());
+						img.onload = fade50(pauser.getElement());
 						img.src = isPortrait(clone) ? '../assets/pauseLong.png' : '../assets/pause.png';
-						return pause;
+						return pauser;
 					},
 					//dummy pause, gets rewitten after first run
 					pause = {
@@ -302,13 +304,9 @@
 					init = function (t) {
 						this.target = t;
 					},
-					$wrap = makeElement(ptL(klasAdd, 'inplay'), always($('wrap'))),
 					ret = {
 						state: undefined,
 						init: function () {
-							_.extend($wrap, {
-								unrender: ptL(klasRem, 'inplay', $('wrap'))
-							});
 							this.states.playing.init(this);
 							this.states.paused.init(this);
 							this.state = this.states.playing;
@@ -323,11 +321,9 @@
 							this.state = s;
 						},
 						unrender: function () {
-							mycountdown.progress = null;
+                            shutdown();
 							pause.unrender();
-							klasRem(klas, control);
-							$wrap.unrender();
-							this.state = this.states.playing;
+							this.state = this.states.playing;//reset
 						},
 						states: {
 							playing: {
@@ -337,16 +333,14 @@
 									counter();
 									pause.unrender(); //dummy pause on initial run
 									klasAdd(klas, control);
-									$wrap.render();
 									this.target.changestates(this.target.states.paused);
 								}
 							},
 							paused: {
 								init: init,
 								render: function () {
-									mycountdown.progress = null;
+                                    shutdown();
 									pause = pauserender();
-									klasRem(klas, control);
 									this.target.changestates(this.target.states.playing);
 								}
 							}
@@ -407,30 +401,33 @@
 				_.compose(stage_one_rpt.add, adapter, utils.addEvent(clicker, cb))($('controls'));
 			},
 			play = noOp,
-			toggle_command = (function (o, klas, cb) {
-				var rem = _.compose(ptL(klasRem, klas), cb),
+            
+            toggle_command = (function (klas, cb) {
+				var o = { timer: null },
+                    rem = _.compose(ptL(klasRem, klas), cb),
+                    wrap = makeElement(ptL(klasAdd, 'inplay'), always($('wrap'))),
+                    $wrap = _.extend(wrap, {
+                        unrender: ptL(klasRem, 'inplay', $('wrap'))
+                    }),
 					clear = function () {
 						window.clearTimeout(o.timer);
 						o.timer = null;
+                        $wrap.render();
 					},
-					add = _.compose(ptL(klasAdd, klas), cb),
-					doAdd = ptL(utils.doWhen, o.timer, add),
-					//doTouchAdd = ptL(utils.doWhen, _.negate(always(o.timer)), add),
-					desktop = _.compose(clear, doAdd),
+                    preppedAdd = _.compose(ptL(klasAdd, klas), cb),
 					ret = {
 						render: function () {
 							o.timer = window.setTimeout(rem, 3000);
 							window.setTimeout(clear, 3500);
 						},
 						unrender: function () {
-							var cb = touchevents ? add : desktop;
-							cb();
+							_.compose(clear, preppedAdd)();
+                            $wrap.unrender();
 						}
 					};
 				return makeLeafComp(ret);
-			}({
-				timer: null
-			}, 'static', getControls)),
+			}('static', getControls)),
+            
 			prepToggler = function (command) {
 				var enterHandler = ptL(utils.addHandler, 'mouseenter'),
 					handler = ptL(klasAdd, 'static', getControls);
@@ -535,7 +532,7 @@
 						sliderender();
 						var base_cb = ret.baserender(),
 							slide = getSlide();
-						//await load event on image
+						//await load event on image NERVE CENTRE..
 						getDomTargetImg(slide).onload = function () {
 							//this sequence is critical, make slide opaque BEFORE setting NEXT image on base
 							fade100(slide)();
@@ -599,10 +596,20 @@
 						makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
 					});
 				},
-				handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
+				handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render),
+                doHandler = function(e){
+                    try {
+                      handler(e); 
+                        //report.innerHTML = navigator.userAgent;
+                    }
+                    catch(er){
+                        report.innerHTML = er;
+                    }
+                    
+                };
 			presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
 			stage_two_comp.addAll(stage_two_rpt, stage_two_persist);
 			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, handler)))(thumbs);
 		}());
 	}());
-}(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents));
+}(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
