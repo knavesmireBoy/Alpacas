@@ -323,6 +323,9 @@ if (!window.gAlp) {
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
     if (touchevents && cssanimations && !(_.isEmpty(verbose))) {
+        
+        var p = document.getElementById('article').querySelector('p');
+       p.innerHTML = document.documentElement.className;
         _.each(paras, split_handler);
 	}
 }(document, document.getElementById('aside'), document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
