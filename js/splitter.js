@@ -114,7 +114,7 @@ gAlp.Splitter = (function (gang) {
 					gang = [];
 					this.start = 0;
 					this.end = 0;
-					this.font = getFont(size, face, 1);
+					this.font = getFont(size, face, .95);
 					this.remaining_text = element.innerText;
 					this.line = getTargetWidth(element);
 					process.call(this, getEndIndex.call(this));

@@ -9,11 +9,15 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (doc, mask_target, swapper, states, mq, query, cssmask, cssanimations, touchevents, report) {
+(function(doc, mask_target, swapper, states, mq, query, cssmask, cssanimations, touchevents, report) {
 	"use strict";
+    
+    function getResult(arg) {
+		return _.isFunction(arg) ? arg() : arg;
+	}
 
 	function always(VALUE) {
-		return function () {
+		return function() {
 			return VALUE;
 		};
 	}
@@ -23,7 +27,7 @@ if (!window.gAlp) {
 	}
 
 	function toCamelCase(variable) {
-		return variable.replace(/-([a-z])/g, function (str, letter) {
+		return variable.replace(/-([a-z])/g, function(str, letter) {
 			return letter.toUpperCase();
 		});
 	}
@@ -41,7 +45,7 @@ if (!window.gAlp) {
 		if (args.length >= fn.length) {
 			return fn.apply(null, gAlp.Util.reverse(args));
 		} else {
-			return function () {
+			return function() {
 				return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
 			};
 		}
@@ -58,7 +62,6 @@ if (!window.gAlp) {
 			ctxt[m].call(ctxt, k, v);
 		}
 	}
-    
 
 	function construct(drill, args, o) {
 		var context = drill(o);
@@ -68,143 +71,169 @@ if (!window.gAlp) {
 	function isBig(n) {
 		return window.viewportSize.getWidth() > n;
 	}
+    
+    function fred(el, node, klas){
+         var p = el.getElementsByTagName(node);
+            return _.filter(p, function(p){
+                return !p.classList.contains(klas);
+            })[0];
+    }
+
+	function handlerwrap(ptlHandler, ptl, el) {
+        var res = fred(el, 'p', 'show');
+        utils.addClass('elip', res);
+        return ptlHandler(el, _.compose(_.partial(handlerwrap, ptlHandler, ptl, el), _.partial(ptl, res)));
+	}
 	var utils = gAlp.Util,
 		curry2 = utils.curryTwice(),
 		curry3 = utils.curryThrice(),
 		ptL = _.partial,
-		$ = function (str) {
+		$ = function(str) {
 			return document.getElementById(str);
 		},
-        paras = $('article').getElementsByTagName('p'),
-        verbose = utils.getByClass('.verbose'),
+		paras = $('article').getElementsByTagName('p'),
+		verbose = utils.getByClass('.verbose'),
 		//con = window.console.log.bind(window),
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
-		getIndex = (function () {
+		getIndex = (function() {
 			if (mq) {
-				return function () {
+				return function() {
 					return Number(Modernizr.mq(query));
 				};
 			}
-			return function () {
+			return function() {
 				return isBig(threshold) ? 1 : 0;
 			};
 		}()),
-		getPredicate = (function () {
+		getPredicate = (function() {
 			if (mq) {
 				return ptL(Modernizr.mq, query);
 			} else {
 				return ptL(isBig, threshold);
 			}
 		}()),
+		noScrollBars = ptL(gAlp.Util.gtThan, viewportSize.getHeight, always(document.body.clientHeight)),
 		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
-		switchAction = function (collection, bool) {
+		switchAction = function(collection, bool) {
 			var i = bool ? Number(!getIndex()) : getIndex();
 			return collection[i];
 		},
-		prepAction = function () {
+		prepAction = function() {
 			getPredicate = _.negate(getPredicate);
 			return switchAction.apply(null, arguments);
 		},
-		doConstruct = _.wrap(construct, function (wrapped, drill, args, o) {
+		doConstruct = _.wrap(construct, function(wrapped, drill, args, o) {
 			wrapped(drill, args, o);
 			return o;
 		}),
-		prepSetStyles = function (config) {
+		prepSetStyles = function(config) {
 			//ie < 9 doesn't support setProperty and they don't support media queries (mq)
 			var method = mq ? 'setProperty' : '';
 			return ptL(doConstruct, utils.drillDown(['style']), [method, config]);
 		},
-		readmoretarget = utils.getByClass('read-more-target')[0],
 		constr,
 		player,
-		memoFactory = function (target, copy) {
+		memoFactory = function(target, copy) {
 			var hyperlinks = {},
-                ran = false,
-                ret = {
-                    set: function(){
-                        ran = true;
-                        return '|';
-                    },
-                    unset: function(){
-                        return '<strong>$1</strong>'
-                    },
-				store: function (match, attrs, content) {
-					content = content.replace(/&nbsp;/, ' ');
-					hyperlinks[content] = attrs;
-					return '[' + content + ']';
-				},
-				retrieve: function (match, content) {
-					return '<a' + hyperlinks[content] + '>' + content + '</a>';
-				},
-				revert: function (i, cb) {
-					if(ran){
-                        ran = false;
-                        target.innerHTML = copy;
-                        hyperlinks = {};
-                    }
-                    if(i > 0){
-                        cb();
-                    }
-				},
-                
-			};
+				ran = false,
+				ret = {
+					set: function() {
+						ran = true;
+						return '|';
+					},
+					unset: function() {
+						return '<strong>$1</strong>'
+					},
+					store: function(match, attrs, content) {
+						content = content.replace(/&nbsp;/, ' ');
+						hyperlinks[content] = attrs;
+						return '[' + content + ']';
+					},
+					retrieve: function(match, content) {
+						return '<a' + hyperlinks[content] + '>' + content + '</a>';
+					},
+					revert: function(i, cb) {
+						if (ran) {
+							ran = false;
+							target.innerHTML = copy;
+							hyperlinks = {};
+						}
+						if (i > 0) {
+							cb();
+						}
+					},
+				};
 			return ret;
 		},
 		anCr = curryRight(utils.setAnchor)(utils.getNewElement)(null),
-		doSplitz = function(count){
-            return function (target, copy) {
-			var doReplace = curry3(replacer),
-				memo = memoFactory(target, copy),
-				//pipe is used to surround text that will be emphasised so <strong>Sampson</strong> becomes |Strong|
-				getStrong = doReplace(new RegExp('<\\/?[^a>]+>', 'g'))(memo.set),
-				/*a la Markdown links take this form [linked text](link URL) so replace <a href ="/path">My Text</a> with [My Text](href ="/path")*/
-				getLinks = doReplace(new RegExp('<a([^>]*)>([^<]+)<\\/a>', 'g'))(memo.store), //store hyperlinks attributes
-				setStrong = doReplace(new RegExp('\\|(.+?)\\|', 'g'))('<strong>$1</strong>'),
-				setLinks = doReplace(new RegExp('\\[(.+?)\\]', 'g'))(memo.retrieve),
-				input = _.compose(getStrong, getLinks),
-				output = _.compose(setStrong, setLinks),
-                exec = function(){
-                    var face = utils.getComputedStyle(target, 'font-family').split(',')[0],
-						size = Math.round(parseFloat(utils.getComputedStyle(target, 'font-size'))),
-						splitter = window.gAlp.Splitter();
-					target.innerHTML = input(target.innerHTML);
-					splitter.init(target, face.replace('\\', ''), size);
-					target.innerHTML = output(splitter.output('span'));
-                    utils.show(target);
-                    count -=1;
-                },
-				execute = function () {
-                    return memo.revert(count, exec);
+		doSplitz = function(count) {
+			return function(target, copy) {
+				var doReplace = curry3(replacer),
+					memo = memoFactory(target, copy),
+					//pipe is used to surround text that will be emphasised so <strong>Sampson</strong> becomes |Strong|
+					getStrong = doReplace(new RegExp('<\\/?[^a>]+>', 'g'))(memo.set),
+					/*a la Markdown links take this form [linked text](link URL) so replace <a href ="/path">My Text</a> with [My Text](href ="/path")*/
+					getLinks = doReplace(new RegExp('<a([^>]*)>([^<]+)<\\/a>', 'g'))(memo.store), //store hyperlinks attributes
+					setStrong = doReplace(new RegExp('\\|(.+?)\\|', 'g'))('<strong>$1</strong>'),
+					setLinks = doReplace(new RegExp('\\[(.+?)\\]', 'g'))(memo.retrieve),
+					input = _.compose(getStrong, getLinks),
+					output = _.compose(setStrong, setLinks),
+					exec = function() {
+						var face = utils.getComputedStyle(target, 'font-family').split(',')[0],
+							size = Math.round(parseFloat(utils.getComputedStyle(target, 'font-size'))),
+							splitter = window.gAlp.Splitter();
+						target.innerHTML = input(target.innerHTML);
+						splitter.init(target, face.replace('\\', ''), size);
+						target.innerHTML = output(splitter.output('span'));
+						utils.show(target);
+						count -= 1;
+					},
+					execute = function() {
+						return memo.revert(count, exec);
+					};
+				return {
+					execute: execute
 				};
-			return {
-				execute: execute
 			};
-            };
 		}, //split
-        do_split = doSplitz(paras.length*2),
-		// now re-check on scroll
-		splitHandler = function () {
-			var command = do_split.apply(null, arguments),
-				handler = function () {
-                    command.execute();
-				};
-			try {
-				if (window.innerHeight && readmoretarget) {
-					utils.setScrollHandlers(readmoretarget.getElementsByTagName('p'), curry2(utils.getScrollThreshold)(0.2));
-					utils.addClass('scroll', $('main'));
-				}
-			} catch (er) {
-				report.innerHTML = er;
+		do_split = doSplitz(paras.length * 2),
+        //scroller = function(){},
+		readmoretarget = utils.getByClass('read-more-target')[0],
+		parag = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
+		displayers = _.map(parag, function(el) {
+			return utils.machDisplayElement(el)();
+		}),
+		enableScroll = ptL(utils.doWhen, readmoretarget, ptL(utils.addClass, 'scroll', $('main'))),
+		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
+        addElip = ptL(_.every, [readmoretarget], getResult),
+
+		enableElip = _.compose(ptL(utils.doWhen, addElip, ptL(utils.addClass, 'elip', parag[0]))),
+		scroll_handlers = utils.setScrollHandlers(parag, curry2(utils.getScrollThreshold)(0.2)),
+		$el = scroll_handlers[0], //($el is an eventing object $el.getElement() would be window)
+		//$el.triggerEvent($el.getElement(), 'scroll');
+		scroller = function(i) {
+            enableElip();
+            enableScroll();
+			if (noScrollBars()) {
+				ellipsis_handler(readmoretarget);
 			}
+		},
+		// now re-check on scroll
+		splitHandler = function() {
+			var command = do_split.apply(null, arguments),
+                i = 0,
+				handler = function() {
+					command.execute();
+                    scroller(i++);
+				};
 			handler();
 			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
 		},
-        split_handler = function (p) {
-				splitHandler(p, p.innerHTML);
-        },
-        
-        swapimg = utils.getByClass("swap"),
-		getKid = function () {
+		split_handler = function(p) {
+			splitHandler(p, p.innerHTML);
+		},
+		swapimg = utils.getByClass("swap"),
+		getKid = function() {
 			return utils.getDomChild(utils.getNodeByTag('img'))(mask_target.firstChild);
 		},
 		kid = getKid(),
@@ -212,38 +241,38 @@ if (!window.gAlp) {
 		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
 		ie7 = utils.getComputedStyle(kid, 'color') === 'blue' ? true : false,
 		highLighter = {
-			perform: function () {
+			perform: function() {
 				if (!utils.hasFeature('nthchild')) {
-					this.perform = function () {
+					this.perform = function() {
 						var getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
 							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
 							getTerm = _.compose(curry2(utils.getter)('id'), ptL(utils.byIndex, 0), getBody),
 							links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
-							found = ptL(_.filter, _.toArray(links), function (link) {
+							found = ptL(_.filter, _.toArray(links), function(link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});
 						_.compose(ptL(utils.addClass, 'current'), ptL(utils.byIndex, 0), found)();
 					};
 				} else {
-					this.perform = function () {};
+					this.perform = function() {};
 				}
 				this.perform();
 			}
 		},
-		factory = function (cond) {
-			var activate = function () {
+		factory = function(cond) {
+			var activate = function() {
 					utils.makeElement(prepSetStyles({
 						display: "block"
 					}), always(mask_target)).add();
 				},
-				standard = function () {
+				standard = function() {
 					var orig = utils.getDomChild(utils.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
 						config = {
 							alt: '',
 							src: utils.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
 						},
-						exec = function () {
+						exec = function() {
 							var setAttrs = utils.setAttrsFix(ie6 || ie7),
 								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
 							utils.makeElement(prepSetStyles({
@@ -257,14 +286,14 @@ if (!window.gAlp) {
 					but CSSStyleDeclaration.style.setProperty accepts css/hyphen type property names without conversion
 					to camelCase*/
 					return {
-						init: function () {
+						init: function() {
 							if (getPredicate()) {
 								return this.execute;
 							}
 							getPredicate = _.negate(getPredicate);
 							return activate;
 						},
-						execute: function () {
+						execute: function() {
 							try {
 								highLighter.perform();
 								exec();
@@ -272,12 +301,12 @@ if (!window.gAlp) {
 								report.innerHTML = e.message;
 							}
 						},
-						undo: function () {
+						undo: function() {
 							mask_target.removeChild(utils.getNextElement(orig.nextSibling));
 						}
 					};
 				},
-				swap = function () {
+				swap = function() {
 					var config = {
 							src: "../images/honcho.jpg",
 							alt: "Alpacas sitting on ground"
@@ -286,19 +315,19 @@ if (!window.gAlp) {
 						render = _.compose(ptL(utils.addClass, 'swap'), ptL(setAttrs, always(true), 'setAttribute', config), anCr(mask_target)),
 						oldel;
 					return {
-						init: function (outcomes) {
+						init: function(outcomes) {
 							if (!getPredicate()) {
 								return prepAction(outcomes, true);
 							}
 							return activate;
 						},
-						execute: function () {
+						execute: function() {
 							activate();
 							oldel = utils.removeNodeOnComplete(getKid());
 							render('img');
 							highLighter.perform();
 						},
-						undo: function () {
+						undo: function() {
 							utils.removeNodeOnComplete(getKid());
 							anCr(mask_target)(oldel);
 						}
@@ -307,12 +336,12 @@ if (!window.gAlp) {
 			return utils.getBest(cond, [swap, standard])();
 		};
 	if (!cssmask || swapimg[0]) {
-		constr = function () {
+		constr = function() {
 			return factory(always(swapper));
 		};
-		player = function (command) {
+		player = function(command) {
 			var outcomes = [command.undo, command.execute],
-				handler = function () {
+				handler = function() {
 					if (!getPredicate()) {
 						prepAction(outcomes, true)();
 					}
@@ -322,10 +351,9 @@ if (!window.gAlp) {
 		};
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
-    if (touchevents && cssanimations && !(_.isEmpty(verbose))) {
-        
-        var p = document.getElementById('article').querySelector('p');
-       p.innerHTML = document.documentElement.className;
-        _.each(paras, split_handler);
+	if (touchevents && cssanimations && !(_.isEmpty(verbose))) {
+		var p = document.getElementById('article').querySelector('p');
+		//p.innerHTML = document.documentElement.className;
+		_.each(paras, split_handler);
 	}
 }(document, document.getElementById('aside'), document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));

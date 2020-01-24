@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.6.0
- * Build https://modernizr.com/download?-backgroundsize-bgpositionshorthand-bgpositionxy-bgsizecover-borderradius-boxshadow-boxsizing-classlist-cssanimations-csscalc-cssgrid_cssgridlegacy-cssmask-csspointerevents-csstransforms-csstransitions-cssvhunit-cssvwunit-dataset-flexbox-flexboxlegacy-geolocation-hsla-ie8compat-lastchild-mediaqueries-multiplebgs-nthchild-opacity-pointermq-queryselector-requestanimationframe-rgba-scriptdefer-shapes-supports-textshadow-touchevents-hasevent-mq-prefixedcss-setclasses-dontmin
+ * Build https://modernizr.com/download?-backgroundsize-bgpositionshorthand-bgpositionxy-bgsizecover-borderradius-boxsizing-classlist-cssanimations-cssgrid_cssgridlegacy-cssmask-csspointerevents-csstransforms-csstransformslevel2-csstransitions-cssvhunit-cssvwunit-dataset-ellipsis-flexbox-flexboxlegacy-nthchild-opacity-pointermq-requestanimationframe-rgba-shapes-supports-touchevents-hasevent-mq-prefixedcss-setclasses-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -87,78 +87,6 @@
   Modernizr = new Modernizr();
 
   
-/*!
-{
-  "name": "Geolocation API",
-  "property": "geolocation",
-  "caniuse": "geolocation",
-  "tags": ["media"],
-  "notes": [{
-    "name": "MDN documentation",
-    "href": "https://developer.mozilla.org/en-US/docs/WebAPI/Using_geolocation"
-  }],
-  "polyfills": [
-    "joshuabell-polyfill",
-    "webshims",
-    "geo-location-javascript",
-    "geolocation-api-polyfill"
-  ]
-}
-!*/
-/* DOC
-Detects support for the Geolocation API for users to provide their location to web applications.
-*/
-
-  // geolocation is often considered a trivial feature detect...
-  // Turns out, it's quite tricky to get right:
-  //
-  // Using !!navigator.geolocation does two things we don't want. It:
-  //   1. Leaks memory in IE9: github.com/Modernizr/Modernizr/issues/513
-  //   2. Disables page caching in WebKit: webk.it/43956
-  //
-  // Meanwhile, in Firefox < 8, an about:config setting could expose
-  // a false positive that would throw an exception: bugzil.la/688158
-
-  Modernizr.addTest('geolocation', 'geolocation' in navigator);
-
-/*!
-{
-  "name": "IE8 compat mode",
-  "property": "ie8compat",
-  "authors": ["Erich Ocean"]
-}
-!*/
-/* DOC
-Detects whether or not the current browser is IE8 in compatibility mode (i.e. acting as IE7).
-*/
-
-  // In this case, IE8 will be acting as IE7. You may choose to remove features in this case.
-
-  // related:
-  // james.padolsey.com/javascript/detect-ie-in-js-using-conditional-comments/
-
-  Modernizr.addTest('ie8compat', (!window.addEventListener && !!document.documentMode && document.documentMode === 7));
-
-/*!
-{
-  "name": "QuerySelector",
-  "property": "queryselector",
-  "caniuse": "queryselector",
-  "tags": ["queryselector"],
-  "authors": ["Andrew Betts (@triblondon)"],
-  "notes": [{
-    "name" : "W3C Selectors reference",
-    "href": "https://www.w3.org/TR/selectors-api/#queryselectorall"
-  }],
-  "polyfills": ["css-selector-engine"]
-}
-!*/
-/* DOC
-Detects support for querySelector.
-*/
-
-  Modernizr.addTest('queryselector', 'querySelector' in document && 'querySelectorAll' in document);
-
 /*!
 {
   "name": "CSS Supports",
@@ -446,6 +374,39 @@ Detects support for querySelector.
   
 /*!
 {
+  "name": "Background Position Shorthand",
+  "property": "bgpositionshorthand",
+  "tags": ["css"],
+  "builderAliases": ["css_backgroundposition_shorthand"],
+  "notes": [{
+    "name": "MDN Docs",
+    "href": "https://developer.mozilla.org/en/CSS/background-position"
+  }, {
+    "name": "W3 Spec",
+    "href": "https://www.w3.org/TR/css3-background/#background-position"
+  }, {
+    "name": "Demo",
+    "href": "https://jsfiddle.net/Blink/bBXvt/"
+  }]
+}
+!*/
+/* DOC
+Detects if you can use the shorthand method to define multiple parts of an
+element's background-position simultaniously.
+
+eg `background-position: right 10px bottom 10px`
+*/
+
+  Modernizr.addTest('bgpositionshorthand', function() {
+    var elem = createElement('a');
+    var eStyle = elem.style;
+    var val = 'right 10px bottom 10px';
+    eStyle.cssText = 'background-position: ' + val + ';';
+    return (eStyle.backgroundPosition === val);
+  });
+
+/*!
+{
   "name": "CSS Pointer Events",
   "caniuse": "pointer-events",
   "property": "csspointerevents",
@@ -499,79 +460,6 @@ Detects support for querySelector.
 
 /*!
 {
-  "name": "script[defer]",
-  "property": "scriptdefer",
-  "caniuse": "script-defer",
-  "tags": ["script"],
-  "builderAliases": ["script_defer"],
-  "authors": ["Theodoor van Donge"],
-  "warnings": ["Browser implementation of the `defer` attribute vary: https://stackoverflow.com/questions/3952009/defer-attribute-chrome#answer-3982619"],
-  "knownBugs": ["False positive in Opera 12"]
-}
-!*/
-/* DOC
-Detects support for the `defer` attribute on the `<script>` element.
-*/
-
-  Modernizr.addTest('scriptdefer', 'defer' in createElement('script'));
-
-/*!
-{
-  "name": "Background Position Shorthand",
-  "property": "bgpositionshorthand",
-  "tags": ["css"],
-  "builderAliases": ["css_backgroundposition_shorthand"],
-  "notes": [{
-    "name": "MDN Docs",
-    "href": "https://developer.mozilla.org/en/CSS/background-position"
-  }, {
-    "name": "W3 Spec",
-    "href": "https://www.w3.org/TR/css3-background/#background-position"
-  }, {
-    "name": "Demo",
-    "href": "https://jsfiddle.net/Blink/bBXvt/"
-  }]
-}
-!*/
-/* DOC
-Detects if you can use the shorthand method to define multiple parts of an
-element's background-position simultaniously.
-
-eg `background-position: right 10px bottom 10px`
-*/
-
-  Modernizr.addTest('bgpositionshorthand', function() {
-    var elem = createElement('a');
-    var eStyle = elem.style;
-    var val = 'right 10px bottom 10px';
-    eStyle.cssText = 'background-position: ' + val + ';';
-    return (eStyle.backgroundPosition === val);
-  });
-
-/*!
-{
-  "name": "CSS Multiple Backgrounds",
-  "caniuse": "multibackgrounds",
-  "property": "multiplebgs",
-  "tags": ["css"]
-}
-!*/
-
-  // Setting multiple images AND a color on the background shorthand property
-  // and then querying the style.background property value for the number of
-  // occurrences of "url(" is a reliable method for detecting ACTUAL support for this!
-
-  Modernizr.addTest('multiplebgs', function() {
-    var style = createElement('a').style;
-    style.cssText = 'background:url(https://),url(https://),red url(https://)';
-
-    // If the UA supports multiple backgrounds, there should be three occurrences
-    // of the string "url(" in the return value for elemStyle.background
-    return (/(url\s*\(.*?){3}/).test(style.background);
-  });
-
-/*!
-{
   "name": "dataset API",
   "caniuse": "dataset",
   "property": "dataset",
@@ -586,149 +474,6 @@ eg `background-position: right 10px bottom 10px`
     var n = createElement('div');
     n.setAttribute('data-a-b', 'c');
     return !!(n.dataset && n.dataset.aB === 'c');
-  });
-
-
-
-  /**
-   * contains checks to see if a string contains another string
-   *
-   * @access private
-   * @function contains
-   * @param {string} str - The string we want to check for substrings
-   * @param {string} substr - The substring we want to search the first string for
-   * @returns {boolean}
-   */
-
-  function contains(str, substr) {
-    return !!~('' + str).indexOf(substr);
-  }
-
-  ;
-/*!
-{
-  "name": "CSS HSLA Colors",
-  "caniuse": "css3-colors",
-  "property": "hsla",
-  "tags": ["css"]
-}
-!*/
-
-  Modernizr.addTest('hsla', function() {
-    var style = createElement('a').style;
-    style.cssText = 'background-color:hsla(120,40%,100%,.5)';
-    return contains(style.backgroundColor, 'rgba') || contains(style.backgroundColor, 'hsla');
-  });
-
-
-  /**
-   * domToCSS takes a camelCase string and converts it to kebab-case
-   * e.g. boxSizing -> box-sizing
-   *
-   * @access private
-   * @function domToCSS
-   * @param {string} name - String name of camelCase prop we want to convert
-   * @returns {string} The kebab-case version of the supplied name
-   */
-
-  function domToCSS(name) {
-    return name.replace(/([A-Z])/g, function(str, m1) {
-      return '-' + m1.toLowerCase();
-    }).replace(/^ms-/, '-ms-');
-  }
-  ;
-
-  /**
-   * List of property values to set for css tests. See ticket #21
-   * http://git.io/vUGl4
-   *
-   * @memberof Modernizr
-   * @name Modernizr._prefixes
-   * @optionName Modernizr._prefixes
-   * @optionProp prefixes
-   * @access public
-   * @example
-   *
-   * Modernizr._prefixes is the internal list of prefixes that we test against
-   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
-   * an array of kebab-case vendor prefixes you can use within your code.
-   *
-   * Some common use cases include
-   *
-   * Generating all possible prefixed version of a CSS property
-   * ```js
-   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
-   *
-   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
-   * ```
-   *
-   * Generating all possible prefixed version of a CSS value
-   * ```js
-   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
-   *
-   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
-   * ```
-   */
-
-  // we use ['',''] rather than an empty array in order to allow a pattern of .`join()`ing prefixes to test
-  // values in feature detects to continue to work
-  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : ['','']);
-
-  // expose these for the plugin API. Look in the source for how to join() them against your input
-  ModernizrProto._prefixes = prefixes;
-
-  
-/*!
-{
-  "name": "CSS Calc",
-  "property": "csscalc",
-  "caniuse": "calc",
-  "tags": ["css"],
-  "builderAliases": ["css_calc"],
-  "authors": ["@calvein"]
-}
-!*/
-/* DOC
-Method of allowing calculated values for length units. For example:
-
-```css
-//lem {
-  width: calc(100% - 3em);
-}
-```
-*/
-
-  Modernizr.addTest('csscalc', function() {
-    var prop = 'width:';
-    var value = 'calc(10px);';
-    var el = createElement('a');
-
-    el.style.cssText = prop + prefixes.join(value + prop);
-
-    return !!el.style.length;
-  });
-
-/*!
-{
-  "name": "CSS Opacity",
-  "caniuse": "css-opacity",
-  "property": "opacity",
-  "tags": ["css"]
-}
-!*/
-
-  // Browsers that actually have CSS Opacity implemented have done so
-  // according to spec, which means their return values are within the
-  // range of [0.0,1.0] - including the leading zero.
-
-  Modernizr.addTest('opacity', function() {
-    var style = createElement('a').style;
-    style.cssText = prefixes.join('opacity:.55;');
-
-    // The non-literal . in this regex is intentional:
-    // German Chrome returns this value as 0,55
-    // github.com/Modernizr/Modernizr/issues/#issue/59/comment/516632
-    return (/^0.55$/).test(style.opacity);
   });
 
 
@@ -905,17 +650,86 @@ Method of allowing calculated values for length units. For example:
   ModernizrProto.mq = mq;
 
   
+
+  /**
+   * domToCSS takes a camelCase string and converts it to kebab-case
+   * e.g. boxSizing -> box-sizing
+   *
+   * @access private
+   * @function domToCSS
+   * @param {string} name - String name of camelCase prop we want to convert
+   * @returns {string} The kebab-case version of the supplied name
+   */
+
+  function domToCSS(name) {
+    return name.replace(/([A-Z])/g, function(str, m1) {
+      return '-' + m1.toLowerCase();
+    }).replace(/^ms-/, '-ms-');
+  }
+  ;
+
+  /**
+   * List of property values to set for css tests. See ticket #21
+   * http://git.io/vUGl4
+   *
+   * @memberof Modernizr
+   * @name Modernizr._prefixes
+   * @optionName Modernizr._prefixes
+   * @optionProp prefixes
+   * @access public
+   * @example
+   *
+   * Modernizr._prefixes is the internal list of prefixes that we test against
+   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
+   * an array of kebab-case vendor prefixes you can use within your code.
+   *
+   * Some common use cases include
+   *
+   * Generating all possible prefixed version of a CSS property
+   * ```js
+   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
+   *
+   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
+   * ```
+   *
+   * Generating all possible prefixed version of a CSS value
+   * ```js
+   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
+   *
+   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
+   * ```
+   */
+
+  // we use ['',''] rather than an empty array in order to allow a pattern of .`join()`ing prefixes to test
+  // values in feature detects to continue to work
+  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : ['','']);
+
+  // expose these for the plugin API. Look in the source for how to join() them against your input
+  ModernizrProto._prefixes = prefixes;
+
+  
 /*!
 {
-  "name": "CSS Media Queries",
-  "caniuse": "css-mediaqueries",
-  "property": "mediaqueries",
-  "tags": ["css"],
-  "builderAliases": ["css_mediaqueries"]
+  "name": "CSS Opacity",
+  "caniuse": "css-opacity",
+  "property": "opacity",
+  "tags": ["css"]
 }
 !*/
 
-  Modernizr.addTest('mediaqueries', mq('only all'));
+  // Browsers that actually have CSS Opacity implemented have done so
+  // according to spec, which means their return values are within the
+  // range of [0.0,1.0] - including the leading zero.
+
+  Modernizr.addTest('opacity', function() {
+    var style = createElement('a').style;
+    style.cssText = prefixes.join('opacity:.55;');
+
+    // The non-literal . in this regex is intentional:
+    // German Chrome returns this value as 0,55
+    // github.com/Modernizr/Modernizr/issues/#issue/59/comment/516632
+    return (/^0.55$/).test(style.opacity);
+  });
 
 
   /**
@@ -1028,24 +842,6 @@ This test will also return `true` for Firefox 4 Multitouch support.
     }
     return bool;
   });
-
-/*!
-{
-  "name": "CSS :last-child pseudo-selector",
-  "caniuse": "css-sel3",
-  "property": "lastchild",
-  "tags": ["css"],
-  "builderAliases": ["css_lastchild"],
-  "notes": [{
-    "name": "Related Github Issue",
-    "href": "https://github.com/Modernizr/Modernizr/pull/304"
-  }]
-}
-!*/
-
-  testStyles('#modernizr div {width:100px} #modernizr :last-child{width:200px;display:block}', function(elem) {
-    Modernizr.addTest('lastchild', elem.lastChild.offsetWidth > elem.firstChild.offsetWidth);
-  }, 2);
 
 /*!
 {
@@ -1187,23 +983,6 @@ Detects support for the ':nth-child()' CSS pseudo-selector.
     Modernizr.addTest('cssvwunit', roundedEquals(compStyle, width));
   });
 
-
-  /**
-   * cssToDOM takes a kebab-case string and converts it to camelCase
-   * e.g. box-sizing -> boxSizing
-   *
-   * @access private
-   * @function cssToDOM
-   * @param {string} name - String name of kebab-case prop we want to convert
-   * @returns {string} The camelCase version of the supplied name
-   */
-
-  function cssToDOM(name) {
-    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
-      return m1 + m2.toUpperCase();
-    }).replace(/^-/, '');
-  }
-  ;
 
   /**
    * hasOwnProp is a shim for hasOwnProperty that is needed for Safari 2.0 support
@@ -1463,43 +1242,19 @@ Detect support for Pointer based media queries
 
 
   /**
-   * nativeTestProps allows for us to use native feature detection functionality if available.
-   * some prefixed form, or false, in the case of an unsupported rule
+   * cssToDOM takes a kebab-case string and converts it to camelCase
+   * e.g. box-sizing -> boxSizing
    *
    * @access private
-   * @function nativeTestProps
-   * @param {array} props - An array of property names
-   * @param {string} value - A string representing the value we want to check via @supports
-   * @returns {boolean|undefined} A boolean when @supports exists, undefined otherwise
+   * @function cssToDOM
+   * @param {string} name - String name of kebab-case prop we want to convert
+   * @returns {string} The camelCase version of the supplied name
    */
 
-  // Accepts a list of property names and a single value
-  // Returns `undefined` if native detection not available
-  function nativeTestProps(props, value) {
-    var i = props.length;
-    // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
-    if ('CSS' in window && 'supports' in window.CSS) {
-      // Try every prefixed variant of the property
-      while (i--) {
-        if (window.CSS.supports(domToCSS(props[i]), value)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    // Otherwise fall back to at-rule (for Opera 12.x)
-    else if ('CSSSupportsRule' in window) {
-      // Build a condition string for every prefixed variant
-      var conditionText = [];
-      while (i--) {
-        conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
-      }
-      conditionText = conditionText.join(' or ');
-      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
-        return computedStyle(node, null, 'position') == 'absolute';
-      });
-    }
-    return undefined;
+  function cssToDOM(name) {
+    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
+      return m1 + m2.toUpperCase();
+    }).replace(/^-/, '');
   }
   ;
 
@@ -1614,6 +1369,64 @@ Detect support for Pointer based media queries
   var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
   ModernizrProto._domPrefixes = domPrefixes;
   
+
+  /**
+   * nativeTestProps allows for us to use native feature detection functionality if available.
+   * some prefixed form, or false, in the case of an unsupported rule
+   *
+   * @access private
+   * @function nativeTestProps
+   * @param {array} props - An array of property names
+   * @param {string} value - A string representing the value we want to check via @supports
+   * @returns {boolean|undefined} A boolean when @supports exists, undefined otherwise
+   */
+
+  // Accepts a list of property names and a single value
+  // Returns `undefined` if native detection not available
+  function nativeTestProps(props, value) {
+    var i = props.length;
+    // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
+    if ('CSS' in window && 'supports' in window.CSS) {
+      // Try every prefixed variant of the property
+      while (i--) {
+        if (window.CSS.supports(domToCSS(props[i]), value)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    // Otherwise fall back to at-rule (for Opera 12.x)
+    else if ('CSSSupportsRule' in window) {
+      // Build a condition string for every prefixed variant
+      var conditionText = [];
+      while (i--) {
+        conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
+      }
+      conditionText = conditionText.join(' or ');
+      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
+        return computedStyle(node, null, 'position') == 'absolute';
+      });
+    }
+    return undefined;
+  }
+  ;
+
+
+  /**
+   * contains checks to see if a string contains another string
+   *
+   * @access private
+   * @function contains
+   * @param {string} str - The string we want to check for substrings
+   * @param {string} substr - The substring we want to search the first string for
+   * @returns {boolean}
+   */
+
+  function contains(str, substr) {
+    return !!~('' + str).indexOf(substr);
+  }
+
+  ;
 
   /**
    * fnBind is a super small [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) polyfill.
@@ -1794,57 +1607,6 @@ Detect support for Pointer based media queries
   }
 
   ;
-
-  /**
-   * testProp() investigates whether a given style property is recognized
-   * Property names can be provided in either camelCase or kebab-case.
-   *
-   * @memberof Modernizr
-   * @name Modernizr.testProp
-   * @access public
-   * @optionName Modernizr.testProp()
-   * @optionProp testProp
-   * @function testProp
-   * @param {string} prop - Name of the CSS property to check
-   * @param {string} [value] - Name of the CSS value to check
-   * @param {boolean} [useValue] - Whether or not to check the value if @supports isn't supported
-   * @returns {boolean}
-   * @example
-   *
-   * Just like [testAllProps](#modernizr-testallprops), only it does not check any vendor prefixed
-   * version of the string.
-   *
-   * Note that the property name must be provided in camelCase (e.g. boxSizing not box-sizing)
-   *
-   * ```js
-   * Modernizr.testProp('pointerEvents')  // true
-   * ```
-   *
-   * You can also provide a value as an optional second argument to check if a
-   * specific value is supported
-   *
-   * ```js
-   * Modernizr.testProp('pointerEvents', 'none') // true
-   * Modernizr.testProp('pointerEvents', 'penguin') // false
-   * ```
-   */
-
-  var testProp = ModernizrProto.testProp = function(prop, value, useValue) {
-    return testProps([prop], undefined, value, useValue);
-  };
-  
-/*!
-{
-  "name": "CSS textshadow",
-  "property": "textshadow",
-  "caniuse": "css-textshadow",
-  "tags": ["css"],
-  "knownBugs": ["FF3.0 will false positive on this test"]
-}
-!*/
-
-  Modernizr.addTest('textshadow', testProp('textShadow', '1px 1px'));
-
 
   /**
    * testPropsAll tests a list of DOM properties we want to check against.
@@ -2160,21 +1922,6 @@ Detects the ability to control an element's background position using css
 
 /*!
 {
-  "name": "Box Shadow",
-  "property": "boxshadow",
-  "caniuse": "css-boxshadow",
-  "tags": ["css"],
-  "knownBugs": [
-    "WebOS false positives on this test.",
-    "The Kindle Silk browser false positives"
-  ]
-}
-!*/
-
-  Modernizr.addTest('boxshadow', testAllProps('boxShadow', '1px 1px', true));
-
-/*!
-{
   "name": "Box Sizing",
   "property": "boxsizing",
   "caniuse": "css3-boxsizing",
@@ -2212,6 +1959,20 @@ Detects the ability to control an element's background position using css
   // `grid-columns` is only in the old syntax, `grid-column` exists in both and so `grid-template-rows` is used for the new syntax.
   Modernizr.addTest('cssgridlegacy', testAllProps('grid-columns', '10px', true));
   Modernizr.addTest('cssgrid', testAllProps('grid-template-rows', 'none', true));
+
+/*!
+{
+  "name": "CSS text-overflow ellipsis",
+  "property": "ellipsis",
+  "caniuse": "text-overflow",
+  "polyfills": [
+    "text-overflow"
+  ],
+  "tags": ["css"]
+}
+!*/
+
+  Modernizr.addTest('ellipsis', testAllProps('textOverflow', 'ellipsis'));
 
 /*!
 {
@@ -2281,33 +2042,6 @@ Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows 
 
 /*!
 {
-  "name": "CSS Transforms",
-  "property": "csstransforms",
-  "caniuse": "transforms2d",
-  "tags": ["css"]
-}
-!*/
-
-  Modernizr.addTest('csstransforms', function() {
-    // Android < 3.0 is buggy, so we sniff and blacklist
-    // http://git.io/hHzL7w
-    return navigator.userAgent.indexOf('Android 2.') === -1 &&
-           testAllProps('transform', 'scale(1)', true);
-  });
-
-/*!
-{
-  "name": "CSS Transitions",
-  "property": "csstransitions",
-  "caniuse": "css-transitions",
-  "tags": ["css"]
-}
-!*/
-
-  Modernizr.addTest('csstransitions', testAllProps('transition', 'all', true));
-
-/*!
-{
   "name": "CSS Shapes",
   "property": "shapes",
   "tags": ["css"],
@@ -2326,6 +2060,50 @@ Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows 
 
   Modernizr.addTest('shapes', testAllProps('shapeOutside', 'content-box', true));
 
+/*!
+{
+  "name": "CSS Transforms",
+  "property": "csstransforms",
+  "caniuse": "transforms2d",
+  "tags": ["css"]
+}
+!*/
+
+  Modernizr.addTest('csstransforms', function() {
+    // Android < 3.0 is buggy, so we sniff and blacklist
+    // http://git.io/hHzL7w
+    return navigator.userAgent.indexOf('Android 2.') === -1 &&
+           testAllProps('transform', 'scale(1)', true);
+  });
+
+/*!
+{
+  "name": "CSS Transforms Level 2",
+  "property": "csstransformslevel2",
+  "authors": ["rupl"],
+  "tags": ["css"],
+  "notes": [{
+    "name": "CSSWG Draft Spec",
+    "href": "https://drafts.csswg.org/css-transforms-2/"
+  }]
+}
+!*/
+
+  Modernizr.addTest('csstransformslevel2', function() {
+    return testAllProps('translate', '45px', true);
+  });
+
+/*!
+{
+  "name": "CSS Transitions",
+  "property": "csstransitions",
+  "caniuse": "css-transitions",
+  "tags": ["css"]
+}
+!*/
+
+  Modernizr.addTest('csstransitions', testAllProps('transition', 'all', true));
+
 
   // Run each test
   testRunner();
@@ -2343,8 +2121,5 @@ Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows 
 
   // Leak Modernizr namespace
   window.Modernizr = Modernizr;
-
-
-;
 
 })(window, document);

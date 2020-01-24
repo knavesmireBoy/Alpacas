@@ -78,10 +78,22 @@
         transition: opacity 2s;
 	}
   
-	#main .read-more-state:checked~.read-more-target p, #main.scroll .read-more-target p.show {
+	#main .read-more-state:checked~.read-more-target p, #main.scroll .read-more-target p.show, .ellipsis #main .read-more-state~.read-more-target p.elip {
 		position: relative;
 		opacity: 1;
 	}
+     
+    .ellipsis #main .read-more-state~.read-more-target p.elip {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+	}
+    
+     .ellipsis #main .read-more-state~.read-more-target p.show {
+         white-space: normal;
+         text-overflow: inherit;
+	}
+
 	.read-more-state~.read-more-trigger::before {
 		content: 'Read On';
 	}

@@ -161,9 +161,6 @@ String.prototype.toCamelCase = function (char) {
 		});
 	};
 
-
-
-
 String.prototype.honorific = function(h) {
 	"use strict";
 	return h + ' ' + this;

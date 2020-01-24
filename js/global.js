@@ -338,6 +338,32 @@ gAlp.Util = (function() {
 	function removeElement(node) {
 		return node.parentNode.removeChild(node);
 	}
+    
+    function handleElement($el, cb){
+        if(getPageOffset() > cb($el.getElement())){
+            $el.render();
+        }
+        else {
+            $el.unrender();
+		}
+        }
+    
+    function handleScroll($el, cb, klas) {
+        if(!$el.getElementsByTagName){
+        var inta = new gAlp.Intaface('Element', ['render', 'unrender', 'getElement']);
+            gAlp.Intaface.ensures($el, inta);
+            handleElement($el, cb);
+        }
+        else {//default treatment
+            if (getPageOffset() > cb($el)){
+             document.getElementsByTagName('h2')[0].innerHTML = $el.innerHTML.substr(0, 11);
+                gAlp.Util.addClass(klas, $el);
+            }
+        else {
+            gAlp.Util.removeClass(klas, $el);
+		}
+    }
+    }
 
 	function getElementOffset(el) {
 		//https://medium.com/snips-ai/make-your-next-microsite-beautifully-readable-with-this-simple-javascript-technique-ffa1a18d6de2
@@ -357,6 +383,26 @@ gAlp.Util = (function() {
 			left: left
 		};
 	}
+    
+    function getPageOffset(bool) {
+			var w = window,
+				d = document.documentElement || document.body.parentNode || document.body,
+				x = (w.pageXOffset !== undefined) ? w.pageXOffset : d.scrollLeft,
+				y = (w.pageYOffset !== undefined) ? w.pageYOffset : d.scrollTop;
+			return bool ? x : y;
+		}
+    
+    function getScrollThreshold(el, percent) {
+			try {
+				var elementOffsetTop = getElementOffset(el).top,
+					elementHeight = el.offsetHeight || el.getBoundingClientRect().height,
+                    wh = window.innerHeight,
+					extra = elementHeight * (percent || 0.0);
+				return (elementOffsetTop - wh) + extra;
+			} catch (e) {
+				return 0;
+			}
+		}
 
 	function getClassList(el) {
 		return el && (el.classList || gAlp.ClassList(el));
@@ -1178,13 +1224,7 @@ gAlp.Util = (function() {
 		map: function(coll, mapper) {
 			return _.map(coll, mapper);
 		},
-		getOffset: function(bool) {
-			var w = window,
-				d = document.documentElement || document.body.parentNode || document.body,
-				x = (w.pageXOffset !== undefined) ? w.pageXOffset : d.scrollLeft,
-				y = (w.pageYOffset !== undefined) ? w.pageYOffset : d.scrollTop;
-			return bool ? x : y;
-		},
+		
 		getRect: function(el) {
 			if (el.getBoundingClientRect && _.isFunction(el.getBoundingClientRect)) {
 				return el.getBoundingClientRect();
@@ -1201,30 +1241,31 @@ gAlp.Util = (function() {
         getBody: function(){
             return document.body || document.getElementsByTagName('body')[0];
         },
-		handleScroll: function(el, cb, klas) {
-			var threshold = cb(el);
-			if (gAlp.Util.getOffset() > threshold) {
-				gAlp.Util.addClass(klas, el);
-			}
-		},
-		getScrollThreshold: function(el, percent) {
-			try {
-				var elementOffsetTop = getElementOffset(el).top,
-					elementHeight = el.offsetHeight || el.getBoundingClientRect().height,
-					extra = elementHeight * (percent || 0.0);
-				return (elementOffsetTop - window.innerHeight) + extra;
-			} catch (e) {
-				return 0;
-			}
-		},
-		setScrollHandlers: function(collection, getThreshold) {
+        
+         machDisplayElement: function(el, klas){
+             var shower = klas ? _.partial(gAlp.Util.addClass, klas) : gAlp.Util.show,
+                hider = klas ? _.partial(gAlp.Util.removeClass, klas) : gAlp.Util.hide,
+                $show = machElement(_.partial(shower, always(el)));
+             return function(){
+            //creates then overrides a default machElement, for showing/hiding rather than appending/removing
+                 //a fresh $show if created in a loop..
+            return _.extend($show, {
+				unrender: _.partial(hider, always(el)),
+                getElement: function(){
+                    return el;
+                }
+			});
+        };
+         },
+        getScrollThreshold: getScrollThreshold,
+        setScrollHandlers: function(collection, getThreshold, klas) {
 			// ensure we don't fire this handler too often
 			// for a good intro into throttling and debouncing, see:
 			// https://css-tricks.com/debouncing-throttling-explained-examples/
-			var deferHandle = curry33(_.bind(this.handleScroll, this))('show')(getThreshold || this.getScrollThreshold),
-				funcs = _.map(collection, deferHandle),
-				throttled = _.map(funcs, curry2(_.throttle)(100));
-			_.each(throttled, _.partial(this.addHandler, 'scroll', window));
+            klas = klas || 'show';
+			var deferHandle = curry33(handleScroll)(klas)(getThreshold || gAlp.Util.getScrollThreshold),
+				funcs = _.map(collection, deferHandle);
+                return _.map(_.map(funcs, curry2(_.throttle)(100)), _.partial(addHandler, 'scroll', window));
 		},
 		checker: checker,
 		validator: validator,

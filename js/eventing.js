@@ -141,6 +141,10 @@ window.gAlp.Eventing = (function(eventing) {
 	}([]);
 	if (window.addEventListener) {
 		eventing.init = function(type, el, fn, context) {
+            
+            //var inta = new gAlp.Intaface('Element', ['setAttribute']);
+            //gAlp.Intaface.ensures(config.element, inta);
+          
 			var config = sortArgs(fn, el, context),
 				bound;
 			this.addListener = function(el) {
@@ -156,13 +160,16 @@ window.gAlp.Eventing = (function(eventing) {
 			this.getElement = function() {
 				return config.element;
 			};
+            
+             
+            
 			_.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 			this.el = config.element + '_' + window.gAlp.Eventing.listEvents().length + '_' + count++ + '__' + config.element.id;
 			return _.extendOwn({}, this);
 		};
 	} else if (document.attachEvent) { // IE
 		//window.onload = function(){alert(9);}
-		eventing.init = function(type, el, fn, context) {
+		eventing.init = function(type, el, fn, context) {            
 			var config = sortArgs(fn, el, context),
 				bound;
 			this.addListener = function(el) {

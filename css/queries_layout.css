@@ -185,13 +185,14 @@
 	.js .verbose #main #article p, .js .verbose #main .read-more-target p {
 		margin-right: 0%;
 	}
-    
+    /*
     .js .verbose #main #article p * {
 		opacity: 0;
 	}
      .js .verbose #main #article p.show *{
 		opacity: 1;
 	}
+    */
 	#article p span {
 		display: inline-block;
 		position: relative;
@@ -273,6 +274,9 @@
 		display: inline-block;
 		padding: 0 .5em;
 		margin-bottom: 1em;
+	}
+    #main.scroll .read-more-trigger {
+		display: none;
 	}
 	#footer {
 		padding: 0%;
