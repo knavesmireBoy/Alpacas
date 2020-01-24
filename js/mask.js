@@ -197,34 +197,28 @@ if (!window.gAlp) {
 			};
 		}, //split
 		do_split = doSplitz(paras.length * 2),
-        //scroller = function(){},
 		readmoretarget = utils.getByClass('read-more-target')[0],
 		parag = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
-		displayers = _.map(parag, function(el) {
-			return utils.machDisplayElement(el)();
-		}),
-		enableScroll = ptL(utils.doWhen, readmoretarget, ptL(utils.addClass, 'scroll', $('main'))),
 		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
         addElip = ptL(_.every, [readmoretarget], getResult),
-
 		enableElip = _.compose(ptL(utils.doWhen, addElip, ptL(utils.addClass, 'elip', parag[0]))),
-		scroll_handlers = utils.setScrollHandlers(parag, curry2(utils.getScrollThreshold)(0.2)),
-		$el = scroll_handlers[0], //($el is an eventing object $el.getElement() would be window)
-		//$el.triggerEvent($el.getElement(), 'scroll');
-		scroller = function(i) {
+        addElipHandler = ptL(_.every, [noScrollBars, readmoretarget, Modernizr.ellipsis], getResult),
+        addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis], getResult),
+		enableElipHandler = _.compose(ptL(utils.doWhen, addElipHandler, ptL(ellipsis_handler, readmoretarget))),		
+		scroller = function(percent) {
+            var setScrollHandlers = ptL(utils.setScrollHandlers, parag, curry2(utils.getScrollThreshold)(percent)),
+                enableScrollHandlers = _.compose(ptL(utils.doWhen, addScrollHandlers, setScrollHandlers));
+            enableScrollHandlers();
+            enableElipHandler()
             enableElip();
-            enableScroll();
-			if (noScrollBars()) {
-				ellipsis_handler(readmoretarget);
-			}
+            //parag[0].innerHTML = document.documentElement.className;
 		},
 		// now re-check on scroll
 		splitHandler = function() {
 			var command = do_split.apply(null, arguments),
-                i = 0,
 				handler = function() {
 					command.execute();
-                    scroller(i++);
+                    scroller(0.2);
 				};
 			handler();
 			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
@@ -317,7 +311,7 @@ if (!window.gAlp) {
 					return {
 						init: function(outcomes) {
 							if (!getPredicate()) {
-								return prepAction(outcomes, true);
+                               return prepAction(outcomes, true);
 							}
 							return activate;
 						},
@@ -335,12 +329,12 @@ if (!window.gAlp) {
 				};
 			return utils.getBest(cond, [swap, standard])();
 		};
-	if (!cssmask || swapimg[0]) {
+	if (cssmask || swapimg[0]) {
 		constr = function() {
 			return factory(always(swapper));
 		};
 		player = function(command) {
-			var outcomes = [command.undo, command.execute],
+			var outcomes = swapimg[0] ? [command.undo, command.execute] : [command.execute, command.undo],
 				handler = function() {
 					if (!getPredicate()) {
 						prepAction(outcomes, true)();

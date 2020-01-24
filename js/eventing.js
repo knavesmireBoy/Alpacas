@@ -7,7 +7,7 @@ if (!window.gAlp) {
 }
 window.gAlp.Eventing = (function(eventing) {
 	var count = 0;
-
+////$element.triggerEvent($element.getElement(), 'scroll');
 	function triggerEvent(el, type) {
 		if ('createEvent' in document) {
 			// modern browsers, IE9+

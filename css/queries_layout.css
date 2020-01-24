@@ -275,7 +275,7 @@
 		padding: 0 .5em;
 		margin-bottom: 1em;
 	}
-    #main.scroll .read-more-trigger {
+    .ellipsis #main .read-more-trigger {
 		display: none;
 	}
 	#footer {

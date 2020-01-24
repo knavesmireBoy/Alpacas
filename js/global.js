@@ -356,7 +356,6 @@ gAlp.Util = (function() {
         }
         else {//default treatment
             if (getPageOffset() > cb($el)){
-             document.getElementsByTagName('h2')[0].innerHTML = $el.innerHTML.substr(0, 11);
                 gAlp.Util.addClass(klas, $el);
             }
         else {

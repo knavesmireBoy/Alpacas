@@ -56,31 +56,29 @@
 		background-color: rgb(238, 238, 221);
 		text-shadow: 1px 1px 1px white;
 	}
-	/* https://codepen.io/Idered/pen/AeBgF */
-	#main .read-more-trigger {
+	/* https://codepen.io/Idered/pen/AeBgF*/
+    /* #main required to override #main { position: relative; }*/
+	#main .read-more-state~.read-more-trigger {
 		font: .8em/2.5 'Droid Sans', sans-serif;
 		border: 1px solid #ddd;
 		border-radius: .25em;
-		color: #900;
-		color: rgb(153, 0, 0);
 	}
-    #main.scroll .read-more-trigger {
-		display: none;
-	}
+
 	#main .read-more-state~.read-more-target p {
 		position: absolute;
 		opacity: 0;
 	}
+  
+	#main .read-more-state:checked~.read-more-target p, .ellipsis #main .read-more-target p.show, .ellipsis #main .read-more-state~.read-more-target p.elip {
+		position: relative;
+		opacity: 1;
+	}
     
-    #main.scroll .read-more-state~.read-more-target p {
+       
+    .ellipsis #main .read-more-state~.read-more-target p {
         -webkit-transition: opacity 2s;
         -o-transition: opacity 2s;
         transition: opacity 2s;
-	}
-  
-	#main .read-more-state:checked~.read-more-target p, #main.scroll .read-more-target p.show, .ellipsis #main .read-more-state~.read-more-target p.elip {
-		position: relative;
-		opacity: 1;
 	}
      
     .ellipsis #main .read-more-state~.read-more-target p.elip {
@@ -94,13 +92,15 @@
          text-overflow: inherit;
 	}
 
-	.read-more-state~.read-more-trigger::before {
+	#main .read-more-state~.read-more-trigger::before {
 		content: 'Read On';
+        color: #900;
+		color: rgb(153, 0, 0);
 	}
-	.read-more-state:checked~.read-more-trigger::before {
+	#main .read-more-state:checked~.read-more-trigger::before {
 		content: 'Read It';
 	}
-	#main .read-more-trigger:hover, .read-more-state:checked~.read-more-trigger::before {
+	#main .read-more-trigger:hover, #main .read-more-state:checked~.read-more-trigger::before {
 		color: #080;
 		color: rgb(0, 136, 0);
 	}

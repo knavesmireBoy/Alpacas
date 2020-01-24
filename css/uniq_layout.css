@@ -193,6 +193,7 @@ bottom: -250%;
 		#stud_services #main #article p {
 			margin-right: 70%;
 		}
+    
 		#welcome #aside img {
 			-webkit-mask: url('../images/carlos_masking.png') top left / cover;
 			mask: url('../images/carlos_masking.png') top left / cover;
@@ -221,10 +222,10 @@ bottom: -250%;
 			-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
 			mask: url('../images/honcho_masking.png') -1px 0px / cover;
 		}
+    
 		.cssmask #about_us #wrap #main #aside {
 			z-index: 0;
 		}
-    
     /*}*/
     #alpacas_for_sale #wrap #main #aside {
             z-index: 1;
