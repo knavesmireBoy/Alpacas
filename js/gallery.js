@@ -600,6 +600,7 @@
                 doHandler = function(e){
                     try {
                       handler(e); 
+                        utils.highLighter.perform();
                         //report.innerHTML = navigator.userAgent;
                     }
                     catch(er){
@@ -609,6 +610,7 @@
                 };
 			presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
 			stage_two_comp.addAll(stage_two_rpt, stage_two_persist);
+            
 			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, handler)))(thumbs);
 		}());
 	}());
