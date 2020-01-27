@@ -6,7 +6,12 @@ if (!window.gAlp) {
 	window.gAlp = {};
 }
 (function (core) {
-    "use strict";
+	"use strict";
+    
+    function noOp() {
+		return function () {};
+	}
+    
 	core.Intaface = function (name, methods) {
 		if (this.Intaface) {
 			//called without new: this == core.Intaface
@@ -131,7 +136,8 @@ if (!window.gAlp) {
 		try {
 			core.Intaface.ensureImplements.apply(core.Intaface, arguments);
 		} catch (e) {
-			console.log(e.message);
+            noOp();
+			//console.log(e.message);
 		}
 	};
 }(gAlp));

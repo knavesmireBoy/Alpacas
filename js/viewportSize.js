@@ -1,10 +1,9 @@
 /*! viewportSize | Author: Tyson Matanich, 2013 | License: MIT */
 (function (window) {
-    "use strict";
-    
-       	//https://stackoverflow.com/questions/24119418/underscore-bind-not-work-in-ie8
+	"use strict";
+	//https://stackoverflow.com/questions/24119418/underscore-bind-not-work-in-ie8
 	//https://stackoverflow.com/questions/13789618/differences-between-lodash-and-underscore
-    	if (typeof Function.prototype.bind === 'undefined') {
+	if (typeof Function.prototype.bind === 'undefined') {
 		Function.prototype.bind = function (context) {
 			var fn = this,
 				slice = Array.prototype.slice,
@@ -15,9 +14,9 @@
 		};
 	}
 
-    function undef(x) {
-        return typeof (x) === 'undefined';
-    }
+	function undef(x) {
+		return typeof (x) === 'undefined';
+	}
 
 	function isTypeOf(typ, arg) {
 		return typeof arg === typ;
@@ -32,8 +31,7 @@
 		}
 		return window;
 	}
-    
-    //var getComputedStyle = (function () {
+	//var getComputedStyle = (function () {
 	function sort(arg, styleProperty) {
 		var computedStyle = null,
 			defView = document.defaultView,
@@ -52,7 +50,6 @@
 	}
 	//return sort;
 	//}());
-
 	window.getWinSize = function () {
 		if (window.innerWidth !== undefined) {
 			return [window.innerWidth, window.innerHeight];
@@ -64,7 +61,6 @@
                    ];
 		}
 	};
-
 	var getSize = function (Name) {
 		var size,
 			name = Name.toLowerCase(),
@@ -72,7 +68,7 @@
 			documentElement = document.documentElement,
 			bodyElement,
 			divElement,
-            sizeIs = window.getWinSize();
+			sizeIs = window.getWinSize();
 		//return sizeIs[0];
 		if (window["inner" + Name] === undefined) {
 			// IE6 & IE7 don't have window.innerWidth or innerHeight
@@ -114,8 +110,7 @@
 		}
 		return size;
 	};
-    
-    window.viewportSize = {};
+	window.viewportSize = {};
 	window.viewportSize.getHeight = function () {
 		return getSize("Height");
 	};
@@ -123,5 +118,13 @@
 		return getSize("Width");
 	};
 	window.viewportSize.sort = sort;
-	
 }(this));
+
+String.prototype.capitalize = function (char) {
+	var splitter = char || ' ',
+		res = this.split(splitter),
+		mapper = function (str) {
+			return str.charAt(0).toUpperCase() + str.slice(1);
+		};
+	return _.map(res, mapper).join(' ');
+};

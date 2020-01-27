@@ -8,18 +8,16 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-
-
 /**
-* Shim for "fixing" IE's lack of support (IE < 9) for applying slice
-* on host objects like NamedNodeMap, NodeList, and HTMLCollection
-* (technically, since host objects have been implementation-dependent,
-* at least before ES2015, IE hasn't needed to work this way).
-* Also works on strings, fixes IE < 9 to allow an explicit undefined
-* for the 2nd argument (as in Firefox), and prevents errors when
-* called on other DOM objects.
-*/
-(function() {
+ * Shim for "fixing" IE's lack of support (IE < 9) for applying slice
+ * on host objects like NamedNodeMap, NodeList, and HTMLCollection
+ * (technically, since host objects have been implementation-dependent,
+ * at least before ES2015, IE hasn't needed to work this way).
+ * Also works on strings, fixes IE < 9 to allow an explicit undefined
+ * for the 2nd argument (as in Firefox), and prevents errors when
+ * called on other DOM objects.
+ */
+(function () {
 	'use strict';
 	var slice = Array.prototype.slice;
 	try {
@@ -28,7 +26,7 @@ if (!window.gAlp) {
 	} catch (e) { // Fails in IE < 9
 		//AJS// gAlp.shim indicates IE < 9; could test for attachEvent
 		gAlp.slice_shim = true;
-		gAlp.clone = function(object) {
+		gAlp.clone = function (object) {
 			function F() {}
 			F.prototype = object || F.prototype;
 			F.prototype.constructor = F;
@@ -38,7 +36,7 @@ if (!window.gAlp) {
 		// NamedNodeMap (attributes, entities, notations),
 		// NodeList (e.g., getElementsByTagName), HTMLCollection (e.g., childNodes),
 		// and will not fail on other DOM objects (as do DOM elements in IE < 9)
-		Array.prototype.slice = function(begin, end) {
+		Array.prototype.slice = function (begin, end) {
 			// IE < 9 gets unhappy with an undefined end argument
 			end = (typeof end !== 'undefined') ? end : this.length;
 			// For native Array objects, we use the native slice function
@@ -76,9 +74,8 @@ if (!window.gAlp) {
 		};
 	}
 }());
-
 if (!Array.prototype.push) {
-	Array.prototype.push = function() {
+	Array.prototype.push = function () {
 		"use strict";
 		var i, L;
 		for (i = this.length, L = arguments.length; i < L; i += 1) {
@@ -87,7 +84,7 @@ if (!Array.prototype.push) {
 	};
 }
 if (!Array.prototype.pop) {
-	Array.prototype.pop = function() {
+	Array.prototype.pop = function () {
 		"use strict";
 		var n = this.length - 1,
 			item = this[n];
@@ -95,45 +92,35 @@ if (!Array.prototype.pop) {
 		return item;
 	};
 }
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(f) {
-	return setTimeout(f, 1000 / 60)
-} // simulate calling code 60 
-window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || function(requestID) {
-	clearTimeout(requestID)
-} //fall back
-
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (f) {
+    "use strict";
+	return setTimeout(f, 1000 / 60);
+}; // simulate calling code 60 
+window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || function (requestID) {
+    "use strict";
+	clearTimeout(requestID);
+}; //fall back
 window.dispatchEvent = window.dispatchEvent || window.fireEvent;
 
-if (typeof Object.getPrototypeOf !== "function") {
-	if (typeof "test".__proto__ === "object") {
-		Object.getPrototypeOf = function(object) {
-			return object.__proto__;
-		};
-	} else {
-		Object.getPrototypeOf = function(object) {
-			// May break if the constructor has been tampered with
-			return object.constructor.prototype;
-		};
-	}
-}
 if (!String.prototype.trim) {
-	String.prototype.trim = function() {
+	String.prototype.trim = function () {
 		return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 	};
 }
-String.prototype.sansNumber = function() {
-	var n = parseFloat(this),
-		i = !isNaN(n) ? '' + n : 0;
+String.prototype.sansNumber = function () {
+	var str = '',
+        n = parseFloat(this),
+		i = !isNaN(n) ? str + n : 0;
 	return this.substring(i.length);
 };
-String.prototype.isUpper = function() {
+String.prototype.isUpper = function () {
 	return this.toString() === this.toUpperCase();
 };
-String.prototype.bloated = function() {
+String.prototype.bloated = function () {
 	var str = this.toString();
 	return Number(str.length - str.trim().length);
 };
-String.prototype.abbreviate = function(token) {
+String.prototype.abbreviate = function (token) {
 	"use strict";
 	var split = this.split(token || " "),
 		res = '',
@@ -144,51 +131,40 @@ String.prototype.abbreviate = function(token) {
 	}
 	return res;
 };
-String.prototype.capitalize = function(char) {
-	var splitter = char || ' ',
-        res = this.split(splitter),
-		mapper = function(str) {
-			return str.charAt(0).toUpperCase() + str.slice(1);
-		}
-	res = res.map(mapper);
-	return res.join(' ');
-};
 
 String.prototype.toCamelCase = function (char) {
-    var reg = new RegExp(char+"([a-z])", 'g');
-		return this.replace(reg, function (match, captured) {
-			return captured.toUpperCase();
-		});
-	};
-
-String.prototype.honorific = function(h) {
+	var reg = new RegExp(char + "([a-z])", 'g');
+	return this.replace(reg, function (match, captured) {
+		return captured.toUpperCase();
+	});
+};
+String.prototype.honorific = function (h) {
 	"use strict";
 	return h + ' ' + this;
 };
 if (typeof Function.prototype.method === 'undefined') {
-	Function.prototype.method = function(name, func) {
+	Function.prototype.method = function (name, func) {
 		"use strict";
 		this.prototype[name] = func;
 		return this;
 	};
 }
 if (typeof Function.prototype.bind === 'undefined') {
-	Function.prototype.bind = function(context) {
+	Function.prototype.bind = function (context) {
 		"use strict";
 		var fn = this,
 			slice = Array.prototype.slice,
 			args = slice.call(arguments, 1);
-		return function() {
+		return function () {
 			return fn.apply(context, args.concat(slice.call(arguments)));
 		};
 	};
 }
-
 if (typeof Function.prototype.wrap === 'undefined') {
 	//WORKHORSE
-	Function.prototype.wrap = function(wrapper, options) {
+	Function.prototype.wrap = function (wrapper, options) {
 		var method = this;
-		return function() {
+		return function () {
 			var args = [],
 				L = arguments.length,
 				i;
@@ -210,26 +186,36 @@ if (typeof Function.prototype.wrap === 'undefined') {
 	};
 }
 
-         function ieOpacity(v) {
-			this['-ms-filter'] = 'progid:DXImageTransform.Microsoft.Alpha=' + (v * 100) + ')';
-			this.filter = 'alpha(opacity=' + (v * 100) + ')';
-			return this;
-        }
+function ieOpacity(v) {
+	this['-ms-filter'] = 'progid:DXImageTransform.Microsoft.Alpha=' + (v * 100) + ')';
+	this.filter = 'alpha(opacity=' + (v * 100) + ')';
+	return this;
+}
 
-
-function getNativeOpacity(bool){
-            return function(v){
-                return {
-                    getKey: function(){
-                        return bool ?  'filter' : Modernizr.prefixedCSS('opacity');
-                    },
-                    getValue: function(val){
-                        var value = val || v;
-                        return bool ?  'alpha(opacity=' + value + ')' : value/100;
-                    }
-                }; 
-            };
-           
-        }
-        
+function getNativeOpacity(bool) {
+	return function (v) {
+		return {
+			getKey: function () {
+				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
+			},
+			getValue: function (val) {
+				var value = val || v;
+				return bool ? 'alpha(opacity=' + value + ')' : value / 100;
+			}
+		};
+	};
+}
 gAlp.getOpacity = getNativeOpacity(gAlp.slice_shim);
+
+if (typeof Object.getPrototypeOf !== "function") {
+	if (typeof "test".__proto__ === "object") {
+		Object.getPrototypeOf = function (object) {
+			return object.__proto__;
+		};
+	} else {
+		Object.getPrototypeOf = function (object) {
+			// May break if the constructor has been tampered with
+			return object.constructor.prototype;
+		};
+	}
+}

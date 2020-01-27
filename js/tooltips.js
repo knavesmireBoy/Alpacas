@@ -92,29 +92,3 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 		};
         return Modernizr.cssanimations ? timer : dummytimer;
 };
-
-gAlp.highLighter = {
-			perform: function() {
-                document.body.style.backgroundColor = 'black';
-                function simpleInvoke(o, m, arg) {
-                    return o[m](arg);
-                }
-				if (!gAlp.Util.hasFeature('nthchild')) {// utils.hasFeature('nthchild') || Modernizr.nthchild
-					this.perform = function() {
-						var utils = utils,
-                            ptL = _.partial,
-                            getBody = utils.curry3(simpleInvoke)('body')('getElementsByTagName'),
-							getLinks = utils.curry3(simpleInvoke)('a')('getElementsByTagName'),
-							getTerm = _.compose(utils.curry2(utils.getter)('id'), ptL(utils.byIndex, 0), getBody),
-							links = _.compose(getLinks, utils.curry3(simpleInvoke)('nav')('getElementById'))(document),
-							found = ptL(_.filter, _.toArray(links), function(link) {
-								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
-							});
-						_.compose(ptL(utils.addClass, 'current'), ptL(utils.byIndex, 0), found)();
-					};
-				} else {
-					this.perform = function() {};
-				}
-				this.perform();
-			}
-		};

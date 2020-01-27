@@ -1,41 +1,44 @@
-/*jslint browser: true*/
+/*jslint nomen: true */
 /*global window: false */
-/*global _: false */
+/*global document: false */
+/*global Modernizr: false */
 /*global gAlp: false */
+/*global _: false */
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-gAlp.Iterator = function(rev) {
-	return function(index, coll, validate, doAdvance) {
-		var loop = function(bool) {
+gAlp.Iterator = function (rev) {
+    "use strict";
+	return function (index, coll, validate, doAdvance) {
+		var loop = function (bool) {
 				if (!bool) {
 					index = gAlp.Util.doWhen(validate, _.partial(doAdvance, index += 1));
 				}
 				//document.getElementsByTagName('h2')[0].innerHTML = index;
 				return index;
 			},
-			switchDirection = function() {
+			switchDirection = function () {
 				//console.log('sw..')
 				coll = gAlp.Util.reverse(coll);
 				//coll.reverse();
 				index = coll.length - 1 - index;
 				rev = !rev;
 			},
-			isReversed = function() {
+			isReversed = function () {
 				return (rev === true);
 			},
-			getnext = function(isRev, bool) {
+			getnext = function (isRev, bool) {
 				//console.log('next..', isRev())
 				gAlp.Util.doWhen(isRev(), switchDirection);
 				return coll[loop(bool)];
 			},
-			getNow = function(bool) {
+			getNow = function (bool) {
 				return coll[loop(bool)];
 			},
 			forward = _.partial(getnext, isReversed),
 			back = _.partial(getnext, _.negate(isReversed)),
-			invoke = function(bool) {
-				console.log('invoke..')
+			invoke = function (bool) {
+				//console.log('invoke..')
 				return gAlp.Util.getBest(isReversed, [_.bind(back, null, bool), _.bind(forward, null, bool)])();
 			},
 			ret = {
@@ -43,16 +46,16 @@ gAlp.Iterator = function(rev) {
 				back: back,
 				getCurrent: _.partial(getNow, true),
 				getNext: invoke,
-				getIndex: function() {
+				getIndex: function () {
 					return index;
 				},
-				setIndex: function(i) {
+				setIndex: function (i) {
 					index = i;
 				},
-				getLength: function() {
+				getLength: function () {
 					return coll.length;
 				},
-				getCollection: function() {
+				getCollection: function () {
 					return coll;
 				}
 			};
@@ -62,10 +65,11 @@ gAlp.Iterator = function(rev) {
 		return ret;
 	};
 };
-gAlp.Composite = (function() {
+gAlp.Composite = (function () {
+    "use strict";
 	function noOp() {}
-	return function(included /*, intaface*/ ) {
-		var intafaces = _.rest(arguments),
+	return function (included) {
+		var intafaces = _.rest(arguments), /*, intafaces..*/
 			comp_intaface = gAlp.Intaface('Composite', ['add', 'remove', 'get', 'find']),
 			leaf = {
 				add: noOp,
@@ -75,7 +79,7 @@ gAlp.Composite = (function() {
 			},
 			composite,
 			tmp,
-			getOutcomes = function(key, i) {
+			getOutcomes = function (key, i) {
 				var outcomes = {
 					intg: included[i],
 					pos: included[0],
@@ -84,17 +88,18 @@ gAlp.Composite = (function() {
 				};
 				return outcomes[key];
 			},
-			comp_add = function(comp) {
+			comp_add = function (comp) {
 				intafaces.unshift(comp);
 				gAlp.Intaface.ensures.apply(gAlp.Intaface, intafaces);
 				included.push(intafaces.shift(comp));
+				//included.push(comp);
 				comp.parent = this;
 			},
-			comp_remove = function(comp) {
+			comp_remove = function (comp) {
 				if (!comp) {
 					included = [];
 				} else {
-					included = _.filter(included, function(n_comp) {
+					included = _.filter(included, function (n_comp) {
 						if (n_comp !== comp) {
 							return n_comp;
 						}
@@ -102,7 +107,7 @@ gAlp.Composite = (function() {
 					return comp;
 				}
 			},
-			comp_get = function(i) {
+			comp_get = function (i) {
 				//DON'T FORGET isNaN will cast a boolean to a number ONLY supplying undefined will return a NaN
 				var str = i && _.isBoolean(i) ? 'pos' : !i && _.isBoolean(i) ? 'neg' : !isNaN(i) ? 'intg' : 'all',
 					ret = getOutcomes(str, i);
@@ -110,30 +115,34 @@ gAlp.Composite = (function() {
 				//return !isNaN(i) ? included[i] : included;
 			},
 			comp_find = _.partial(gAlp.Util.find, included),
-			doAdd = function(comp) {
+			doAdd = function (comp) {
 				try {
 					comp_add.call(composite, comp);
-				} catch (e) {
-					comp_add(_.extend(leaf, comp));
+				} catch (er) {
+					try {
+						comp_add(_.extend(leaf, comp));
+					} catch (error) {}
 				}
 			},
-			render = function() {
+			render = function () {
 				var args = arguments;
-				_.each(included, function(member) {
-					member.render && member.render.apply(member, args);
+				_.each(included, function (member) {
+					//member.render && member.render.apply(member, args);
+                    gAlp.Util.safeApply('render', member);
 				});
 			},
-			unrender = function() {
+			unrender = function () {
 				var args = arguments;
-				_.each(included, function(member) {
-					member.unrender && member.unrender.apply(member, args);
+				_.each(included, function (member) {
+					//member.unrender && member.unrender.apply(member, args);
+                    gAlp.Util.safeApply('unrender', member);
 				});
 			};
 		intafaces.unshift(comp_intaface);
 		if (included && _.isArray(included)) {
 			composite = {
 				add: doAdd,
-				addAll: function() {
+				addAll: function () {
 					_.each(_.toArray(arguments), doAdd);
 				},
 				remove: comp_remove,
@@ -147,7 +156,7 @@ gAlp.Composite = (function() {
 				//copy and empty included; establish contents conform to interface
 				tmp = included.slice();
 				included = [];
-				_.each(tmp, function(comp) {
+				_.each(tmp, function (comp) {
 					doAdd(comp);
 				});
 			}
