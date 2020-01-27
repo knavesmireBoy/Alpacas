@@ -59,6 +59,7 @@ if (!window.gAlp) {
 	function checkDummy() {
 		var val = gAlp.Util.getComputedStyle(document.getElementById("checkDummy"), "margin-top");
 		return val === "1px";
+		//return true;
 	}
 
 	function getProp(p, o) {
@@ -70,6 +71,7 @@ if (!window.gAlp) {
 	}
 
 	function simpleInvoke(o, m, arg) {
+       //gAlp.Util.report(o[m]);
 		if (arguments.length >= 3) { //allow for superfluous arguments 
 			return o[m](arg);
 		}
@@ -77,6 +79,16 @@ if (!window.gAlp) {
 
 	function caller(ctxt, ptl, arg, m) {
 		return ptl(ctxt)[m](arg);
+	}
+
+	function capitalize(st, char) {
+		var splitter = char || ' ',
+			mystr = st || '',
+			res = mystr.split(splitter),
+			mapper = function (str) {
+				return str.charAt(0).toUpperCase() + str.slice(1);
+			};
+		return _.map(res, mapper).join(' ');
 	}
 
 	function sortIndexFactory(index, klas, coll) {
@@ -173,7 +185,8 @@ if (!window.gAlp) {
 			]
 		],
 		sliceArray = function (list, end) {
-			return list.slice(_.random(0, end || list.length));
+			//return list.slice(_.random(0, end || list.length));
+			return list.slice(0, 3);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -188,9 +201,9 @@ if (!window.gAlp) {
 			}
 		}()),
 		//$ = function (str) {return document.getElementById(str);},
-        //con = _.bind(window.console.log, window.console),
+		//con = _.bind(window.console.log, window.console),
 		utils = gAlp.Util,
-        always = utils.always,
+		always = utils.always,
 		reverse = utils.invoker('reverse', Array.prototype.reverse),
 		repeatOnce = doRepeat()(1),
 		validator = utils.validator,
@@ -265,17 +278,15 @@ if (!window.gAlp) {
 						maybeClass = ptL(onValidation(validator('no match found', c), supportsNthChild), doDescription);
 					_.each(tr, function (td, i, data) {
 						//partially apply the RETURNED function from onValidation with (partially applied) function to invoke
-						//addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
 						provisionalID = onValidation(isFirstRow(always(Number(!i))), isTableHead(ptL(utils.isEqual, type, 'th')));
 						provisionalID(ptL(assignId, td));
 						_.compose(maybeClass, addspan, utils.setText(td), anCr(row))(type);
 						doOdd(_.compose(doOddRow, always(row)));
+						sellDiv.style.marginTop = '-1px';
 					});
 				});
-				//report.innerHTML = document.getElementsByTagName('td')[10].getAttribute('colspan');
-				//report.innerHTML = window.addEventListener; 
 				render = anCr(table.parentNode);
 				addLinkAttrs = _.extend(addLinkAttrs, {
 					href: getPath(subject)
@@ -298,7 +309,7 @@ if (!window.gAlp) {
 				getId = _.compose(ptL(byIndex, 1), doThrice(simpleInvoke)(' ')('split')),
 				doRow = onValidation(validator('is first row', ptL(utils.isEqual, 0))),
 				doColspan = ptL(setAttrs, {
-					colspan: 2
+					colSpan: 2 //!!!!////camelCase!!!!
 				}),
 				getPath = function (array) {
 					return array.slice(-1)[0][1];
@@ -475,7 +486,6 @@ if (!window.gAlp) {
 				addHandler = function (id, cb) {
 					this.handle = _.compose(_.identity, ptL(prepHandle, cb), ptL(doAddClass, id))($nav.get());
 				},
-			
 				getLink = getLinkDefer(index),
 				prepTitles = function () {
 					return ['Alpacas For Sale', mapLinktoTitle(getLink()), 'Next Alpaca'];
@@ -505,7 +515,7 @@ if (!window.gAlp) {
 									return composed(arr[0]);
 								}, _.zip(navExes, events));
 							_.compose(utils.getDefaultAction, best)()();
-                        //this.fire();
+							//this.fire();
 						},
 						nextLoop = function () {
 							var fromClass = _.compose(getDomTargetLink, ptL(byIndex, 0), ptL(utils.getByClass, 'current')),
@@ -525,14 +535,14 @@ if (!window.gAlp) {
 							init: ptL(init, prepTitles, doLoopNav),
 							id: 'loop',
 							addHandler: function () {
-                                //this.subscribe(tooltip_command.undo);
-                                _.compose(_.identity, ptL(prepHandle, _.bind(handler, this)), ptL(doAddClass, this.id))($nav.get());
-                            },
+								//this.subscribe(tooltip_command.undo);
+								_.compose(_.identity, ptL(prepHandle, _.bind(handler, this)), ptL(doAddClass, this.id))($nav.get());
+							},
 							hide: hide,
 							doNext: nextLoop(),
 							delegate: ptL(simpleInvoke, ctxt, 'handle', false)
 						};
-                    return _.extend(looper, new utils.Observer());
+					return _.extend(looper, new utils.Observer());
 					//return looper;
 				},
 				prepTab = function () {
@@ -551,8 +561,8 @@ if (!window.gAlp) {
 						tabber = {
 							init: ptL(init, partialLinks, doTabNav),
 							id: 'tab',
-							//addHandler: ptL(doAddHandler, ptL(addHandler, 'tab', ctxt.handle.bind(ctxt))),
-							addHandler: ptL(addHandler, 'tab', ctxt.handle.bind(ctxt)),
+							addHandler: ptL(addHandler, 'tab', _.bind(ctxt.handle, ctxt)),
+							//addHandler: _.bind(addHandler, this, 'tab', _.bind(ctxt.handle, ctxt)),
 							hide: hide,
 							doNext: nextTab,
 							delegate: ptL(simpleInvoke, ctxt, 'handle')
@@ -698,7 +708,14 @@ if (!window.gAlp) {
 			}
 		};
 	if (loaded) {
-		myloader.execute();
+		utils.highLighter.perform();
+      
+        try {
+            myloader.execute();
+        }
+        catch(e){
+         utils.report(e);
+        }
 	}
 }('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
