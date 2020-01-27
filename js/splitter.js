@@ -20,9 +20,8 @@ gAlp.Splitter = (function (gang) {
 	function getProp(p, o) {
 		return o && o[p];
 	}
-
 	var ptL = _.partial,
-        global_strong = /\|/g,
+		global_strong = /\|/g,
 		link = /\[([\S]+)$/,
 		getFont = function (size, face, n) {
 			return (size * n) + 'px ' + face;
@@ -51,7 +50,6 @@ gAlp.Splitter = (function (gang) {
 				remChar = this.remaining_text.length,
 				charWidth,
 				char_per_line;
-            
 			if (this.line < max) {
 				charWidth = max / remChar;
 				char_per_line = this.line / charWidth;
@@ -66,7 +64,6 @@ gAlp.Splitter = (function (gang) {
 			var string = this.remaining_text.slice(0, num),
 				L = string.length,
 				end = string.lastIndexOf('.') + 1; // ie(-1 + 1) ie 0 ie false   
-                        
 			if (!end || end < (L * percent)) {
 				end = string.lastIndexOf(' ');
 			}
@@ -93,7 +90,6 @@ gAlp.Splitter = (function (gang) {
 			} else {
 				this.saved_text = this.remaining_text.substring(0, this.end);
 				this.remaining_text = this.remaining_text.substring(this.end);
-                
 				if (orphan_tags(this.saved_text.match(global_strong))) {
 					//complete the tag on current line
 					this.saved_text += '|';

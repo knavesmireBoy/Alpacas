@@ -95,6 +95,7 @@ if (!window.gAlp) {
 		verbose = utils.getByClass('.verbose'),
 		//con = window.console.log.bind(window),
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
+		//threshold = Number(query.match(/[^\d]+(\d+)[^\d]+/)[1]),
 		getIndex = (function () {
 			if (mq) {
 				return function () {
@@ -234,25 +235,6 @@ if (!window.gAlp) {
 		//https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet
 		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
 		ie7 = utils.getComputedStyle(kid, 'color') === 'blue' ? true : false,
-		highLighter = {
-			perform: function () {
-				if (!utils.hasFeature('nthchild')) {
-					this.perform = function () {
-						var getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
-							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
-							getTerm = _.compose(curry2(utils.getter)('id'), ptL(utils.byIndex, 0), getBody),
-							links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
-							found = ptL(_.filter, _.toArray(links), function (link) {
-								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
-							});
-						_.compose(ptL(utils.addClass, 'current'), ptL(utils.byIndex, 0), found)();
-					};
-				} else {
-					this.perform = function () {};
-				}
-				this.perform();
-			}
-		},
 		factory = function (cond) {
 			var activate = function () {
 					utils.makeElement(prepSetStyles({
@@ -267,7 +249,6 @@ if (!window.gAlp) {
 							src: utils.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
 						},
 						exec = function () {
-							//alert('exec');
 							var setAttrs = utils.setAttrsFix(ie6 || ie7),
 								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
 							utils.makeElement(prepSetStyles({
@@ -290,15 +271,13 @@ if (!window.gAlp) {
 						},
 						execute: function () {
 							try {
-								highLighter.perform();
+								utils.highLighter.perform();
 								exec();
-                                report.innerHTML = 'exec';
 							} catch (e) {
 								report.innerHTML = e.message;
 							}
 						},
 						undo: function () {
-							//alert('udo');
 							mask_target.removeChild(utils.getNextElement(orig.nextSibling));
 						}
 					};
@@ -322,7 +301,7 @@ if (!window.gAlp) {
 							activate();
 							oldel = utils.removeNodeOnComplete(getKid());
 							render('img');
-							highLighter.perform();
+							utils.highLighter.perform();
 						},
 						undo: function () {
 							utils.removeNodeOnComplete(getKid());
@@ -346,14 +325,8 @@ if (!window.gAlp) {
 			utils.addHandler('resize', window, _.throttle(handler, 66));
 			command.init(outcomes)();
 		};
-        var p = document.getElementById('article').getElementsByTagName('p')[0];
-		p.innerHTML = document.documentElement.className;
-        try {
+		document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
 		utils.addHandler('load', window, ptL(player, constr()));
-        }
-        catch(e){
-            report.innerHTML = e;
-        }
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose))) {
 		//var p = document.getElementById('article').querySelector('p');
