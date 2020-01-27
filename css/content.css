@@ -1,7 +1,6 @@
 body {
 	font: 0.9em "Trebuchet MS", sans-serif;
 }
-
 html.no-js body {
 	background: ivory;
 }
@@ -12,16 +11,16 @@ html.js body {
 	font-size: 1em;
 }
 #header {
-    background-image: url("../assets/header__964.png");
-    background-position: 50%;
-    background-repeat: no-repeat;
+	background-image: url("../assets/header__964.png");
+	background-position: 50%;
+	background-repeat: no-repeat;
 }
 #header h2 {
 	font: italic 3.2em/1 "Handwritten", Georgia, cursive;
 	text-indent: .1em;
 	border-bottom: solid #9c0 1px;
 	letter-spacing: -.01em;
-    color: #900;
+	color: #900;
 	color: rgb(153, 0, 0);
 }
 #nav {
@@ -30,7 +29,7 @@ html.js body {
 }
 #nav a, #nav a:link, #nav a:visited {
 	background-image: url(../assets/links.jpg);
-	background-repeat:  no-repeat;
+	background-repeat: no-repeat;
 	background-position: 0 -4%;
 	color: #080;
 	color: rgb(0, 136, 0);
@@ -40,15 +39,15 @@ html.js body {
 	color: #6e2900;
 	background-position: 0 47%;
 }
-
 /*keep separate to keep early ie happy!*/
+
 /* ie6 requires "#nav a.current:visited" */
+
 #nav a.current, #nav a.current:visited, #nav a:active {
 	color: #900;
 	color: rgb(153, 0, 0);
 	background-position: 0 99%;
 }
-
 #nav li {
 	border-bottom: solid #C6C084 1px;
 	border-bottom: solid rgb(198, 192, 132) 1px;
@@ -81,30 +80,24 @@ html.js body {
 	color: #ff6;
 	color: rgb(255, 255, 102);
 }
-
 hr {
-  border: 0;
-  margin: .35em auto;
-  max-width: 100%;
-  background-position: 50%;
-  box-sizing: border-box;
+	border: 0;
+	margin: .35em auto;
+	max-width: 100%;
+	background-position: 50%;
+	box-sizing: border-box;
 }
-
 .fade {
-  height: 1px;
-  color: red;
-  background-image: linear-gradient(
-    90deg,
-    rgba(153,204,0,0),
-    rgba(153,204,0,1) 50%,
-    rgba(153,204,0,0) 100%);
+	height: 1px;
+	color: red;
+	background-image: linear-gradient( 90deg, rgba(153, 204, 0, 0), rgba(153, 204, 0, 1) 50%, rgba(153, 204, 0, 0) 100%);
 }
-
+.no-cssgradients hr {
+	display: none;
+}
 .indent {
-    margin-right: 33%;
+	margin-right: 33%;
 }
-
-
 /* hide from ie mac AND WATCH OUT FOR SPACE BETWEEN progid: AND DXImageTransform.
 MUST BE: progid:DXImageTransform
 _NOT BE: progid: DXImageTransform

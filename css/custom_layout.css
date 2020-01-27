@@ -125,10 +125,11 @@ ul.loop li a::after, ul.loop li a::before {
     height: 1%;
 }
 /*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
-#sell.extent figure{
+#sell.extent figure {
     display: table-cell;
     vertical-align: bottom;
     padding: 2% 2% 0;
+    padding: 1.2em 1.2em 0;
 }
 
 html.js #sell a, html.js #sell table {

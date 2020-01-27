@@ -280,6 +280,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	background: hsla(75, 50%, 90%, 1);
 	border-bottom-color: hsla(75, 50%, 90%, 1);
 	border-bottom-color: #EBF2D8;
+    color: red;
 }
 #alpacas_for_sale h2 {
 	color: #944;
