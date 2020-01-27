@@ -1,6 +1,6 @@
 /*!
- * modernizr v3.6.0
- * Build https://modernizr.com/download?-backgroundsize-bgpositionshorthand-bgpositionxy-bgsizecover-borderradius-boxsizing-classlist-cssanimations-cssgrid_cssgridlegacy-cssmask-csspointerevents-csstransforms-csstransitions-cssvhunit-cssvwunit-dataset-ellipsis-flexbox-nthchild-pointermq-requestanimationframe-rgba-shapes-supports-touchevents-hasevent-mq-prefixedcss-setclasses-dontmin
+ * modernizr v3.5.0
+ * Build https://modernizr.com/download?-backgroundsize-cssanimations-cssgrid_cssgridlegacy-cssmask-flexbox-flexboxlegacy-flexboxtweener-flexwrap-nthchild-opacity-requestanimationframe-svgasimg-svgfilters-addtest-atrule-domprefixes-hasevent-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-printshiv-setclasses-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -39,7 +39,7 @@
 
   var ModernizrProto = {
     // The current version, dummy
-    _version: '3.6.0',
+    _version: '3.5.0',
 
     // Any settings that don't work as separate modules
     // can go in here as configuration.
@@ -89,28 +89,71 @@
   
 /*!
 {
-  "name": "CSS Supports",
-  "property": "supports",
-  "caniuse": "css-featurequeries",
-  "tags": ["css"],
-  "builderAliases": ["css_supports"],
+  "name": "SVG filters",
+  "property": "svgfilters",
+  "caniuse": "svg-filters",
+  "tags": ["svg"],
+  "builderAliases": ["svg_filters"],
+  "authors": ["Erik Dahlstrom"],
   "notes": [{
-    "name": "W3 Spec",
-    "href": "http://dev.w3.org/csswg/css3-conditional/#at-supports"
-  },{
-    "name": "Related Github Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/648"
-  },{
-    "name": "W3 Info",
-    "href": "http://dev.w3.org/csswg/css3-conditional/#the-csssupportsrule-interface"
+    "name": "W3C Spec",
+    "href": "https://www.w3.org/TR/SVG11/filters.html"
   }]
 }
 !*/
 
-  var newSyntax = 'CSS' in window && 'supports' in window.CSS;
-  var oldSyntax = 'supportsCSS' in window;
-  Modernizr.addTest('supports', newSyntax || oldSyntax);
+  // Should fail in Safari: https://stackoverflow.com/questions/9739955/feature-detecting-support-for-svg-filters.
+  Modernizr.addTest('svgfilters', function() {
+    var result = false;
+    try {
+      result = 'SVGFEColorMatrixElement' in window &&
+        SVGFEColorMatrixElement.SVG_FECOLORMATRIX_TYPE_SATURATE == 2;
+    }
+    catch (e) {}
+    return result;
+  });
 
+
+  /**
+   * List of property values to set for css tests. See ticket #21
+   * http://git.io/vUGl4
+   *
+   * @memberof Modernizr
+   * @name Modernizr._prefixes
+   * @optionName Modernizr._prefixes
+   * @optionProp prefixes
+   * @access public
+   * @example
+   *
+   * Modernizr._prefixes is the internal list of prefixes that we test against
+   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
+   * an array of kebab-case vendor prefixes you can use within your code.
+   *
+   * Some common use cases include
+   *
+   * Generating all possible prefixed version of a CSS property
+   * ```js
+   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
+   *
+   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
+   * ```
+   *
+   * Generating all possible prefixed version of a CSS value
+   * ```js
+   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
+   *
+   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
+   * ```
+   */
+
+  // we use ['',''] rather than an empty array in order to allow a pattern of .`join()`ing prefixes to test
+  // values in feature detects to continue to work
+  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : ['','']);
+
+  // expose these for the plugin API. Look in the source for how to join() them against your input
+  ModernizrProto._prefixes = prefixes;
+
+  
 
   /**
    * is returns a boolean if the typeof an obj is exactly type.
@@ -206,22 +249,6 @@
 
   var docElement = document.documentElement;
   
-/*!
-{
-  "name": "classList",
-  "caniuse": "classlist",
-  "property": "classlist",
-  "tags": ["dom"],
-  "builderAliases": ["dataview_api"],
-  "notes": [{
-    "name": "MDN Docs",
-    "href": "https://developer.mozilla.org/en/DOM/element.classList"
-  }]
-}
-!*/
-
-  Modernizr.addTest('classlist', 'classList' in docElement);
-
 
   /**
    * A convenience helper to check if the document we are running in is an SVG document
@@ -272,711 +299,582 @@
 
   ;
 
-  /**
-   * createElement is a convenience wrapper around document.createElement. Since we
-   * use createElement all over the place, this allows for (slightly) smaller code
-   * as well as abstracting away issues with creating elements in contexts other than
-   * HTML documents (e.g. SVG documents).
-   *
-   * @access private
-   * @function createElement
-   * @returns {HTMLElement|SVGElement} An HTML or SVG element
-   */
+/**
+  * @optionName html5printshiv
+  * @optionProp html5printshiv
+  */
 
-  function createElement() {
-    if (typeof document.createElement !== 'function') {
-      // This is the case in IE7, where the type of createElement is "object".
-      // For this reason, we cannot call apply() as Object is not a Function.
-      return document.createElement(arguments[0]);
-    } else if (isSVG) {
-      return document.createElementNS.call(document, 'http://www.w3.org/2000/svg', arguments[0]);
-    } else {
-      return document.createElement.apply(document, arguments);
-    }
-  }
+  // Take the html5 variable out of the html5shiv scope so we can return it.
+  var html5;
+  if (!isSVG) {
 
-  ;
+    /**
+     * @preserve HTML5 Shiv 3.7.3 | @afarkas @jdalton @jon_neal @rem | MIT/GPL2 Licensed
+     */
+    ;(function(window, document) {
+      /** version */
+      var version = '3.7.3';
 
-  /**
-   * Modernizr.hasEvent() detects support for a given event
-   *
-   * @memberof Modernizr
-   * @name Modernizr.hasEvent
-   * @optionName Modernizr.hasEvent()
-   * @optionProp hasEvent
-   * @access public
-   * @function hasEvent
-   * @param  {string|*} eventName - the name of an event to test for (e.g. "resize")
-   * @param  {Element|string} [element=HTMLDivElement] - is the element|document|window|tagName to test on
-   * @returns {boolean}
-   * @example
-   *  `Modernizr.hasEvent` lets you determine if the browser supports a supplied event.
-   *  By default, it does this detection on a div element
-   *
-   * ```js
-   *  hasEvent('blur') // true;
-   * ```
-   *
-   * However, you are able to give an object as a second argument to hasEvent to
-   * detect an event on something other than a div.
-   *
-   * ```js
-   *  hasEvent('devicelight', window) // true;
-   * ```
-   *
-   */
+      /** Preset options */
+      var options = window.html5 || {};
 
-  var hasEvent = (function() {
+      /** Used to skip problem elements */
+      var reSkip = /^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i;
 
-    // Detect whether event support can be detected via `in`. Test on a DOM element
-    // using the "blur" event b/c it should always exist. bit.ly/event-detection
-    var needsFallback = !('onblur' in document.documentElement);
+      /** Not all elements can be cloned in IE **/
+      var saveClones = /^(?:a|b|code|div|fieldset|h1|h2|h3|h4|h5|h6|i|label|li|ol|p|q|span|strong|style|table|tbody|td|th|tr|ul)$/i;
 
-    function inner(eventName, element) {
+      /** Detect whether the browser supports default html5 styles */
+      var supportsHtml5Styles;
 
-      var isSupported;
-      if (!eventName) { return false; }
-      if (!element || typeof element === 'string') {
-        element = createElement(element || 'div');
-      }
+      /** Name of the expando, to work with multiple documents or to re-shiv one document */
+      var expando = '_html5shiv';
 
-      // Testing via the `in` operator is sufficient for modern browsers and IE.
-      // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
-      // "resize", whereas `in` "catches" those.
-      eventName = 'on' + eventName;
-      isSupported = eventName in element;
+      /** The id for the the documents expando */
+      var expanID = 0;
 
-      // Fallback technique for old Firefox - bit.ly/event-detection
-      if (!isSupported && needsFallback) {
-        if (!element.setAttribute) {
-          // Switch to generic element if it lacks `setAttribute`.
-          // It could be the `document`, `window`, or something else.
-          element = createElement('div');
+      /** Cached data for each document */
+      var expandoData = {};
+
+      /** Detect whether the browser supports unknown elements */
+      var supportsUnknownElements;
+
+      (function() {
+        try {
+          var a = document.createElement('a');
+          a.innerHTML = '<xyz></xyz>';
+          //if the hidden property is implemented we can assume, that the browser supports basic HTML5 Styles
+          supportsHtml5Styles = ('hidden' in a);
+
+          supportsUnknownElements = a.childNodes.length == 1 || (function() {
+            // assign a false positive if unable to shiv
+            (document.createElement)('a');
+            var frag = document.createDocumentFragment();
+            return (
+              typeof frag.cloneNode == 'undefined' ||
+                typeof frag.createDocumentFragment == 'undefined' ||
+                typeof frag.createElement == 'undefined'
+            );
+          }());
+        } catch(e) {
+          // assign a false positive if detection fails => unable to shiv
+          supportsHtml5Styles = true;
+          supportsUnknownElements = true;
         }
 
-        element.setAttribute(eventName, '');
-        isSupported = typeof element[eventName] === 'function';
+      }());
 
-        if (element[eventName] !== undefined) {
-          // If property was created, "remove it" by setting value to `undefined`.
-          element[eventName] = undefined;
-        }
-        element.removeAttribute(eventName);
+      /*--------------------------------------------------------------------------*/
+
+      /**
+       * Creates a style sheet with the given CSS text and adds it to the document.
+       * @private
+       * @param {Document} ownerDocument The document.
+       * @param {String} cssText The CSS text.
+       * @returns {StyleSheet} The style element.
+       */
+      function addStyleSheet(ownerDocument, cssText) {
+        var p = ownerDocument.createElement('p'),
+          parent = ownerDocument.getElementsByTagName('head')[0] || ownerDocument.documentElement;
+
+        p.innerHTML = 'x<style>' + cssText + '</style>';
+        return parent.insertBefore(p.lastChild, parent.firstChild);
       }
 
-      return isSupported;
-    }
-    return inner;
-  })();
-
-
-  ModernizrProto.hasEvent = hasEvent;
-  
-/*!
-{
-  "name": "Background Position Shorthand",
-  "property": "bgpositionshorthand",
-  "tags": ["css"],
-  "builderAliases": ["css_backgroundposition_shorthand"],
-  "notes": [{
-    "name": "MDN Docs",
-    "href": "https://developer.mozilla.org/en/CSS/background-position"
-  }, {
-    "name": "W3 Spec",
-    "href": "https://www.w3.org/TR/css3-background/#background-position"
-  }, {
-    "name": "Demo",
-    "href": "https://jsfiddle.net/Blink/bBXvt/"
-  }]
-}
-!*/
-/* DOC
-Detects if you can use the shorthand method to define multiple parts of an
-element's background-position simultaniously.
-
-eg `background-position: right 10px bottom 10px`
-*/
-
-  Modernizr.addTest('bgpositionshorthand', function() {
-    var elem = createElement('a');
-    var eStyle = elem.style;
-    var val = 'right 10px bottom 10px';
-    eStyle.cssText = 'background-position: ' + val + ';';
-    return (eStyle.backgroundPosition === val);
-  });
-
-/*!
-{
-  "name": "CSS Pointer Events",
-  "caniuse": "pointer-events",
-  "property": "csspointerevents",
-  "authors": ["ausi"],
-  "tags": ["css"],
-  "builderAliases": ["css_pointerevents"],
-  "notes": [
-    {
-      "name": "MDN Docs",
-      "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events"
-    },{
-      "name": "Test Project Page",
-      "href": "https://ausi.github.com/Feature-detection-technique-for-pointer-events/"
-    },{
-      "name": "Test Project Wiki",
-      "href": "https://github.com/ausi/Feature-detection-technique-for-pointer-events/wiki"
-    },
-    {
-      "name": "Related Github Issue",
-      "href": "https://github.com/Modernizr/Modernizr/issues/80"
-    }
-  ]
-}
-!*/
-
-  Modernizr.addTest('csspointerevents', function() {
-    var style = createElement('a').style;
-    style.cssText = 'pointer-events:auto';
-    return style.pointerEvents === 'auto';
-  });
-
-/*!
-{
-  "name": "CSS rgba",
-  "caniuse": "css3-colors",
-  "property": "rgba",
-  "tags": ["css"],
-  "notes": [{
-    "name": "CSSTricks Tutorial",
-    "href": "https://css-tricks.com/rgba-browser-support/"
-  }]
-}
-!*/
-
-  Modernizr.addTest('rgba', function() {
-    var style = createElement('a').style;
-    style.cssText = 'background-color:rgba(150,255,150,.5)';
-
-    return ('' + style.backgroundColor).indexOf('rgba') > -1;
-  });
-
-/*!
-{
-  "name": "dataset API",
-  "caniuse": "dataset",
-  "property": "dataset",
-  "tags": ["dom"],
-  "builderAliases": ["dom_dataset"],
-  "authors": ["@phiggins42"]
-}
-!*/
-
-  // dataset API for data-* attributes
-  Modernizr.addTest('dataset', function() {
-    var n = createElement('div');
-    n.setAttribute('data-a-b', 'c');
-    return !!(n.dataset && n.dataset.aB === 'c');
-  });
-
-
-  /**
-   * domToCSS takes a camelCase string and converts it to kebab-case
-   * e.g. boxSizing -> box-sizing
-   *
-   * @access private
-   * @function domToCSS
-   * @param {string} name - String name of camelCase prop we want to convert
-   * @returns {string} The kebab-case version of the supplied name
-   */
-
-  function domToCSS(name) {
-    return name.replace(/([A-Z])/g, function(str, m1) {
-      return '-' + m1.toLowerCase();
-    }).replace(/^ms-/, '-ms-');
-  }
-  ;
-
-  /**
-   * List of property values to set for css tests. See ticket #21
-   * http://git.io/vUGl4
-   *
-   * @memberof Modernizr
-   * @name Modernizr._prefixes
-   * @optionName Modernizr._prefixes
-   * @optionProp prefixes
-   * @access public
-   * @example
-   *
-   * Modernizr._prefixes is the internal list of prefixes that we test against
-   * inside of things like [prefixed](#modernizr-prefixed) and [prefixedCSS](#-code-modernizr-prefixedcss). It is simply
-   * an array of kebab-case vendor prefixes you can use within your code.
-   *
-   * Some common use cases include
-   *
-   * Generating all possible prefixed version of a CSS property
-   * ```js
-   * var rule = Modernizr._prefixes.join('transform: rotate(20deg); ');
-   *
-   * rule === 'transform: rotate(20deg); webkit-transform: rotate(20deg); moz-transform: rotate(20deg); o-transform: rotate(20deg); ms-transform: rotate(20deg);'
-   * ```
-   *
-   * Generating all possible prefixed version of a CSS value
-   * ```js
-   * rule = 'display:' +  Modernizr._prefixes.join('flex; display:') + 'flex';
-   *
-   * rule === 'display:flex; display:-webkit-flex; display:-moz-flex; display:-o-flex; display:-ms-flex; display:flex'
-   * ```
-   */
-
-  // we use ['',''] rather than an empty array in order to allow a pattern of .`join()`ing prefixes to test
-  // values in feature detects to continue to work
-  var prefixes = (ModernizrProto._config.usePrefixes ? ' -webkit- -moz- -o- -ms- '.split(' ') : ['','']);
-
-  // expose these for the plugin API. Look in the source for how to join() them against your input
-  ModernizrProto._prefixes = prefixes;
-
-  
-
-
-  /**
-   * wrapper around getComputedStyle, to fix issues with Firefox returning null when
-   * called inside of a hidden iframe
-   *
-   * @access private
-   * @function computedStyle
-   * @param {HTMLElement|SVGElement} - The element we want to find the computed styles of
-   * @param {string|null} [pseudoSelector]- An optional pseudo element selector (e.g. :before), of null if none
-   * @returns {CSSStyleDeclaration}
-   */
-
-  function computedStyle(elem, pseudo, prop) {
-    var result;
-
-    if ('getComputedStyle' in window) {
-      result = getComputedStyle.call(window, elem, pseudo);
-      var console = window.console;
-
-      if (result !== null) {
-        if (prop) {
-          result = result.getPropertyValue(prop);
-        }
-      } else {
-        if (console) {
-          var method = console.error ? 'error' : 'log';
-          console[method].call(console, 'getComputedStyle returning null, its possible modernizr test results are inaccurate');
-        }
+      /**
+       * Returns the value of `html5.elements` as an array.
+       * @private
+       * @returns {Array} An array of shived element node names.
+       */
+      function getElements() {
+        var elements = html5.elements;
+        return typeof elements == 'string' ? elements.split(' ') : elements;
       }
-    } else {
-      result = !pseudo && elem.currentStyle && elem.currentStyle[prop];
-    }
 
-    return result;
-  }
-
-  ;
-
-  /**
-   * roundedEquals takes two integers and checks if the first is within 1 of the second
-   *
-   * @access private
-   * @function roundedEquals
-   * @param {number} a
-   * @param {number} b
-   * @returns {boolean}
-   */
-
-  function roundedEquals(a, b) {
-    return a - 1 === b || a === b || a + 1 === b;
-  }
-
-  ;
-
-  /**
-   * getBody returns the body of a document, or an element that can stand in for
-   * the body if a real body does not exist
-   *
-   * @access private
-   * @function getBody
-   * @returns {HTMLElement|SVGElement} Returns the real body of a document, or an
-   * artificially created element that stands in for the body
-   */
-
-  function getBody() {
-    // After page load injecting a fake body doesn't work so check if body exists
-    var body = document.body;
-
-    if (!body) {
-      // Can't use the real body create a fake one.
-      body = createElement(isSVG ? 'svg' : 'body');
-      body.fake = true;
-    }
-
-    return body;
-  }
-
-  ;
-
-  /**
-   * injectElementWithStyles injects an element with style element and some CSS rules
-   *
-   * @access private
-   * @function injectElementWithStyles
-   * @param {string} rule - String representing a css rule
-   * @param {function} callback - A function that is used to test the injected element
-   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
-   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
-   * @returns {boolean}
-   */
-
-  function injectElementWithStyles(rule, callback, nodes, testnames) {
-    var mod = 'modernizr';
-    var style;
-    var ret;
-    var node;
-    var docOverflow;
-    var div = createElement('div');
-    var body = getBody();
-
-    if (parseInt(nodes, 10)) {
-      // In order not to give false positives we create a node for each test
-      // This also allows the method to scale for unspecified uses
-      while (nodes--) {
-        node = createElement('div');
-        node.id = testnames ? testnames[nodes] : mod + (nodes + 1);
-        div.appendChild(node);
+      /**
+       * Extends the built-in list of html5 elements
+       * @memberOf html5
+       * @param {String|Array} newElements whitespace separated list or array of new element names to shiv
+       * @param {Document} ownerDocument The context document.
+       */
+      function addElements(newElements, ownerDocument) {
+        var elements = html5.elements;
+        if(typeof elements != 'string'){
+          elements = elements.join(' ');
+        }
+        if(typeof newElements != 'string'){
+          newElements = newElements.join(' ');
+        }
+        html5.elements = elements +' '+ newElements;
+        shivDocument(ownerDocument);
       }
-    }
 
-    style = createElement('style');
-    style.type = 'text/css';
-    style.id = 's' + mod;
+      /**
+       * Returns the data associated to the given document
+       * @private
+       * @param {Document} ownerDocument The document.
+       * @returns {Object} An object of data.
+       */
+      function getExpandoData(ownerDocument) {
+        var data = expandoData[ownerDocument[expando]];
+        if (!data) {
+          data = {};
+          expanID++;
+          ownerDocument[expando] = expanID;
+          expandoData[expanID] = data;
+        }
+        return data;
+      }
 
-    // IE6 will false positive on some tests due to the style element inside the test div somehow interfering offsetHeight, so insert it into body or fakebody.
-    // Opera will act all quirky when injecting elements in documentElement when page is served as xml, needs fakebody too. #270
-    (!body.fake ? div : body).appendChild(style);
-    body.appendChild(div);
+      /**
+       * returns a shived element for the given nodeName and document
+       * @memberOf html5
+       * @param {String} nodeName name of the element
+       * @param {Document} ownerDocument The context document.
+       * @returns {Object} The shived element.
+       */
+      function createElement(nodeName, ownerDocument, data){
+        if (!ownerDocument) {
+          ownerDocument = document;
+        }
+        if(supportsUnknownElements){
+          return ownerDocument.createElement(nodeName);
+        }
+        if (!data) {
+          data = getExpandoData(ownerDocument);
+        }
+        var node;
 
-    if (style.styleSheet) {
-      style.styleSheet.cssText = rule;
-    } else {
-      style.appendChild(document.createTextNode(rule));
-    }
-    div.id = mod;
+        if (data.cache[nodeName]) {
+          node = data.cache[nodeName].cloneNode();
+        } else if (saveClones.test(nodeName)) {
+          node = (data.cache[nodeName] = data.createElem(nodeName)).cloneNode();
+        } else {
+          node = data.createElem(nodeName);
+        }
 
-    if (body.fake) {
-      //avoid crashing IE8, if background image is used
-      body.style.background = '';
-      //Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
-      body.style.overflow = 'hidden';
-      docOverflow = docElement.style.overflow;
-      docElement.style.overflow = 'hidden';
-      docElement.appendChild(body);
-    }
+        // Avoid adding some elements to fragments in IE < 9 because
+        // * Attributes like `name` or `type` cannot be set/changed once an element
+        //   is inserted into a document/fragment
+        // * Link elements with `src` attributes that are inaccessible, as with
+        //   a 403 response, will cause the tab/window to crash
+        // * Script elements appended to fragments will execute when their `src`
+        //   or `text` property is set
+        return node.canHaveChildren && !reSkip.test(nodeName) && !node.tagUrn ? data.frag.appendChild(node) : node;
+      }
 
-    ret = callback(div, rule);
-    // If this is done after page load we don't want to remove the body so check if body exists
-    if (body.fake) {
-      body.parentNode.removeChild(body);
-      docElement.style.overflow = docOverflow;
-      // Trigger layout so kinetic scrolling isn't disabled in iOS6+
-      // eslint-disable-next-line
-      docElement.offsetHeight;
-    } else {
-      div.parentNode.removeChild(div);
-    }
+      /**
+       * returns a shived DocumentFragment for the given document
+       * @memberOf html5
+       * @param {Document} ownerDocument The context document.
+       * @returns {Object} The shived DocumentFragment.
+       */
+      function createDocumentFragment(ownerDocument, data){
+        if (!ownerDocument) {
+          ownerDocument = document;
+        }
+        if(supportsUnknownElements){
+          return ownerDocument.createDocumentFragment();
+        }
+        data = data || getExpandoData(ownerDocument);
+        var clone = data.frag.cloneNode(),
+          i = 0,
+          elems = getElements(),
+          l = elems.length;
+        for(;i<l;i++){
+          clone.createElement(elems[i]);
+        }
+        return clone;
+      }
 
-    return !!ret;
+      /**
+       * Shivs the `createElement` and `createDocumentFragment` methods of the document.
+       * @private
+       * @param {Document|DocumentFragment} ownerDocument The document.
+       * @param {Object} data of the document.
+       */
+      function shivMethods(ownerDocument, data) {
+        if (!data.cache) {
+          data.cache = {};
+          data.createElem = ownerDocument.createElement;
+          data.createFrag = ownerDocument.createDocumentFragment;
+          data.frag = data.createFrag();
+        }
 
-  }
 
-  ;
+        ownerDocument.createElement = function(nodeName) {
+          //abort shiv
+          if (!html5.shivMethods) {
+            return data.createElem(nodeName);
+          }
+          return createElement(nodeName, ownerDocument, data);
+        };
 
-  /**
-   * Modernizr.mq tests a given media query, live against the current state of the window
-   * adapted from matchMedia polyfill by Scott Jehl and Paul Irish
-   * gist.github.com/786768
-   *
-   * @memberof Modernizr
-   * @name Modernizr.mq
-   * @optionName Modernizr.mq()
-   * @optionProp mq
-   * @access public
-   * @function mq
-   * @param {string} mq - String of the media query we want to test
-   * @returns {boolean}
-   * @example
-   * Modernizr.mq allows for you to programmatically check if the current browser
-   * window state matches a media query.
-   *
-   * ```js
-   *  var query = Modernizr.mq('(min-width: 900px)');
-   *
-   *  if (query) {
-   *    // the browser window is larger than 900px
-   *  }
-   * ```
-   *
-   * Only valid media queries are supported, therefore you must always include values
-   * with your media query
-   *
-   * ```js
-   * // good
-   *  Modernizr.mq('(min-width: 900px)');
-   *
-   * // bad
-   *  Modernizr.mq('min-width');
-   * ```
-   *
-   * If you would just like to test that media queries are supported in general, use
-   *
-   * ```js
-   *  Modernizr.mq('only all'); // true if MQ are supported, false if not
-   * ```
-   *
-   *
-   * Note that if the browser does not support media queries (e.g. old IE) mq will
-   * always return false.
-   */
+        ownerDocument.createDocumentFragment = Function('h,f', 'return function(){' +
+                                                        'var n=f.cloneNode(),c=n.createElement;' +
+                                                        'h.shivMethods&&(' +
+                                                        // unroll the `createElement` calls
+                                                        getElements().join().replace(/[\w\-:]+/g, function(nodeName) {
+                                                          data.createElem(nodeName);
+                                                          data.frag.createElement(nodeName);
+                                                          return 'c("' + nodeName + '")';
+                                                        }) +
+          ');return n}'
+                                                       )(html5, data.frag);
+      }
 
-  var mq = (function() {
-    var matchMedia = window.matchMedia || window.msMatchMedia;
-    if (matchMedia) {
-      return function(mq) {
-        var mql = matchMedia(mq);
-        return mql && mql.matches || false;
+      /*--------------------------------------------------------------------------*/
+
+      /**
+       * Shivs the given document.
+       * @memberOf html5
+       * @param {Document} ownerDocument The document to shiv.
+       * @returns {Document} The shived document.
+       */
+      function shivDocument(ownerDocument) {
+        if (!ownerDocument) {
+          ownerDocument = document;
+        }
+        var data = getExpandoData(ownerDocument);
+
+        if (html5.shivCSS && !supportsHtml5Styles && !data.hasCSS) {
+          data.hasCSS = !!addStyleSheet(ownerDocument,
+                                        // corrects block display not defined in IE6/7/8/9
+                                        'article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}' +
+                                        // adds styling not present in IE6/7/8/9
+                                        'mark{background:#FF0;color:#000}' +
+                                        // hides non-rendered elements
+                                        'template{display:none}'
+                                       );
+        }
+        if (!supportsUnknownElements) {
+          shivMethods(ownerDocument, data);
+        }
+        return ownerDocument;
+      }
+
+      /*--------------------------------------------------------------------------*/
+
+      /**
+       * The `html5` object is exposed so that more elements can be shived and
+       * existing shiving can be detected on iframes.
+       * @type Object
+       * @example
+       *
+       * // options can be changed before the script is included
+       * html5 = { 'elements': 'mark section', 'shivCSS': false, 'shivMethods': false };
+       */
+      var html5 = {
+
+        /**
+         * An array or space separated string of node names of the elements to shiv.
+         * @memberOf html5
+         * @type Array|String
+         */
+        'elements': options.elements || 'abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output picture progress section summary template time video',
+
+        /**
+         * current version of html5shiv
+         */
+        'version': version,
+
+        /**
+         * A flag to indicate that the HTML5 style sheet should be inserted.
+         * @memberOf html5
+         * @type Boolean
+         */
+        'shivCSS': (options.shivCSS !== false),
+
+        /**
+         * Is equal to true if a browser supports creating unknown/HTML5 elements
+         * @memberOf html5
+         * @type boolean
+         */
+        'supportsUnknownElements': supportsUnknownElements,
+
+        /**
+         * A flag to indicate that the document's `createElement` and `createDocumentFragment`
+         * methods should be overwritten.
+         * @memberOf html5
+         * @type Boolean
+         */
+        'shivMethods': (options.shivMethods !== false),
+
+        /**
+         * A string to describe the type of `html5` object ("default" or "default print").
+         * @memberOf html5
+         * @type String
+         */
+        'type': 'default',
+
+        // shivs the document according to the specified `html5` object options
+        'shivDocument': shivDocument,
+
+        //creates a shived element
+        createElement: createElement,
+
+        //creates a shived documentFragment
+        createDocumentFragment: createDocumentFragment,
+
+        //extends list of elements
+        addElements: addElements
       };
-    }
 
-    return function(mq) {
-      var bool = false;
+      /*--------------------------------------------------------------------------*/
 
-      injectElementWithStyles('@media ' + mq + ' { #modernizr { position: absolute; } }', function(node) {
-        bool = (window.getComputedStyle ?
-                window.getComputedStyle(node, null) :
-                node.currentStyle).position == 'absolute';
-      });
+      // expose html5
+      window.html5 = html5;
 
-      return bool;
-    };
-  })();
+      // shiv the document
+      shivDocument(document);
 
+      /*------------------------------- Print Shiv -------------------------------*/
 
-  ModernizrProto.mq = mq;
+      /** Used to filter media types */
+      var reMedia = /^$|\b(?:all|print)\b/;
 
-  
+      /** Used to namespace printable elements */
+      var shivNamespace = 'html5shiv';
 
-  /**
-   * testStyles injects an element with style element and some CSS rules
-   *
-   * @memberof Modernizr
-   * @name Modernizr.testStyles
-   * @optionName Modernizr.testStyles()
-   * @optionProp testStyles
-   * @access public
-   * @function testStyles
-   * @param {string} rule - String representing a css rule
-   * @param {function} callback - A function that is used to test the injected element
-   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
-   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
-   * @returns {boolean}
-   * @example
-   *
-   * `Modernizr.testStyles` takes a CSS rule and injects it onto the current page
-   * along with (possibly multiple) DOM elements. This lets you check for features
-   * that can not be detected by simply checking the [IDL](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Interface_development_guide/IDL_interface_rules).
-   *
-   * ```js
-   * Modernizr.testStyles('#modernizr { width: 9px; color: papayawhip; }', function(elem, rule) {
-   *   // elem is the first DOM node in the page (by default #modernizr)
-   *   // rule is the first argument you supplied - the CSS rule in string form
-   *
-   *   addTest('widthworks', elem.style.width === '9px')
-   * });
-   * ```
-   *
-   * If your test requires multiple nodes, you can include a third argument
-   * indicating how many additional div elements to include on the page. The
-   * additional nodes are injected as children of the `elem` that is returned as
-   * the first argument to the callback.
-   *
-   * ```js
-   * Modernizr.testStyles('#modernizr {width: 1px}; #modernizr2 {width: 2px}', function(elem) {
-   *   document.getElementById('modernizr').style.width === '1px'; // true
-   *   document.getElementById('modernizr2').style.width === '2px'; // true
-   *   elem.firstChild === document.getElementById('modernizr2'); // true
-   * }, 1);
-   * ```
-   *
-   * By default, all of the additional elements have an ID of `modernizr[n]`, where
-   * `n` is its index (e.g. the first additional, second overall is `#modernizr2`,
-   * the second additional is `#modernizr3`, etc.).
-   * If you want to have more meaningful IDs for your function, you can provide
-   * them as the fourth argument, as an array of strings
-   *
-   * ```js
-   * Modernizr.testStyles('#foo {width: 10px}; #bar {height: 20px}', function(elem) {
-   *   elem.firstChild === document.getElementById('foo'); // true
-   *   elem.lastChild === document.getElementById('bar'); // true
-   * }, 2, ['foo', 'bar']);
-   * ```
-   *
-   */
+      /** Detect whether the browser supports shivable style sheets */
+      var supportsShivableSheets = !supportsUnknownElements && (function() {
+        // assign a false negative if unable to shiv
+        var docEl = document.documentElement;
+        return !(
+          typeof document.namespaces == 'undefined' ||
+            typeof document.parentWindow == 'undefined' ||
+            typeof docEl.applyElement == 'undefined' ||
+            typeof docEl.removeNode == 'undefined' ||
+            typeof window.attachEvent == 'undefined'
+        );
+      }());
 
-  var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
-  
-/*!
-{
-  "name": "Touch Events",
-  "property": "touchevents",
-  "caniuse" : "touch",
-  "tags": ["media", "attribute"],
-  "notes": [{
-    "name": "Touch Events spec",
-    "href": "https://www.w3.org/TR/2013/WD-touch-events-20130124/"
-  }],
-  "warnings": [
-    "Indicates if the browser supports the Touch Events spec, and does not necessarily reflect a touchscreen device"
-  ],
-  "knownBugs": [
-    "False-positive on some configurations of Nokia N900",
-    "False-positive on some BlackBerry 6.0 builds – https://github.com/Modernizr/Modernizr/issues/372#issuecomment-3112695"
-  ]
-}
-!*/
-/* DOC
-Indicates if the browser supports the W3C Touch Events API.
+      /*--------------------------------------------------------------------------*/
 
-This *does not* necessarily reflect a touchscreen device:
+      /**
+       * Wraps all HTML5 elements in the given document with printable elements.
+       * (eg. the "header" element is wrapped with the "html5shiv:header" element)
+       * @private
+       * @param {Document} ownerDocument The document.
+       * @returns {Array} An array wrappers added.
+       */
+      function addWrappers(ownerDocument) {
+        var node,
+          nodes = ownerDocument.getElementsByTagName('*'),
+          index = nodes.length,
+          reElements = RegExp('^(?:' + getElements().join('|') + ')$', 'i'),
+          result = [];
 
-* Older touchscreen devices only emulate mouse events
-* Modern IE touch devices implement the Pointer Events API instead: use `Modernizr.pointerevents` to detect support for that
-* Some browsers & OS setups may enable touch APIs when no touchscreen is connected
-* Future browsers may implement other event models for touch interactions
+        while (index--) {
+          node = nodes[index];
+          if (reElements.test(node.nodeName)) {
+            result.push(node.applyElement(createWrapper(node)));
+          }
+        }
+        return result;
+      }
 
-See this article: [You Can't Detect A Touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/).
+      /**
+       * Creates a printable wrapper for the given element.
+       * @private
+       * @param {Element} element The element.
+       * @returns {Element} The wrapper.
+       */
+      function createWrapper(element) {
+        var node,
+          nodes = element.attributes,
+          index = nodes.length,
+          wrapper = element.ownerDocument.createElement(shivNamespace + ':' + element.nodeName);
 
-It's recommended to bind both mouse and touch/pointer events simultaneously – see [this HTML5 Rocks tutorial](http://www.html5rocks.com/en/mobile/touchandmouse/).
+        // copy element attributes to the wrapper
+        while (index--) {
+          node = nodes[index];
+          node.specified && wrapper.setAttribute(node.nodeName, node.nodeValue);
+        }
+        // copy element styles to the wrapper
+        wrapper.style.cssText = element.style.cssText;
+        return wrapper;
+      }
 
-This test will also return `true` for Firefox 4 Multitouch support.
-*/
+      /**
+       * Shivs the given CSS text.
+       * (eg. header{} becomes html5shiv\:header{})
+       * @private
+       * @param {String} cssText The CSS text to shiv.
+       * @returns {String} The shived CSS text.
+       */
+      function shivCssText(cssText) {
+        var pair,
+          parts = cssText.split('{'),
+          index = parts.length,
+          reElements = RegExp('(^|[\\s,>+~])(' + getElements().join('|') + ')(?=[[\\s,>+~#.:]|$)', 'gi'),
+          replacement = '$1' + shivNamespace + '\\:$2';
 
-  // Chrome (desktop) used to lie about its support on this, but that has since been rectified: http://crbug.com/36415
-  Modernizr.addTest('touchevents', function() {
-    var bool;
-    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
-      bool = true;
-    } else {
-      // include the 'heartz' as a way to have a non matching MQ to help terminate the join
-      // https://git.io/vznFH
-      var query = ['@media (', prefixes.join('touch-enabled),('), 'heartz', ')', '{#modernizr{top:9px;position:absolute}}'].join('');
-      testStyles(query, function(node) {
-        bool = node.offsetTop === 9;
-      });
-    }
-    return bool;
-  });
+        while (index--) {
+          pair = parts[index] = parts[index].split('}');
+          pair[pair.length - 1] = pair[pair.length - 1].replace(reElements, replacement);
+          parts[index] = pair.join('}');
+        }
+        return parts.join('{');
+      }
 
-/*!
-{
-  "name": "CSS :nth-child pseudo-selector",
-  "caniuse": "css-sel3",
-  "property": "nthchild",
-  "tags": ["css"],
-  "notes": [
-    {
-      "name": "Related Github Issue",
-      "href": "https://github.com/Modernizr/Modernizr/pull/685"
-    },
-    {
-      "name": "Sitepoint :nth-child documentation",
-      "href": "http://reference.sitepoint.com/css/pseudoclass-nthchild"
-    }
-  ],
-  "authors": ["@emilchristensen"],
-  "warnings": ["Known false negative in Safari 3.1 and Safari 3.2.2"]
-}
-!*/
-/* DOC
-Detects support for the ':nth-child()' CSS pseudo-selector.
-*/
+      /**
+       * Removes the given wrappers, leaving the original elements.
+       * @private
+       * @params {Array} wrappers An array of printable wrappers.
+       */
+      function removeWrappers(wrappers) {
+        var index = wrappers.length;
+        while (index--) {
+          wrappers[index].removeNode();
+        }
+      }
 
-  // 5 `<div>` elements with `1px` width are created.
-  // Then every other element has its `width` set to `2px`.
-  // A Javascript loop then tests if the `<div>`s have the expected width
-  // using the modulus operator.
-  testStyles('#modernizr div {width:1px} #modernizr div:nth-child(2n) {width:2px;}', function(elem) {
-    var elems = elem.getElementsByTagName('div');
-    var correctWidths = true;
+      /*--------------------------------------------------------------------------*/
 
-    for (var i = 0; i < 5; i++) {
-      correctWidths = correctWidths && elems[i].offsetWidth === i % 2 + 1;
-    }
-    Modernizr.addTest('nthchild', correctWidths);
-  }, 5);
+      /**
+       * Shivs the given document for print.
+       * @memberOf html5
+       * @param {Document} ownerDocument The document to shiv.
+       * @returns {Document} The shived document.
+       */
+      function shivPrint(ownerDocument) {
+        var shivedSheet,
+          wrappers,
+          data = getExpandoData(ownerDocument),
+          namespaces = ownerDocument.namespaces,
+          ownerWindow = ownerDocument.parentWindow;
 
-/*!
-{
-  "name": "CSS vh unit",
-  "property": "cssvhunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vhunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "Similar JSFiddle",
-    "href": "https://jsfiddle.net/FWeinb/etnYC/"
-  }]
-}
-!*/
+        if (!supportsShivableSheets || ownerDocument.printShived) {
+          return ownerDocument;
+        }
+        if (typeof namespaces[shivNamespace] == 'undefined') {
+          namespaces.add(shivNamespace);
+        }
 
-  testStyles('#modernizr { height: 50vh; }', function(elem) {
-    var height = parseInt(window.innerHeight / 2, 10);
-    var compStyle = parseInt(computedStyle(elem, null, 'height'), 10);
+        function removeSheet() {
+          clearTimeout(data._removeSheetTimer);
+          if (shivedSheet) {
+            shivedSheet.removeNode(true);
+          }
+          shivedSheet= null;
+        }
 
-    Modernizr.addTest('cssvhunit', roundedEquals(compStyle, height));
-  });
+        ownerWindow.attachEvent('onbeforeprint', function() {
 
-/*!
-{
-  "name": "CSS vw unit",
-  "property": "cssvwunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vwunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "JSFiddle Example",
-    "href": "https://jsfiddle.net/FWeinb/etnYC/"
-  }]
-}
-!*/
+          removeSheet();
 
-  testStyles('#modernizr { width: 50vw; }', function(elem) {
-    var width = parseInt(window.innerWidth / 2, 10);
-    var compStyle = parseInt(computedStyle(elem, null, 'width'), 10);
+          var imports,
+            length,
+            sheet,
+            collection = ownerDocument.styleSheets,
+            cssText = [],
+            index = collection.length,
+            sheets = Array(index);
 
-    Modernizr.addTest('cssvwunit', roundedEquals(compStyle, width));
-  });
+          // convert styleSheets collection to an array
+          while (index--) {
+            sheets[index] = collection[index];
+          }
+          // concat all style sheet CSS text
+          while ((sheet = sheets.pop())) {
+            // IE does not enforce a same origin policy for external style sheets...
+            // but has trouble with some dynamically created stylesheets
+            if (!sheet.disabled && reMedia.test(sheet.media)) {
 
+              try {
+                imports = sheet.imports;
+                length = imports.length;
+              } catch(er){
+                length = 0;
+              }
+
+              for (index = 0; index < length; index++) {
+                sheets.push(imports[index]);
+              }
+
+              try {
+                cssText.push(sheet.cssText);
+              } catch(er){}
+            }
+          }
+
+          // wrap all HTML5 elements with printable elements and add the shived style sheet
+          cssText = shivCssText(cssText.reverse().join(''));
+          wrappers = addWrappers(ownerDocument);
+          shivedSheet = addStyleSheet(ownerDocument, cssText);
+
+        });
+
+        ownerWindow.attachEvent('onafterprint', function() {
+          // remove wrappers, leaving the original elements, and remove the shived style sheet
+          removeWrappers(wrappers);
+          clearTimeout(data._removeSheetTimer);
+          data._removeSheetTimer = setTimeout(removeSheet, 500);
+        });
+
+        ownerDocument.printShived = true;
+        return ownerDocument;
+      }
+
+      /*--------------------------------------------------------------------------*/
+
+      // expose API
+      html5.type += ' print';
+      html5.shivPrint = shivPrint;
+
+      // shiv for print
+      shivPrint(document);
+
+      if(typeof module == 'object' && module.exports){
+        module.exports = html5;
+      }
+
+    }(typeof window !== 'undefined' ? window : this, document));
+  }
+
+  ;
 
   /**
-   * cssToDOM takes a kebab-case string and converts it to camelCase
-   * e.g. box-sizing -> boxSizing
+   * If the browsers follow the spec, then they would expose vendor-specific styles as:
+   *   elem.style.WebkitBorderRadius
+   * instead of something like the following (which is technically incorrect):
+   *   elem.style.webkitBorderRadius
+
+   * WebKit ghosts their properties in lowercase but Opera & Moz do not.
+   * Microsoft uses a lowercase `ms` instead of the correct `Ms` in IE8+
+   *   erik.eae.net/archives/2008/03/10/21.48.10/
+
+   * More here: github.com/Modernizr/Modernizr/issues/issue/21
    *
    * @access private
-   * @function cssToDOM
-   * @param {string} name - String name of kebab-case prop we want to convert
-   * @returns {string} The camelCase version of the supplied name
+   * @returns {string} The string representing the vendor-specific style properties
    */
 
-  function cssToDOM(name) {
-    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
-      return m1 + m2.toUpperCase();
-    }).replace(/^-/, '');
-  }
-  ;
+  var omPrefixes = 'Moz O ms Webkit';
+  
+
+  /**
+   * List of JavaScript DOM values used for tests
+   *
+   * @memberof Modernizr
+   * @name Modernizr._domPrefixes
+   * @optionName Modernizr._domPrefixes
+   * @optionProp domPrefixes
+   * @access public
+   * @example
+   *
+   * Modernizr._domPrefixes is exactly the same as [_prefixes](#modernizr-_prefixes), but rather
+   * than kebab-case properties, all properties are their Capitalized variant
+   *
+   * ```js
+   * Modernizr._domPrefixes === [ "Moz", "O", "ms", "Webkit" ];
+   * ```
+   */
+
+  var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
+  ModernizrProto._domPrefixes = domPrefixes;
+  
 
   /**
    * hasOwnProp is a shim for hasOwnProperty that is needed for Safari 2.0 support
@@ -1220,39 +1118,31 @@ Detects support for the ':nth-child()' CSS pseudo-selector.
 
 /*!
 {
-  "name": "Pointer Media Query",
-  "property": "pointermq",
+  "name": "SVG as an <img> tag source",
+  "property": "svgasimg",
+  "caniuse" : "svg-img",
+  "tags": ["svg"],
+  "aliases": ["svgincss"],
+  "authors": ["Chris Coyier"],
   "notes": [{
-    "name": "//Name of reference document",
-    "href": "//URL of reference document"
+    "name": "HTML5 Spec",
+    "href": "http://www.w3.org/TR/html5/embedded-content-0.html#the-img-element"
   }]
 }
 !*/
-/* DOC
-Detect support for Pointer based media queries
-*/
-
-  Modernizr.addTest('pointermq', mq(('(pointer:coarse),(pointer:fine),(pointer:none)')));
 
 
-  /**
-   * If the browsers follow the spec, then they would expose vendor-specific styles as:
-   *   elem.style.WebkitBorderRadius
-   * instead of something like the following (which is technically incorrect):
-   *   elem.style.webkitBorderRadius
+  // Original Async test by Stu Cox
+  // https://gist.github.com/chriscoyier/8774501
 
-   * WebKit ghosts their properties in lowercase but Opera & Moz do not.
-   * Microsoft uses a lowercase `ms` instead of the correct `Ms` in IE8+
-   *   erik.eae.net/archives/2008/03/10/21.48.10/
+  // Now a Sync test based on good results here
+  // http://codepen.io/chriscoyier/pen/bADFx
 
-   * More here: github.com/Modernizr/Modernizr/issues/issue/21
-   *
-   * @access private
-   * @returns {string} The string representing the vendor-specific style properties
-   */
+  // Note http://www.w3.org/TR/SVG11/feature#Image is *supposed* to represent
+  // support for the `<image>` tag in SVG, not an SVG file linked from an `<img>`
+  // tag in HTML – but it’s a heuristic which works
+  Modernizr.addTest('svgasimg', document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1'));
 
-  var omPrefixes = 'Moz O ms Webkit';
-  
 
   var cssomPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : []);
   ModernizrProto._cssomPrefixes = cssomPrefixes;
@@ -1326,26 +1216,484 @@ Detect support for Pointer based media queries
   
 
   /**
-   * List of JavaScript DOM values used for tests
+   * createElement is a convenience wrapper around document.createElement. Since we
+   * use createElement all over the place, this allows for (slightly) smaller code
+   * as well as abstracting away issues with creating elements in contexts other than
+   * HTML documents (e.g. SVG documents).
    *
-   * @memberof Modernizr
-   * @name Modernizr._domPrefixes
-   * @optionName Modernizr._domPrefixes
-   * @optionProp domPrefixes
-   * @access public
-   * @example
-   *
-   * Modernizr._domPrefixes is exactly the same as [_prefixes](#modernizr-_prefixes), but rather
-   * than kebab-case properties, all properties are their Capitalized variant
-   *
-   * ```js
-   * Modernizr._domPrefixes === [ "Moz", "O", "ms", "Webkit" ];
-   * ```
+   * @access private
+   * @function createElement
+   * @returns {HTMLElement|SVGElement} An HTML or SVG element
    */
 
-  var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
-  ModernizrProto._domPrefixes = domPrefixes;
+  function createElement() {
+    if (typeof document.createElement !== 'function') {
+      // This is the case in IE7, where the type of createElement is "object".
+      // For this reason, we cannot call apply() as Object is not a Function.
+      return document.createElement(arguments[0]);
+    } else if (isSVG) {
+      return document.createElementNS.call(document, 'http://www.w3.org/2000/svg', arguments[0]);
+    } else {
+      return document.createElement.apply(document, arguments);
+    }
+  }
+
+  ;
+
+  /**
+   * Modernizr.hasEvent() detects support for a given event
+   *
+   * @memberof Modernizr
+   * @name Modernizr.hasEvent
+   * @optionName Modernizr.hasEvent()
+   * @optionProp hasEvent
+   * @access public
+   * @function hasEvent
+   * @param  {string|*} eventName - the name of an event to test for (e.g. "resize")
+   * @param  {Element|string} [element=HTMLDivElement] - is the element|document|window|tagName to test on
+   * @returns {boolean}
+   * @example
+   *  `Modernizr.hasEvent` lets you determine if the browser supports a supplied event.
+   *  By default, it does this detection on a div element
+   *
+   * ```js
+   *  hasEvent('blur') // true;
+   * ```
+   *
+   * However, you are able to give an object as a second argument to hasEvent to
+   * detect an event on something other than a div.
+   *
+   * ```js
+   *  hasEvent('devicelight', window) // true;
+   * ```
+   *
+   */
+
+  var hasEvent = (function() {
+
+    // Detect whether event support can be detected via `in`. Test on a DOM element
+    // using the "blur" event b/c it should always exist. bit.ly/event-detection
+    var needsFallback = !('onblur' in document.documentElement);
+
+    function inner(eventName, element) {
+
+      var isSupported;
+      if (!eventName) { return false; }
+      if (!element || typeof element === 'string') {
+        element = createElement(element || 'div');
+      }
+
+      // Testing via the `in` operator is sufficient for modern browsers and IE.
+      // When using `setAttribute`, IE skips "unload", WebKit skips "unload" and
+      // "resize", whereas `in` "catches" those.
+      eventName = 'on' + eventName;
+      isSupported = eventName in element;
+
+      // Fallback technique for old Firefox - bit.ly/event-detection
+      if (!isSupported && needsFallback) {
+        if (!element.setAttribute) {
+          // Switch to generic element if it lacks `setAttribute`.
+          // It could be the `document`, `window`, or something else.
+          element = createElement('div');
+        }
+
+        element.setAttribute(eventName, '');
+        isSupported = typeof element[eventName] === 'function';
+
+        if (element[eventName] !== undefined) {
+          // If property was created, "remove it" by setting value to `undefined`.
+          element[eventName] = undefined;
+        }
+        element.removeAttribute(eventName);
+      }
+
+      return isSupported;
+    }
+    return inner;
+  })();
+
+
+  ModernizrProto.hasEvent = hasEvent;
   
+
+  /**
+   * prefixedCSSValue is a way test for prefixed css properties (e.g. display: -webkit-flex)
+   *
+   * @memberof Modernizr
+   * @name Modernizr.prefixedCSSValue
+   * @optionName Modernizr.prefixedCSSValue()
+   * @optionProp prefixedCSSValue
+   * @access public
+   * @function prefixedCSSValue
+   * @param {string} prop - String name of the property to test for
+   * @param {string} value - String value of the non prefixed version of the value you want to test for
+   * @returns {string|false} The string representing the (possibly prefixed)
+   * valid version of the property, or `false` when it is unsupported.
+   * @example
+   *
+   * `Modernizr.prefixedCSSValue` is a way test for prefixed css properties (e.g. display: -webkit-flex)
+   *
+   * ```js
+   * Modernizr.prefixedCSSValue('background', 'linear-gradient(left, red, red)')
+   * ```
+   *
+   */
+
+  var prefixedCSSValue = function(prop, value) {
+    var result = false;
+    var elem = createElement('div');
+    var style = elem.style;
+
+    if (prop in style) {
+      var i = domPrefixes.length;
+
+      style[prop] = value;
+      result = style[prop];
+
+      while (i-- && !result) {
+        style[prop] = '-' + domPrefixes[i] + '-' + value;
+        result = style[prop];
+      }
+    }
+
+    if (result === '') {
+      result = false;
+    }
+
+    return result;
+  };
+
+  ModernizrProto.prefixedCSSValue = prefixedCSSValue;
+  
+/*!
+{
+  "name": "CSS Opacity",
+  "caniuse": "css-opacity",
+  "property": "opacity",
+  "tags": ["css"]
+}
+!*/
+
+  // Browsers that actually have CSS Opacity implemented have done so
+  // according to spec, which means their return values are within the
+  // range of [0.0,1.0] - including the leading zero.
+
+  Modernizr.addTest('opacity', function() {
+    var style = createElement('a').style;
+    style.cssText = prefixes.join('opacity:.55;');
+
+    // The non-literal . in this regex is intentional:
+    // German Chrome returns this value as 0,55
+    // github.com/Modernizr/Modernizr/issues/#issue/59/comment/516632
+    return (/^0.55$/).test(style.opacity);
+  });
+
+
+  /**
+   * cssToDOM takes a kebab-case string and converts it to camelCase
+   * e.g. box-sizing -> boxSizing
+   *
+   * @access private
+   * @function cssToDOM
+   * @param {string} name - String name of kebab-case prop we want to convert
+   * @returns {string} The camelCase version of the supplied name
+   */
+
+  function cssToDOM(name) {
+    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
+      return m1 + m2.toUpperCase();
+    }).replace(/^-/, '');
+  }
+  ;
+
+  /**
+   * domToCSS takes a camelCase string and converts it to kebab-case
+   * e.g. boxSizing -> box-sizing
+   *
+   * @access private
+   * @function domToCSS
+   * @param {string} name - String name of camelCase prop we want to convert
+   * @returns {string} The kebab-case version of the supplied name
+   */
+
+  function domToCSS(name) {
+    return name.replace(/([A-Z])/g, function(str, m1) {
+      return '-' + m1.toLowerCase();
+    }).replace(/^ms-/, '-ms-');
+  }
+  ;
+
+  /**
+   * getBody returns the body of a document, or an element that can stand in for
+   * the body if a real body does not exist
+   *
+   * @access private
+   * @function getBody
+   * @returns {HTMLElement|SVGElement} Returns the real body of a document, or an
+   * artificially created element that stands in for the body
+   */
+
+  function getBody() {
+    // After page load injecting a fake body doesn't work so check if body exists
+    var body = document.body;
+
+    if (!body) {
+      // Can't use the real body create a fake one.
+      body = createElement(isSVG ? 'svg' : 'body');
+      body.fake = true;
+    }
+
+    return body;
+  }
+
+  ;
+
+  /**
+   * injectElementWithStyles injects an element with style element and some CSS rules
+   *
+   * @access private
+   * @function injectElementWithStyles
+   * @param {string} rule - String representing a css rule
+   * @param {function} callback - A function that is used to test the injected element
+   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
+   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
+   * @returns {boolean}
+   */
+
+  function injectElementWithStyles(rule, callback, nodes, testnames) {
+    var mod = 'modernizr';
+    var style;
+    var ret;
+    var node;
+    var docOverflow;
+    var div = createElement('div');
+    var body = getBody();
+
+    if (parseInt(nodes, 10)) {
+      // In order not to give false positives we create a node for each test
+      // This also allows the method to scale for unspecified uses
+      while (nodes--) {
+        node = createElement('div');
+        node.id = testnames ? testnames[nodes] : mod + (nodes + 1);
+        div.appendChild(node);
+      }
+    }
+
+    style = createElement('style');
+    style.type = 'text/css';
+    style.id = 's' + mod;
+
+    // IE6 will false positive on some tests due to the style element inside the test div somehow interfering offsetHeight, so insert it into body or fakebody.
+    // Opera will act all quirky when injecting elements in documentElement when page is served as xml, needs fakebody too. #270
+    (!body.fake ? div : body).appendChild(style);
+    body.appendChild(div);
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = rule;
+    } else {
+      style.appendChild(document.createTextNode(rule));
+    }
+    div.id = mod;
+
+    if (body.fake) {
+      //avoid crashing IE8, if background image is used
+      body.style.background = '';
+      //Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
+      body.style.overflow = 'hidden';
+      docOverflow = docElement.style.overflow;
+      docElement.style.overflow = 'hidden';
+      docElement.appendChild(body);
+    }
+
+    ret = callback(div, rule);
+    // If this is done after page load we don't want to remove the body so check if body exists
+    if (body.fake) {
+      body.parentNode.removeChild(body);
+      docElement.style.overflow = docOverflow;
+      // Trigger layout so kinetic scrolling isn't disabled in iOS6+
+      // eslint-disable-next-line
+      docElement.offsetHeight;
+    } else {
+      div.parentNode.removeChild(div);
+    }
+
+    return !!ret;
+
+  }
+
+  ;
+
+  /**
+   * Modernizr.mq tests a given media query, live against the current state of the window
+   * adapted from matchMedia polyfill by Scott Jehl and Paul Irish
+   * gist.github.com/786768
+   *
+   * @memberof Modernizr
+   * @name Modernizr.mq
+   * @optionName Modernizr.mq()
+   * @optionProp mq
+   * @access public
+   * @function mq
+   * @param {string} mq - String of the media query we want to test
+   * @returns {boolean}
+   * @example
+   * Modernizr.mq allows for you to programmatically check if the current browser
+   * window state matches a media query.
+   *
+   * ```js
+   *  var query = Modernizr.mq('(min-width: 900px)');
+   *
+   *  if (query) {
+   *    // the browser window is larger than 900px
+   *  }
+   * ```
+   *
+   * Only valid media queries are supported, therefore you must always include values
+   * with your media query
+   *
+   * ```js
+   * // good
+   *  Modernizr.mq('(min-width: 900px)');
+   *
+   * // bad
+   *  Modernizr.mq('min-width');
+   * ```
+   *
+   * If you would just like to test that media queries are supported in general, use
+   *
+   * ```js
+   *  Modernizr.mq('only all'); // true if MQ are supported, false if not
+   * ```
+   *
+   *
+   * Note that if the browser does not support media queries (e.g. old IE) mq will
+   * always return false.
+   */
+
+  var mq = (function() {
+    var matchMedia = window.matchMedia || window.msMatchMedia;
+    if (matchMedia) {
+      return function(mq) {
+        var mql = matchMedia(mq);
+        return mql && mql.matches || false;
+      };
+    }
+
+    return function(mq) {
+      var bool = false;
+
+      injectElementWithStyles('@media ' + mq + ' { #modernizr { position: absolute; } }', function(node) {
+        bool = (window.getComputedStyle ?
+                window.getComputedStyle(node, null) :
+                node.currentStyle).position == 'absolute';
+      });
+
+      return bool;
+    };
+  })();
+
+
+  ModernizrProto.mq = mq;
+
+  
+
+  /**
+   * testStyles injects an element with style element and some CSS rules
+   *
+   * @memberof Modernizr
+   * @name Modernizr.testStyles
+   * @optionName Modernizr.testStyles()
+   * @optionProp testStyles
+   * @access public
+   * @function testStyles
+   * @param {string} rule - String representing a css rule
+   * @param {function} callback - A function that is used to test the injected element
+   * @param {number} [nodes] - An integer representing the number of additional nodes you want injected
+   * @param {string[]} [testnames] - An array of strings that are used as ids for the additional nodes
+   * @returns {boolean}
+   * @example
+   *
+   * `Modernizr.testStyles` takes a CSS rule and injects it onto the current page
+   * along with (possibly multiple) DOM elements. This lets you check for features
+   * that can not be detected by simply checking the [IDL](https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Interface_development_guide/IDL_interface_rules).
+   *
+   * ```js
+   * Modernizr.testStyles('#modernizr { width: 9px; color: papayawhip; }', function(elem, rule) {
+   *   // elem is the first DOM node in the page (by default #modernizr)
+   *   // rule is the first argument you supplied - the CSS rule in string form
+   *
+   *   addTest('widthworks', elem.style.width === '9px')
+   * });
+   * ```
+   *
+   * If your test requires multiple nodes, you can include a third argument
+   * indicating how many additional div elements to include on the page. The
+   * additional nodes are injected as children of the `elem` that is returned as
+   * the first argument to the callback.
+   *
+   * ```js
+   * Modernizr.testStyles('#modernizr {width: 1px}; #modernizr2 {width: 2px}', function(elem) {
+   *   document.getElementById('modernizr').style.width === '1px'; // true
+   *   document.getElementById('modernizr2').style.width === '2px'; // true
+   *   elem.firstChild === document.getElementById('modernizr2'); // true
+   * }, 1);
+   * ```
+   *
+   * By default, all of the additional elements have an ID of `modernizr[n]`, where
+   * `n` is its index (e.g. the first additional, second overall is `#modernizr2`,
+   * the second additional is `#modernizr3`, etc.).
+   * If you want to have more meaningful IDs for your function, you can provide
+   * them as the fourth argument, as an array of strings
+   *
+   * ```js
+   * Modernizr.testStyles('#foo {width: 10px}; #bar {height: 20px}', function(elem) {
+   *   elem.firstChild === document.getElementById('foo'); // true
+   *   elem.lastChild === document.getElementById('bar'); // true
+   * }, 2, ['foo', 'bar']);
+   * ```
+   *
+   */
+
+  var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
+  
+/*!
+{
+  "name": "CSS :nth-child pseudo-selector",
+  "caniuse": "css-sel3",
+  "property": "nthchild",
+  "tags": ["css"],
+  "notes": [
+    {
+      "name": "Related Github Issue",
+      "href": "https://github.com/Modernizr/Modernizr/pull/685"
+    },
+    {
+      "name": "Sitepoint :nth-child documentation",
+      "href": "http://reference.sitepoint.com/css/pseudoclass-nthchild"
+    }
+  ],
+  "authors": ["@emilchristensen"],
+  "warnings": ["Known false negative in Safari 3.1 and Safari 3.2.2"]
+}
+!*/
+/* DOC
+Detects support for the ':nth-child()' CSS pseudo-selector.
+*/
+
+  // 5 `<div>` elements with `1px` width are created.
+  // Then every other element has its `width` set to `2px`.
+  // A Javascript loop then tests if the `<div>`s have the expected width
+  // using the modulus operator.
+  testStyles('#modernizr div {width:1px} #modernizr div:nth-child(2n) {width:2px;}', function(elem) {
+    var elems = elem.getElementsByTagName('div');
+    var correctWidths = true;
+
+    for (var i = 0; i < 5; i++) {
+      correctWidths = correctWidths && elems[i].offsetWidth === i % 2 + 1;
+    }
+    Modernizr.addTest('nthchild', correctWidths);
+  }, 5);
+
 
 
   /**
@@ -1362,47 +1710,6 @@ Detect support for Pointer based media queries
     return !!~('' + str).indexOf(substr);
   }
 
-  ;
-
-  /**
-   * nativeTestProps allows for us to use native feature detection functionality if available.
-   * some prefixed form, or false, in the case of an unsupported rule
-   *
-   * @access private
-   * @function nativeTestProps
-   * @param {array} props - An array of property names
-   * @param {string} value - A string representing the value we want to check via @supports
-   * @returns {boolean|undefined} A boolean when @supports exists, undefined otherwise
-   */
-
-  // Accepts a list of property names and a single value
-  // Returns `undefined` if native detection not available
-  function nativeTestProps(props, value) {
-    var i = props.length;
-    // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
-    if ('CSS' in window && 'supports' in window.CSS) {
-      // Try every prefixed variant of the property
-      while (i--) {
-        if (window.CSS.supports(domToCSS(props[i]), value)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    // Otherwise fall back to at-rule (for Opera 12.x)
-    else if ('CSSSupportsRule' in window) {
-      // Build a condition string for every prefixed variant
-      var conditionText = [];
-      while (i--) {
-        conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
-      }
-      conditionText = conditionText.join(' or ');
-      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
-        return computedStyle(node, null, 'position') == 'absolute';
-      });
-    }
-    return undefined;
-  }
   ;
 
   /**
@@ -1490,6 +1797,85 @@ Detect support for Pointer based media queries
   });
 
   
+
+
+  /**
+   * wrapper around getComputedStyle, to fix issues with Firefox returning null when
+   * called inside of a hidden iframe
+   *
+   * @access private
+   * @function computedStyle
+   * @param {HTMLElement|SVGElement} - The element we want to find the computed styles of
+   * @param {string|null} [pseudoSelector]- An optional pseudo element selector (e.g. :before), of null if none
+   * @returns {CSSStyleDeclaration}
+   */
+
+  function computedStyle(elem, pseudo, prop) {
+    var result;
+
+    if ('getComputedStyle' in window) {
+      result = getComputedStyle.call(window, elem, pseudo);
+      var console = window.console;
+
+      if (result !== null) {
+        if (prop) {
+          result = result.getPropertyValue(prop);
+        }
+      } else {
+        if (console) {
+          var method = console.error ? 'error' : 'log';
+          console[method].call(console, 'getComputedStyle returning null, its possible modernizr test results are inaccurate');
+        }
+      }
+    } else {
+      result = !pseudo && elem.currentStyle && elem.currentStyle[prop];
+    }
+
+    return result;
+  }
+
+  ;
+
+  /**
+   * nativeTestProps allows for us to use native feature detection functionality if available.
+   * some prefixed form, or false, in the case of an unsupported rule
+   *
+   * @access private
+   * @function nativeTestProps
+   * @param {array} props - An array of property names
+   * @param {string} value - A string representing the value we want to check via @supports
+   * @returns {boolean|undefined} A boolean when @supports exists, undefined otherwise
+   */
+
+  // Accepts a list of property names and a single value
+  // Returns `undefined` if native detection not available
+  function nativeTestProps(props, value) {
+    var i = props.length;
+    // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
+    if ('CSS' in window && 'supports' in window.CSS) {
+      // Try every prefixed variant of the property
+      while (i--) {
+        if (window.CSS.supports(domToCSS(props[i]), value)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    // Otherwise fall back to at-rule (for Opera 12.x)
+    else if ('CSSSupportsRule' in window) {
+      // Build a condition string for every prefixed variant
+      var conditionText = [];
+      while (i--) {
+        conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
+      }
+      conditionText = conditionText.join(' or ');
+      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
+        return computedStyle(node, null, 'position') == 'absolute';
+      });
+    }
+    return undefined;
+  }
+  ;
 
   // testProps is a generic CSS / DOM property test.
 
@@ -1584,6 +1970,45 @@ Detect support for Pointer based media queries
   }
 
   ;
+
+  /**
+   * testProp() investigates whether a given style property is recognized
+   * Property names can be provided in either camelCase or kebab-case.
+   *
+   * @memberof Modernizr
+   * @name Modernizr.testProp
+   * @access public
+   * @optionName Modernizr.testProp()
+   * @optionProp testProp
+   * @function testProp
+   * @param {string} prop - Name of the CSS property to check
+   * @param {string} [value] - Name of the CSS value to check
+   * @param {boolean} [useValue] - Whether or not to check the value if @supports isn't supported
+   * @returns {boolean}
+   * @example
+   *
+   * Just like [testAllProps](#modernizr-testallprops), only it does not check any vendor prefixed
+   * version of the string.
+   *
+   * Note that the property name must be provided in camelCase (e.g. boxSizing not box-sizing)
+   *
+   * ```js
+   * Modernizr.testProp('pointerEvents')  // true
+   * ```
+   *
+   * You can also provide a value as an optional second argument to check if a
+   * specific value is supported
+   *
+   * ```js
+   * Modernizr.testProp('pointerEvents', 'none') // true
+   * Modernizr.testProp('pointerEvents', 'penguin') // false
+   * ```
+   */
+
+  var testProp = ModernizrProto.testProp = function(prop, value, useValue) {
+    return testProps([prop], undefined, value, useValue);
+  };
+  
 
   /**
    * testPropsAll tests a list of DOM properties we want to check against.
@@ -1762,6 +2187,62 @@ Detects support for the `window.requestAnimationFrame` API, for offloading anima
 */
 
   Modernizr.addTest('requestanimationframe', !!prefixed('requestAnimationFrame', window), {aliases: ['raf']});
+    
+    
+    
+    /*!
+{
+  "name": "Touch Events",
+  "property": "touchevents",
+  "caniuse" : "touch",
+  "tags": ["media", "attribute"],
+  "notes": [{
+    "name": "Touch Events spec",
+    "href": "https://www.w3.org/TR/2013/WD-touch-events-20130124/"
+  }],
+  "warnings": [
+    "Indicates if the browser supports the Touch Events spec, and does not necessarily reflect a touchscreen device"
+  ],
+  "knownBugs": [
+    "False-positive on some configurations of Nokia N900",
+    "False-positive on some BlackBerry 6.0 builds – https://github.com/Modernizr/Modernizr/issues/372#issuecomment-3112695"
+  ]
+}
+!*/
+/* DOC
+Indicates if the browser supports the W3C Touch Events API.
+
+This *does not* necessarily reflect a touchscreen device:
+
+* Older touchscreen devices only emulate mouse events
+* Modern IE touch devices implement the Pointer Events API instead: use `Modernizr.pointerevents` to detect support for that
+* Some browsers & OS setups may enable touch APIs when no touchscreen is connected
+* Future browsers may implement other event models for touch interactions
+
+See this article: [You Can't Detect A Touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/).
+
+It's recommended to bind both mouse and touch/pointer events simultaneously – see [this HTML5 Rocks tutorial](http://www.html5rocks.com/en/mobile/touchandmouse/).
+
+This test will also return `true` for Firefox 4 Multitouch support.
+*/
+
+  // Chrome (desktop) used to lie about its support on this, but that has since been rectified: http://crbug.com/36415
+  Modernizr.addTest('touchevents', function() {
+    var bool;
+    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+      bool = true;
+    } else {
+      // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+      // https://git.io/vznFH
+      var query = ['@media (', prefixes.join('touch-enabled),('), 'heartz', ')', '{#modernizr{top:9px;position:absolute}}'].join('');
+      testStyles(query, function(node) {
+        bool = node.offsetTop === 9;
+      });
+    }
+    return bool;
+  });
+
+
 
 
   /**
@@ -1800,6 +2281,9 @@ Detects support for the `window.requestAnimationFrame` API, for offloading anima
    * testAllProps('shapeOutside', 'content-box', true);
    * ```
    */
+    
+    
+    
 
   function testAllProps(prop, value, skipValueTest) {
     return testPropsAll(prop, undefined, undefined, value, skipValueTest);
@@ -1828,30 +2312,6 @@ Detects whether or not elements can be animated using CSS
 
 /*!
 {
-  "name": "Background Position XY",
-  "property": "bgpositionxy",
-  "tags": ["css"],
-  "builderAliases": ["css_backgroundposition_xy"],
-  "authors": ["Allan Lei", "Brandom Aaron"],
-  "notes": [{
-    "name": "Demo",
-    "href": "https://jsfiddle.net/allanlei/R8AYS/"
-  }, {
-    "name": "Adapted From",
-    "href": "https://github.com/brandonaaron/jquery-cssHooks/blob/master/bgpos.js"
-  }]
-}
-!*/
-/* DOC
-Detects the ability to control an element's background position using css
-*/
-
-  Modernizr.addTest('bgpositionxy', function() {
-    return testAllProps('backgroundPositionX', '3px', true) && testAllProps('backgroundPositionY', '5px', true);
-  });
-
-/*!
-{
   "name": "Background Size",
   "property": "backgroundsize",
   "tags": ["css"],
@@ -1864,58 +2324,6 @@ Detects the ability to control an element's background position using css
 !*/
 
   Modernizr.addTest('backgroundsize', testAllProps('backgroundSize', '100%', true));
-
-/*!
-{
-  "name": "Background Size Cover",
-  "property": "bgsizecover",
-  "tags": ["css"],
-  "builderAliases": ["css_backgroundsizecover"],
-  "notes": [{
-    "name" : "MDN Docs",
-    "href": "https://developer.mozilla.org/en/CSS/background-size"
-  }]
-}
-!*/
-
-  // Must test value, as this specifically tests the `cover` value
-  Modernizr.addTest('bgsizecover', testAllProps('backgroundSize', 'cover'));
-
-/*!
-{
-  "name": "Border Radius",
-  "property": "borderradius",
-  "caniuse": "border-radius",
-  "polyfills": ["css3pie"],
-  "tags": ["css"],
-  "notes": [{
-    "name": "Comprehensive Compat Chart",
-    "href": "https://muddledramblings.com/table-of-css3-border-radius-compliance"
-  }]
-}
-!*/
-
-  Modernizr.addTest('borderradius', testAllProps('borderRadius', '0px', true));
-
-/*!
-{
-  "name": "Box Sizing",
-  "property": "boxsizing",
-  "caniuse": "css3-boxsizing",
-  "polyfills": ["borderboxmodel", "boxsizingpolyfill", "borderbox"],
-  "tags": ["css"],
-  "builderAliases": ["css_boxsizing"],
-  "notes": [{
-    "name": "MDN Docs",
-    "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing"
-  },{
-    "name": "Related Github Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/248"
-  }]
-}
-!*/
-
-  Modernizr.addTest('boxsizing', testAllProps('boxSizing', 'border-box', true) && (document.documentMode === undefined || document.documentMode > 7));
 
 /*!
 {
@@ -1939,20 +2347,6 @@ Detects the ability to control an element's background position using css
 
 /*!
 {
-  "name": "CSS text-overflow ellipsis",
-  "property": "ellipsis",
-  "caniuse": "text-overflow",
-  "polyfills": [
-    "text-overflow"
-  ],
-  "tags": ["css"]
-}
-!*/
-
-  Modernizr.addTest('ellipsis', testAllProps('textOverflow', 'ellipsis'));
-
-/*!
-{
   "name": "Flexbox",
   "property": "flexbox",
   "caniuse": "flexbox",
@@ -1971,6 +2365,68 @@ Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows 
 */
 
   Modernizr.addTest('flexbox', testAllProps('flexBasis', '1px', true));
+
+/*!
+{
+  "name": "Flexbox (legacy)",
+  "property": "flexboxlegacy",
+  "tags": ["css"],
+  "polyfills": ["flexie"],
+  "notes": [{
+    "name": "The _old_ flexbox",
+    "href": "https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/"
+  }]
+}
+!*/
+
+  Modernizr.addTest('flexboxlegacy', testAllProps('boxDirection', 'reverse', true));
+
+/*!
+{
+  "name": "Flexbox (tweener)",
+  "property": "flexboxtweener",
+  "tags": ["css"],
+  "polyfills": ["flexie"],
+  "notes": [{
+    "name": "The _inbetween_ flexbox",
+    "href": "https://www.w3.org/TR/2011/WD-css3-flexbox-20111129/"
+  }],
+  "warnings": ["This represents an old syntax, not the latest standard syntax."]
+}
+!*/
+
+  Modernizr.addTest('flexboxtweener', testAllProps('flexAlign', 'end', true));
+
+/*!
+{
+  "name": "Flex Line Wrapping",
+  "property": "flexwrap",
+  "tags": ["css", "flexbox"],
+  "notes": [{
+    "name": "W3C Flexible Box Layout spec",
+    "href": "http://dev.w3.org/csswg/css3-flexbox"
+  }],
+  "warnings": [
+    "Does not imply a modern implementation – see documentation."
+  ]
+}
+!*/
+/* DOC
+Detects support for the `flex-wrap` CSS property, part of Flexbox, which isn’t present in all Flexbox implementations (notably Firefox).
+
+This featured in both the 'tweener' syntax (implemented by IE10) and the 'modern' syntax (implemented by others). This detect will return `true` for either of these implementations, as long as the `flex-wrap` property is supported. So to ensure the modern syntax is supported, use together with `Modernizr.flexbox`:
+
+```javascript
+if (Modernizr.flexbox && Modernizr.flexwrap) {
+  // Modern Flexbox with `flex-wrap` supported
+}
+else {
+  // Either old Flexbox syntax, or `flex-wrap` not supported
+}
+```
+*/
+
+  Modernizr.addTest('flexwrap', testAllProps('flexWrap', 'wrap', true));
 
 /*!
 {
@@ -1999,55 +2455,49 @@ Detects support for the Flexible Box Layout model, a.k.a. Flexbox, which allows 
   ]
 }
 !*/
+    
+    	/*!
+	{
+	  "name": "CSS text-overflow ellipsis",
+	  "property": "ellipsis",
+	  "caniuse": "text-overflow",
+	  "polyfills": [
+	    "text-overflow"
+	  ],
+	  "tags": ["css"]
+	}
+	!*/
+	Modernizr.addTest('ellipsis', testAllProps('textOverflow', 'ellipsis'));
+    
+    
+  Modernizr.addTest('cssgradients', function() {
 
-  Modernizr.addTest('cssmask', testAllProps('maskRepeat', 'repeat-x', true));
+    var str1 = 'background-image:';
+    var str2 = 'gradient(linear,left top,right bottom,from(#9f9),to(white));';
+    var css = '';
+    var angle;
 
-/*!
-{
-  "name": "CSS Shapes",
-  "property": "shapes",
-  "tags": ["css"],
-  "notes": [{
-    "name": "CSS Shapes W3C specification",
-    "href": "https://www.w3.org/TR/css-shapes"
-  },{
-    "name": "Examples from Adobe",
-    "href": "http://webplatform.adobe.com/shapes/"
-  }, {
-    "name": "Samples showcasing uses of Shapes",
-    "href": "http://codepen.io/collection/qFesk"
-  }]
-}
-!*/
+    for (var i = 0, len = prefixes.length - 1; i < len; i++) {
+      angle = (i === 0 ? 'to ' : '');
+      css += str1 + prefixes[i] + 'linear-gradient(' + angle + 'left top, #9f9, white);';
+    }
 
-  Modernizr.addTest('shapes', testAllProps('shapeOutside', 'content-box', true));
+    if (Modernizr._config.usePrefixes) {
+    // legacy webkit syntax (FIXME: remove when syntax not in use anymore)
+      css += str1 + '-webkit-' + str2;
+    }
 
-/*!
-{
-  "name": "CSS Transforms",
-  "property": "csstransforms",
-  "caniuse": "transforms2d",
-  "tags": ["css"]
-}
-!*/
+    var elem = createElement('a');
+    var style = elem.style;
+    style.cssText = css;
 
-  Modernizr.addTest('csstransforms', function() {
-    // Android < 3.0 is buggy, so we sniff and blacklist
-    // http://git.io/hHzL7w
-    return navigator.userAgent.indexOf('Android 2.') === -1 &&
-           testAllProps('transform', 'scale(1)', true);
+    // IE6 returns undefined so cast to string
+    return ('' + style.backgroundImage).indexOf('gradient') > -1;
   });
 
-/*!
-{
-  "name": "CSS Transitions",
-  "property": "csstransitions",
-  "caniuse": "css-transitions",
-  "tags": ["css"]
-}
-!*/
 
-  Modernizr.addTest('csstransitions', testAllProps('transition', 'all', true));
+
+  Modernizr.addTest('cssmask', testAllProps('maskRepeat', 'repeat-x', true));
 
 
   // Run each test
