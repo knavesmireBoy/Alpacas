@@ -198,6 +198,7 @@ gAlp.Util = (function () {
 	}
 
 	function setAdapter(o, v, k) {
+        //console.log(arguments)
 		return setret(o, k, v);
 	}
 
@@ -328,6 +329,17 @@ gAlp.Util = (function () {
 		}
 		return node;
 	}
+    
+    
+      function getSiblingCollection(coll, dir){
+          return _.map(coll, function(el){
+              var method = gAlp.Util[dir];
+              if(method){
+                  return method(el); 
+              }
+              return el;
+          });
+      }
 
 	function drillDown(arr) {
 		var a = arr && arr.slice && arr.slice();
@@ -427,7 +439,7 @@ gAlp.Util = (function () {
 			};
 		};
 	}
-
+    
 	function curry2(fun) {
 		return function (secondArg) {
 			return function (firstArg) {
@@ -508,11 +520,18 @@ gAlp.Util = (function () {
 		};
 	}
 
-	function invokeWhen(validate, action, context) {
-		context = context || null;
+	function invokeWhenEvent(validate, action, event, context) {
+		var i = context ? 2 : 1,
+            ctxt = context || null;
+		var args = _.rest(arguments, i),
+			res = validate.apply(ctxt, args);
+		return res && action.apply(ctxt, args);
+	}
+    
+    function invokeWhen(validate, action) {
 		var args = _.rest(arguments, 2),
-			res = validate.apply(context, args);
-		return res && action.apply(context, args);
+			res = validate.apply(null, args);
+		return res && action.apply(null, args);
 	}
 
 	function retWhen(pred, opt1, opt2) {
@@ -616,7 +635,8 @@ gAlp.Util = (function () {
 	}
 
 	function setFromArray(validate, method, classArray, target) {
-		//console.log(arguments)
+		            console.log(arguments)
+
 		//target may be a function returning a target element
 		var fn,
 			tgt = getClassList(getResult(target)),
@@ -847,6 +867,9 @@ gAlp.Util = (function () {
 				}
 			});
 		});
+        adapter.getSubject = function(){
+            return subject;
+        };
 		return adapter;
 	}
 
@@ -970,7 +993,7 @@ gAlp.Util = (function () {
 		apply: function (f) {
 			return f.apply(f, _.rest(arguments));
 		},
-        safeapply: function(f, ctxt){
+        safeApply: function(f, ctxt){
            var func = ctxt ? f[ctxt] : f,
                slice = ctxt ? 2 : 1;
             if(func && _.isFunction(func)){
@@ -1106,10 +1129,11 @@ gAlp.Util = (function () {
 		drillDown: drillDown,
 		addHandler: addHandler,
 		getNodeByTag: curry2(regExp)('i'),
+        getNextElement: getNextElement,//expects node.nextSibling
 		getPreviousElement: getPreviousElement,
-		getNextElement: getNextElement,
-		getNext: _.partial(nested, curry2(getter)('nextSibling'), getNextElement),
+		getNext: _.partial(nested, curry2(getter)('nextSibling'), getNextElement),// expects node
 		getPrevious: _.partial(nested, curry2(getter)('previousSibling'), getPreviousElement),
+        getSiblingCollection: getSiblingCollection,
 		getChild: _.partial(nested, curry2(getter)('firstChild'), getNextElement),
 		getParent: _.partial(nested, curry2(getter)('parentNode'), getNextElement),
 		getTargetNode: getTargetNode,

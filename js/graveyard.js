@@ -62,6 +62,8 @@ function passThru(delegatee, subject, config) {
 	return delegator;
 }
 
+
+
 	function fixMinWidthForIE() {
 		try {
 			if (!document.body.currentStyle) {
@@ -337,16 +339,12 @@ const curry = fn => (...args) => args.length >= fn.length
 		partial.apply(null, getResult(getargs))(o);
 	}
 
-	/*
     String.prototype.mapLinktoTitle = function() {
     var getHref = curry3(simpleInvoke)(linkEx)('match'),
         s = _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, gAlp.Util.drillDown(['href']));
         s.call(this);
 };
     
-    */
-
-	/*
 	var COR = {
 		init: function (predicate, key, action) {
         //ie add,replace,remove
@@ -393,9 +391,9 @@ const curry = fn => (...args) => args.length >= fn.length
 			chain = setUp(checker, vals);
 		_.each(_.invert(_.rest(args)[0]), chain.handle, chain);
 	}
-    */
 
-	/*
+
+	
 	(function() {
 	    'use strict';
 	   
@@ -413,13 +411,12 @@ const curry = fn => (...args) => args.length >= fn.length
 	        Len = Math.ceil(delta);
 	    });
 	}());
-	*/
-
+	
 	function caller(f1, f2, context) {
 		return f1(context).call(f2(context));
 	}
 
-                /*
+               
                                 try {
 addMyEvent(_.partial(gAlp.Util.addHandler, 'bolt'), navigator.retreat)($('controls'));
 //thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
@@ -428,9 +425,8 @@ thumbnailsListener.triggerEvent($('controls'), 'bolt');
     catch(er){
         report.innerHTML = er.message;
     }
-            */    
-//console.log(navigator.advance)
-    /*
+              
+    
 try {
 addMyEvent(_.partial(gAlp.Util.addHandler, 'build'), listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[3]}))(thumbnails);
 //thumbnails.addEventListener('build', listen1.bind(thumbnails, {target: document.getElementsByTagName('img')[2]}));
@@ -439,8 +435,8 @@ thumbnailsListener.triggerEvent(thumbnails, 'build');
     catch(er){
         report.innerHTML = er.message;
     }
-   */
-	/*
+  
+	
 	var COR = {
 		init: function (predicate, key, action) {
         //ie add,replace,remove
@@ -487,4 +483,42 @@ thumbnailsListener.triggerEvent(thumbnails, 'build');
 			chain = setUp(checker, vals);
 		_.each(_.invert(_.rest(args)[0]), chain.handle, chain);
 	}
-    */
+   
+//state pattern
+  var beatles = (function(options){
+            var ret = {
+                state: options[0],
+            states: {
+                john: {
+                    sing: function(){
+                        return 'I Wanna'
+                    }
+                },
+                paul: {
+                    sing: function(){
+                        return 'I Saw Her'
+                    }
+                }
+            },
+                swap: function(){
+                    options.reverse();
+                    this.state = options[0];
+                },
+                sing: function(){
+                    console.log(this.states[this.state].sing())
+                }
+            };
+            return ret;
+        }(['john', 'paul']));
+
+function extendFrom(sub, supa, keys, key) {
+		function mapper(method) {
+			if (sub[method] && _.isFunction(sub[method])) {
+				supa[method] = function () {
+					return supa[keys][supa[key]][method].apply(sub[key], arguments);
+				};
+			}
+		}
+		_.each(_.keys(sub), mapper);
+		return supa;
+	}

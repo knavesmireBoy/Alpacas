@@ -72,12 +72,18 @@
 
 
 @media only screen and (max-width: 767px) {
+    /*
 	.js #alpacas_for_sale #innerwrap {
 		margin-bottom: -5%;
 	}
 	.js #alpacas_for_sale.sell #innerwrap {
 		margin-bottom: 5%;
+	}*/
+    
+    #alpacas_for_sale #footer {
+		margin-top: -5%;
 	}
+    
 	.js body.sell #innerwrap #main #aside {
 		display: none;
 	}
@@ -92,15 +98,14 @@
 	#gallery.showtime #header h2 {
 		margin: 0%;
 	}
-	#alpacas_for_sale #footer {
-		margin-top: -5%;
-	}
-	.js #alpacas_for_sale #footer {
-		margin-top: 0%;
-	}
+	
 	.js #about_us #main>#aside {
 		width: 100%;
 	}
+    
+    #sell {
+        margin-bottom: 15%;
+    }
     
     #sell a {
         margin-left: 2%;
@@ -113,6 +118,10 @@
     #article div#sell figure a {
         margin-left: 0%;
     }
+    
+    #stud_services.verbose #footer {
+		margin-top: 5%;
+	}
 }
 
 /*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
@@ -205,6 +214,10 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     #alpacas_for_sale #tooltip {
 	bottom: 23em;
     }
+    
+    #alpacas_for_sale ul li a {
+    font-size: 1.1em;
+}
 }
 /* iPhone 6, 7, 8 ----------- */
 /*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/
@@ -232,6 +245,10 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		position: relative;
 		width: 100%;
 		bottom: 10%;
+	}
+    
+    #alpacas_for_sale.sell #innerwrap #main>div#aside {
+		position: absolute;
 	}
 	#links dt:nth-child(1) {
 		-webkit-animation: entry 1s ease-out 1s backwards;
@@ -299,7 +316,6 @@ and (max-device-width : 1024px) {
 		margin-top: -5em;
 		padding-bottom: 3em;
 		padding-bottom: 0em;
-        background: black;
 	}  
     
     #wrap.inplay #footer ul > * {
@@ -321,6 +337,10 @@ and (max-device-width : 1024px) {
 		position: relative;
 		z-index: 1;
 	}
+    
+    #upkeep #main #aside {
+        bottom: 13%;
+    }
 }
 @media only screen and (max-width: 1054px) {
 	.verbose #main #article p {

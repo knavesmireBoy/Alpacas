@@ -7,20 +7,10 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, article, report, displayclass, linkEx, navExes, limits) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, limits) {
 	"use strict";
 
 	function noOp() {}
-
-	function doRepeat() {
-		return function (i) {
-			return function () {
-				var res = i > 0;
-				i -= 1;
-				return res > 0;
-			};
-		};
-	}
 
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
@@ -51,7 +41,6 @@ if (!window.gAlp) {
 			if (!result) {
 				return fun(arg);
 			}
-			//report.innerHTML = arg && arg.innerHTML;  
 			return arg;
 		};
 	}
@@ -62,16 +51,12 @@ if (!window.gAlp) {
 		//return true;
 	}
 
-	function getProp(p, o) {
-		return o[p];
-	}
-
 	function stringOp(reg, o, m) {
 		return o[m](reg);
 	}
 
 	function simpleInvoke(o, m, arg) {
-       //gAlp.Util.report(o[m]);
+		//gAlp.Util.report(o[m]);
 		if (arguments.length >= 3) { //allow for superfluous arguments 
 			return o[m](arg);
 		}
@@ -81,34 +66,20 @@ if (!window.gAlp) {
 		return ptl(ctxt)[m](arg);
 	}
 
-	function capitalize(st, char) {
-		var splitter = char || ' ',
-			mystr = st || '',
-			res = mystr.split(splitter),
-			mapper = function (str) {
-				return str.charAt(0).toUpperCase() + str.slice(1);
-			};
-		return _.map(res, mapper).join(' ');
+	function inRange(i) {
+		return i >= 0;
 	}
 
-	function sortIndexFactory(index, klas, coll) {
-		var drill = gAlp.Util.drillDown(['target']),
-			txt = gAlp.Util.drillDown(['innerHTML']),
-			finder = function (el, item) {
-				return item.match(new RegExp(txt(el), 'i'));
-			},
-			options = {
-				tab: function (e) {
-					var el = drill(e);
-					index = el && el.parentNode ? _.findIndex(coll, _.partial(finder, el)) : index;
-					return index;
-				},
-				loop: function (bool) {
-					index = _.isBoolean(bool) ? index : (index += 1) % coll.length;
-					return index;
-				}
-			};
-		return options[klas];
+	function extendFrom(sub, supa, keys, key) {
+		function mapper(method) {
+			if (sub[method] && _.isFunction(sub[method])) {
+				supa[method] = function () {
+					return supa[keys][supa[key]][method].apply(sub[key], arguments);
+				};
+			}
+		}
+		_.each(_.keys(sub), mapper);
+		return supa;
 	}
 	var alpacas = [
 			[
@@ -184,9 +155,10 @@ if (!window.gAlp) {
 				["src", "../images/sale/rico.jpg"]
 			]
 		],
+		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			//return list.slice(_.random(0, end || list.length));
-			return list.slice(0, 3);
+			return list.slice(_.random(0, end || list.length));
+			//return list.slice(0,0);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -200,48 +172,90 @@ if (!window.gAlp) {
 				return isDesktop;
 			}
 		}()),
-		//$ = function (str) {return document.getElementById(str);},
+		throttler = function (callback) {
+			if (!getEnvironment()) {
+				getEnvironment = _.negate(getEnvironment);
+			}
+			var handler = function () {
+				if (!getEnvironment()) {
+					//con('ch...')
+					getEnvironment = _.negate(getEnvironment);
+					callback();
+				}
+			};
+			return utils.addHandler('resize', window, _.throttle(handler, 66));
+		},
+		$ = function (str) {
+			return document.getElementById(str);
+		},
 		//con = _.bind(window.console.log, window.console),
-		utils = gAlp.Util,
 		always = utils.always,
 		reverse = utils.invoker('reverse', Array.prototype.reverse),
-		repeatOnce = doRepeat()(1),
 		validator = utils.validator,
 		ptL = _.partial,
 		idty = _.identity,
-		doTwice = utils.curryTwice(),
 		doTwiceDefer = utils.curryTwice(true),
 		doThrice = utils.curryThrice(),
+		doQuart = utils.curryFourFold(),
 		anCr = utils.append(),
 		anMv = utils.move(),
 		anCrIn = utils.insert(),
 		setAttrs = utils.setAttributes,
-		doAddClass = utils.addClass,
 		doDrillDown = utils.drillDown,
 		byIndex = utils.byIndex,
-		getNavTypeFactory = function (coll, len, limits) {
-			var pop = utils.invoker('pop', Array.prototype.pop),
-				shift = utils.invoker('shift', Array.prototype.shift),
-				//reverse = utils.invoker('reverse', Array.prototype.reverse),
-				isMobile = validator('loop layout priority', _.negate(getEnvironment)),
-				subHigher = validator('Data length exceeds a tab layout', doTwiceDefer(gtThan)(limits.hi)(len)),
-				subLower = validator('Data length will not require a loop layout', doTwiceDefer(lsThanEq)(limits.lo)(len)),
-				trials = [ptL(onValidation(subLower), pop, coll), ptL(onValidation(subHigher), shift, coll), ptL(onValidation(isMobile), reverse, coll)];
-			_.each(trials, function (f) {
-				return f();
-			});
-			return coll;
+		klasAdd = utils.addClass,
+		klasRem = utils.removeClass,
+		getDomTargetLink = utils.getDomChild(utils.getNodeByTag('a')),
+		getDomTargetImage = utils.getDomChild(utils.getNodeByTag('img')),
+		clicker = ptL(utils.addHandler, 'click'),
+		allow = !touchevents ? 2 : 0,
+		getTargetLink = doDrillDown(['childNodes', 1, 'firstChild']),
+		eventBridge = function (action, e) {
+			var getText = doDrillDown(['target', 'nodeName']),
+				val = _.compose(doThrice(simpleInvoke)(/img/i)('match'), getText),
+				isImg = utils.validator('Please click on an image', val);
+			try {
+				return utils.conditional(isImg)(action, e);
+			} catch (er) {
+				action();
+			}
+		},
+		adaptHandlers = function (subject, adapter, allpairs, override) {
+			adapter = adapter || {};
+			adapter = utils.simpleAdapter(allpairs, adapter, subject);
+			adapter[override] = function () {
+				subject.remove(subject);
+			};
+			return adapter;
+		},
+		handlerpair = ['addListener', 'remove', 'triggerEvent', 'getElement'],
+		renderpair = ['render', 'unrender', 'triggerEvent', 'getElement'],
+		tooltip_pairs = [
+			['render', 'unrender'],
+			['init', 'cancel']
+		],
+		tooltip_adapter = ptL(utils.simpleAdapter, tooltip_pairs, gAlp.Composite()),
+		makeToolTip = ptL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow),
+		makeElement = utils.machElement,
+		makeComp = function (obj, inc) {
+			obj = obj || {
+				render: noOp,
+				unrender: noOp,
+				getElement: noOp
+			};
+			return _.extend(gAlp.Composite(inc), obj);
+		},
+		adapterFactory = function () {
+			//fresh instance of curried function per adapter
+			return doQuart(adaptHandlers)('unrender')([renderpair, handlerpair.slice(0)])(gAlp.Composite());
 		},
 		checkDataLength = validator('no alpacas for sale', always(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
-		getPerformer = function () {
-			return ptL(utils.apply, utils.partialSetFromArray.apply(utils, arguments));
-		},
-		sellDiv = _.compose(ptL(setAttrs, {
+		$sell = utils.machElement(ptL(setAttrs, {
 			id: 'sell'
-		}), anCr(article), always('div'))(),
-		renderTable = _.compose(anCr(sellDiv), always('table')),
+		}), anCr(article), always('div')),
+		renderTable = _.compose(anCr($sell.render().getElement()), always('table')),
 		iterateTable = function (getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
 			return function (getAnchor, subject) {
 				var table = getAnchor(), //<table></table
@@ -269,9 +283,6 @@ if (!window.gAlp) {
 						doOdd = onValidation(supportsNthChild, isOdd),
 						provisionalID,
 						assignId = function (str) {
-							//console.log(str)
-							//tableconfig.title = addImgAttrs.alt = getId(str);
-							//addLinkAttrs.title = addImgAttrs.alt = getId(str);
 							addImgAttrs.alt = getId(str);
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
@@ -284,7 +295,7 @@ if (!window.gAlp) {
 						provisionalID(ptL(assignId, td));
 						_.compose(maybeClass, addspan, utils.setText(td), anCr(row))(type);
 						doOdd(_.compose(doOddRow, always(row)));
-						sellDiv.style.marginTop = '-1px';
+						//$sell.style.marginTop = '-1px';///conditional on ie
 					});
 				});
 				render = anCr(table.parentNode);
@@ -314,410 +325,285 @@ if (!window.gAlp) {
 				getPath = function (array) {
 					return array.slice(-1)[0][1];
 				},
-				configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(doAddClass, 'description'), ptL(doAddClass, 'odd'));
+				configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(klasAdd, 'description'), ptL(klasAdd, 'odd'));
 			loadData(coll, cb, configureTable);
 			return true;
-		},
-		loaded = maybeLoad(ptL(doLoad, alpacas_select, renderTable)),
-		routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
-		myconfig = {
-			shower: getPerformer(always(true), 'add'),
-			hider: getPerformer(always(true), 'remove'),
-			klas: 'show',
-			intaface: gAlp.Intaface('Display', ['show', 'hide'])
-		},
-		links = _.toArray(sellDiv.getElementsByTagName('a')),
-		display_elements = _.map(links, function (el) {
-			return [el, utils.getPrevious(el)];
-		}),
-		tables = _.map(links, function (el) {
-			return utils.getPrevious(el);
-		}),
-		mapLinktoTitle = function (link) {
-			var getHref = doThrice(simpleInvoke)(linkEx)('match');
-			return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
-		},
-		alpacaTitles = _.map(links, mapLinktoTitle),
-		getAlpacaTitles = doTwice(getProp)(alpacaTitles),
-		partialLinks = doTwiceDefer(utils.map)(mapLinktoTitle)(links),
-		getLinkDefer = doTwiceDefer(getProp)(links), //awaits integer
-		getDomTargetLink = utils.getDomChild(utils.getNodeByTag('a')),
-		getDomTargetImage = utils.getDomChild(utils.getNodeByTag('img')),
-		tooltip = gAlp.Tooltip(article, ["click table/picture", "to toggle the display"], 2),
-		doToolTip = ptL(utils.doWhen, repeatOnce, _.bind(tooltip.init, tooltip)),
-		mynav = (function () {
-			function prepNav(ancor, refnode) {
-				return utils.makeElement(ptL(setAttrs, {
+		};
+	maybeLoad(ptL(doLoad, alpacas_select, renderTable));
+	(function (extent) {
+		if (!extent) {
+			$sell.unrender();
+			return;
+		}
+		var links = _.toArray($sell.getElement().getElementsByTagName('a')),
+			my_head = gAlp.Composite([]),
+			my_stage_one = gAlp.Composite([]),
+			my_stage_two = gAlp.Composite([]),
+			my_figure_comp = gAlp.Composite([]),
+			my_list_comp = gAlp.Composite([]),
+			my_list_elements = gAlp.Composite([]),
+			prepNav = function (ancor, refnode) {
+				return utils.machElement(ptL(setAttrs, {
 					id: 'list'
 				}), anCrIn(ancor, refnode), always('ul'));
-			}
-
-			function throttler(callback) {
-				if (!getEnvironment()) {
-					getEnvironment = _.negate(getEnvironment);
-				}
-				var handler = function () {
-					if (!getEnvironment()) {
-						//con('ch...')
-						getEnvironment = _.negate(getEnvironment);
-						callback();
-					}
-				};
-				return utils.addHandler('resize', window, _.throttle(handler, 66));
-			}
-			return {
-				init: function (cb) {
-					this.subject = this.subject || prepNav(sellDiv, article);
-					this.handle = throttler(ptL(utils.doWhen, _.bind(this.subject.get, this.subject), cb));
-					return this;
-				},
-				add: function () {
-					return this.subject.add();
-				},
-				remove: function () {
-					//this.handle && this.handle.remove(this.handle);
-					return this.subject.remove();
-				},
-				get: function () {
-					var el = this.subject.get();
-					if (el) {
-						return el;
-					} else {
-						return this.add().get();
-					}
-				}
-			};
-		}()),
-		makeLeaf = function (comp, config, el) {
-			var leaf = gAlp.Composite(null, config.intaface);
-			leaf.hide = ptL(config.hider, config.klas, el);
-			leaf.show = ptL(config.shower, config.klas, el);
-			leaf.get = always(el);
-			comp.add(leaf);
-		},
-		makeDisplayer = function (inc, conf, bool) {
-			function setDisplays(inc, comp) {
-				comp.hide = function () {
-					_.each(inc, function (leaf) {
-						leaf.hide();
-					});
-				};
-				comp.show = function (j) {
-					comp.hide();
-					_.each(inc, function (leaf, i) {
-						if (!isNaN(j) && j === i) {
-							leaf.show(); //show pair
-						} else if (isNaN(j)) {
-							leaf.show();
-						}
-					});
-				};
-				return bool ? _.extend(comp, new utils.Observer()) : comp;
-			}
-			return setDisplays(inc, gAlp.Composite(inc, conf.intaface));
-		},
-		simpleComp = function (coll, config, bool) {
-			var comp = makeDisplayer([], config),
-				doLeaf = ptL(makeLeaf, comp, config);
-			_.each(coll, doLeaf);
-			return bool ? _.extend(comp, new utils.Observer()) : comp;
-		},
-		machDisplayComp = function (coll, config) {
-			var headcomp = makeDisplayer([], config, true),
-				mycomp = headcomp,
-				recur = function (gang) {
-					_.each(gang, function (arg) {
-						if (_.isArray(arg)) {
-							mycomp = makeDisplayer([], config);
-							headcomp.add(mycomp);
-							recur(arg);
-						} else {
-							makeLeaf(mycomp, config, arg);
-						}
-					});
-				};
-			headcomp.handle = function (e) {
-				var i = this.strategy(e);
-				if (i >= 0) {
-					this.show(i);
-					this.fire(i);
-				}
-			};
-			headcomp.getIndex = function () {
-				return this.strategy && (this.strategy(true) || 0);
-			};
-			recur(coll);
-			headcomp.subscribe(doToolTip);
-			//headcomp.subscribe(tooltip_command.execute);
-			return headcomp;
-		},
-		getDisplayComp = ptL(machDisplayComp, display_elements, myconfig),
-		tabFactory = function (gallery, index) {
-			if (isNaN(index)) {
-				return;
-			}
-
-			function doTabs(doLI, str) {
-				return _.compose(utils.setText(str.capitalize()), doLI())('a');
-			}
-
-			function doTabsLoop(doLI, str, i) {
-				///REMEMBER a new onValidation PER LOOP
-				var v = validator('wrong link', ptL(utils.isEqual, 1, i)),
-					doParent = _.compose(ptL(doAddClass, 'current'), doDrillDown(['parentNode'])),
-					doWhen = ptL(onValidation(v), doParent);
-				return _.compose(doWhen, utils.setText(str.capitalize()), doLI())('a');
-			}
-			var I = 0,
-				resizerinc = [],
-				ctxt = getDisplayComp(index),
-				mecallback = function () {
-					return function () {
-						resizerinc[I].exit(ctxt.getIndex());
-						I = (I += 1) % resizerinc.length;
-						resizerinc[I].show(ctxt.getIndex());
+			},
+			prepNavKlas = function (klas) {
+				var $el = makeComp(utils.machElement(ptL(klasAdd, klas), ptL($, 'list')));
+				$el.unrender = ptL(klasRem, klas, ptL($, 'list'));
+				return $el;
+			},
+			doIterate = function (coll, iteratee, comp) {
+				return _.each(getResult(coll), _.compose(comp.add, iteratee));
+			},
+			makeBody = function () {
+				var $el = makeComp(makeElement(ptL(klasAdd, 'sell'), always(utils.getBody())));
+				$el.unrender = ptL(klasRem, 'sell', utils.getBody());
+				return $el;
+			},
+			makeFigure = function (ancor, el) {
+				var grabAlt = _.compose(doDrillDown(['alt']), getDomTargetImage),
+					preptext = _.compose(utils.setText, grabAlt)(el),
+					sibling = utils.getPrevious(el),
+					find = function (e) {
+						var myimg_alt = grabAlt(this.sub.getElement()),
+							tgt_alt = doDrillDown(['target', 'alt'])(e);
+						return myimg_alt === tgt_alt;
 					};
-				},
-				$nav = mynav.init(mecallback(I)),
-				getLI = function () {
-					return _.compose(anCr, _.compose(anCr($nav.get()), always('li')))();
-				},
-				prepHandle = ptL(utils.addHandler, 'click'),
-				addHandler = function (id, cb) {
-					this.handle = _.compose(_.identity, ptL(prepHandle, cb), ptL(doAddClass, id))($nav.get());
-				},
-				getLink = getLinkDefer(index),
-				prepTitles = function () {
-					return ['Alpacas For Sale', mapLinktoTitle(getLink()), 'Next Alpaca'];
-				},
-				resizercomp = makeDisplayer(resizerinc, myconfig, true),
-				doTabNav = _.compose(ptL(doTabs, getLI)),
-				doLoopNav = _.compose(ptL(doTabsLoop, getLI)),
-				init = function (coll, iteratee) {
-					_.each(coll(), iteratee);
-				},
-				hide = function () {
-					$nav.remove();
-				},
-				doExit = function (i) {
-					$nav.remove();
-					ctxt.fire(i);
-				},
-				exiting = function (subject, i) {
-					ctxt.unsubscribe(subject);
-					doExit(i);
-				},
-				prepLoop = function () {
-					var handler = function (e) {
-							var events = [ctxt.handle.bind(ctxt), _.compose(_.bind(gallery.execute, gallery), _.bind($nav.remove, $nav)), noOp, noOp],
-								composed = _.compose(doThrice(stringOp)('match'), doDrillDown(['target', 'innerHTML']))(e),
+				return {
+					render: function () {
+						var fig = _.compose(anCr(ancor), always('figure'))();
+						this.sub = utils.machElement(ptL(idty, fig), preptext, anCr(fig), always('figcaption'), anMv(fig), ptL(idty, el)).render();
+						return this;
+					},
+					unrender: function () {
+						if (!this.sub) { //may not have been initialised when unrender called
+							return;
+						}
+						var link = _.compose(getDomTargetLink)(this.sub.getElement());
+						utils.insertAfter(link, sibling);
+						this.sub.unrender();
+					},
+					find: find
+				};
+			},
+			my_presenter = (function (head) {
+				_.each(links, function (lnk) {
+					var elements = gAlp.Composite([]),
+						tbl = utils.getPrevious(lnk),
+						$lnk = makeComp(makeElement(utils.show, always(lnk))),
+						$tbl = makeComp(makeElement(utils.show, always(tbl)));
+					$tbl.unrender = ptL(utils.hide, tbl);
+					$lnk.unrender = ptL(utils.hide, lnk);
+					elements.addAll($tbl, $lnk);
+					head.add(elements);
+				});
+				return head;
+			}(gAlp.Composite([]))),
+			$body = makeBody(),
+			$nav = makeComp(prepNav($sell.getElement(), article)),
+			doCurrent = function (bool, klas, leaf) {
+				var addClass = ptL(utils.setFromArray, always(bool), 'add', [klas]),
+					$el = makeComp(makeElement(addClass, always(leaf.getElement())));
+				$el.unrender = ptL(klasRem, klas, leaf.getElement());
+				return $el;
+			},
+			toggleTable = ptL(utils.toggleClass, ['tog'], $sell.getElement()),
+			addListener2Comp = function (comp, cb, el) {
+				return _.compose(comp.add, adapterFactory(), utils.addEvent(clicker, cb))(getResult(el));
+			},
+			getNavTypeFactory = function (coll, len, limits) {
+				var pop = utils.invoker('pop', Array.prototype.pop),
+					shift = utils.invoker('shift', Array.prototype.shift),
+					//reverse = utils.invoker('reverse', Array.prototype.reverse),
+					isMobile = validator('loop layout priority', _.negate(getEnvironment)),
+					subHigher = validator('Data length exceeds a tab layout', doTwiceDefer(gtThan)(limits.hi)(len)),
+					subLower = validator('Data length will not require a loop layout', doTwiceDefer(lsThanEq)(limits.lo)(len)),
+					trials = [ptL(onValidation(subLower), pop, coll), ptL(onValidation(subHigher), shift, coll), ptL(onValidation(isMobile), reverse, coll)];
+				_.each(trials, function (f) {
+					return f();
+				});
+				return coll;
+			},
+			routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
+			layout = (function (myroutes) {
+				var mapLinktoTitle = function (link) {
+						var getHref = doThrice(simpleInvoke)(linkEx)('match');
+						return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
+					},
+					alpacaTitles = _.map(links, mapLinktoTitle),
+					prepTabTitles = doTwiceDefer(utils.map)(mapLinktoTitle)(links),
+					prepLoopTitles = function () {
+						return ['Alpacas For Sale', 'placeholder', 'Next Alpaca'];
+					},
+					getLI = function () {
+						return _.compose(anCr, _.compose(anCr($nav.getElement()), always('li')))();
+					},
+					doTabs = function (doLI, str) {
+						var getListEl = _.compose(always, utils.getDomParent(utils.getNodeByTag('li')));
+						//needs to return an appended element, so renders on the fly
+						return _.compose(makeComp, utils.machElement, getListEl, utils.setText(str.capitalize()), doLI())('a');
+					},
+					doTabNav = _.compose(ptL(doTabs, getLI)),
+					prepTabNav = function () {
+						return function (e) {
+							var el = doDrillDown(['target', 'innerHTML'])(e),
+								i = _.findIndex(alpacaTitles, ptL(utils.isEqual, el)),
+								comp = my_stage_two.get(0);
+							if (inRange(i)) {
+								comp.unrender();
+								comp.get(0).get(i).render();
+								comp.get(1).get(i).render();
+							}
+						};
+					},
+					prepLoopNav = function (i) {
+						function setText() {
+							var comp = my_stage_two.get(0);
+							if (inRange(i)) {
+								i = (i += 1) % alpacaTitles.length;
+								comp.unrender();
+								comp.get(0).get(i).render();
+								//too DOM dependent??
+								_.compose(utils.setText(alpacaTitles[i]), getTargetLink)($('list'));
+							}
+						}
+						var reset = function () {
+								my_head.get(2).unrender();
+								my_head.get(2).remove();
+								my_head.get(1).render();
+							},
+							events = [setText, reset, noOp, noOp];
+						return function (e) {
+							var composed = _.compose(doThrice(stringOp)('match'), doDrillDown(['target', 'innerHTML']))(e),
 								best = ptL(utils.getBest, function (arr) {
 									return composed(arr[0]);
 								}, _.zip(navExes, events));
 							_.compose(utils.getDefaultAction, best)()();
-							//this.fire();
-						},
-						nextLoop = function () {
-							var fromClass = _.compose(getDomTargetLink, ptL(byIndex, 0), ptL(utils.getByClass, 'current')),
-								pre_prepped = _.compose(ptL(utils.setter, fromClass, 'innerHTML'), getAlpacaTitles),
-								isNotEmpty = function (arg) {
-									return arg;
-								},
-								prepped = _.compose(ptL(utils.invokeWhen, _.compose(isNotEmpty, fromClass), pre_prepped)),
-								exit = ptL(exiting, prepped);
-							return function (i) {
-								this.exit = exit;
-								ctxt.subscribe(prepped);
-								ctxt.fire(i);
-							};
-						},
-						looper = {
-							init: ptL(init, prepTitles, doLoopNav),
-							id: 'loop',
-							addHandler: function () {
-								//this.subscribe(tooltip_command.undo);
-								_.compose(_.identity, ptL(prepHandle, _.bind(handler, this)), ptL(doAddClass, this.id))($nav.get());
-							},
-							hide: hide,
-							doNext: nextLoop(),
-							delegate: ptL(simpleInvoke, ctxt, 'handle', false)
 						};
-					return _.extend(looper, new utils.Observer());
-					//return looper;
-				},
-				prepTab = function () {
-					var nextTab = function (i) {
-							var navbar = simpleComp($nav.get().childNodes, _.extend(myconfig, {
-									klas: 'current'
-								})),
-								boundNav = _.bind(navbar.show, navbar);
-							ctxt.subscribe(boundNav);
-							ctxt.fire(i);
-							this.exit = function (i) {
-								ctxt.unsubscribe(boundNav);
-								doExit(i);
-							};
-						},
-						tabber = {
-							init: ptL(init, partialLinks, doTabNav),
-							id: 'tab',
-							addHandler: ptL(addHandler, 'tab', _.bind(ctxt.handle, ctxt)),
-							//addHandler: _.bind(addHandler, this, 'tab', _.bind(ctxt.handle, ctxt)),
-							hide: hide,
-							doNext: nextTab,
-							delegate: ptL(simpleInvoke, ctxt, 'handle')
-						};
-					return tabber;
-				},
-				layouts = {
-					loop: prepLoop(),
-					tab: prepTab()
-				},
-				prepareLayout = function (comp) {
-					if (!comp) {
-						return;
-					}
-					_.extend(comp, gAlp.Composite([], myconfig.intaface));
-					comp.show = function (j) {
-						var i = isNaN(j) ? index : j;
-						this.init(i);
-						ctxt.strategy = sortIndexFactory(i, this.id, alpacaTitles);
-						this.addHandler();
-						this.delegate(i); //ie show current
-						this.doNext(i); //prep observers
-					};
-					comp.add(ctxt);
-					resizercomp.add(comp);
-					return comp;
-				},
-				sortLayouts = function () {
-					var mylayouts = [layouts[routes[0]]],
-						alt = layouts[routes[1]];
-					if (alt) {
-						mylayouts.push(alt);
-					}
-					_.each(mylayouts, prepareLayout);
-					mylayouts = [];
-				};
-			sortLayouts();
-			//memoize...
-			tabFactory = function (gallery, index) {
-				if (isNaN(index)) {
-					return;
-				}
-				getLink = getLinkDefer(index);
-				resizercomp.get(I).show(index);
-			};
-			resizercomp.get(0).show(index);
-		}, //orig tabFactory
-		makeFigure = function (ancor, el) {
-			var grabAlt = _.compose(doDrillDown(['alt']), getDomTargetImage),
-				preptext = _.compose(utils.setText, grabAlt)(el);
-			return {
-				execute: function () {
-					doAddClass('extent', ancor);
-					var fig = _.compose(anCr(ancor), always('figure'))();
-					this.subject = utils.makeElement(ptL(idty, fig), preptext, anCr(fig), always('figcaption'), anMv(fig), ptL(idty, el)).add();
-					return this;
-				},
-				find: function (e) {
-					var myimg_alt = _.compose(doDrillDown(['alt']), getDomTargetImage)(this.subject.get()),
-						tgt_alt = doDrillDown(['target', 'alt'])(e);
-					return (myimg_alt === tgt_alt);
-				},
-				undo: function (i) {
-					utils.removeClass('extent', ancor);
-					var link = _.compose(getDomTargetLink)(this.subject.get());
-					utils.insertAfter(link, tables[i]);
-					this.subject.remove();
-				}
-			};
-		},
-		loader = function (coll, layout, target_node, proxy) {
-			_.compose(ptL(doAddClass, 'sell'), always(document.body))();
-			var goFigure = ptL(makeFigure, target_node),
-				getFigs = function () {
-					return _.map(coll, function (el) {
-						return goFigure(el).execute();
-					});
-				},
-				toggleTable = function () {
-					var f = ptL(utils.toggleClass, ['tog'], target_node);
-					//f = window.confirm.bind(window, 'proceed');
-					return utils.addEvent(ptL(utils.addHandler, 'click'), f)(target_node);
-				},
-				delBridge = function (action, e) {
-					var getText = doDrillDown(['target', 'nodeName']),
-						val = _.compose(doThrice(simpleInvoke)(/img/i)('match'), getText),
-						isImg = utils.validator('Please click on an image', val);
-					try {
-						return utils.conditional(isImg)(action, e);
-					} catch (er) {
-						//true;
-					}
-				},
-				delegate = function (coll, ctxt, e) {
-					var j;
-					_.each(getResult(coll), function ($el, i) {
-						if ($el.find(e)) {
-							j = i;
-						}
-						$el.undo(i);
-					});
-					if (ctxt.handler) {
-						ctxt.handler.remove(ctxt.handler);
-					}
-					ctxt.handler = toggleTable();
-					return j;
-				},
-				execs = function (base) {
-					var layouts = {
+					},
+					mystates = {
 						loop: {
-							execute: function () {
-								if (base.handler) {
-									base.handler.remove(base.handler);
-								}
-								var figs = getFigs(),
-									pred = ptL(delBridge, ptL(delegate, figs, base)),
-									action = ptL(tabFactory, proxy),
-									pred_action = _.compose(action, pred);
-								base.handler = utils.addEvent(ptL(utils.addHandler, 'click'), pred_action)(target_node);
-							}
+							getId: always('loop'),
+							prepNav: prepLoopNav,
+							buildList: ptL(doIterate, prepLoopTitles, doTabNav, my_list_comp),
+							displayList: doThrice(doIterate)(my_list_elements)(ptL(doCurrent, false, 'current')),
+							enter: function (i) {
+								var setText = utils.setText(alpacaTitles[i]),
+									$el = makeComp(utils.machElement(setText, getTargetLink, ptL($, 'list')));
+								$el.unrender = function () {
+									$el.getElement().innerHTML = 'fuck';
+								};
+								return $el;
+							},
+							validator: eventBridge,
+							renderList: noOp
 						},
 						tab: {
-							execute: function () {
-								if (base.handler) {
-									base.handler.remove(base.handler);
-								}
-								tabFactory(layouts.loop, 0);
-								base.handler = toggleTable();
+							getId: always('tab'),
+							prepNav: prepTabNav,
+							buildList: ptL(doIterate, prepTabTitles, doTabNav, my_list_comp),
+							displayList: doThrice(doIterate)(my_list_elements)(ptL(doCurrent, true, 'current')),
+							enter: doTwiceDefer(makeComp)(null)(null),
+							validator: eventBridge,
+							renderList: function (i) {
+								my_list_elements.unrender();
+								my_list_elements.get(i).render();
 							}
 						}
-					};
-					return _.extend(base, layouts[layout]);
-				};
-			return execs({});
-		}, //loader
-		myloader = { // a proxy that persists and is responsible for instatiating subjects
-			execute: function () {
-				if (this.subject) {
-					this.subject.handler.remove(this.subject.handler);
+					},
+					mystate = (function (states) {
+						return {
+							states: states,
+							state: states[myroutes[0]],
+							changestates: function () {
+								myroutes.reverse();
+								this.state = this.states[myroutes[0]];
+								return this;
+							}
+						};
+					}(mystates));
+				return extendFrom(mystate.states.state, mystate, 'states', 'state');
+			}(routes)),
+			prepStageThree = function (i, bool) {
+				var mylayout = bool ? layout.changestates().state : layout.state,
+					my_nav = my_stage_two.get(4);
+				mylayout.buildList(); //add to my_list_comp
+				my_nav.add(prepNavKlas(mylayout.getId())); //mynav1 (remove)
+				my_nav.add(mylayout.enter(i)); //mynav2
+				addListener2Comp(my_nav, mylayout.prepNav(i), ptL($, 'list')); //mynav3 (remove)
+				my_nav.render();
+				//display current (tab)
+				mylayout.displayList(ptL(my_list_comp.get)); //listElements
+				mylayout.renderList(i);
+			},
+			prepStageTwo = function (i) {
+				my_head.get(0).render();
+				my_stage_one.unrender();
+				var my_display_elements = gAlp.Composite([]),
+					my_nav = gAlp.Composite([]);
+				my_display_elements.addAll(my_presenter, my_list_elements);
+				my_stage_two.add(my_display_elements); //0
+				addListener2Comp(my_stage_two, toggleTable, $sell.getElement()); //1
+				_.compose(my_stage_two.add, tooltip_adapter, makeToolTip)(); //2 
+				my_stage_two.render();
+				my_display_elements.unrender();
+				my_presenter.get(i).render();
+				my_stage_two.add($nav); //3
+				my_stage_two.add(my_nav); //4
+				my_nav.add(my_list_comp); //mynav0
+				$nav.render();
+				prepStageThree(i);
+			},
+			prepStageTwoBridge = function (i) {
+				prepStageTwo(i < 0 ? 0 : i);
+			},
+			prepStageOne = function () {
+				var myExtent = function (head, el) {
+						var $el = makeComp(makeElement(ptL(klasAdd, 'extent'), always(el)));
+						$el.unrender = ptL(klasRem, 'extent', el);
+						head.add($el);
+					},
+					goFigure = ptL(makeFigure, $sell.getElement()),
+					doFigures = ptL(doIterate, links, goFigure, my_figure_comp),
+					dofind;
+				doFigures();
+				my_figure_comp.find = ptL(my_figure_comp.find, 'findIndex');
+				dofind = _.compose(prepStageTwoBridge, my_figure_comp.find);
+				myExtent(my_figure_comp, $sell.getElement());
+				my_stage_one.add(my_figure_comp); //0
+				addListener2Comp(my_stage_one, ptL(layout.state.validator, dofind), $sell.getElement()); //2
+			},
+			swap = function () {
+				var i = _.findIndex(my_presenter.get(), ptL(utils.isEqual, my_presenter.get(null))),
+					comp = my_head.get(2).get(4); //my_nav
+				_.each(comp.get(), function (subcomp, i) {
+					if (i) {
+						subcomp.unrender();
+						comp.remove(subcomp);
+					}
+				});
+				comp.get(0).unrender();
+				comp.get(0).remove();
+				my_list_elements.remove();
+				prepStageThree(i, true);
+			},
+			prepStage = function () {
+				my_head.add($body); //0
+				my_head.add(my_stage_one); //1
+				my_head.add(my_stage_two); //2
+				if (routes[1]) {
+					throttler(swap);
 				}
-				this.subject = loader(links, routes[0], sellDiv, this);
-				this.subject.execute();
-			}
-		};
-	if (loaded) {
-		utils.highLighter.perform();
-      
-        try {
-            myloader.execute();
-        }
-        catch(e){
-         utils.report(e);
-        }
-	}
-}('(min-width: 769px)', Modernizr.mq('only all'), document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
+				if (layout.state.getId() === 'tab') {
+					prepStageTwoBridge(0);
+				} else {
+					prepStageOne();
+					my_head.render();
+				}
+			};
+		prepStage();
+	}(alp_len));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
 }));

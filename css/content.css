@@ -82,7 +82,7 @@ html.js body {
 }
 hr {
 	border: 0;
-	margin: .35em auto;
+	margin: .65em auto 0;
 	max-width: 100%;
 	background-position: 50%;
 	box-sizing: border-box;

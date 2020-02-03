@@ -20,7 +20,7 @@
 	width: 129%;
 	max-width: 60em;
 	right: -19%;
-	bottom: 12%;
+	bottom: 10%;
 }
 .js #upkeep #article>* {
 	margin-right: 40%;
@@ -170,9 +170,6 @@ bottom: -250%;
 @media screen and (min-width: 769px) {
        /* @supports(mask-image:  url('')) {*/
            /* @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
-        .no-js body.verbose {
-            background-color: lavender;
-        }
         
         .no-js .verbose #main div > * {
             margin-right: 33%;
@@ -186,10 +183,7 @@ bottom: -250%;
 			position: absolute;
             /*z-index: -1;*/
 		}		
-		
-		#stud_services #footer, #contact_us #footer, #links #footer, #about_alpacas #footer, #about_us #footer {
-			margin-top: 3%;
-		}
+	
 		#stud_services #main #article p {
 			margin-right: 70%;
 		}

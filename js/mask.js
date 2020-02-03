@@ -203,8 +203,8 @@ if (!window.gAlp) {
 		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
 		addElip = ptL(_.every, [readmoretarget], getResult),
 		enableElip = _.compose(ptL(utils.doWhen, addElip, ptL(utils.addClass, 'elip', parag[0]))),
-		addElipHandler = ptL(_.every, [noScrollBars, readmoretarget, Modernizr.ellipsis], getResult),
-		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis], getResult),
+		addElipHandler = ptL(_.every, [noScrollBars, readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
+		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
 		enableElipHandler = _.compose(ptL(utils.doWhen, addElipHandler, ptL(ellipsis_handler, readmoretarget))),
 		scroller = function (percent) {
 			var setScrollHandlers = ptL(utils.setScrollHandlers, parag, curry2(utils.getScrollThreshold)(percent)),
@@ -325,7 +325,7 @@ if (!window.gAlp) {
 			utils.addHandler('resize', window, _.throttle(handler, 66));
 			command.init(outcomes)();
 		};
-		document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
+		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose))) {

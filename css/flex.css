@@ -162,9 +162,3 @@
 		grid-row: 4 / 7;
 	}
 }
-
-@media (any-pointer: coarse) {
-    html.js body#gallery {
-        background-color: lavender;
-    }
-}

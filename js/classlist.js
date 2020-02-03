@@ -70,18 +70,7 @@ gAlp.ClassList = (function () {
 		f.message = message;
 		return f;
 	}
-
-	function getOtherFactory(pairs) {
-		return _.compose(gAlp.Util.getZero, _.partial(_.without, pairs));
-	}
-
-	function getOther(el, pairs) {
-		var dopairs = getOtherFactory(pairs),
-            article = document.getElementById('article');
-		return function () {
-			el.classList.replace(article.className, dopairs(article.className));
-		};
-	}
+    
 	var constr = function (node) {
 		var set = _.partial(setter, node, 'className'),
 			superset = _.partial(setterplus, node, 'className'),

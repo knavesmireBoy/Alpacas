@@ -79,12 +79,11 @@ a#yag {
 	clear: both;
 	z-index: 1;
 }
+
 #footer ul {
-	padding: 22% 5% 3.5% 0;
-	line-height: 1.2;
-}
-#footer ul {
+    padding: 22% 5% 3.5% 0;
 	padding: 3% 5% 3% 0;
+    line-height: 1.2;
 	line-height: 1;
 }
 #footer li {
@@ -120,10 +119,6 @@ a#yag {
 	margin: 0 0 .0em;
 	/* z-index required IF persisting with masking, explore clipping */
 	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
-}
-
-.read-more-target {
-    margin-top: .5em;
 }
 
 #main #aside {

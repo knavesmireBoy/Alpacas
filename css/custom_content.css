@@ -146,7 +146,7 @@ font: bold 0.8em  "Bookman Old Style", "Palatino", serif;
 }
 
 #alpacas_for_sale ul li a {
-    font-size: 1.2em;
+    font-size: 1.3em;
 }
 
 #alpacas_for_sale #article.loop ul li a {
@@ -177,8 +177,10 @@ figure {
 }
 
 figure:hover {
-    background: hsla(75, 50%, 30%, .55);
-    color: white;
+    /*background: hsla(75, 50%, 30%, .55);*/
+    background: linear-gradient(white, hsla(75, 50%, 30%, .55));
+    background: linear-gradient(white, hsla(75, 50%, 80%, 1));
+    color: #6e2900;
 }
 
 #alpacas_for_sale ul.tab a{
@@ -263,6 +265,7 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
 }
+
 #alpacas_for_sale ul.tab li a{
 	border-color: #7F9933;
 	border-color: hsla(75, 50%, 40%, 1);
@@ -280,7 +283,6 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	background: hsla(75, 50%, 90%, 1);
 	border-bottom-color: hsla(75, 50%, 90%, 1);
 	border-bottom-color: #EBF2D8;
-    color: red;
 }
 #alpacas_for_sale h2 {
 	color: #944;
@@ -520,9 +522,7 @@ button#exit:hover, button#exit:focus {
 	-webkit-transform: rotate(360deg);
 	transform: rotate(360deg);
 }
-#gallery #footer {
-	background-color: rgb(117, 151, 7);
-}
+
 #links dd {
 	font-size: 90%;
 }

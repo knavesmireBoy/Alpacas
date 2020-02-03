@@ -253,17 +253,14 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 ul#thumbnails li.go {
     visibility: hidden;
 }
-#gallery #footer {
-	padding-top: 0%;
-	margin-top: 5%;
-}
+
 #gallery.showtime #footer {
-	margin-top: 0%;
-}
-#gallery #footer ul {
-	padding: 3.5% 5%;
+	margin-top: -2%;
+    padding: 0%;
 	border-width: 0px;
+    background: none;
 }
+
 #gallery #footer ul>* {
 	-webkit-transition: all 1s;
 	-o-transition: all 1s;
@@ -284,7 +281,7 @@ li#slide, li#paused {
 	z-index: 2;
 }
 #controls.static {
-	top: -4em;
+	top: -3.6em;
 }
 #gallery #main {
 	padding: 0;

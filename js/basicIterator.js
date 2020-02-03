@@ -1,7 +1,5 @@
 /*jslint nomen: true */
 /*global window: false */
-/*global document: false */
-/*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
 if (!window.gAlp) {
@@ -68,14 +66,27 @@ gAlp.Iterator = function (rev) {
 gAlp.Composite = (function () {
     "use strict";
 	function noOp() {}
+    function isFalse(i){
+        return !i && _.isBoolean(i);
+    }
+    
+    function isTrue(i){
+        return i && _.isBoolean(i);
+    }
+    
+    
 	return function (included) {
 		var intafaces = _.rest(arguments), /*, intafaces..*/
+            j,
+            k,
 			comp_intaface = gAlp.Intaface('Composite', ['add', 'remove', 'get', 'find']),
 			leaf = {
 				add: noOp,
 				remove: noOp,
 				get: noOp,
-				find: noOp
+				find: noOp,
+                render: noOp,
+                unrender: noOp
 			},
 			composite,
 			tmp,
@@ -92,7 +103,6 @@ gAlp.Composite = (function () {
 				intafaces.unshift(comp);
 				gAlp.Intaface.ensures.apply(gAlp.Intaface, intafaces);
 				included.push(intafaces.shift(comp));
-				//included.push(comp);
 				comp.parent = this;
 			},
 			comp_remove = function (comp) {
@@ -107,35 +117,68 @@ gAlp.Composite = (function () {
 					return comp;
 				}
 			},
-			comp_get = function (i) {
+			comp_get1 = function (i) {
 				//DON'T FORGET isNaN will cast a boolean to a number ONLY supplying undefined will return a NaN
 				var str = i && _.isBoolean(i) ? 'pos' : !i && _.isBoolean(i) ? 'neg' : !isNaN(i) ? 'intg' : 'all',
 					ret = getOutcomes(str, i);
 				return ret;
 				//return !isNaN(i) ? included[i] : included;
 			},
-			comp_find = _.partial(gAlp.Util.find, included),
+            comp_get = function (i) {
+                //console.log('recent', i)
+                if(_.isNull(i) && !isNaN(k)){
+                    return included[k];
+                }
+                if(_.isNull(i)){
+                    return included;
+                }
+				var j = isTrue(i) ? 0 : isFalse(i) ? included.length - 1 : !isNaN(i) ? i : undefined,
+                    ret =  !isNaN(j) ? included[j] : included;
+                k = !isNaN(j) ? j : k;//store current
+                return ret;
+			},
+            /*
+            comp_find  = function (m){
+                return function () {
+				var args = _.toArray(arguments);
+				return _[m](included, function (member) {
+					//return member.find && member.find.apply(member, args.concat(_.rest(arguments)));
+					return member.find && member.find.apply(member, _.rest(arguments));
+				});
+			};
+            },
+            */
+            comp_find  = function (m, e){
+				return _[m](included, function (member) {
+					return member.find && member.find(e);
+				});
+            },
+            
 			doAdd = function (comp) {
 				try {
 					comp_add.call(composite, comp);
 				} catch (er) {
 					try {
 						comp_add(_.extend(leaf, comp));
-					} catch (error) {}
+					} catch (error) {
+                        noOp();
+                    }
 				}
+                return comp;
 			},
 			render = function () {
-				var args = arguments;
+				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-					//member.render && member.render.apply(member, args);
-                    gAlp.Util.safeApply('render', member);
+					//member.render && member.render.apply(member, _.rest(arguments));
+                    member.render && member.render.apply(member, args.concat(_.rest(arguments)));
+                    //gAlp.Util.safeApply('render', member);
 				});
 			},
 			unrender = function () {
-				var args = arguments;
+				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-					//member.unrender && member.unrender.apply(member, args);
-                    gAlp.Util.safeApply('unrender', member);
+                    //member.unrender && member.unrender.apply(member, _.rest(arguments));
+					member.unrender && member.unrender.apply(member, args.concat(_.rest(arguments)));
 				});
 			};
 		intafaces.unshift(comp_intaface);
@@ -150,7 +193,10 @@ gAlp.Composite = (function () {
 				find: comp_find,
 				included: included,
 				render: render,
-				unrender: unrender
+				unrender: unrender,
+                current: function(){
+                return included[j] || included;
+            }
 			};
 			if (included.length) {
 				//copy and empty included; establish contents conform to interface

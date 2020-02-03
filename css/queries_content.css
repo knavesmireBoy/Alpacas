@@ -69,25 +69,24 @@
 		opacity: 0;
 	}
   
-	#main .read-more-state:checked~.read-more-target p, .ellipsis #main .read-more-target p.show, .ellipsis #main .read-more-state~.read-more-target p.elip {
+	#main .read-more-state:checked~.read-more-target p, .ellipsis.touchevents #main .read-more-target p.show, .ellipsis.touchevents #main .read-more-state~.read-more-target p.elip {
 		position: relative;
 		opacity: 1;
 	}
-    
        
-    .ellipsis #main .read-more-state~.read-more-target p {
+    .ellipsis.touchevents #main .read-more-state~.read-more-target p {
         -webkit-transition: opacity 2s;
         -o-transition: opacity 2s;
         transition: opacity 2s;
 	}
      
-    .ellipsis #main .read-more-state~.read-more-target p.elip {
+    .ellipsis.touchevents #main .read-more-state~.read-more-target p.elip {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
 	}
     
-     .ellipsis #main .read-more-state~.read-more-target p.show {
+     .ellipsis.touchevents #main .read-more-state~.read-more-target p.show {
          white-space: normal;
          text-overflow: inherit;
 	}
@@ -144,6 +143,7 @@
 		background-size: 105%;
 	}
 	#wrap #footer ul {
+		background: rgb(117, 151, 7) url(../assets/grass.png) no-repeat 0% 100%;
 		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
 		background-repeat: repeat-x;
 		background-size: 80%;
