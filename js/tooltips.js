@@ -14,9 +14,9 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 		},
         utils = gAlp.Util,
 		setText = utils.setText,
-		setAttrs = utils.setAttrs,
-		createDiv = _.partial(utils.getNewElement, 'div'),
-		doElement = _.partial(utils.render, anchor, null, createDiv),
+		setAttrs = utils.setAttributes,
+        anCr = utils.append(),
+        doElement = _.compose(anCr(anchor), utils.always('div')),
 		doAttrs = _.partial(setAttrs, {
 			id: 'tooltip'
 		}),
@@ -39,7 +39,7 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
 					var parent = $('tooltip'),
                         tgt = utils.getDomChild(utils.getNodeByTag('div'));
                           if(parent){
-                              utils.makeElement(setText(instr[1]), _.partial(_.identity, tgt(parent.firstChild))).add();
+                              utils.machElement(setText(instr[1]), _.partial(_.identity, tgt(parent.firstChild))).render();
                           }
                     }
 				},
@@ -56,13 +56,13 @@ window.gAlp.Tooltip = function(anchor, instr, count) {
         init = function(){
           //console.log('tool: '+count)
             if(isPos(count--)){
-            var tip = utils.makeElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).add().get(),
-                doDiv = _.partial(utils.render, tip, null, createDiv),
+            var tip = utils.machElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).render().getElement(),
+                doDiv = _.compose(anCr(tip), utils.always('div')),
                 doAttr = _.partial(setAttrs, {
                     id: 'triangle'
                 });
-                utils.makeElement(setText(instr[0]), doDiv).add();
-                utils.makeElement(doAttr, doDiv).add();
+                utils.machElement(setText(instr[0]), doDiv).render();
+                utils.machElement(doAttr, doDiv).render();
             }
             return this;
             },
