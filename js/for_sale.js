@@ -69,6 +69,10 @@ if (!window.gAlp) {
 	function inRange(i) {
 		return i >= 0;
 	}
+    
+    function setter(o, k, v) {
+		o[k] = v;
+	}
 
 	function extendFrom(sub, supa, keys, key) {
 		function mapper(method) {
@@ -157,8 +161,8 @@ if (!window.gAlp) {
 		],
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			return list.slice(_.random(0, end || list.length));
-			//return list.slice(0,0);
+			//return list.slice(_.random(0, end || list.length));13/5
+			return list.slice(0,6);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -196,6 +200,7 @@ if (!window.gAlp) {
 		idty = _.identity,
 		doTwiceDefer = utils.curryTwice(true),
 		doThrice = utils.curryThrice(),
+        doThriceDefer = utils.curryThrice(true),
 		doQuart = utils.curryFourFold(),
 		anCr = utils.append(),
 		anMv = utils.move(),
@@ -287,7 +292,7 @@ if (!window.gAlp) {
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
 						maybeClass = ptL(onValidation(validator('no match found', c), supportsNthChild), doDescription);
-					_.each(tr, function (td, i, data) {
+                    _.each(tr, function (td, i, data) {
 						//partially apply the RETURNED function from onValidation with (partially applied) function to invoke
 						addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
@@ -295,7 +300,6 @@ if (!window.gAlp) {
 						provisionalID(ptL(assignId, td));
 						_.compose(maybeClass, addspan, utils.setText(td), anCr(row))(type);
 						doOdd(_.compose(doOddRow, always(row)));
-						//$sell.style.marginTop = '-1px';///conditional on ie
 					});
 				});
 				render = anCr(table.parentNode);
@@ -491,12 +495,12 @@ if (!window.gAlp) {
 								var setText = utils.setText(alpacaTitles[i]),
 									$el = makeComp(utils.machElement(setText, getTargetLink, ptL($, 'list')));
 								$el.unrender = function () {
-									$el.getElement().innerHTML = 'fuck';
+									$el.getElement().innerHTML = 'placeholder';
 								};
 								return $el;
 							},
 							validator: eventBridge,
-							renderList: noOp
+							renderList: function(){}
 						},
 						tab: {
 							getId: always('tab'),
@@ -508,7 +512,10 @@ if (!window.gAlp) {
 							renderList: function (i) {
 								my_list_elements.unrender();
 								my_list_elements.get(i).render();
-							}
+                                /*
+                                var getSellStyle = _.compose(doThrice(setter)('-1px')('marginTop'), doDrillDown(['style']), doThriceDefer(simpleInvoke)(null)('getElement')($sell));
+                                */
+                            }
 						}
 					},
 					mystate = (function (states) {
@@ -555,7 +562,7 @@ if (!window.gAlp) {
 				prepStageThree(i);
 			},
 			prepStageTwoBridge = function (i) {
-				prepStageTwo(i < 0 ? 0 : i);
+                prepStageTwo(i < 0 ? 0 : i);
 			},
 			prepStageOne = function () {
 				var myExtent = function (head, el) {
@@ -572,6 +579,22 @@ if (!window.gAlp) {
 				myExtent(my_figure_comp, $sell.getElement());
 				my_stage_one.add(my_figure_comp); //0
 				addListener2Comp(my_stage_one, ptL(layout.state.validator, dofind), $sell.getElement()); //2
+                var figs = utils.getByTag('figure', document),
+                    res = _.find(utils.getByTag('img', document), function(el){
+                    var color = utils.getComputedStyle(el, 'color');
+                    return color && color !== 'white';
+                }),
+                    matchIndex = ptL(utils.isEqual, alp_len-4),
+                    index = _.filter([18, 13, 26], function(n, i){
+                        return matchIndex(i) ? n : null;
+                    });
+                if(index && res){
+                    report.innerHTML = figs.length;
+                    _.each(figs, function(el){
+                            el.style.width = index+'%';
+                        });
+                }
+                report.innerHTML = 'lost';
 			},
 			swap = function () {
 				var i = _.findIndex(my_presenter.get(), ptL(utils.isEqual, my_presenter.get(null))),
@@ -588,6 +611,7 @@ if (!window.gAlp) {
 				prepStageThree(i, true);
 			},
 			prepStage = function () {
+                utils.highLighter.perform();
 				my_head.add($body); //0
 				my_head.add(my_stage_one); //1
 				my_head.add(my_stage_two); //2
@@ -599,9 +623,10 @@ if (!window.gAlp) {
 				} else {
 					prepStageOne();
 					my_head.render();
+                    //report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
 				}
 			};
-		prepStage();
+		  prepStage();
 	}(alp_len));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
