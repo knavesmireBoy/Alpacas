@@ -132,6 +132,20 @@ String.prototype.abbreviate = function (token) {
 	return res;
 };
 
+	String.prototype.honor = function () {
+        "use strict";
+		var str;
+		if (this.constructor.prototype.saved) {
+			str = this.constructor.prototype.saved.join(' ');
+			this.constructor.prototype.saved = null;
+		} else {
+			this.constructor.prototype.saved = this.split(' ');
+			str = this.constructor.prototype.saved[1];
+		}
+		return str;
+	};
+
+
 String.prototype.toCamelCase = function (char) {
 	var reg = new RegExp(char + "([a-z])", 'g');
 	return this.replace(reg, function (match, captured) {
