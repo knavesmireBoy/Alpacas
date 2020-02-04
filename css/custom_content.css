@@ -47,23 +47,23 @@ pre {
 	background-position: 0 99%;
 }
 #tooltip {
-	position: absolute;
-    z-index: 3;
-	bottom: 0em;
-	font-weight: normal;
-	font-size: .7em;
-	opacity: 0;
-	-webkit-transform: translate(-10em, -10em);
-	-ms-transform: translate(-10em, -10em);
-	transform: translate(-10em, -10em);
-	-webkit-transition-property: opacity, -webkit-transform;
-	transition-property: opacity, -webkit-transform;
-	-o-transition-property: transform, opacity;
-	transition-property: transform, opacity;
-	transition-property: transform, opacity, -webkit-transform;
-	-webkit-transition-duration: 2s;
-	-o-transition-duration: 2s;
-	transition-duration: 2s;
+position: absolute;
+z-index: 3;
+bottom: 0em;
+font-weight: normal;
+font-size: .7em;
+opacity: 0;
+-webkit-transform: translate(-10em, -10em);
+    -ms-transform: translate(-10em, -10em);
+        transform: translate(-10em, -10em);
+-webkit-transition-property: opacity, -webkit-transform;
+transition-property: opacity, -webkit-transform;
+-o-transition-property: transform, opacity;
+transition-property: transform, opacity;
+transition-property: transform, opacity, -webkit-transform;
+-webkit-transition-duration: 2s;
+     -o-transition-duration: 2s;
+        transition-duration: 2s;
 }
 
 #sell.extent + #tooltip {

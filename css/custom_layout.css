@@ -9,7 +9,7 @@
 #alpacas_for_sale.sell #main #aside {
 	display: none;
 }
-#alpacas_for_sale ul, #alpacas_for_sale ul.loop li a, #alpacas_for_sale #main #aside, ul#thumbnails, #gallery #main, #controls {
+#alpacas_for_sale ul, #alpacas_for_sale ul.loop li a, ul.tab li, #alpacas_for_sale #main #aside, ul#thumbnails, #gallery #main, #controls {
 	position: relative;
 }
 #alpacas_for_sale ul, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
@@ -34,13 +34,6 @@
 #alpacas_for_sale #header {
 	z-index: 0;
 	margin-bottom: 1em;
-}
-.extent {
-	left: 0;
-	margin: 0 auto;
-	padding: 1.5%;
-	*padding: .6em .3em;
-	*height: 1%;
 }
 
 ul#list li {
@@ -95,6 +88,7 @@ ul.loop li a::after, ul.loop li a::before {
 	height: 0;
 	margin-top: -2em;
 }
+
 .no-nthchild #alpacas_for_sale ul.loop li a {
 	padding: 2em;
 }
@@ -117,25 +111,54 @@ ul.loop li a::after, ul.loop li a::before {
     left: 0px;
 }
 
-#sell a.show, #sell.extent a{
+#sell a.show, #sell.extent a {
     display: block;
 }
+/* set img color to red */
+html.js figure a img {
+	color: red;
+}
+/* target ie 7 separately*/
+*+html figure a img {
+    color: blue;
+}
+/* reset img color to white for ie > 6*/
+html.js figure a > img {
+	color: white;
+}
+
+.extent {
+	left: 0;
+	margin: 0 auto;
+	padding: 1.5%;
+	*padding: .6em .3em;
+	*height: 1%;
+}
+
 #sell.extent {
     border-spacing: 1em;
     height: 1%;
 }
 /*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
 #sell.extent figure {
-    display: table-cell;
-    vertical-align: bottom;
-    padding: 2% 2% 0;
+    width: 18%;
+    width: 13%;
+    width: 26%;
+    margin: 1%;
     padding: 1.2em 1.2em 0;
+    display: inline;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+#sell.extent > figure {
+    display: table-cell;
 }
 
 html.js #sell a, html.js #sell table {
 	*display: none;
 }
-html.js #sell a.show, html.js #sell table.show {
+html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	*display: block;
 }
 #alpacas_for_sale #article {
@@ -146,6 +169,10 @@ html.js #sell a.show, html.js #sell table.show {
 	padding: 2%;
 	height: 1%;
 	*clear: left;
+}
+
+#sell.extent {
+    *padding: 2% 1%;
 }
 .tab+#sell {
 	margin-top: -1px;

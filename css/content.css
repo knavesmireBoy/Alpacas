@@ -1,11 +1,9 @@
 body {
 	font: 0.9em "Trebuchet MS", sans-serif;
+    background: white;
 }
-html.no-js body {
+.no-js body {
 	background: ivory;
-}
-html.js body {
-	background: white;
 }
 #innerwrap {
 	font-size: 1em;
@@ -37,14 +35,13 @@ html.js body {
 #nav a:hover {
 	text-decoration: none;
 	color: #6e2900;
+	color: rgb(110, 41, 0);
 	background-position: 0 47%;
 }
 /*keep separate to keep early ie happy!*/
-
 /* ie6 requires "#nav a.current:visited" */
 
 #nav a.current, #nav a.current:visited, #nav a:active {
-	color: #900;
 	color: rgb(153, 0, 0);
 	background-position: 0 99%;
 }

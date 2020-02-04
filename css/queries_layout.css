@@ -116,6 +116,15 @@
 	}
 }
 
+@-webkit-keyframes animatedBackground {
+	0% {
+		background-position: 50% 0%
+	}
+	100% {
+		background-position: 50% 100%
+	}
+}
+
 @keyframes fade {
     0% {
 		opacity: 0;
