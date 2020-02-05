@@ -100,9 +100,8 @@ a#yag {
 	position: absolute;
 	left: -9999px;
 }
-.verbose #main div hr {
-	margin-right: 30%;
-}
+
+
 /* https://stopdesign.com/eg/ie5mac-bpf */
 
 /* Start Mac IE5 filter \*/
@@ -125,4 +124,5 @@ a#yag {
 #nav li, #footer {
 	*overflow: hidden;
 }
+
 /* End Mac IE5 filter */

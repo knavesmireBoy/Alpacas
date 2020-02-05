@@ -127,6 +127,7 @@
 		background-position: 50% 100%
 	}
 }
+
 @keyframes fade {
 	0% {
 		opacity: 0;
@@ -173,7 +174,7 @@
 		position: absolute;
 		left: -999em;
 		top: 3em;
-		padding: 0em 0 0 0;
+		padding: 0;
 	}
 	.menu {
 		position: absolute;
@@ -252,7 +253,7 @@
 		-webkit-animation: entry 6s ease-out;
 		animation: entry 6s ease-out;
 	}
-	#aside {
+	#main #aside {
 		-webkit-animation: alpacasSlide 1s 1 ease-out;
 		animation: alpacasSlide 1s 1 ease-out;
 		position: static;
@@ -276,9 +277,6 @@
 	#alpacas_for_sale #footer {
 		margin-top: -4%;
 	}
-	.verbose #main div hr {
-		margin-right: 0%;
-	}
 }/* mobile layout */
 
 @media only screen and (max-width: 480px) {
@@ -291,9 +289,7 @@
 	}
 }
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-	body {
-		font-size: 0.9em;
-	}
+
 	#main {
 		font-size: 0.95em;
 	}

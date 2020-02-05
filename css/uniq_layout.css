@@ -1,3 +1,4 @@
+/*(max-width:768px)(max-width:850px)(max-width:1000px)/(min-width:769px)(min-width:869px)(min-width:980px)(min-width:1200px)*/
 #main #aside {
 	margin: 0;
 	position: absolute;
@@ -59,7 +60,7 @@
 #about_alpacas #main #article p {
 	margin-right: 30%;
 }
-#about_alpacas #main div p, #about_alpacas #main div hr {
+#about_alpacas #main div p, #about_alpacas hr {
 	margin-right: 44%;
 }
 #upkeep #main #aside {
@@ -111,70 +112,6 @@
 #contact_us #main>#aside {
 	width: 76%;
 }
-/* End Mac IE5 filter */
-
-/*IE5/Mac Band Pass Filter\*/
-
-/*/
-
-  #welcome #main #aside {
-right: -24%;
-bottom: -39%
-}
-
-  #about_us #main #aside {
-bottom: -59%;
-}
-
- #about_alpacas #main #aside {
-right: -35%;
-bottom: -31%;
-}
-
- #upkeep #main #aside {
-right: -28%;
-bottom: -25%;
-}
-
- #upkeep #footer{
-margin-top: 0%;
-}
-
- #upkeep #innerwrap{
-margin-bottom: -200%;
-}
-
- #stud_services #main #aside{
-right: -30%;
-bottom: -80%;
-}
-
-#alpacas_for_sale #main #aside {
-top: -10em;
-}
-
-#alpacas_for_sale #main div#aside {
-	right: 0%;
-bottom: 20em;
-}
-
- #alpacas_for_sale #main #aside img {
-position: static;
-}
-
-#alpacas_for_sale #header {
-z-index: 0;
-}
- #links #main #aside{
-right: -38%;
-bottom: -200%;
-}
- #contact_us #main #aside {
-right: -30%;
-bottom: -250%;
-}
-
-/**/
 
 @media only screen {
 	#header {
@@ -239,7 +176,7 @@ bottom: -250%;
 		margin-right: 0%;
 	}
     
-    #main div#article hr {
+    #main hr {
 		margin-right: 0%;
 	}
 }
@@ -249,18 +186,6 @@ bottom: -250%;
 		margin-right: 0%;
 	}
 }
-@media screen and (min-width: 869px) {
-	#aside {
-		-webkit-animation: alpacasBounce 3s 1 ease-out;
-		animation: alpacasBounce 3s 1 ease-out;
-	}
-	#aside:after {
-		content: "";
-		display: table;
-		clear: both;
-	}
-}
-
 
 @media screen and (min-width: 769px) {
 	/* @supports(mask-image:  url('')) {
@@ -336,7 +261,18 @@ bottom: -250%;
 		margin-right: 65%;
 	}
     .js #article hr, .cssgradients hr {
-    display: block;
+        display: block;
+	}
+}
+@media screen and (min-width: 869px) {
+	#aside {
+		-webkit-animation: alpacasBounce 3s 1 ease-out;
+		animation: alpacasBounce 3s 1 ease-out;
+	}
+	#aside:after {
+		content: "";
+		display: table;
+		clear: both;
 	}
 }
 @media only screen and (min-width: 980px) {

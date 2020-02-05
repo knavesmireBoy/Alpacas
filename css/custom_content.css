@@ -1,8 +1,6 @@
-
 body#alpacas_for_sale {
-font: bold 0.8em   Georgia, Palatino, serif;
+font: bold 0.8em  Georgia, Palatino, serif;
 }
-
 
 #tooltip {
 position: absolute;
@@ -28,14 +26,6 @@ transition-property: transform, opacity, -webkit-transform;
     visibility: hidden;
 }
 
-@-webkit-keyframes animatedBackground {
-	0% {
-		background-position: 50% 0%
-	}
-	100% {
-		background-position: 50% 100%
-	}
-}
 #tooltip.tip {
 	-webkit-transform: translate(10em, -3em);
 	-ms-transform: translate(10em, -3em);

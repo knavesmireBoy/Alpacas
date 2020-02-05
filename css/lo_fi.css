@@ -1,6 +1,10 @@
+body {
+	font: .9em "Trebuchet MS", sans-serif;
+	background-color: white;
+}
 p {
-	line-height: 1.4;
-	margin: 0.5em 33% 0.5em 0;
+	line-height: 1.5;
+	margin: 0.5em 35% 0.5em 0;
 }
 table {
 	border: solid 1px black;
@@ -21,8 +25,11 @@ th em {
 	white-space: nowrap;
 	padding-right: 1em
 }
+a, a:link, a:visited, h2 {
+    color: #900;
+    color: rgb(153, 0, 0);
+}
 a, a:link, a:visited {
-	color: #900;
 	border-width: 0;
 	text-decoration: none;
 	font-weight: 700;
@@ -53,22 +60,19 @@ button {
 h1 {
 	font-size: 2em;
 }
-/*
-.examples {
-
-  transition-timing-function: linear;
-  transition-timing-function: cubic-bezier(0, 0, 1, 1);
-
-  transition-timing-function: ease;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-
-  transition-timing-function: ease-in-out;
-  transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
-
-  transition-timing-function: ease-in;
-  transition-timing-function: cubic-bezier(0.42, 0, 1, 1);
-
-  transition-timing-function: ease-out;
-  transition-timing-function: cubic-bezier(0, 0, 0.58, 1);
+h2 {
+	font: italic 3.2em/1 "Handwritten", Georgia, cursive;
+	text-indent: .1em;
+	border-bottom: solid #9c0 1px;
+	letter-spacing: -.01em;
 }
-*/
+
+b {
+	color: #ff6;
+	color: rgb(255, 255, 102);
+}
+hr {
+	border: 0px;
+	margin: .65em 35% 0 0;
+    height: 1px;
+}
