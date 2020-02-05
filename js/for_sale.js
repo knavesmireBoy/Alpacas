@@ -166,6 +166,11 @@ if (!window.gAlp) {
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
+        lookup = {
+            4: 'four',
+            5: 'five',
+            6: 'six'
+        },
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
@@ -579,22 +584,14 @@ if (!window.gAlp) {
 				myExtent(my_figure_comp, $sell.getElement());
 				my_stage_one.add(my_figure_comp); //0
 				addListener2Comp(my_stage_one, ptL(layout.state.validator, dofind), $sell.getElement()); //2
-                var figs = utils.getByTag('figure', document),
-                    res = _.find(utils.getByTag('img', document), function(el){
-                    var color = utils.getComputedStyle(el, 'color');
-                    return color && color !== 'white';
-                }),
-                    matchIndex = ptL(utils.isEqual, alp_len-4),
-                    index = _.filter([18, 13, 26], function(n, i){
-                        return matchIndex(i) ? n : null;
-                    });
-                if(index && res){
-                    report.innerHTML = figs.length;
-                    _.each(figs, function(el){
-                            el.style.width = index+'%';
-                        });
-                }
-                report.innerHTML = 'lost';
+                
+                var res = _.find(utils.getByTag('img', document), function(el){
+                    console.log(utils.getComputedStyle(el, 'color'))
+                    return utils.getComputedStyle(el, 'color') !== 'white';
+                });
+                
+                utils.doWhen(res, ptL(klasAdd, lookup[alp_len], article));
+                report.innerHTML = res;
 			},
 			swap = function () {
 				var i = _.findIndex(my_presenter.get(), ptL(utils.isEqual, my_presenter.get(null))),

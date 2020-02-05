@@ -9,10 +9,10 @@
 #alpacas_for_sale.sell #main #aside {
 	display: none;
 }
-#alpacas_for_sale ul, #alpacas_for_sale ul.loop li a, ul.tab li, #alpacas_for_sale #main #aside, ul#thumbnails, #gallery #main, #controls {
+#alpacas_for_sale ul.loop li a, ul.tab li, #alpacas_for_sale #main #aside, ul#thumbnails, #gallery #main, #controls {
 	position: relative;
 }
-#alpacas_for_sale ul, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
+#alpacas_for_sale ul.tab, #alpacas_for_sale ul.loop, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
 	overflow: hidden;
 }
 #alpacas_for_sale #main #aside {
@@ -35,24 +35,19 @@
 	z-index: 0;
 	margin-bottom: 1em;
 }
-
 ul#list li {
-    float: left;
+	float: left;
 	zoom: 1;
 }
-
 ul#list li a {
-    float: left;
+	float: left;
 }
-
 #alpacas_for_sale ul.tab li {
-   padding: 0 1em 0 0; 
+	padding: 0 1em 0 0;
 }
-
 #alpacas_for_sale ul.tab a {
 	padding: 0.7em 1.3em;
 }
-
 #alpacas_for_sale ul.loop li a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	padding: 0.7em .5em 0.7em 2em;
@@ -65,18 +60,15 @@ ul#list li a {
 .nthchild #alpacas_for_sale ul.loop li:first-child a {
 	padding-left: 1em;
 }
-
 ul#list.tab {
-    transform: translateX(-1000px);
-    -webkit-transition: left 1s;
+	transform: translateX(-1000px);
+	-webkit-transition: left 1s;
 	-o-transition: left 1s;
 	transition: all 1s;
 }
-
 ul#list.loop, ul#list.tab {
-    transform: translateX(0px);
+	transform: translateX(0px);
 }
-
 ul.loop li a::after, ul.loop li a::before {
 	/*border arrows */
 	display: block;
@@ -88,45 +80,45 @@ ul.loop li a::after, ul.loop li a::before {
 	height: 0;
 	margin-top: -2em;
 }
-
 .no-nthchild #alpacas_for_sale ul.loop li a {
 	padding: 2em;
 }
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
 #sell {
-  display: none;  
+	display: none;
 }
 .sell #sell {
-  display: block;  
+	display: block;
 }
-#sell table,  #sell.tog table.show, #sell.extent table.show, .sell #aside {
-    position: absolute;
-    left: -9999px;
+#sell table, #sell.tog table.show, #sell.extent table.show, .sell #aside {
+	position: absolute;
+	left: -9999px;
 }
 #sell a {
-    display: none;
+	display: none;
 }
 #sell table.show {
-    position: static;
-    left: 0px;
+	position: static;
+	left: 0px;
 }
-
 #sell a.show, #sell.extent a {
-    display: block;
+	display: block;
 }
 /* set img color to red */
+
 html.js figure a img {
 	color: red;
 }
 /* target ie 7 separately*/
+
 *+html figure a img {
-    color: blue;
+	color: blue;
 }
 /* reset img color to white for ie > 6*/
-html.js figure a > img {
+
+html.js figure a>img {
 	color: white;
 }
-
 .extent {
 	left: 0;
 	margin: 0 auto;
@@ -134,25 +126,32 @@ html.js figure a > img {
 	*padding: .6em .3em;
 	*height: 1%;
 }
-
 #sell.extent {
-    border-spacing: 1em;
-    height: 1%;
+	border-spacing: 1em;
+	height: 1%;
 }
 /*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
 #sell.extent figure {
-    width: 18%;
-    width: 13%;
-    width: 26%;
-    margin: 1%;
-    padding: 1.2em 1.2em 0;
-    display: inline;
-    display: inline-block;
-    vertical-align: bottom;
+	margin: 1%;
+	padding: 1.2em 1.2em 0;
+	display: inline;
+	display: inline-block;
+	vertical-align: bottom;
+}
+#sell.extent>figure {
+	display: table-cell;
 }
 
-#sell.extent > figure {
-    display: table-cell;
+.four #sell.extent figure {
+    width: 18%
+}
+
+.five #sell.extent figure {
+    width: 13%
+}
+
+.six #sell.extent figure {
+    width: 26%
 }
 
 html.js #sell a, html.js #sell table {
@@ -170,9 +169,8 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	height: 1%;
 	*clear: left;
 }
-
 #sell.extent {
-    *padding: 2% 1%;
+	*padding: 2% 1%;
 }
 .tab+#sell {
 	margin-top: -1px;
@@ -181,11 +179,9 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	padding: 1.6%;
 	*height: 1%;
 }
-
 #sell.extent a {
 	padding: 0;
 }
-
 .sell #sell.tog a {
 	margin-left: 0;
 }
@@ -278,16 +274,14 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 	*display: inline;
 }
 ul#thumbnails li.go {
-    visibility: hidden;
+	visibility: hidden;
 }
-
 #gallery.showtime #footer {
 	margin-top: -2%;
-    padding: 0%;
+	padding: 0%;
 	border-width: 0px;
-    background: none;
+	background: none;
 }
-
 #gallery #footer ul>* {
 	-webkit-transition: all 1s;
 	-o-transition: all 1s;
@@ -320,7 +314,7 @@ li#slide, li#paused {
 }
 #controls {
 	display: table;
-    width: auto;
+	width: auto;
 	border-spacing: .5em;
 }
 #gallery #controls button {
@@ -336,26 +330,3 @@ button#exit {
 	transition: all 1s;
 	float: right;
 }
-/*IE5Mac Band Pass Filter NOTES*/
-
-/* overflow: hidden; deal with painting bug */
-
-/*overflow: visible required for 'aside' pages OVERRIDE for gallery else footer cannot calculate top margin*/
-
-/*\*/
-
-/*/
-#gallery #innerwrap, #gallery ul {
-overflow: hidden;
-position: relative;
-}
-ul#thumbnails a {
-	float: left;
-}
-#controls {
-	outline: solid 1px blue;
-	*height: 1%;
-	*overflow: hidden;
-	*clear: both;
-}
-/**/

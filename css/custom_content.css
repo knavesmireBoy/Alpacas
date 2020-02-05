@@ -1,51 +1,9 @@
-/*
-h8 {
-	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
-	font-size: 24px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 700;
-	line-height: 26.4px;
-}
-h3 {
-	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
-	font-size: 14px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 700;
-	line-height: 15.4px;
-}
-p {
-	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
-	font-size: 14px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	line-height: 20px;
-}
-blockquote {
-	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
-	font-size: 21px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	line-height: 30px;
-}
-pre {
-	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
-	font-size: 13px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	line-height: 18.5714px;
-}
-*/
 
-#welcome #nav li:nth-child(1) a, #about_us #nav li:nth-child(2) a, #about_alpacas #nav li:nth-child(3) a, #upkeep #nav li:nth-child(4) a, #stud_services #nav li:nth-child(5) a, #alpacas_for_sale #nav li:nth-child(6) a, #links #nav li:nth-child(7) a, #contact_us #nav li:nth-child(8) a, #gallery #nav li:nth-child(9) a {
-	color: #900;
-	color: rgb(153, 0, 0);
-	background-position: 0 99%;
+body#alpacas_for_sale {
+font: bold 0.8em   Georgia, Palatino, serif;
 }
+
+
 #tooltip {
 position: absolute;
 z-index: 3;
@@ -141,11 +99,7 @@ transition-property: transform, opacity, -webkit-transform;
 	border-top: 12px solid hsla(75, 50%, 40%, 1);
 }
 
-body#alpacas_for_sale {
-font: bold 0.8em  "Bookman Old Style", "Palatino", serif;
-}
-
-#alpacas_for_sale ul li a {
+#alpacas_for_sale ul.tab li a, #alpacas_for_sale ul.loop li a {
     font-size: 1.3em;
 }
 
@@ -164,11 +118,6 @@ figcaption {
     text-align: center;
     font-weight: normal;
     padding: .3em;
-    /*
-    background: hsl(61, 38%, 70%);
-    color: hsl(30, 60%, 24%);
-    text-shadow: 1px 1px 2px white;
-    */
 }
 
 figure {
@@ -208,11 +157,6 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 #alpacas_for_sale ul.tab li.current a:hover{
 	color: hsla(75, 50%, 40%, 1);
 }
-/*
-Following style: left and right borders turned to white when only top rule is required for the NO SALE status. Otherwise breadcrumb is top of a border that is complted by the following "sell" div
-ul.breadcrumb  { border-right: white; border-left: white }
-*/
-
 #alpacas_for_sale ul.loop li a:hover {
 	color: #EBF2D8;
 	color: hsla(75, 50%, 90%, 1);
@@ -292,12 +236,6 @@ ul.breadcrumb  { border-right: white; border-left: white }
 	color: #900;
 	color: hsla(0, 100%, 30%, 1);
 }
-/* keep for ref
-#alpacas_for_sale.sell #sell {
-  box-shadow: inset 0 0 0em hsla(75, 50%, 50%, 1);
-}
-*/
-
 #sell {
 	background: #EBF2D8;
 	background: hsla(75, 50%, 90%, 1);
@@ -462,20 +400,9 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	text-shadow: 1px 1px 1px black;
 	line-height: 1.6;
 	opacity: 1;
-	/*https://developer.mozilla.org/en-US/docs/Web/CSS/background
-    background shorthand property not fully supported in early mobile environments
-    background-size needing to be declared longhand
-    */
-	/*background: url(../assets/buttons_sprite.png)  50% 0%  / 128% no-repeat;*/
 	background-image: url(../assets/buttons_sprite_lowend8.png);
 	background-repeat: no-repeat;
 	background-position: 50% 0%;
-	/*
-    border-top-color: #9c0;
-    border-right-color: #900;
-    border-bottom-color: #080;
-    border-left-color: #C6C084;
-    outline: 0px solid #7F4E1E;*/
 }
 
 #controls.static button {

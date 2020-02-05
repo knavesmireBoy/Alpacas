@@ -1,3 +1,40 @@
+#main #aside {
+	margin: 0;
+	position: absolute;
+	z-index: 0;
+	/* z-index required IF persisting with masking, explore clipping */
+	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
+.no-cssmask #main #aside {
+	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
+	z-index: -1;
+	display: none;
+}
+.no-js #main>#aside {
+	position: static;
+	width: 100%;
+	margin-top: 1em;
+	animation: none;
+}
+.no-js #aside img {
+	float: none;
+}
+/* set img color to red */
+
+#aside img {
+	float: right;
+	color: red;
+}
+/* reset img color to white for ie > 6*/
+
+#aside>img {
+	color: white;
+}
+/* target ie 7 separately*/
+
+*+html #aside img {
+	color: blue;
+}
 #welcome #main #aside {
 	width: 126%;
 	max-width: 69em;
@@ -10,11 +47,20 @@
 	right: 0em;
 	bottom: 12%;
 }
+#about_us #main #article p {
+	margin-right: 30%;
+}
 #about_alpacas #main #aside {
 	width: 121%;
 	max-width: 60em;
 	right: -25%;
 	bottom: 11%;
+}
+#about_alpacas #main #article p {
+	margin-right: 30%;
+}
+#about_alpacas #main div p, #about_alpacas #main div hr {
+	margin-right: 44%;
 }
 #upkeep #main #aside {
 	width: 129%;
@@ -22,18 +68,21 @@
 	right: -19%;
 	bottom: 10%;
 }
-.js #upkeep #article>* {
-	margin-right: 40%;
+#upkeep #main #article p {
+	margin-right: 27%;
 }
 #stud_services #main #aside {
 	width: 135%;
 	right: -20%;
 	bottom: 2%;
 }
+#stud_services #main #article p {
+	margin-right: 69%;
+}
 #links #main #aside {
 	width: 145%;
 	max-width: 70em;
-	right: -25%;
+	right: -30%;
 	bottom: 2%;
 }
 #contact_us #main #aside {
@@ -49,9 +98,6 @@
 }
 #stud_services #main>#aside {
 	width: 90%;
-}
-#stud_services #main #article p {
-    margin-right: 69%;
 }
 #links #main>#aside {
 	width: 110%;
@@ -151,7 +197,6 @@ bottom: -250%;
 	#header h2 {
 		margin-left: 28%;
 	}
-	
 }
 @media screen and (hover: hover) {
 	#controls button#forwardbutton:hover {
@@ -167,96 +212,154 @@ bottom: -250%;
 		background-position: 50% 100%;
 	}
 }
-@media screen and (min-width: 769px) {
-       /* @supports(mask-image:  url('')) {*/
-           /* @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
-        
-        .no-js .verbose #main div > * {
-            margin-right: 33%;
-        }
-        
-        #about_alpacas #main div > * {
-			margin-right: 44%;
-		}
-        
-		#wrap #innerwrap #main #aside {
-			position: absolute;
-            /*z-index: -1;*/
-		}		
-	
-		#stud_services #main #article p {
-			margin-right: 70%;
-		}
+@media screen and (max-width: 768px) {
+	#wrap #main #aside {
+		position: static;
+		width: 100%;
+	}
+	#wrap #innerwrap #main div p {
+		margin-right: 0%;
+	}
+    #about_us #main .read-more-target p:first-child {
+		margin-right: 0%;
+	}
+}
+@media screen and (max-width: 850px) {
+	#wrap #main #article div p {
+		margin-right: 0%;
+	}
+	#about_alpacas #main .read-more-target p:first-child {
+		margin-right: 0%;
+	}
+	#upkeep #main .read-more-target p:first-child {
+		margin-right: 0%;
+	}
     
-		#welcome #aside img {
-			-webkit-mask: url('../images/carlos_masking.png') top left / cover;
-			mask: url('../images/carlos_masking.png') top left / cover;
-		}
-		#about_alpacas #aside img {
-			-webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
-			mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
-		}
-		#upkeep #aside img {
-			-webkit-mask: url('../images/upkeep_masking.png') -1px 0px / cover;
-			mask: url('../images/upkeep_masking.png') -1px 0px / cover;
-		}
-		#stud_services #aside img:first-child {
-			-webkit-mask: url('../images/stud_masking.png') -1px 0px / cover;
-			mask: url('../images/stud_masking.png') -1px 0px / cover;
-		}
-		#links #aside img {
-			-webkit-mask: url('../images/links_masking.png') -1px 0px / cover;
-			mask: url('../images/links_masking.png') -1px 0px / cover;
-		}
-		#contact_us #aside img {
-			-webkit-mask: url('../images/contacts_masking.png') -1px 0px / cover;
-			mask: url('../images/contacts_masking.png') -1px 0px / cover;
-		}
-		.cssmask #about_us #aside img {
-			-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
-			mask: url('../images/honcho_masking.png') -1px 0px / cover;
-		}
+    #welcome #main .read-more-target p:first-child {
+		margin-right: 0%;
+	}
     
-		.cssmask #about_us #wrap #main #aside {
-			z-index: 0;
-		}
-    /*}*/
-    #alpacas_for_sale #wrap #main #aside {
-            z-index: 1;
-		}
-    #alpacas_for_sale #main #aside {
-			max-width: 50em;
-		}
-		
-		#alpacas_for_sale #main div#aside {
-			width: 130%;
-		}
-		#alpacas_for_sale #innerwrap {
-			margin-top: 0%;
-		}
-		#alpacas_for_sale #footer {
-			margin-top: 0%;
-		}
-    #about_us #main div > * {
-        margin-right: 33%;
-    }
-    #about_us #wrap #main #aside {
-			position: absolute;
-            z-index: -1;
-		}
-     #alpacas_for_sale #innerwrap  #main  div#aside {
-         position: absolute;
-    }
-    .no-js #stud_services #main > #aside {
-        width: 90%;
-    }
+    #main div#article hr {
+		margin-right: 0%;
+	}
 }
 
-@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
-   #header {
+@media only screen and (max-width: 1000px) {
+	.verbose #innerwrap #main #article p {
+		margin-right: 0%;
+	}
+}
+@media screen and (min-width: 869px) {
+	#aside {
+		-webkit-animation: alpacasBounce 3s 1 ease-out;
+		animation: alpacasBounce 3s 1 ease-out;
+	}
+	#aside:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+
+@media screen and (min-width: 769px) {
+	/* @supports(mask-image:  url('')) {
+	 @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
+	#wrap #innerwrap #main #aside {
+		position: absolute;
+		border: solid 1px red;
+	}
+	
+	#about_us #main #aside, #links #main #aside {
+		z-index: -1;
+	}
+	#welcome #aside img {
+		-webkit-mask: url('../images/carlos_masking.png') top left / cover;
+		mask: url('../images/carlos_masking.png') top left / cover;
+	}
+	#about_alpacas #aside img {
+		-webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+		mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+	}
+	#upkeep #aside img {
+		-webkit-mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+		mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+	}
+	#stud_services #aside img:first-child {
+		-webkit-mask: url('../images/stud_masking.png') -1px 0px / cover;
+		mask: url('../images/stud_masking.png') -1px 0px / cover;
+	}
+	#links #aside img {
+		-webkit-mask: url('../images/links_masking.png') -1px 0px / cover;
+		mask: url('../images/links_masking.png') -1px 0px / cover;
+	}
+	#contact_us #aside img {
+		-webkit-mask: url('../images/contacts_masking.png') -1px 0px / cover;
+		mask: url('../images/contacts_masking.png') -1px 0px / cover;
+	}
+	.cssmask #about_us #aside img {
+		-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
+		mask: url('../images/honcho_masking.png') -1px 0px / cover;
+	}
+	.cssmask #about_us #wrap #main #aside {
+		z-index: 0;
+	}
+	/*}*/
+	#alpacas_for_sale #wrap #main #aside {
+		z-index: 1;
+	}
+	#alpacas_for_sale #main #aside {
+		max-width: 50em;
+	}
+	#alpacas_for_sale #main div#aside {
+		width: 130%;
+	}
+	#alpacas_for_sale #innerwrap {
+		margin-top: 0%;
+	}
+	#alpacas_for_sale #footer {
+		margin-top: 0%;
+	}
+	/*
+	#about_us #wrap #main #aside {
+		position: absolute;
+		z-index: -1;
+	}
+	#alpacas_for_sale #innerwrap #main div#aside {
+		position: absolute;
+	}
+    */
+	.no-js #stud_services #main>#aside {
+		width: 90%;
+	}
+	#stud_services.verbose #main #article p {
+		margin-right: 65%;
+	}
+    .js #article hr, .cssgradients hr {
+    display: block;
+	}
+}
+@media only screen and (min-width: 980px) {
+	/* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
+	#links #main #aside {
+		z-index: 0;
+	}
+	#upkeep #main .read-more-target p:first-of-type {
+		margin-right: 27%;
+	}
+}
+
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+	#header {
 		padding-top: 22%;
 		background-image: url("../assets/header.png");
 		background-size: 100%;
-       display: block;
-	} 
+		display: block;
+	}
+}
+
+@media only screen and (min-width: 1200px) {
+    #welcome #main #article p {
+		margin-right: 36%;
+	}
 }

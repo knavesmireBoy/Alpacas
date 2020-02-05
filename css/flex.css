@@ -113,7 +113,7 @@
 	ul#thumbnails.gallery {
 		display: -ms-grid;
 		display: grid;
-		grid-template-columns: repeat(5, 1fr) .7262fr;
+		grid-template-columns: repeat(5, 1fr) .7242fr;
 		/*
         superfluous and buggers up layout in Chrome
         grid-template-rows: repeat(6, 16.666%);
@@ -161,4 +161,9 @@
 		-ms-grid-row-span: 3;
 		grid-row: 4 / 7;
 	}
+}
+@media only screen and (max-width: 767px) {
+    	ul#thumbnails.gallery {
+    grid-template-columns: repeat(5, 1fr) .75fr;
+    }
 }

@@ -21,9 +21,6 @@
 	}
 	
 }
-/*@media (hover: hover) {*/
-/*  https://stackoverflow.com/questions/40532204/media-query-for-devices-supporting-hover 
-@media not all and (hover: none){*/
 
 	#controls {
 		opacity: 0;
@@ -80,9 +77,6 @@
 		margin-bottom: 5%;
 	}*/
     
-    #alpacas_for_sale #footer {
-		margin-top: -5%;
-	}
     
 	.js body.sell #innerwrap #main #aside {
 		display: none;
@@ -177,9 +171,7 @@
 }
 /*
 -moz-device-pixel-ratio
-
 Gives the number of device pixels per CSS pixel.
-
 Note: This media feature is also implemented by Webkit as -webkit-device-pixel-ratio. The min and max prefixes as implemented by Gecko are named min--moz-device-pixel-ratio and max--moz-device-pixel-ratio; but the same prefixes as implemented by Webkit are named -webkit-min-device-pixel-ratio and -webkit-max-device-pixel-ratio.
 */
 
@@ -238,13 +230,12 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 }
 
-
 @media only screen and (max-width: 768px) {
 
 	#alpacas_for_sale #innerwrap #main>div#aside {
 		position: relative;
-		width: 100%;
-		bottom: 10%;
+        width: 100%;
+        bottom: 8%;
 	}
     
     #alpacas_for_sale.sell #innerwrap #main>div#aside {
@@ -321,13 +312,6 @@ and (max-device-width : 1024px) {
     #wrap.inplay #footer ul > * {
         opacity: 0;
     }
-    
-}
-
-@media only screen and (max-width: 800px) {
-	#about_alpacas #main .read-more-target p:first-child {
-		margin-right: 0%;
-	}
 }
 @media only screen and (min-width: 920px) {
 	#links #innerwrap #main {
@@ -337,13 +321,7 @@ and (max-device-width : 1024px) {
 		position: relative;
 		z-index: 1;
 	}
-    
     #upkeep #main #aside {
         bottom: 13%;
     }
-}
-@media only screen and (max-width: 1054px) {
-	.verbose #main #article p {
-		margin-right: 0%;
-	}
 }

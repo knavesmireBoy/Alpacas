@@ -1,6 +1,6 @@
 p {
 	line-height: 1.4;
-	margin: 0.5em 0;
+	margin: 0.5em 33% 0.5em 0;
 }
 table {
 	border: solid 1px black;
@@ -8,7 +8,7 @@ table {
 th, td {
 	padding: 0.3em;
 	vertical-align: top;
-    border: 1px solid;
+	border: 1px solid;
 }
 th {
 	color: white;
@@ -16,7 +16,6 @@ th {
 	background-color: black;
 	vertical-align: middle
 }
-
 th em {
 	font-style: normal;
 	white-space: nowrap;
@@ -33,13 +32,11 @@ a:hover {
 }
 a:active, a:focus {
 	outline: none;
-    -moz-outline-style: none;
+	-moz-outline-style: none;
 }
-
 #footer a {
 	color: white;
 }
-
 /* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
 
 img {
@@ -51,10 +48,10 @@ img, #nav a {
 }
 button {
 	padding: 0 .4em;
-    margin: 0 .3em;
+	margin: 0 .3em;
 }
 h1 {
-    font-size: 2em;
+	font-size: 2em;
 }
 /*
 .examples {
