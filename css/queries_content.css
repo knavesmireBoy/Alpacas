@@ -5,9 +5,7 @@
 @media only screen and (max-width: 768px) {
 	/*(min-width: 1px) and */
 	/*@media \0screen\,screen\9 {   */
-	#header, #wrap #footer {
-		background: none;
-	}
+
 	#main hr {
 		display: none;
 	}

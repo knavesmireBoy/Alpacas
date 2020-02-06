@@ -1,75 +1,41 @@
-/*(max-width:768px)(max-width:850px)(max-width:1000px)/(min-width:769px)(min-width:869px)(min-width:980px)(min-width:1200px)*/
-#main #aside {
-	margin: 0;
-	position: absolute;
-	z-index: 0;
-	/* z-index required IF persisting with masking, explore clipping */
-	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
-}
-.no-cssmask #main #aside {
-	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
-	z-index: -1;
-	display: none;
-}
-.no-js #main>#aside {
-	position: static;
-	width: 100%;
-	margin-top: 1em;
-	animation: none;
-}
-.no-js #aside img {
-	float: none;
-}
-/* set img color to red */
+/*(max-width:768px)(max-width:850px)/(min-width:769px)(min-width:920px)(min-width:980px)(min-width:1200px)*/
+/*(min-device-width: 320px) and (max-device-width: 480px) */
 
-#aside img {
-	float: right;
-	color: red;
-}
-/* reset img color to white for ie > 6*/
-
-#aside>img {
-	color: white;
-}
-/* target ie 7 separately*/
-
-*+html #aside img {
-	color: blue;
-}
 #welcome #main #aside {
 	width: 126%;
 	max-width: 69em;
 	right: -15%;
 	bottom: 13%;
 }
+
+#welcome p {
+    margin: 0.5em 31% 0.5em 0;
+}
 #about_us #main #aside {
 	width: 100%;
 	max-width: 62em;
 	right: 0em;
-	bottom: 12%;
-}
-#about_us #main #article p {
-	margin-right: 30%;
+	bottom: 14%;
 }
 #about_alpacas #main #aside {
 	width: 121%;
 	max-width: 60em;
 	right: -25%;
-	bottom: 11%;
+	bottom: 12%;
 }
-#about_alpacas #main #article p {
+#about_alpacas #article p {
 	margin-right: 30%;
 }
-#about_alpacas #main div p, #about_alpacas hr {
+#about_alpacas #article p, #about_alpacas hr {
 	margin-right: 44%;
 }
 #upkeep #main #aside {
 	width: 129%;
 	max-width: 60em;
 	right: -19%;
-	bottom: 10%;
+	bottom: 14%;
 }
-#upkeep #main #article p {
+#upkeep #article p {
 	margin-right: 27%;
 }
 #stud_services #main #aside {
@@ -77,20 +43,28 @@
 	right: -20%;
 	bottom: 2%;
 }
-#stud_services #main #article p {
+#stud_services #article p {
 	margin-right: 69%;
 }
 #links #main #aside {
 	width: 145%;
 	max-width: 70em;
-	right: -30%;
+	right: -25%;
 	bottom: 2%;
+    border: solid 1px red;
 }
 #contact_us #main #aside {
 	width: 105%;
 	max-width: 55em;
 	right: -20%;
 	bottom: 13%;
+}
+#contact_us p {
+    line-height: 1.8;
+    margin: 0;
+}
+#contact_us #article {
+    margin-bottom: 1.2em;
 }
 /* Start Mac IE5 filter \*/
 
@@ -113,58 +87,47 @@
 	width: 76%;
 }
 
-@media only screen {
-	#header {
-		padding-top: 22%;
-		background-image: url("../assets/header.png");
-		background-size: 100%;
-	}
-	#nav {
-		margin-left: 1em
-	}
-	#wrap #innerwrap {
-		margin-bottom: 0;
-	}
-	#wrap {
-		min-width: 500px;
-	}
-	#main {
-		width: 71%;
-	}
-	#header h2 {
-		margin-left: 28%;
-	}
-}
-@media screen and (hover: hover) {
-	#controls button#forwardbutton:hover {
-		background-position: 50% 56%;
-	}
-	#controls button#backbutton:hover {
-		background-position: 50% 70.5%;
-	}
-	#controls button#playbutton:hover {
-		background-position: 50% 85%;
-	}
-	#controls.playing button#playbutton:hover {
-		background-position: 50% 100%;
-	}
-}
+
 @media screen and (max-width: 768px) {
-	#wrap #main #aside {
-		position: static;
-		width: 100%;
-	}
-	#wrap #innerwrap #main div p {
-		margin-right: 0%;
-	}
+
     #about_us #main .read-more-target p:first-child {
 		margin-right: 0%;
 	}
+    	#links dt:nth-child(1) {
+		-webkit-animation: entry 1s ease-out 1s backwards;
+		animation: entry 1s ease-out 1s backwards;
+	}
+	#links dd:nth-child(2) {
+		-webkit-animation: entry 1s ease-out 2s backwards;
+		animation: entry 1s ease-out 2s backwards;
+	}
+	#links dt:nth-child(3) {
+		-webkit-animation: entry 1s ease-out 3s backwards;
+		animation: entry 1s ease-out 3s backwards;
+	}
+	#links dd:nth-child(4) {
+		-webkit-animation: entry 1s ease-out 4s backwards;
+		animation: entry 1s ease-out 4s backwards;
+	}
+	#links dt:nth-child(5) {
+		-webkit-animation: entry 1s ease-out 5s backwards;
+		animation: entry 1s ease-out 5s backwards;
+	}
+	#links dd:nth-child(6) {
+		-webkit-animation: entry 1s ease-out 6s backwards;
+		animation: entry 1s ease-out 6s backwards;
+	}
+	#links dt:nth-child(7) {
+		-webkit-animation: entry 1s ease-out 7s backwards;
+		animation: entry 1s ease-out 7s backwards;
+	}
+	#links dd:nth-child(8) {
+		-webkit-animation: entry 1s ease-out 8s backwards;
+		animation: entry 1s ease-out 8s backwards;
+	}
 }
 @media screen and (max-width: 850px) {
-	#wrap #main #article div p {
-		margin-right: 0%;
-	}
+
 	#about_alpacas #main .read-more-target p:first-child {
 		margin-right: 0%;
 	}
@@ -175,33 +138,43 @@
     #welcome #main .read-more-target p:first-child {
 		margin-right: 0%;
 	}
-    
-    #main hr {
-		margin-right: 0%;
-	}
 }
 
-@media only screen and (max-width: 1000px) {
-	.verbose #innerwrap #main #article p {
+@media screen and (max-width: 1100px) {
+    
+    #welcome #article p {
 		margin-right: 0%;
 	}
+    #about_us #article p {
+		margin-right: 0%;
+	}
+#about_alpacas #main #aside {
+	bottom: 14%;
+}
+    
+    #upkeep #main #aside {
+	bottom: 10%;
+}
+
+    /* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
+    #links #main #aside {
+        z-index: -1;
+    }
 }
 
 @media screen and (min-width: 769px) {
 	/* @supports(mask-image:  url('')) {
 	 @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
-	#wrap #innerwrap #main #aside {
-		position: absolute;
-		border: solid 1px red;
-	}
-	
-	#about_us #main #aside, #links #main #aside {
-		z-index: -1;
-	}
-	#welcome #aside img {
+    
+    #welcome #aside img {
 		-webkit-mask: url('../images/carlos_masking.png') top left / cover;
 		mask: url('../images/carlos_masking.png') top left / cover;
 	}
+
+	#about_us #main #aside {
+		z-index: -1;
+	}
+	
 	#about_alpacas #aside img {
 		-webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
 		mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
@@ -229,7 +202,7 @@
 	.cssmask #about_us #wrap #main #aside {
 		z-index: 0;
 	}
-	/*}*/
+	
 	#alpacas_for_sale #wrap #main #aside {
 		z-index: 1;
 	}
@@ -245,57 +218,42 @@
 	#alpacas_for_sale #footer {
 		margin-top: 0%;
 	}
-	/*
-	#about_us #wrap #main #aside {
-		position: absolute;
-		z-index: -1;
-	}
-	#alpacas_for_sale #innerwrap #main div#aside {
-		position: absolute;
-	}
-    */
 	.no-js #stud_services #main>#aside {
 		width: 90%;
 	}
-	#stud_services.verbose #main #article p {
+	#stud_services.verbose #article p {
 		margin-right: 65%;
 	}
-    .js #article hr, .cssgradients hr {
-        display: block;
-	}
+
 }
-@media screen and (min-width: 869px) {
-	#aside {
-		-webkit-animation: alpacasBounce 3s 1 ease-out;
-		animation: alpacasBounce 3s 1 ease-out;
+@media only screen and (min-width: 920px) {
+	#links #innerwrap #main {
+		font-size: 110%;
 	}
-	#aside:after {
-		content: "";
-		display: table;
-		clear: both;
-	}
+
+    #upkeep #main #aside {
+        bottom: 14%;
+    }
 }
+
 @media only screen and (min-width: 980px) {
-	/* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
-	#links #main #aside {
-		z-index: 0;
-	}
+
 	#upkeep #main .read-more-target p:first-of-type {
 		margin-right: 27%;
 	}
 }
 
-@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
-	#header {
-		padding-top: 22%;
-		background-image: url("../assets/header.png");
-		background-size: 100%;
-		display: block;
+@media only screen and (min-width: 1200px) {
+    #welcome #article p {
+		margin-right: 36%;
 	}
 }
 
-@media only screen and (min-width: 1200px) {
-    #welcome #main #article p {
-		margin-right: 36%;
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+	#upkeep #footer {
+		margin-top: 0%;
+	}
+	.js #upkeep p {
+		margin-right: 0%;
 	}
 }

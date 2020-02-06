@@ -101,7 +101,43 @@ a#yag {
 	left: -9999px;
 }
 
+#main #aside {
+	margin: 0;
+	position: absolute;
+	z-index: 0;
+	/* z-index required IF persisting with masking, explore clipping */
+	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
+.no-cssmask #main #aside {
+	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
+	z-index: -1;
+	display: none;
+}
+.no-js #main>#aside {
+	position: static;
+	width: 100%;
+	margin-top: 1em;
+	animation: none;
+}
+.no-js #aside img {
+	float: none;
+}
+/* set img color to red */
 
+#aside img {
+	float: right;
+	color: red;
+}
+/* reset img color to white for ie > 6*/
+
+#aside>img {
+	color: white;
+}
+/* target ie 7 separately*/
+
+*+html #aside img {
+	color: blue;
+}
 /* https://stopdesign.com/eg/ie5mac-bpf */
 
 /* Start Mac IE5 filter \*/

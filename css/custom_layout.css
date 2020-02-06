@@ -9,13 +9,13 @@
 #alpacas_for_sale.sell #main #aside {
 	display: none;
 }
-#alpacas_for_sale ul.loop li a, ul.tab li, #alpacas_for_sale #main #aside, ul#thumbnails, #gallery #main, #controls {
+ul.loop li a, ul.tab li, #alpacas_for_sale #aside, ul#thumbnails, #gallery #main, #controls {
 	position: relative;
 }
-#alpacas_for_sale ul.tab, #alpacas_for_sale ul.loop, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
+ul.tab, ul.loop, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
 	overflow: hidden;
 }
-#alpacas_for_sale #main #aside {
+#alpacas_for_sale #aside {
 	position: absolute;
 	bottom: 12%;
 	right: 0%;
@@ -25,7 +25,7 @@
 #alpacas_for_sale #aside img {
 	float: none;
 }
-#alpacas_for_sale .sell #main #aside, .touch {
+#alpacas_for_sale .sell #aside, .touch {
 	left: -9999px;
 }
 #article {
@@ -42,31 +42,31 @@ ul#list li {
 ul#list li a {
 	float: left;
 }
-#alpacas_for_sale ul.tab li {
+ul.tab li {
 	padding: 0 1em 0 0;
 }
-#alpacas_for_sale ul.tab a {
+ul.tab a {
 	padding: 0.7em 1.3em;
 }
-#alpacas_for_sale ul.loop li a {
+ul.loop li a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	padding: 0.7em .5em 0.7em 2em;
 	color: white;
 }
-#alpacas_for_sale ul.loop li:first-child a {
+ul.loop li:first-child a {
 	float: left;
 	padding-left: 0.7em;
 }
-.nthchild #alpacas_for_sale ul.loop li:first-child a {
+.nthchild  ul.loop li:first-child a {
 	padding-left: 1em;
 }
-ul#list.tab {
+ul.tab {
 	transform: translateX(-1000px);
 	-webkit-transition: left 1s;
 	-o-transition: left 1s;
 	transition: all 1s;
 }
-ul#list.loop, ul#list.tab {
+ul.loop, ul.tab {
 	transform: translateX(0px);
 }
 ul.loop li a::after, ul.loop li a::before {
@@ -80,16 +80,37 @@ ul.loop li a::after, ul.loop li a::before {
 	height: 0;
 	margin-top: -2em;
 }
-.no-nthchild #alpacas_for_sale ul.loop li a {
+.no-nthchild ul.loop li a {
 	padding: 2em;
 }
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
 #sell {
 	display: none;
 }
+
 .sell #sell {
 	display: block;
+    padding: 2%;
+	height: 1%;
+	*clear: left;
 }
+
+.tab+#sell {
+	margin-top: -1px;
+}
+.no-flexboxlegacy .extent {
+    display: table;
+    border-spacing: 1em;
+}
+.extent {
+	left: 0;
+	margin: 0 auto;
+	padding: 1.5%;
+	height: 1%;
+	*padding: .6em .3em;
+	*height: 1%;
+}
+
 #sell table, #sell.tog table.show, #sell.extent table.show, .sell #aside {
 	position: absolute;
 	left: -9999px;
@@ -97,60 +118,39 @@ ul.loop li a::after, ul.loop li a::before {
 #sell a {
 	display: none;
 }
+
+#sell a.show, #sell.extent a {
+	display: block;
+}
 #sell table.show {
 	position: static;
 	left: 0px;
 }
-#sell a.show, #sell.extent a {
-	display: block;
-}
-/* set img color to red */
 
-html.js figure a img {
-	color: red;
-}
-/* target ie 7 separately*/
-
-*+html figure a img {
-	color: blue;
-}
-/* reset img color to white for ie > 6*/
-
-html.js figure a>img {
-	color: white;
-}
-.extent {
-	left: 0;
-	margin: 0 auto;
-	padding: 1.5%;
-	*padding: .6em .3em;
-	*height: 1%;
-}
-#sell.extent {
-	border-spacing: 1em;
-	height: 1%;
-}
-/*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
-#sell.extent figure {
-	margin: 1%;
+.extent figure {
+    margin: 1%;
 	padding: 1.2em 1.2em 0;
+    vertical-align: bottom;
+}
+
+/*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
+.no-flexboxlegacy .extent figure {
 	display: inline;
 	display: inline-block;
-	vertical-align: bottom;
 }
-#sell.extent>figure {
+.no-flexboxlegacy .extent > figure {
 	display: table-cell;
 }
 
-.four #sell.extent figure {
+.four .extent figure {
     width: 18%
 }
 
-.five #sell.extent figure {
+.five .extent figure {
     width: 13%
 }
 
-.six #sell.extent figure {
+.six .extent figure {
     width: 26%
 }
 
@@ -164,17 +164,11 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	position: relative;
 	width: 100%;
 }
-#sell {
-	padding: 2%;
-	height: 1%;
-	*clear: left;
-}
+
 #sell.extent {
 	*padding: 2% 1%;
 }
-.tab+#sell {
-	margin-top: -1px;
-}
+
 #sell a {
 	padding: 1.6%;
 	*height: 1%;
@@ -182,17 +176,17 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 #sell.extent a {
 	padding: 0;
 }
-.sell #sell.tog a {
+.sell .tog a {
 	margin-left: 0;
 }
 #sell table {
+    width: 46.5%;
+    min-width: 18em;
+	margin-right: 2.5%;
 	table-layout: fixed;
 	float: left;
 }
-#sell table {
-	width: 46.5%;
-	margin-right: 2.5%;
-}
+
 #sell table table {
 	margin-right: 0%;
 	width: 100%;
@@ -215,7 +209,7 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 
 /* G A L L E R Y */
 
-ul#thumbnails li a, div#thumbnails a {
+ul#thumbnails li a {
 	display: block;
 }
 ul#thumbnails {

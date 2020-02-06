@@ -89,15 +89,15 @@ transition-property: transform, opacity, -webkit-transform;
 	border-top: 12px solid hsla(75, 50%, 40%, 1);
 }
 
-#alpacas_for_sale ul.tab li a, #alpacas_for_sale ul.loop li a {
+ul.tab li a, ul.loop li a {
     font-size: 1.3em;
 }
 
-#alpacas_for_sale #article.loop ul li a {
+ul.loop  li a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	color: white;
 }
-#alpacas_for_sale ul.loop a, #alpacas_for_sale th, #alpacas_for_sale #tooltip div:first-child{
+ul.loop a, th, #alpacas_for_sale #tooltip div:first-child{
 	color: white;
 	font-weight: bold;
 	background: #7F9933;
@@ -107,7 +107,7 @@ transition-property: transform, opacity, -webkit-transform;
 figcaption {
     text-align: center;
     font-weight: normal;
-    padding: .3em;
+    padding: .3em 0;
 }
 
 figure {
@@ -238,6 +238,7 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 
 #sell table {
 	padding: 0px;
+    font-size: 1.1em;
 }
 
 #sell table td, #sell table table td {

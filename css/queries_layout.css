@@ -1,3 +1,7 @@
+/*(max-width: 2000px)(max-width: 850px)(max-width:1000px)(max-width:768px)(max-width: 480px)/(min-width:869px)*/
+/*(min-device-width: 320px) and (max-device-width: 480px)*/
+/*(min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) */
+
 @-webkit-keyframes alpacasBounce {
 	0% {
 		-webkit-transform: translate(0, 50em);
@@ -136,7 +140,37 @@
 		opacity: 1;
 	}
 }
+
+
+@media only screen {
+	#header {
+		padding-top: 22%;
+		background-image: url("../assets/header.png");
+		background-size: 100%;
+	}
+	#nav {
+		margin-left: 1em
+	}
+	#wrap #innerwrap {
+		margin-bottom: 0;
+	}
+	#wrap {
+		min-width: 500px;
+	}
+	#main {
+		width: 71%;
+	}
+	#header h2 {
+		margin-left: 28%;
+	}
+    #main #aside {
+		position: absolute;
+	}
+	
+}
+
 @media screen and (max-width: 768px) {
+    
 	#wrap {
 		min-width: 250px;
 	}
@@ -186,6 +220,14 @@
 	#menu-toggle:checked+ul {
 		top: 3.33em;
 		left: 0em;
+	}
+    /*#wrap reqd to counter for example #welcome #main>#aside direct child selector reqd to hide rule from ie 6*/
+    #wrap #main #aside {
+		position: static;
+		width: 100%;
+	}
+	#wrap #main p {
+		margin-right: 0%;
 	}
 	.read-more-target {
 		margin-top: .5em;
@@ -277,6 +319,18 @@
 	#alpacas_for_sale #footer {
 		margin-top: -4%;
 	}
+    
+    .js #article hr, .cssgradients hr {
+        display: none;
+	}
+    .js body.sell #innerwrap #main #aside {
+		display: none;
+	}
+    
+     #header, #wrap #footer {
+		background: none;
+	}
+	
 }/* mobile layout */
 
 @media only screen and (max-width: 480px) {
@@ -288,11 +342,8 @@
 		content: "";
 	}
 }
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-
-	#main {
-		font-size: 0.95em;
-	}
+@media only screen and (max-device-width: 320px) and (max-device-height: 480px), only screen and (max-device-width: 480px) and (max-device-height: 320px) {
+	
 	#header {
 		padding-top: 11em;
 	}
@@ -301,6 +352,15 @@
 	}
 	a#yag {
 		width: 5em;
+	}
+}
+
+@media screen and (max-width: 850px) {
+ #main hr {
+		margin-right: 0%;
+	}
+    	#wrap #main #article div p {
+		margin-right: 0%;
 	}
 }
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
@@ -318,10 +378,26 @@
 	#header h2 {
 		margin: 0% 0 0 27%;
 	}
+    
+	#aside {
+		-webkit-animation: alpacasBounce 3s 1 ease-out;
+		animation: alpacasBounce 3s 1 ease-out;
+	}
+	#aside:after {
+		content: "";
+		display: table;
+		clear: both;
 }
-@media screen and (max-width: 2000px) {
+}
+@media only screen and (max-width: 1000px) {
+    
+	.verbose #main #article p {
+		margin-right: 0%;
+	}
+}
+@media screen and (min-width: 1200px) {
 	#wrap {
-		max-width: 80em;
+		max-width: 85em;
 	}
 }
 @media screen\0 {
@@ -330,5 +406,14 @@
 	}
 	a#yag {
 		top: 1%;
+	}
+}
+
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+	#header {
+		padding-top: 22%;
+		background-image: url("../assets/header.png");
+		background-size: 100%;
+		display: block;
 	}
 }

@@ -1,5 +1,15 @@
 /* https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/ */
 
+/*(max-width: 767px)(max-width: 768px)(max-width: 600px)/(min-width: 920px)(min-width: 1024px)*/
+
+/* (min-device-width: 320px) and (max-device-width: 480px) */
+
+/*(max-device-width: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 1.5)*/
+
+/* (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5)*/
+
+/* (min-device-width : 768px) and (max-device-width : 1024px)*/
+
 @media only screen {
 	ul#thumbnails.gallery li {
 		width: 16.4%;
@@ -19,140 +29,94 @@
 		background-color: hsla(75, 50%, 40%, .3);
 		background-size: 128%;
 	}
-	
 }
-
-	#controls {
-		opacity: 0;
-	}
-    
-    #controls.static {
-		opacity: 1;
-	}
-
+#controls {
+	opacity: 0;
+}
+#controls.static {
+	opacity: 1;
+}
 /*https://css-tricks.com/logic-in-media-queries/*/
 
-@media only screen and (max-width: 600px)/*, (min-width: 769px) and (max-width: 820px) */{
-
-    /*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
+@media only screen and (max-width: 667px) {
+	/*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
 	#sell.tog table.show {
 		position: absolute;
-        left: -9999px;
+		left: -9999px;
 	}
-    
-    #sell a.show {
-        display: none;
-    }
-    
-    #sell.tog a.show, #sell.extent a.show  {
-        display: block;
-    }
-    #sell table.show{
+	#sell a.show {
+		display: none;
+	}
+	#sell.tog a.show, #sell.extent a.show {
+		display: block;
+	}
+	#sell table.show {
 		position: static;
-        left: 0px;
+		left: 0px;
 	}
-    
 	sell #sell {
 		text-align: center;
 	}
 	/* if not using flex */
 	#sell table {
-		width: 100%;
-        margin: 0;
-	}
-    
-     ul.loop li a {
-        font-size: 1em;
-        padding: 1em .5em 1em 2em;
-    }
-}
-
-
-@media only screen and (max-width: 767px) {
-    /*
-	.js #alpacas_for_sale #innerwrap {
-		margin-bottom: -5%;
-	}
-	.js #alpacas_for_sale.sell #innerwrap {
-		margin-bottom: 5%;
-	}*/
-    
-    
-	.js body.sell #innerwrap #main #aside {
-		display: none;
-	}
-	.js #alpacas_for_sale div#aside img {
-		margin: 0%;
 		float: none;
-		animation: enter 1s 1 ease-out;
+        width: 100%;
+		margin: 0;
 	}
-	#stud_services #main #article p {
-		margin-right: 0%;
-	}
-	#gallery.showtime #header h2 {
-		margin: 0%;
-	}
-	
-	.js #about_us #main>#aside {
-		width: 100%;
-	}
-
-    #sell a {
-        margin-left: 2%;
-    }
-    #sell.tog a.show {
-        margin: 0;
-        display: block;
-    }    
-    
-    #article div#sell figure a {
-        margin-left: 0%;
-    }
-    
-    #stud_services.verbose #footer {
-		margin-top: 5%;
+	ul.loop li a {
+		font-size: 1em;
+		padding: 1em .5em 1em 2em;
 	}
 }
-
 /*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
+@media screen and (hover: hover) {
+	#controls button#forwardbutton:hover {
+		background-position: 50% 56%;
+	}
+	#controls button#backbutton:hover {
+		background-position: 50% 70.5%;
+	}
+	#controls button#playbutton:hover {
+		background-position: 50% 85%;
+	}
+	#controls.playing button#playbutton:hover {
+		background-position: 50% 100%;
+	}
+}
+/*
+@media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+    @media not all and (hover: none) {
+    @media screen and (hover: none){
+*/
+@media only screen and (min-device-width: 320px) and (max-device-width: 823px), only screen and (pointer: coarse){
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-	#upkeep #footer {
-		margin-top: 0%;
-	}
-	.js #upkeep p {
-		margin-right: 0%;
-	}
-	#sell table {
-		float: none;
-		max-width: 100%;
-		margin-right: 0%;
-	}
+        body#gallery {
+            background-color: gainsboro;
+        }
+
+	
 	ul#thumbnails.gallery li.portrait {
 		width: 12.4%;
 	}
 	#gallery #thumbnails {
 		margin-bottom: 0em;
 	}
-    
-    #controls.static {
+	#controls.static {
 		top: -3.3em;
 	}
-    
-    #controls {
-        top: 2em;
-        border-spacing: .25em;
-        opacity: 1;
-    }
+	#controls {
+		top: 1.8em;
+		border-spacing: .25em;
+		opacity: 1;
+	}
 	#controls button {
 		width: 1.5em;
 		height: 1.5em;
 	}
-	
-    /* ideally fix the issue of toggling static in javascript in the meantime let playing hold sway*/
-    .inplay #gallery {
+	/* ideally fix the issue of toggling static in javascript in the meantime let playing hold sway*/
+	.inplay #gallery {
 		top: 1.65em;
-        background: blue;
+		background: blue;
 	}
 	#gallery.showtime #innerwrap {
 		padding-bottom: 2.4em;
@@ -160,10 +124,9 @@
 	#gallery.showtime #footer {
 		margin-top: -3.3em;
 	}
-    
-     #wrap.inplay #footer ul > * {
-        opacity: 0;
-    }
+	#wrap.inplay #footer ul>* {
+		opacity: 0;
+	}
 }
 /*
 -moz-device-pixel-ratio
@@ -171,16 +134,31 @@ Gives the number of device pixels per CSS pixel.
 Note: This media feature is also implemented by Webkit as -webkit-device-pixel-ratio. The min and max prefixes as implemented by Gecko are named min--moz-device-pixel-ratio and max--moz-device-pixel-ratio; but the same prefixes as implemented by Webkit are named -webkit-min-device-pixel-ratio and -webkit-max-device-pixel-ratio.
 */
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1.5)/*, (min-resolution: 192dpi)*/ {
+@media only screen and (max-device-width: 360px) and (orientation: portrait){
+     #alpacas_for_sale ul.loop {
+		font-size: 0.85em;
+	}
     
-    body#alpacas_for_sale ul#list.loop{
-        font-size: 0.8em;
+     #alpacas_for_sale ul.tab {
+		font-size: 0.8em;
+	}
+    
+    #sell table {
+        font-size: 1em;
     }
-    
-    figure a {
-        box-shadow: none;
-    }
-    
+}
+
+@media only screen and (min-width: 360px) and (orientation: portrait){
+     #alpacas_for_sale ul.loop {
+		font-size: 1em;
+	}
+}
+
+@media only screen and (max-device-width: 320px) and (max-device-height: 480px) and (orientation: portrait){
+
+	figure a {
+		box-shadow: none;
+	}
 	ul#thumbnails.gallery li {
 		width: 16%;
 		margin: 1%;
@@ -191,85 +169,100 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#article>ul {
 		font-size: .9em;
 	}
-    
-    #controls.static {
+	#controls.static {
 		top: -2.9em;
+	}  
+	#alpacas_for_sale #tooltip {
+		bottom: 23em;
 	}
-    
-    #controls {
-        top: 1.8em;
-    }
-    #alpacas_for_sale #tooltip {
-	bottom: 23em;
-    }
-    
-    #alpacas_for_sale ul li a {
-    font-size: 1.1em;
-}
+	
 }
 /* iPhone 6, 7, 8 ----------- */
+
 /*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/
 
-@media screen and (max-device-width: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 1.5){
-
+@media screen and (max-device-width: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 1.5) {
 	#gallery.showtime #innerwrap {
 		padding-bottom: 7em;
 	}
 	#gallery.showtime #footer {
 		margin-top: -7em;
 	}
-	html.js #alpacas_for_sale.sell #sell a.show, html.js #alpacas_for_sale.sell #sell.tog table.show {
+	html.js .sell #sell a.show, html.js .sell #sell.tog table.show {   
 		display: none;
 	}
-	html.js #alpacas_for_sale.sell #sell.tog a.show, html.js #alpacas_for_sale.sell #sell table.show {
+	html.js .sell #sell.tog a.show, html.js .sell #sell table.show {
 		display: block;
 	}
 }
 
 @media only screen and (max-width: 768px) {
 
+	#stud_services #article p {
+		margin-right: 0%;
+	}
+	#gallery.showtime #header h2 {
+		margin: 0%;
+	}
+	.js #about_us #main>#aside {
+		width: 100%;
+	}
+	#sell a {
+		margin-left: 2%;
+		margin-left: 0%;
+	}
+	#sell.tog a.show {
+		margin: 0;
+		display: block;
+	}
+	#article div#sell figure a {
+		margin-left: 0%;
+	}
+	#stud_services.verbose #footer {
+		margin-top: 5%;
+	}
+	.js #alpacas_for_sale div#aside img {
+		margin: 0%;
+		float: none;
+		animation: enter 1s 1 ease-out;
+	}
 	#alpacas_for_sale #innerwrap #main>div#aside {
 		position: relative;
-        width: 100%;
-        bottom: 8%;
+		width: 100%;
+		bottom: 8%;
 	}
-    
-    #alpacas_for_sale.sell #innerwrap #main>div#aside {
+	#alpacas_for_sale.sell #innerwrap #main>div#aside {
 		position: absolute;
 	}
-	#links dt:nth-child(1) {
-		-webkit-animation: entry 1s ease-out 1s backwards;
-		animation: entry 1s ease-out 1s backwards;
+}
+/*mobile*/
+
+/* iPads (portrait and landscape) ----------- */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px), only screen and (min-device-width: 1024px), only screen and (pointer: coarse) {
+	#gallery.showtime #controls {
+		font-size: 1.8em;
+		z-index: 2;
 	}
-	#links dd:nth-child(2) {
-		-webkit-animation: entry 1s ease-out 2s backwards;
-		animation: entry 1s ease-out 2s backwards;
+	.inplay #controls {
+		top: 2em;
+		opacity: 1;
 	}
-	#links dt:nth-child(3) {
-		-webkit-animation: entry 1s ease-out 3s backwards;
-		animation: entry 1s ease-out 3s backwards;
+	#controls.static {
+		top: -3.5em;
 	}
-	#links dd:nth-child(4) {
-		-webkit-animation: entry 1s ease-out 4s backwards;
-		animation: entry 1s ease-out 4s backwards;
+	#gallery.showtime #innerwrap {
+		padding-bottom: 4.5em;
 	}
-	#links dt:nth-child(5) {
-		-webkit-animation: entry 1s ease-out 5s backwards;
-		animation: entry 1s ease-out 5s backwards;
+	#gallery.showtime #footer {
+		margin-top: -5em;
+		padding-bottom: 0em;
 	}
-	#links dd:nth-child(6) {
-		-webkit-animation: entry 1s ease-out 6s backwards;
-		animation: entry 1s ease-out 6s backwards;
-	}
-	#links dt:nth-child(7) {
-		-webkit-animation: entry 1s ease-out 7s backwards;
-		animation: entry 1s ease-out 7s backwards;
-	}
-	#links dd:nth-child(8) {
-		-webkit-animation: entry 1s ease-out 8s backwards;
-		animation: entry 1s ease-out 8s backwards;
+	#wrap.inplay #footer ul>* {
+		opacity: 0;
 	}
 }
+
 @media screen and (min-width: 1024px) {
 	.touchevents #alpacas_for_sale #article {
 		font-size: 90%;
@@ -277,47 +270,4 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#alpacas_for_sale.selling #footer {
 		margin-top: 2%;
 	}
-}   
-/* iPads (portrait and landscape) ----------- */
-
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) { 
-    
-	#gallery.showtime #controls {
-        font-size: 1.8em;
-		z-index: 2;
-	}
-	.inplay #controls {
-		top: 2em;
-         opacity: 1;
-	}
-	#controls.static {
-		top: -3.5em;
-	}
-    
-	#gallery.showtime #innerwrap {
-		padding-bottom: 4.5em;
-	}
-	#gallery.showtime #footer {
-		margin-top: -5em;
-		padding-bottom: 3em;
-		padding-bottom: 0em;
-	}  
-    
-    #wrap.inplay #footer ul > * {
-        opacity: 0;
-    }
-}
-@media only screen and (min-width: 920px) {
-	#links #innerwrap #main {
-		font-size: 110%;
-	}
-	#links #innerwrap #copy {
-		position: relative;
-		z-index: 1;
-	}
-    #upkeep #main #aside {
-        bottom: 13%;
-    }
 }
