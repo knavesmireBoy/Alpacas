@@ -22,10 +22,6 @@ if (!window.gAlp) {
 		};
 	}
 
-	function simpleInvoke(o, m, arg) {
-		return o[m](arg);
-	}
-
 	function toCamelCase(variable) {
 		return variable.replace(/-([a-z])/g, function (str, letter) {
 			return letter.toUpperCase();
@@ -166,7 +162,8 @@ if (!window.gAlp) {
 				};
 			return ret;
 		},
-		anCr = curryRight(utils.setAnchor)(utils.getNewElement)(null),
+		//anCr = curryRight(utils.setAnchor)(utils.getNewElement)(null),
+        anCr = utils.append(),
 		doSplitz = function (count) {
 			return function (target, copy) {
 				var doReplace = curry3(replacer),
@@ -216,12 +213,12 @@ if (!window.gAlp) {
 		},
 		// now re-check on scroll
 		splitHandler = function () {
-			var command = do_split.apply(null, arguments),
-				handler = function () {
-					command.execute();
-					scroller(0.2);
+            var command = do_split.apply(null, arguments),
+                handler = function () {
+                    command.execute();
+                    setTimeout(ptL(scroller, 0.2), 3333)
 				};
-			handler();
+            handler();
 			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
 		},
 		split_handler = function (p) {
@@ -328,7 +325,7 @@ if (!window.gAlp) {
 		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
-	if (touchevents && cssanimations && !(_.isEmpty(verbose))) {
+	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
 		//var p = document.getElementById('article').querySelector('p');
 		//p.innerHTML = document.documentElement.className;
 		_.each(paras, split_handler);

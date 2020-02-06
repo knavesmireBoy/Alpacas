@@ -161,8 +161,8 @@ if (!window.gAlp) {
 		],
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			//return list.slice(_.random(0, end || list.length));13/5
-			return list.slice(0,6);
+			return list.slice(_.random(0, end || list.length));
+			//return list.slice(0,4);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -218,7 +218,7 @@ if (!window.gAlp) {
 		getDomTargetLink = utils.getDomChild(utils.getNodeByTag('a')),
 		getDomTargetImage = utils.getDomChild(utils.getNodeByTag('img')),
 		clicker = ptL(utils.addHandler, 'click'),
-		allow = !touchevents ? 2 : 0,
+		allow = !touchevents ? 2 : 2,
 		getTargetLink = doDrillDown(['childNodes', 1, 'firstChild']),
 		eventBridge = function (action, e) {
 			var getText = doDrillDown(['target', 'nodeName']),
@@ -586,12 +586,12 @@ if (!window.gAlp) {
 				addListener2Comp(my_stage_one, ptL(layout.state.validator, dofind), $sell.getElement()); //2
                 
                 var res = _.find(utils.getByTag('img', document), function(el){
-                    console.log(utils.getComputedStyle(el, 'color'))
+                    //console.log(utils.getComputedStyle(el, 'color'))
                     return utils.getComputedStyle(el, 'color') !== 'white';
                 });
                 
                 utils.doWhen(res, ptL(klasAdd, lookup[alp_len], article));
-                report.innerHTML = res;
+                //report.innerHTML = res;
 			},
 			swap = function () {
 				var i = _.findIndex(my_presenter.get(), ptL(utils.isEqual, my_presenter.get(null))),

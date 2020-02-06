@@ -30,6 +30,14 @@ gAlp.Util = (function () {
 	function noOp() {
 		return function () {};
 	}
+    
+    function gtEq(x, y) {
+		return getResult(x) >= getResult(y);
+	}
+
+	function lsEq(x, y) {
+		return getResult(x) <= getResult(y);
+	}
 
 	function cat() {
 		var head = _.first(arguments);
@@ -690,6 +698,12 @@ gAlp.Util = (function () {
 		getScrollThreshold: getScrollThreshold,
 		getZero: _.partial(byIndex, 0),
 		getter: getter,
+        gtThan: function (x, y, flag) {
+			if (flag) {
+				return gtEq(x, y);
+			}
+			return getResult(x) > getResult(y);
+		},
 		hasFeature: (function () {
 			var html = document.documentElement || document.getElementsByTagName('html')[0];
 			return function (str) {
@@ -735,6 +749,12 @@ gAlp.Util = (function () {
 		invoker: invoker,
 		isEqual: function (x, y) {
 			return getResult(x) === getResult(y);
+		},
+        lsThan: function (x, y, flag) {
+			if (flag) {
+				return lsEq(x, y);
+			}
+			return getResult(x) < getResult(y);
 		},
 		machElement: machElement,
 		makeElement: makeElement,
