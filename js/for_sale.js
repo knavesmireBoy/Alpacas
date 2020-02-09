@@ -162,7 +162,7 @@ if (!window.gAlp) {
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
 			//return list.slice(_.random(0, end || list.length));
-			return list.slice(0,4);
+			return list.slice(0,3);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -259,9 +259,8 @@ if (!window.gAlp) {
 		},
 		checkDataLength = validator('no alpacas for sale', always(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
-		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled);
-    report.innerHTML = 9;
-		var $sell = utils.machElement(ptL(setAttrs, {
+		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
+        $sell = utils.machElement(ptL(setAttrs, {
 			id: 'sell'
 		}), anCr(article), always('div')),
 		renderTable = _.compose(anCr($sell.render().getElement()), always('table')),
