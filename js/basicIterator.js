@@ -90,15 +90,6 @@ gAlp.Composite = (function () {
 			},
 			composite,
 			tmp,
-			getOutcomes = function (key, i) {
-				var outcomes = {
-					intg: included[i],
-					pos: included[0],
-					neg: included[included.length - 1],
-					all: included
-				};
-				return outcomes[key];
-			},
 			comp_add = function (comp) {
 				intafaces.unshift(comp);
 				gAlp.Intaface.ensures.apply(gAlp.Intaface, intafaces);
@@ -107,7 +98,11 @@ gAlp.Composite = (function () {
 			},
 			comp_remove = function (comp) {
 				if (!comp) {
+                    _.each(included, function(comp){
+                        comp.remove();
+                    });
 					included = [];
+                    return this;
 				} else {
 					included = _.filter(included, function (n_comp) {
 						if (n_comp !== comp) {
@@ -116,13 +111,6 @@ gAlp.Composite = (function () {
 					});
 					return comp;
 				}
-			},
-			comp_get1 = function (i) {
-				//DON'T FORGET isNaN will cast a boolean to a number ONLY supplying undefined will return a NaN
-				var str = i && _.isBoolean(i) ? 'pos' : !i && _.isBoolean(i) ? 'neg' : !isNaN(i) ? 'intg' : 'all',
-					ret = getOutcomes(str, i);
-				return ret;
-				//return !isNaN(i) ? included[i] : included;
 			},
             comp_get = function (i) {
                 //console.log('recent', i)
@@ -137,17 +125,6 @@ gAlp.Composite = (function () {
                 k = !isNaN(j) ? j : k;//store current
                 return ret;
 			},
-            /*
-            comp_find  = function (m){
-                return function () {
-				var args = _.toArray(arguments);
-				return _[m](included, function (member) {
-					//return member.find && member.find.apply(member, args.concat(_.rest(arguments)));
-					return member.find && member.find.apply(member, _.rest(arguments));
-				});
-			};
-            },
-            */
             comp_find  = function (m, e){
 				return _[m](included, function (member) {
 					return member.find && member.find(e);
@@ -169,15 +146,12 @@ gAlp.Composite = (function () {
 			render = function () {
 				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-					//member.render && member.render.apply(member, _.rest(arguments));
                     member.render && member.render.apply(member, args.concat(_.rest(arguments)));
-                    //gAlp.Util.safeApply('render', member);
 				});
 			},
 			unrender = function () {
 				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-                    //member.unrender && member.unrender.apply(member, _.rest(arguments));
 					member.unrender && member.unrender.apply(member, args.concat(_.rest(arguments)));
 				});
 			};

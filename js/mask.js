@@ -216,6 +216,7 @@ if (!window.gAlp) {
             var command = do_split.apply(null, arguments),
                 handler = function () {
                     command.execute();
+                    //scroller(0.2);
                     setTimeout(ptL(scroller, 0.2), 3333)
 				};
             handler();

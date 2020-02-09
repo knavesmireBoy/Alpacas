@@ -161,8 +161,8 @@ if (!window.gAlp) {
 		],
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			return list.slice(_.random(0, end || list.length));
-			//return list.slice(0,4);
+			//return list.slice(_.random(0, end || list.length));
+			return list.slice(0,4);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -181,23 +181,22 @@ if (!window.gAlp) {
 				return isDesktop;
 			}
 		}()),
+        
+          negate = function(cb){
+              if (!getEnvironment()) {
+                  getEnvironment = _.negate(getEnvironment);
+                  cb();
+              }
+          },
+        
 		throttler = function (callback) {
-			if (!getEnvironment()) {
-				getEnvironment = _.negate(getEnvironment);
-			}
-			var handler = function () {
-				if (!getEnvironment()) {
-					//con('ch...')
-					getEnvironment = _.negate(getEnvironment);
-					callback();
-				}
-			};
-			return utils.addHandler('resize', window, _.throttle(handler, 66));
+            negate(noOp);      
+			return utils.addHandler('resize', window, _.throttle(ptL(negate, callback), 66));
 		},
 		$ = function (str) {
 			return document.getElementById(str);
 		},
-		//con = _.bind(window.console.log, window.console),
+		con = _.bind(window.console.log, window.console),
 		always = utils.always,
 		reverse = utils.invoker('reverse', Array.prototype.reverse),
 		validator = utils.validator,
@@ -205,7 +204,6 @@ if (!window.gAlp) {
 		idty = _.identity,
 		doTwiceDefer = utils.curryTwice(true),
 		doThrice = utils.curryThrice(),
-        doThriceDefer = utils.curryThrice(true),
 		doQuart = utils.curryFourFold(),
 		anCr = utils.append(),
 		anMv = utils.move(),
@@ -238,8 +236,8 @@ if (!window.gAlp) {
 			};
 			return adapter;
 		},
-		handlerpair = ['addListener', 'remove', 'triggerEvent', 'getElement'],
-		renderpair = ['render', 'unrender', 'triggerEvent', 'getElement'],
+		handlerpair = ['addListener', 'remove'],
+		renderpair = ['render', 'unrender'],
 		tooltip_pairs = [
 			['render', 'unrender'],
 			['init', 'cancel']
@@ -406,6 +404,7 @@ if (!window.gAlp) {
 					elements.addAll($tbl, $lnk);
 					head.add(elements);
 				});
+                head.remove = noOp;//default remove is recursive, but we want these elements to persist
 				return head;
 			}(gAlp.Composite([]))),
 			$body = makeBody(),
@@ -425,6 +424,8 @@ if (!window.gAlp) {
 					shift = utils.invoker('shift', Array.prototype.shift),
 					//reverse = utils.invoker('reverse', Array.prototype.reverse),
 					isMobile = validator('loop layout priority', _.negate(getEnvironment)),
+					//isMobile = validator('loop layout priority', getEnvironment),
+					//isMobile = validator('loop layout priority', negate),
 					subHigher = validator('Data length exceeds a tab layout', doTwiceDefer(gtThan)(limits.hi)(len)),
 					subLower = validator('Data length will not require a loop layout', doTwiceDefer(lsThanEq)(limits.lo)(len)),
 					trials = [ptL(onValidation(subLower), pop, coll), ptL(onValidation(subHigher), shift, coll), ptL(onValidation(isMobile), reverse, coll)];
@@ -477,9 +478,10 @@ if (!window.gAlp) {
 							}
 						}
 						var reset = function () {
-								my_head.get(2).unrender();
-								my_head.get(2).remove();
-								my_head.get(1).render();
+                            var comp = my_head.get(2);//stage_two
+								comp.unrender();
+								comp.remove();
+                            my_head.get(1).render();
 							},
 							events = [setText, reset, noOp, noOp];
 						return function (e) {
@@ -563,7 +565,7 @@ if (!window.gAlp) {
 				my_stage_two.add($nav); //3
 				my_stage_two.add(my_nav); //4
 				my_nav.add(my_list_comp); //mynav0
-				$nav.render();
+				$nav.render();  
 				prepStageThree(i);
 			},
 			prepStageTwoBridge = function (i) {
@@ -589,22 +591,31 @@ if (!window.gAlp) {
                     //console.log(utils.getComputedStyle(el, 'color'))
                     return utils.getComputedStyle(el, 'color') !== 'white';
                 });
-                
                 utils.doWhen(res, ptL(klasAdd, lookup[alp_len], article));
                 //report.innerHTML = res;
 			},
 			swap = function () {
 				var i = _.findIndex(my_presenter.get(), ptL(utils.isEqual, my_presenter.get(null))),
 					comp = my_head.get(2).get(4); //my_nav
+                //scenario where we move from loop to tab BUT before we have an active UL, ie in "gallery" mode
+                if(!comp){
+                    layout.changestates();
+                    return;
+                }
+                
 				_.each(comp.get(), function (subcomp, i) {
 					if (i) {
 						subcomp.unrender();
 						comp.remove(subcomp);
 					}
 				});
+                
 				comp.get(0).unrender();
 				comp.get(0).remove();
 				my_list_elements.remove();
+                
+                //comp.unrender();
+                //comp.remove();
 				prepStageThree(i, true);
 			},
 			prepStage = function () {
