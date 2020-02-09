@@ -9,10 +9,12 @@
 #alpacas_for_sale.sell #main #aside {
 	display: none;
 }
-ul.loop li a, ul.tab li, #alpacas_for_sale #aside, ul#thumbnails, #gallery #main, #controls {
+/* early ie requires ul#list, ul#list li to pull content above #sell div */
+
+#alpacas_for_sale #aside, ul#thumbnails, #gallery #main, #controls, ul#list, ul#list li {
 	position: relative;
 }
-ul.tab, ul.loop, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
+#sell, #sell a, ul#thumbnails, ul#thumbnails a, ul#list {
 	overflow: hidden;
 }
 #alpacas_for_sale #aside {
@@ -35,15 +37,17 @@ ul.tab, ul.loop, #sell, #sell a, ul#thumbnails, ul#thumbnails a {
 	z-index: 0;
 	margin-bottom: 1em;
 }
-ul#list li {
-	float: left;
-	zoom: 1;
-}
-ul#list li a {
-	float: left;
+/* ie prefers this to margin-bottom -1px on ul#list */
+
+#sell {
+	margin-top: -1px;
 }
 ul.tab li {
-	padding: 0 1em 0 0;
+	margin-right: 1em;
+}
+ul#list li, ul#list li a {
+	float: left;
+	zoom: 1;
 }
 ul.tab a {
 	padding: 0.7em 1.3em;
@@ -54,10 +58,9 @@ ul.loop li a {
 	color: white;
 }
 ul.loop li:first-child a {
-	float: left;
 	padding-left: 0.7em;
 }
-.nthchild  ul.loop li:first-child a {
+.nthchild ul.loop li:first-child a {
 	padding-left: 1em;
 }
 ul.tab {
@@ -81,28 +84,27 @@ ul.loop li a::after, ul.loop li a::before {
 	margin-top: -2em;
 }
 .no-nthchild ul.loop li a {
-	padding: 2em;
+	padding: .7em 1.2em;
 }
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
+
 #sell {
 	display: none;
 }
-
 .sell #sell {
 	display: block;
-    padding: 2%;
+	padding: 2%;
 	height: 1%;
 	*clear: left;
 }
-
-.tab+#sell {
-	margin-top: -1px;
-}
 .no-flexboxlegacy .extent {
-    display: table;
-    border-spacing: 1em;
+	display: table;
+	border-spacing: 1em;
 }
-.extent {
+.loop+#sell {
+	margin-top: 0px;
+}
+#sell.extent {
 	left: 0;
 	margin: 0 auto;
 	padding: 1.5%;
@@ -110,7 +112,6 @@ ul.loop li a::after, ul.loop li a::before {
 	*padding: .6em .3em;
 	*height: 1%;
 }
-
 #sell table, #sell.tog table.show, #sell.extent table.show, .sell #aside {
 	position: absolute;
 	left: -9999px;
@@ -118,7 +119,6 @@ ul.loop li a::after, ul.loop li a::before {
 #sell a {
 	display: none;
 }
-
 #sell a.show, #sell.extent a {
 	display: block;
 }
@@ -126,34 +126,29 @@ ul.loop li a::after, ul.loop li a::before {
 	position: static;
 	left: 0px;
 }
-
 .extent figure {
-    margin: 1%;
+	margin: 1%;
 	padding: 1.2em 1.2em 0;
-    vertical-align: bottom;
+	vertical-align: bottom;
 }
-
 /*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
+
 .no-flexboxlegacy .extent figure {
 	display: inline;
 	display: inline-block;
 }
-.no-flexboxlegacy .extent > figure {
+.no-flexboxlegacy .extent>figure {
 	display: table-cell;
 }
-
 .four .extent figure {
-    width: 18%
+	width: 18%
 }
-
 .five .extent figure {
-    width: 13%
+	width: 13%
 }
-
 .six .extent figure {
-    width: 26%
+	width: 26%
 }
-
 html.js #sell a, html.js #sell table {
 	*display: none;
 }
@@ -164,11 +159,9 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	position: relative;
 	width: 100%;
 }
-
 #sell.extent {
 	*padding: 2% 1%;
 }
-
 #sell a {
 	padding: 1.6%;
 	*height: 1%;
@@ -180,13 +173,11 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	margin-left: 0;
 }
 #sell table {
-    width: 46.5%;
-    min-width: 18em;
+	width: 46.5%;
+	min-width: 18em;
 	margin-right: 2.5%;
-	table-layout: fixed;
 	float: left;
 }
-
 #sell table table {
 	margin-right: 0%;
 	width: 100%;
@@ -270,11 +261,13 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 ul#thumbnails li.go {
 	visibility: hidden;
 }
-#gallery.showtime #footer {
-	margin-top: -2%;
+#gallery #footer {
 	padding: 0%;
+	margin-top: 4%;
 	border-width: 0px;
-	background: none;
+}
+#gallery.showtime #footer {
+	margin-top: 0%;
 }
 #gallery #footer ul>* {
 	-webkit-transition: all 1s;
@@ -288,15 +281,18 @@ li#slide, li#paused {
 	margin-left: -100%;
 }
 #controls {
+	font-size: 1.8em;
 	margin: 0 auto;
 	-webkit-transition: all 1s;
 	-o-transition: all 1s;
 	transition: all 1s;
 	top: 0em;
 	z-index: 2;
+	opacity: 0;
 }
 #controls.static {
-	top: -3.6em;
+	top: -3.5em;
+	opacity: 1;
 }
 #gallery #main {
 	padding: 0;
@@ -311,10 +307,37 @@ li#slide, li#paused {
 	width: auto;
 	border-spacing: .5em;
 }
-#gallery #controls button {
+#controls button {
 	width: 1.5em;
 	height: 1.5em;
+	padding: 0;
+	margin: 0 .3em;
 	display: table-cell;
+}
+.touchevents .inplay #controls {
+	top: 2.4em;
+	opacity: 1;
+}
+.touchevents #gallery.showtime #innerwrap {
+	padding-bottom: 6em;
+}
+.touchevents #gallery.showtime #footer {
+	margin-top: -5em;
+}
+.touchevents #wrap.inplay #footer ul>* {
+	opacity: 0;
+}
+.no-touchevents button#forwardbutton:hover {
+	background-position: 50% 56%;
+}
+.no-touchevents button#backbutton:hover {
+	background-position: 50% 70.5%;
+}
+.no-touchevents button#playbutton:hover {
+	background-position: 50% 85%;
+}
+.no-touchevents.playing button#playbutton:hover {
+	background-position: 50% 100%;
 }
 button#exit {
 	margin: 0.33em;

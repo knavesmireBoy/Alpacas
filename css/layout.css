@@ -13,12 +13,22 @@ body {
 #wrap {
 	margin: 0 auto;
 }
-#wrap, #header, #footer, #aside img, #main p, #main label.read-more-trigger {
+#wrap, #footer, #main label.read-more-trigger, #main p{
 	position: relative;
 }
-#header a, #wrap, #innerwrap, #main #aside, #nav ul, #article, #main .read-more-target, #main label, #main input {
+#header, #aside img {
+   *position: relative; 
+}
+#wrap, #innerwrap, #nav li, #nav a, #footer {
+	*width: 100%;
+}
+#wrap, #article {
 	overflow: hidden;
 }
+#innerwrap, #main #aside, #nav ul, #header a, #main .read-more-target, #main label, #main input, #nav li, #footer  {
+	overflow: hidden;
+}
+
 #header {
 	padding-top: 17em;
 }
@@ -28,7 +38,7 @@ body {
 }
 #header h2 {
 	/* fix IF supporting screen sizes below width of 800px */
-	margin: 4% 0 0 29%;
+	margin-left: 28%;
 }
 #header a {
 	position: absolute;
@@ -59,19 +69,25 @@ a#yag {
 	*min-width: 166px;
 }
 #nav {
-	width: 24%;
+	width: 23%;
 	min-width: 18%;
 	z-index: 1;
-	margin: .5em 0em 0em 1.5em;
+	margin-left: 1.5em;
 	float: left;
 }
 #nav a, #nav a:link, #nav a:visited {
 	padding: 0 0 0 2.5em;
 }
 #main {
-	padding: .6em 0 0;
-	width: 70%;
+	padding: .8em 0 0;
+	width: 71%;
 	float: right;
+}
+.verbose #article p {
+	margin: .7em 0 0;
+}
+.no-cssgradients hr {
+    display: none;
 }
 /*https://css-tricks.com/all-about-floats/*/
 
@@ -89,6 +105,7 @@ a#yag {
 #footer li {
 	display: inline-block;
 	display: inline;
+    zoom: 1;
 	margin-left: .25em;
 }
 #footer li:first-child::after {
@@ -100,7 +117,6 @@ a#yag {
 	position: absolute;
 	left: -9999px;
 }
-
 #main #aside {
 	margin: 0;
 	position: absolute;
@@ -112,15 +128,6 @@ a#yag {
 	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
 	z-index: -1;
 	display: none;
-}
-.no-js #main>#aside {
-	position: static;
-	width: 100%;
-	margin-top: 1em;
-	animation: none;
-}
-.no-js #aside img {
-	float: none;
 }
 /* set img color to red */
 
@@ -150,15 +157,26 @@ a#yag {
 	right: -23%;
 	bottom: 3%;
 }
-#wrap, #innerwrap, #nav li, #nav a, #footer {
-	*width: 100%;
-	width: 100%;
-}
+
 #nav, #main, #aside img {
 	*display: inline;
 }
-#nav li, #footer {
-	*overflow: hidden;
+/*
+#innerwrap  {
+    display: flex;
+    flex-flow: row-reverse;
 }
 
+#innerwrap  #nav{
+flex: 3 0 1%;
+margin-right: 6%;
+}
+#innerwrap  #main{
+flex: 10 0 1%;
+}
+
+@media only screen and (max-width: 768px) {
+
+}
+*/
 /* End Mac IE5 filter */

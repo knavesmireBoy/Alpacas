@@ -1,14 +1,15 @@
 body {
-	font: .9em "Trebuchet MS", sans-serif;
+	font: .8em "Trebuchet MS", sans-serif;
 	background-color: white;
 }
 p {
 	line-height: 1.5;
-	margin: 0.5em 35% 0.5em 0;
+	margin: 0.7em 35% 0.7em 0;
 }
 table {
 	border: solid 1px black;
 }
+
 th, td {
 	padding: 0.3em;
 	vertical-align: top;
@@ -41,9 +42,7 @@ a:active, a:focus {
 	outline: none;
 	-moz-outline-style: none;
 }
-#footer a {
-	color: white;
-}
+
 /* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
 
 img {
@@ -70,9 +69,4 @@ h2 {
 b {
 	color: #ff6;
 	color: rgb(255, 255, 102);
-}
-hr {
-	border: 0px;
-	margin: .65em 35% 0 0;
-    height: 1px;
 }

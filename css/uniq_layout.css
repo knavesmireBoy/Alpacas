@@ -9,7 +9,7 @@
 }
 
 #welcome p {
-    margin: 0.5em 31% 0.5em 0;
+    margin: 0.7em 31% 0.7em 0;
 }
 #about_us #main #aside {
 	width: 100%;
@@ -17,41 +17,36 @@
 	right: 0em;
 	bottom: 14%;
 }
+
 #about_alpacas #main #aside {
 	width: 121%;
 	max-width: 60em;
 	right: -25%;
 	bottom: 12%;
 }
-#about_alpacas #article p {
-	margin-right: 30%;
-}
-#about_alpacas #article p, #about_alpacas hr {
-	margin-right: 44%;
-}
+
 #upkeep #main #aside {
 	width: 129%;
 	max-width: 60em;
 	right: -19%;
 	bottom: 14%;
 }
-#upkeep #article p {
-	margin-right: 27%;
+#upkeep .read-more-target p:first-of-type {
+	margin-right: 29%;
 }
 #stud_services #main #aside {
 	width: 135%;
 	right: -20%;
 	bottom: 2%;
 }
-#stud_services #article p {
+
+#stud_services.verbose #article p {
 	margin-right: 69%;
 }
 #links #main #aside {
 	width: 145%;
-	max-width: 70em;
 	right: -25%;
 	bottom: 2%;
-    border: solid 1px red;
 }
 #contact_us #main #aside {
 	width: 105%;
@@ -74,9 +69,12 @@
 #stud_services #main>#aside {
 	width: 90%;
 }
+
 #links #main>#aside {
-	width: 110%;
+	width: 100%;
+    min-width: 70em;
 }
+
 #links dl {
 	margin: 1em 0;
 }
@@ -85,6 +83,41 @@
 }
 #contact_us #main>#aside {
 	width: 76%;
+}
+
+@media screen and (max-width: 1100px) {
+    
+    #welcome #article p {
+		margin-right: 0%;
+	}
+    #about_us #article p {
+		margin-right: 0%;
+	}
+#about_alpacas #main #aside {
+	bottom: 14%;
+}
+    
+    #upkeep #main #aside {
+	bottom: 10%;
+}
+
+    /* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
+    #links #main #aside {
+        z-index: -1;
+    }
+   
+}
+
+@media screen and (max-width: 1000px) {
+ #upkeep #main  .read-more-target p:first-of-type {
+		margin-right: 0;
+	}
+}
+
+@media screen and (max-width: 850px) {
+    .verbose #main div p:first-child {
+	margin-right: 0%;
+    }
 }
 
 
@@ -126,41 +159,7 @@
 		animation: entry 1s ease-out 8s backwards;
 	}
 }
-@media screen and (max-width: 850px) {
 
-	#about_alpacas #main .read-more-target p:first-child {
-		margin-right: 0%;
-	}
-	#upkeep #main .read-more-target p:first-child {
-		margin-right: 0%;
-	}
-    
-    #welcome #main .read-more-target p:first-child {
-		margin-right: 0%;
-	}
-}
-
-@media screen and (max-width: 1100px) {
-    
-    #welcome #article p {
-		margin-right: 0%;
-	}
-    #about_us #article p {
-		margin-right: 0%;
-	}
-#about_alpacas #main #aside {
-	bottom: 14%;
-}
-    
-    #upkeep #main #aside {
-	bottom: 10%;
-}
-
-    /* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
-    #links #main #aside {
-        z-index: -1;
-    }
-}
 
 @media screen and (min-width: 769px) {
 	/* @supports(mask-image:  url('')) {
@@ -221,31 +220,8 @@
 	.no-js #stud_services #main>#aside {
 		width: 90%;
 	}
-	#stud_services.verbose #article p {
+	#stud_services #article p {
 		margin-right: 65%;
-	}
-
-}
-@media only screen and (min-width: 920px) {
-	#links #innerwrap #main {
-		font-size: 110%;
-	}
-
-    #upkeep #main #aside {
-        bottom: 14%;
-    }
-}
-
-@media only screen and (min-width: 980px) {
-
-	#upkeep #main .read-more-target p:first-of-type {
-		margin-right: 27%;
-	}
-}
-
-@media only screen and (min-width: 1200px) {
-    #welcome #article p {
-		margin-right: 36%;
 	}
 }
 

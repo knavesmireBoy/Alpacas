@@ -1,72 +1,68 @@
-body#alpacas_for_sale {
-font: bold 0.8em  Georgia, Palatino, serif;
+body.sell {
+	font: bold 0.85em Georgia, Palatino, serif;
 }
-
 #tooltip {
-position: absolute;
-z-index: 3;
-bottom: 0em;
-font-weight: normal;
-font-size: .7em;
-opacity: 0;
--webkit-transform: translate(-10em, -10em);
-    -ms-transform: translate(-10em, -10em);
-        transform: translate(-10em, -10em);
--webkit-transition-property: opacity, -webkit-transform;
-transition-property: opacity, -webkit-transform;
--o-transition-property: transform, opacity;
-transition-property: transform, opacity;
-transition-property: transform, opacity, -webkit-transform;
--webkit-transition-duration: 2s;
-     -o-transition-duration: 2s;
-        transition-duration: 2s;
+	position: absolute;
+	z-index: 3;
+	bottom: 0em;
+	font-weight: normal;
+	font-size: .7em;
+	opacity: 0;
+	-webkit-transform: translate(-10em, -10em);
+	-ms-transform: translate(-10em, -10em);
+	transform: translate(-10em, -10em);
+	-webkit-transition-property: opacity, -webkit-transform;
+	transition-property: opacity, -webkit-transform;
+	-o-transition-property: transform, opacity;
+	transition-property: transform, opacity;
+	transition-property: transform, opacity, -webkit-transform;
+	-webkit-transition-duration: 2s;
+	-o-transition-duration: 2s;
+	transition-duration: 2s;
 }
-
-#sell.extent + #tooltip {
-    visibility: hidden;
+#sell.extent+#tooltip {
+	visibility: hidden;
 }
-
 #tooltip.tip {
 	-webkit-transform: translate(10em, -3em);
 	-ms-transform: translate(10em, -3em);
 	transform: translate(10em, -3em);
-    opacity: .75;
+	opacity: .75;
 }
 #tooltip.tb1 {
 	-webkit-transform: translate(2em, -5em);
 	-ms-transform: translate(2em, -5em);
 	transform: translate(2em, -5em);
-    opacity: 1;
+	opacity: 1;
 }
 #tooltip.tb2 {
 	-webkit-transform: translate(2em, 10em);
 	-ms-transform: translate(2em, 10em);
 	transform: translate(2em, 10em);
-    z-index: 5;
+	z-index: 5;
 }
-
-#alpacas_for_sale #tooltip {
+.sell #tooltip {
 	bottom: 10em;
 	left: 0em;
 	opacity: 1;
-	-webkit-transform: translate(-10em, 0em);
-	-ms-transform: translate(-10em, 0em);
-	transform: translate(-10em, 0em);
+	-webkit-transform: translate(-11em, 0em);
+	-ms-transform: translate(-11em, 0em);
+	transform: translate(-11em, 0em);
 }
-#alpacas_for_sale #tooltip.tip {
+.sell #tooltip.tip {
 	-webkit-transform: translate(10em, 0em);
 	-ms-transform: translate(10em, 0em);
 	transform: translate(10em, 0em);
 }
-#alpacas_for_sale #tooltip.tb1 {
+.sell #tooltip.tb1 {
 	-webkit-transform: translate(0em, 10em);
 	-ms-transform: translate(0em, 10em);
 	transform: translate(0em, 10em);
 }
-#alpacas_for_sale #tooltip.tb2 {
+.sell #tooltip.tb2 {
 	-webkit-transform: translate(-50em, 10em);
-    -ms-transform: translate(-50em, 10em);
-    transform: translate(-50em, 10em);
+	-ms-transform: translate(-50em, 10em);
+	transform: translate(-50em, 10em);
 }
 #tooltip div:first-child {
 	background: white;
@@ -80,78 +76,61 @@ transition-property: transform, opacity, -webkit-transform;
 	border-top: 12px solid white;
 	margin: -1px 0px 0px 5em;
 }
-    
-#alpacas_for_sale  #tooltip div:first-child {
+.sell #tooltip div:first-child {
 	text-shadow: 1px 1px 1px black;
 }
-#alpacas_for_sale #tooltip #triangle {
+.sell #tooltip #triangle {
 	border-top: 12px solid #7F9933;
 	border-top: 12px solid hsla(75, 50%, 40%, 1);
 }
-
-ul.tab li a, ul.loop li a {
-    font-size: 1.3em;
-}
-
-ul.loop  li a {
+ul.loop li a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	color: white;
 }
-ul.loop a, th, #alpacas_for_sale #tooltip div:first-child{
+ul.loop a, th, .sell #tooltip div:first-child {
 	color: white;
 	font-weight: bold;
 	background: #7F9933;
 	background: hsla(75, 50%, 40%, 1);
 }
-
 figcaption {
-    text-align: center;
-    font-weight: normal;
-    padding: .3em 0;
+	text-align: center;
+	font-weight: normal;
+	padding: .3em 0;
 }
-
 figure {
-    box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
-    background: white;
+	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
+	background: white;
 }
-
 figure:hover {
-    /*background: hsla(75, 50%, 30%, .55);*/
-    background: linear-gradient(white, hsla(75, 50%, 30%, .55));
-    background: linear-gradient(white, hsla(75, 50%, 80%, 1));
-    color: #6e2900;
+	/*background: hsla(75, 50%, 30%, .55);*/
+	background: linear-gradient(white, hsla(75, 50%, 30%, .55));
+	background: linear-gradient(white, hsla(75, 50%, 80%, 1));
+	color: #6e2900;
 }
-
-#alpacas_for_sale ul.tab a{
+ul.tab a {
 	color: #7F9933;
 	color: hsla(75, 50%, 40%, 1);
 	*color: #7F9933;
-    text-transform: uppercase;
-	background: white;
+	text-transform: uppercase;
 }
-#alpacas_for_sale #article ul li a:hover {
+#article ul li a:hover {
 	text-decoration: none;
 }
-html.no-nthchild #alpacas_for_sale ul.loop li a {
+html.no-nthchild ul.loop li a {
 	border-right: solid 1px white;
 }
-#alpacas_for_sale ul.tab {
-	border: solid #7F9933 1px;
-	border: solid hsla(75, 50%, 40%, 1) 1px;
-	border-width: 0 0 0px 0px;
-}
-
-#alpacas_for_sale ul.tab li a:hover{
+ul.tab li a:hover {
 	color: hsla(75, 50%, 30%, 1);
 }
-#alpacas_for_sale ul.tab li.current a:hover{
+ul.tab li.current a:hover {
 	color: hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale ul.loop li a:hover {
+ul.loop li a:hover {
 	color: #EBF2D8;
 	color: hsla(75, 50%, 90%, 1);
 }
-#alpacas_for_sale ul.loop li a::before {
+ul.loop li a::before {
 	content: "";
 	margin-left: 1px;
 	border: 2em solid transparent;
@@ -159,7 +138,7 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 	border-left-color: white;
 	border-right-width: 0;
 }
-#alpacas_for_sale ul.loop li a::after {
+ul.loop li a::after {
 	content: " ";
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */
@@ -167,31 +146,29 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 	border-left: 1.2em solid #7F9933;
 	border-left: 1.2em solid hsla(75, 50%, 40%, 1);
 }
-#alpacas_for_sale ul.loop li:nth-child(2) a {
+ul.loop li:nth-child(2) a {
 	background: #9FBF3F;
 	background: hsla(75, 50%, 50%, 1);
 }
-#alpacas_for_sale ul.loop li:nth-child(2) a::after {
+ul.loop li:nth-child(2) a::after {
 	border-left-color: #9FBF3F;
 	border-left-color: hsla(75, 50%, 50%, 1);
 }
-#alpacas_for_sale ul.loop li:nth-child(3) a {
+ul.loop li:nth-child(3) a {
 	background: #B2CC65;
 	background: hsla(75, 50%, 60%, 1);
 }
-#alpacas_for_sale ul.loop li:nth-child(3) a::after {
+ul.loop li:nth-child(3) a::after {
 	border-left-color: #B2CC65;
 	border-left-color: hsla(75, 50%, 60%, 1);
 }
-#alpacas_for_sale ul.tab li a, #sell, #sell a, #sell figure {
+ul.tab li a, #sell, #sell a, #sell figure {
 	border: solid 1px black;
 }
-
 #sell figure a {
 	border: solid 1px black;
-    box-shadow: 0px 0px 2px black;
+	box-shadow: 0px 0px 2px black;
 }
-
 #sell figure:hover a {
 	border: solid 1px white;
 }
@@ -199,8 +176,7 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
 }
-
-#alpacas_for_sale ul.tab li a{
+ul.tab li a {
 	border-color: #7F9933;
 	border-color: hsla(75, 50%, 40%, 1);
 	border-top-left-radius: 4px;
@@ -208,12 +184,13 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 	background: #EBF2D8;
 	background: hsla(75, 50%, 90%, .5);
 	-webkit-transition: background 1.5s;
-    -o-transition: background 1.5s;
-    transition: background 1.5s;
-    text-shadow: 2px 2px 2px white;
+	-o-transition: background 1.5s;
+	transition: background 1.5s;
+	text-shadow: 2px 2px 2px white;
 }
 /* DO NOT SET #SELL TO POSITION RELATIVE OTHERWISE BOTTOM BORDER GETS CHOPPED*/
-#alpacas_for_sale #article ul.tab li.current a {
+
+ul.tab li.current a {
 	background: hsla(75, 50%, 90%, 1);
 	border-bottom-color: hsla(75, 50%, 90%, 1);
 	border-bottom-color: #EBF2D8;
@@ -235,12 +212,9 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 	box-shadow: 2px 2px 5px rgba(255, 255, 255, 1);
 	opacity: 1;
 }
-
 #sell table {
 	padding: 0px;
-    font-size: 1.1em;
 }
-
 #sell table td, #sell table table td {
 	border-width: 1px 0 0;
 	padding: .5em;
@@ -249,7 +223,7 @@ html.no-nthchild #alpacas_for_sale ul.loop li a {
 
 #sell table tbody {
 	border: 0px;
-    min-width: 100%;
+	min-width: 100%;
 }
 #sell table td.nested {
 	padding: 0;
@@ -284,7 +258,7 @@ html.no-nthchild #sell table tr.odd td {
 	box-shadow: 0px 0px 20px rgba(255, 255, 255, .8);
 	opacity: .9;
 	-webkit-box-sizing: border-box;
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 #sell table td:first-child+td {
 	border-width: 1px 0 0 1px;
@@ -302,13 +276,12 @@ html.no-nthchild #sell table tr.odd td {
 #sell a:hover, #sell>table:hover {
 	opacity: .9;
 	-webkit-transform: scale(1.01);
-    -ms-transform: scale(1.01);
-    transform: scale(1.01);
+	-ms-transform: scale(1.01);
+	transform: scale(1.01);
 }
-
-tr:nth-child(7) td{
+tr:nth-child(7) td {
 	font-weight: bold;
-    font-size: 1.1em;
+	font-size: 1.1em;
 	text-transform: uppercase;
 	color: #900;
 	color: hsla(0, 100%, 30%, 1);
@@ -318,7 +291,6 @@ tr:nth-child(7) td{
 }
 #sell table th {
 	vertical-align: middle;
-	font-size: 1.1em;
 	text-transform: uppercase;
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	border-width: 0;
@@ -340,19 +312,19 @@ th:nth-child(odd) {
 td:last-child {
 	border-right-width: 0px solid black;
 }
-
 /* set img color to red */
+
 #sell a img {
 	color: red;
 }
 /*ie7*/
+
 *+html #sell a img {
 	color: blue;
 }
-#sell a > img {
+#sell a>img {
 	color: white;
 }
-
 /*"gallery"*/
 
 #thumbnails, ul#thumbnails li a {
@@ -369,16 +341,6 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	border-color: #900;
 	border-color: rgb(153, 0, 0);
 }
-#controls {
-	padding: .25em .75em;
-	font-size: 1.7em;
-	font-family: "sans serif";
-}
-#controls button {
-	padding: 0 .4em;
-	padding: 0;
-	margin: 0 .3em;
-}
 #controls button {
 	background-color: #7F9933;
 	background-color: hsla(75, 50%, 40%, 1);
@@ -387,7 +349,7 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	border: 1px solid hsla(75, 50%, 40%, 1);
 	border-radius: .2em;
 	-webkit-box-shadow: 2px 2px 4px black;
-    box-shadow: 2px 2px 4px black;
+	box-shadow: 2px 2px 4px black;
 	text-shadow: 1px 1px 1px black;
 	line-height: 1.6;
 	opacity: 1;
@@ -395,13 +357,12 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	background-repeat: no-repeat;
 	background-position: 50% 0%;
 }
-
 #controls.static button {
-    border: 1px solid white;
-    border: 1px solid rgba(255, 255, 255, .75);
+	border: 1px solid white;
+	border: 1px solid rgba(255, 255, 255, .75);
 }
-#controls > button {
-    background-image: url(../assets/buttons_sprite_lowend.png);
+#controls>button {
+	background-image: url(../assets/buttons_sprite_lowend.png);
 }
 #controls button:hover, #controls button:focus {
 	background-color: silver;
@@ -441,11 +402,8 @@ button#exit:hover, button#exit:focus {
 	transform: rotate(360deg);
 }
 
-#links dd {
-	font-size: 90%;
-}
 *html button#exit {
-    background-image: url(../assets/close_transparent.png);
+	background-image: url(../assets/close_transparent.png);
 	background-color: #7F9933;
 	margin: 0;
 	padding: 0;
