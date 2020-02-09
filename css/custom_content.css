@@ -117,8 +117,22 @@ ul.tab a {
 #article ul li a:hover {
 	text-decoration: none;
 }
-html.no-nthchild ul.loop li a {
+.no-nthchild ul.loop li a {
 	border-right: solid 1px white;
+}
+ul.loop li a {
+	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
+	padding: 0.7em .5em 0.7em 2em;
+	color: white;
+}
+ul.loop li:first-child a {
+	padding-left: 0.7em;
+}
+.nthchild ul.loop li:first-child a {
+	padding-left: 1em;
+}
+.no-nthchild ul.loop li a {
+	padding: .7em 1.2em;
 }
 ul.tab li a:hover {
 	color: hsla(75, 50%, 30%, 1);

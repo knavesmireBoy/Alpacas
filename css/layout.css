@@ -13,18 +13,22 @@ body {
 #wrap {
 	margin: 0 auto;
 }
-#wrap, #footer, #main label.read-more-trigger, #main p{
+#wrap, #footer, #main label.read-more-trigger, #main p {
 	position: relative;
 }
+
 #header, #aside img {
-   *position: relative; 
+   position: relative; 
 }
+
 #wrap, #innerwrap, #nav li, #nav a, #footer {
-	*width: 100%;
+	width: 100%;
 }
+
 #wrap, #article {
 	overflow: hidden;
 }
+
 #innerwrap, #main #aside, #nav ul, #header a, #main .read-more-target, #main label, #main input, #nav li, #footer  {
 	overflow: hidden;
 }

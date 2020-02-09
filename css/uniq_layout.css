@@ -25,14 +25,18 @@
 	bottom: 12%;
 }
 
+#about_alpacas p:first-of-type {
+	margin-right: 29%;
+}
+
 #upkeep #main #aside {
 	width: 129%;
 	max-width: 60em;
 	right: -19%;
 	bottom: 14%;
 }
-#upkeep .read-more-target p:first-of-type {
-	margin-right: 29%;
+#upkeep p:first-of-type {
+	margin-right: 27%;
 }
 #stud_services #main #aside {
 	width: 135%;
@@ -43,8 +47,10 @@
 #stud_services.verbose #article p {
 	margin-right: 69%;
 }
+
 #links #main #aside {
 	width: 145%;
+	max-width: 70em;
 	right: -25%;
 	bottom: 2%;
 }
@@ -72,7 +78,6 @@
 
 #links #main>#aside {
 	width: 100%;
-    min-width: 70em;
 }
 
 #links dl {
@@ -160,18 +165,33 @@
 	}
 }
 
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+	#upkeep #footer {
+		margin-top: 0%;
+	}
+	.js #upkeep p {
+		margin-right: 0%;
+	}
+}
 
 @media screen and (min-width: 769px) {
 	/* @supports(mask-image:  url('')) {
 	 @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
     
-    #welcome #aside img {
-		-webkit-mask: url('../images/carlos_masking.png') top left / cover;
-		mask: url('../images/carlos_masking.png') top left / cover;
-	}
-
+   
 	#about_us #main #aside {
 		z-index: -1;
+	}
+    
+    
+     #welcome #aside img {
+		-webkit-mask: url('../images/carlos_masking.png') 0px -1px / cover;
+		mask: url('../images/carlos_masking.png') 0px -1px / cover;
+	}
+    
+     .cssmask #about_us #aside img {
+		-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
+		mask: url('../images/honcho_masking.png') -1px 0px / cover;
 	}
 	
 	#about_alpacas #aside img {
@@ -187,49 +207,22 @@
 		mask: url('../images/stud_masking.png') -1px 0px / cover;
 	}
 	#links #aside img {
-		-webkit-mask: url('../images/links_masking.png') -1px 0px / cover;
-		mask: url('../images/links_masking.png') -1px 0px / cover;
+		-webkit-mask: url('../images/links_masking.png') 0px 0px / cover;
+		mask: url('../images/links_masking.png') 0px 0px / cover;
 	}
 	#contact_us #aside img {
-		-webkit-mask: url('../images/contacts_masking.png') -1px 0px / cover;
-		mask: url('../images/contacts_masking.png') -1px 0px / cover;
+		-webkit-mask: url('../images/contacts_masking.png') -1px -1px / cover;
+		mask: url('../images/contacts_masking.png') -1px -1px / cover;
 	}
-	.cssmask #about_us #aside img {
-		-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
-		mask: url('../images/honcho_masking.png') -1px 0px / cover;
-	}
-	.cssmask #about_us #wrap #main #aside {
-		z-index: 0;
-	}
-	
 	#alpacas_for_sale #wrap #main #aside {
 		z-index: 1;
 	}
-	#alpacas_for_sale #main #aside {
+	#alpacas_for_sale #wrap #main #aside {
 		max-width: 50em;
+        width: 130%;
 	}
-	#alpacas_for_sale #main div#aside {
-		width: 130%;
-	}
-	#alpacas_for_sale #innerwrap {
+	#alpacas_for_sale #innerwrap, #alpacas_for_sale #footer {
 		margin-top: 0%;
 	}
-	#alpacas_for_sale #footer {
-		margin-top: 0%;
-	}
-	.no-js #stud_services #main>#aside {
-		width: 90%;
-	}
-	#stud_services #article p {
-		margin-right: 65%;
-	}
-}
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-	#upkeep #footer {
-		margin-top: 0%;
-	}
-	.js #upkeep p {
-		margin-right: 0%;
-	}
 }

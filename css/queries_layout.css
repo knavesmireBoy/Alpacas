@@ -175,11 +175,7 @@
 		margin-right: 0%;
 	}
 }
-@media screen and (max-width: 850px) {
-	#main div p, #main div hr {
-		margin-right: 0%;
-	}
-}
+
 @media screen and (max-width: 768px) {
 	#wrap {
 		min-width: 250px;
@@ -312,20 +308,22 @@
 	.ellipsis.touchevents #main .read-more-trigger {
 		display: none;
 	}
-	
-	.verbose #wrap #footer {
-		margin-top: 0%;
+	#wrap #footer {
+		padding-top: 0%;
+        margin-top: 9%;
 	}
-	#alpacas_for_sale #footer {
-		margin-top: -4%;
+    
+    .verbose #wrap #footer {
+        margin-top: 1%;
 	}
+
 	.js #article hr, .cssgradients hr {
 		display: none;
 	}
 	.js body.sell #innerwrap #main #aside {
 		display: none;
 	}
-	#header, #wrap #footer {
+	#header {
 		background: none;
 	}
 	#aside img {
@@ -333,14 +331,6 @@
 	}
 }
 /* mobile layout */
-
-@media only screen and (max-width: 768px) and (orientation: portrait) {
-	/*
-#footer, #stud_services #wrap #footer, #alpacas_for_sale.sell #footer {
-		margin-top: 5%;
-	}
-    */
-}
 
 	@media only screen and (max-width: 480px) {
 		body {
