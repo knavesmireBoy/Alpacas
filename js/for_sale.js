@@ -196,7 +196,7 @@ if (!window.gAlp) {
 		$ = function (str) {
 			return document.getElementById(str);
 		},
-		con = _.bind(window.console.log, window.console),
+		//con = _.bind(window.console.log, window.console),
 		always = utils.always,
 		reverse = utils.invoker('reverse', Array.prototype.reverse),
 		validator = utils.validator,
@@ -259,8 +259,9 @@ if (!window.gAlp) {
 		},
 		checkDataLength = validator('no alpacas for sale', always(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
-		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
-		$sell = utils.machElement(ptL(setAttrs, {
+		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled);
+    report.innerHTML = 9;
+		var $sell = utils.machElement(ptL(setAttrs, {
 			id: 'sell'
 		}), anCr(article), always('div')),
 		renderTable = _.compose(anCr($sell.render().getElement()), always('table')),
@@ -419,6 +420,7 @@ if (!window.gAlp) {
 			addListener2Comp = function (comp, cb, el) {
 				return _.compose(comp.add, adapterFactory(), utils.addEvent(clicker, cb))(getResult(el));
 			},
+            routes,
 			getNavTypeFactory = function (coll, len, limits) {
 				var pop = utils.invoker('pop', Array.prototype.pop),
 					shift = utils.invoker('shift', Array.prototype.shift),
@@ -433,9 +435,15 @@ if (!window.gAlp) {
 					return f();
 				});
 				return coll;
-			},
-			routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
-			layout = (function (myroutes) {
+			};
+        try {
+            routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits);
+        }
+        catch(e){
+            report.innerHTML = e;
+        }
+			//var routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
+			var layout = (function (myroutes) {
 				var mapLinktoTitle = function (link) {
 						var getHref = doThrice(simpleInvoke)(linkEx)('match');
 						return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
@@ -631,10 +639,16 @@ if (!window.gAlp) {
 				} else {
 					prepStageOne();
 					my_head.render();
-                    //report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
+                    report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
 				}
 			};
-		  prepStage();
+        try {
+          prepStage();  
+        }
+        catch(e){
+            report.innerHTML = e;
+        }
+        
 	}(alp_len));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
