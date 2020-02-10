@@ -1,3 +1,5 @@
+/*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
+
 #alpacas_for_sale #main #aside {
 	width: 100%;
 	z-index: -1;
@@ -10,8 +12,7 @@
 	display: none;
 }
 /* early ie requires ul#list, ul#list li to pull content above #sell div */
-
-#alpacas_for_sale #aside, ul#list, ul#list li, ul#thumbnails, #gallery #main, #controls{
+#alpacas_for_sale #aside, ul#list, ul#list li, ul#thumbnails, #gallery #main, #controls {
 	position: relative;
 }
 #sell, #sell a, ul#thumbnails, ul#thumbnails a, ul#list {
@@ -37,11 +38,6 @@
 	z-index: 0;
 	margin-bottom: 1em;
 }
-/* ie prefers this to margin-bottom -1px on ul#list */
-
-#sell {
-	margin-top: -1px;
-}
 ul.tab li {
 	margin-right: 1em;
 }
@@ -52,7 +48,6 @@ ul#list li, ul#list li a {
 ul.tab a {
 	padding: 0.7em 1.3em;
 }
-
 ul.tab {
 	transform: translateX(-1000px);
 	-webkit-transition: left 1s;
@@ -62,7 +57,6 @@ ul.tab {
 ul.loop, ul.tab {
 	transform: translateX(0px);
 }
-
 ul.loop li a::after, ul.loop li a::before {
 	/*border arrows */
 	display: block;
@@ -75,8 +69,6 @@ ul.loop li a::after, ul.loop li a::before {
 	margin-top: -2em;
 }
 
-/*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
-
 #sell {
 	display: none;
 }
@@ -84,6 +76,8 @@ ul.loop li a::after, ul.loop li a::before {
 	display: block;
 	padding: 2%;
 	height: 1%;
+	/* ie prefers this to margin-bottom -1px on ul#list */
+	margin-top: -1px;
 	*clear: left;
 }
 .no-flexboxlegacy .extent {
@@ -170,12 +164,6 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 #sell table table {
 	margin-right: 0%;
 	width: 100%;
-}
-#sell table.abbr th:first-child {
-	width: 50%;
-}
-#sell table.abbr th:last-child {
-	width: 50%;
 }
 /*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
 
@@ -282,6 +270,7 @@ li#slide, li#paused {
 #controls.static {
 	top: -3.5em;
 	opacity: 1;
+	border: solid 1px red;
 }
 #gallery #main {
 	padding: 0;
@@ -303,6 +292,9 @@ li#slide, li#paused {
 	margin: 0 .3em;
 	display: table-cell;
 }
+/*.touchevents replaces media queries (hover: hover) || (pointer: fine) where support is doubtful
+logic dictates that we only get to this point courtesy of javascript so modernizr supplies the className .(no-)touchevents */
+
 .touchevents .inplay #controls {
 	top: 2.4em;
 	opacity: 1;

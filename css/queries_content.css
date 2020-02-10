@@ -1,8 +1,6 @@
-/*(max-width:768px)/(min-width:850px)*/
-
 /* https://stackoverflow.com/questions/6917639/css-media-query-not-working-in-ie-9 */
-
 /*http://browserhacks.com/*/
+/*netrenderer: 9: 997; 10: 1016; 11: 850*/
 
 @media only screen {
 	#wrap #header {
@@ -32,15 +30,12 @@
 		background-size: 105%;
 	}
 	#wrap #footer ul {
-		background: rgb(117, 151, 7) url(../assets/grass.png) no-repeat 0% 100%;
 		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
 		background-repeat: repeat-x;
 		background-size: 150%;
 	}
 }
 @media only screen and (max-width: 768px) {
-	/*(min-width: 1px) and */
-	/*@media \0screen\,screen\9 {   */
 	#wrap #header {
 		background-image: none;
 	}
@@ -57,8 +52,8 @@
 	}
 	#nav ul, #nav:active ul {
 		border: solid #C6C084 1px;
-		border: solid rgb(198, 192, 132) 1px;
 		background: #FBFCFC;
+		background: linear-gradient(90deg, #FBFCFC, white);
 		border-width: 0px 0px 1px 0px;
 		-webkit-box-shadow: 3px 3px 6px #382D38;
 		box-shadow: 3px 3px 6px #382D38;
@@ -136,6 +131,3 @@
 		animation: fade 3s ease-in;
 	}
 }
-/*mobile*/
-
-/*netrenderer: 9: 997; 10: 1016; 11: 850*/

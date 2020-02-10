@@ -2,6 +2,7 @@
 /*https://css-tricks.com/logic-in-media-queries/*/
 /*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
 /*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/
+
 /*
 -moz-device-pixel-ratio
 Gives the number of device pixels per CSS pixel.
@@ -20,7 +21,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		padding: .67%;
 	}
 	ul#thumbnails li a {
-		float: none;
+		float: none;/*?*/
 	}
 	#controls button {
 		background-image: url(../assets/buttons_sprite.png);
@@ -29,9 +30,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 }
 @media only screen and (max-width: 900px) {
-#links #main #aside {
-	right: -30%;
-}
+	#links #main #aside {
+		right: -30%;
+	}
 }
 @media only screen and (max-width: 768px) {
 	#stud_services #article p {
@@ -56,29 +57,27 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#stud_services.verbose #footer {
 		margin-top: 9%;
 	}
-	.js #alpacas_for_sale div#aside img {
+	.js #alpacas_for_sale #aside img {
 		margin: 0%;
 		float: none;
 		animation: enter 1s 1 ease-out;
 	}
-	#alpacas_for_sale  #main>#aside {
+	#alpacas_for_sale #main>#aside {
 		position: relative;
 		width: 100%;
-        right: 0%;
+		right: 0%;
 	}
 	#alpacas_for_sale.sell #main>#aside {
 		position: absolute;
 	}
-    
-    #alpacas_for_sale #footer {
-        padding-top: 15%;
-        margin-top: -15%;
-    }
-    
-    #alpacas_for_sale.sell #footer {
-        padding-top: 0;
-        margin-top: 9%;
-    }
+	#alpacas_for_sale #footer {
+		padding-top: 15%;
+		margin-top: -15%;
+	}
+	#alpacas_for_sale.sell #footer {
+		padding-top: 0;
+		margin-top: 9%;
+	}
 }
 @media only screen and (max-width: 667px) {
 	.touchevents .inplay #controls {
@@ -136,11 +135,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 }
 @media only screen and (max-width: 320px) and (orientation: portrait) {
-    
-    .js body {
-        font-size: .7em;
-    }
-	
+	.js body {
+		font-size: .7em;
+	}
 	figure a {
 		box-shadow: none;
 	}

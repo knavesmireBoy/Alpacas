@@ -5,7 +5,6 @@ body {
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 /*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
-
 #checkDummy {
 	margin-top: 1px;
 	display: none;
@@ -16,23 +15,18 @@ body {
 #wrap, #footer, #main label.read-more-trigger, #main p {
 	position: relative;
 }
-
 #header, #aside img {
-   position: relative; 
+	position: relative;
 }
-
 #wrap, #innerwrap, #nav li, #nav a, #footer {
 	width: 100%;
 }
-
 #wrap, #article {
 	overflow: hidden;
 }
-
-#innerwrap, #main #aside, #nav ul, #header a, #main .read-more-target, #main label, #main input, #nav li, #footer  {
+#innerwrap, #main #aside, #nav ul, #header a, #main .read-more-target, #main label, #main input, #nav li, #footer {
 	overflow: hidden;
 }
-
 #header {
 	padding-top: 17em;
 }
@@ -91,7 +85,7 @@ a#yag {
 	margin: .7em 0 0;
 }
 .no-cssgradients hr {
-    display: none;
+	display: none;
 }
 /*https://css-tricks.com/all-about-floats/*/
 
@@ -109,7 +103,7 @@ a#yag {
 #footer li {
 	display: inline-block;
 	display: inline;
-    zoom: 1;
+	zoom: 1;
 	margin-left: .25em;
 }
 #footer li:first-child::after {
@@ -135,7 +129,7 @@ a#yag {
 }
 /* set img color to red */
 
-#aside img {
+.no-cssmask #aside img {
 	float: right;
 	color: red;
 }
@@ -161,7 +155,6 @@ a#yag {
 	right: -23%;
 	bottom: 3%;
 }
-
 #nav, #main, #aside img {
 	*display: inline;
 }
@@ -183,4 +176,5 @@ flex: 10 0 1%;
 
 }
 */
+
 /* End Mac IE5 filter */
