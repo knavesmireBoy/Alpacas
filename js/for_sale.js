@@ -162,7 +162,7 @@ if (!window.gAlp) {
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
 			//return list.slice(_.random(0, end || list.length));
-			return list.slice(0,6);
+			return list.slice(0,0);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -419,7 +419,6 @@ if (!window.gAlp) {
 			addListener2Comp = function (comp, cb, el) {
 				return _.compose(comp.add, adapterFactory(), utils.addEvent(clicker, cb))(getResult(el));
 			},
-            routes,
 			getNavTypeFactory = function (coll, len, limits) {
 				var pop = utils.invoker('pop', Array.prototype.pop),
 					shift = utils.invoker('shift', Array.prototype.shift),
@@ -434,15 +433,9 @@ if (!window.gAlp) {
 					return f();
 				});
 				return coll;
-			};
-        try {
-            routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits);
-        }
-        catch(e){
-            report.innerHTML = e;
-        }
-			//var routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
-			var layout = (function (myroutes) {
+			},
+            routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
+            layout = (function (myroutes) {
 				var mapLinktoTitle = function (link) {
 						var getHref = doThrice(simpleInvoke)(linkEx)('match');
 						return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
@@ -609,20 +602,15 @@ if (!window.gAlp) {
                     layout.changestates();
                     return;
                 }
-                
 				_.each(comp.get(), function (subcomp, i) {
 					if (i) {
 						subcomp.unrender();
 						comp.remove(subcomp);
 					}
 				});
-                
 				comp.get(0).unrender();
 				comp.get(0).remove();
 				my_list_elements.remove();
-                
-                //comp.unrender();
-                //comp.remove();
 				prepStageThree(i, true);
 			},
 			prepStage = function () {
@@ -638,15 +626,10 @@ if (!window.gAlp) {
 				} else {
 					prepStageOne();
 					my_head.render();
-                    report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
+                    //report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
 				}
 			};
-        try {
-          prepStage();  
-        }
-        catch(e){
-            report.innerHTML = e;
-        }
+        prepStage();
         
 	}(alp_len));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementById('article'), document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
