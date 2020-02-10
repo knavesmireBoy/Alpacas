@@ -117,8 +117,7 @@ ul.tab li a {
 /* DO NOT SET #SELL TO POSITION RELATIVE OTHERWISE BOTTOM BORDER GETS CHOPPED*/
 
 ul.tab li.current a {
-	background: hsla(75, 50%, 90%, 1);
-	border-bottom-color: hsla(75, 50%, 90%, 1);
+	background: #EBF2D8;
 	border-bottom-color: #EBF2D8;
 }
 #alpacas_for_sale h2 {
@@ -131,11 +130,11 @@ ul.tab li.current a {
 }
 #sell {
 	background: #EBF2D8;
-	background: hsla(75, 50%, 90%, 1);
 }
 #sell>a {
+	background-color: #FFF;
 	background-color: rgba(255, 255, 255, .9);
-	box-shadow: 2px 2px 5px rgba(255, 255, 255, 1);
+	box-shadow: 2px 2px 5px #FFF;
 	opacity: 1;
 }
 #sell table {
@@ -156,7 +155,7 @@ ul.tab li.current a {
 	border-width: 0;
 }
 html.no-nthchild #sell table tr.odd td {
-	background: rgb(241, 242, 222);
+    background: #F2F1DE;
 }
 #sell table th.odd {
 	border-right: solid 1px #FFF;
@@ -250,7 +249,7 @@ td:last-child {
 	-webkit-transition-property: opacity, -webkit-transform;
 	transition-property: opacity, -webkit-transform;
 	-o-transition-property: transform, opacity;
-	transition-property: transform, opacity;
+	   transition-property: transform, opacity;
 	transition-property: transform, opacity, -webkit-transform;
 	-webkit-transition-duration: 2s;
 	-o-transition-duration: 2s;
@@ -375,7 +374,6 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	background-color: hsla(50, 50%, 40%, .3);
 }
 button#exit {
-	background: #FFF;
 	color: #7F9933;
 	color: hsla(75, 50%, 40%, .5);
 	padding: .2em .25em;

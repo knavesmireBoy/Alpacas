@@ -43,7 +43,6 @@
 #footer ul {
 	background-color: #759707;
 	border-top: solid 1px #9c0;
-	transition: width .8s ease;
 	background-position: 50% 100%;
 }
 #footer li {

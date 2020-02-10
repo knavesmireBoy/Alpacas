@@ -55,17 +55,12 @@
 		background: #FBFCFC;
 		background: linear-gradient(90deg, #FBFCFC, white);
 		border-width: 0px 0px 1px 0px;
-		-webkit-box-shadow: 3px 3px 6px #382D38;
-		box-shadow: 3px 3px 6px #382D38;
 		-webkit-box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
 		box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
 		line-height: 2.7;
 		z-index: 2;
-		transition: font .5s;
 	}
 	.menu {
-		-webkit-box-shadow: inset 0px 0px 5px #382D38, 2px 2px 2px #382D38;
-		box-shadow: inset 0px 0px 5px #382D38, 2px 2px 2px #382D38;
 		-webkit-box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
 		box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
 		background: url(../assets/menu-icon.png) center no-repeat #C6C084;
