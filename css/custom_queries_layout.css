@@ -28,6 +28,32 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		background-color: hsla(75, 50%, 40%, .3);
 		background-size: 128%;
 	}
+    button#exit {
+	color: hsla(75, 50%, 40%, .5);
+	padding: .2em .25em;
+	border-radius: 2em;
+	border: 0px solid #FFF;
+	font-size: 2em;
+	text-shadow: 1px 1px 1px hsla(75, 50%, 30%, 1);
+    background: none;
+        width: auto;
+        height: auto;
+        display: inline;
+}
+    
+    .no-textshadow button#exit {
+	color: hsla(75, 50%, 40%, 1);
+    }
+    
+    button#exit:hover, button#exit:focus {
+	background-color: hsla(75, 50%, 40%, .5);
+	color: #FFF;
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+}
+    figcaption {
+	font: normal 1.4em "Handwritten", Georgia, Palatino, serif;
+}
 }
 @media only screen and (max-width: 900px) {
 	#links #main #aside {
@@ -111,10 +137,10 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		font-size: 1em;
 		padding: 1em .5em 1em 2em;
 	}
-	html.js .sell #sell a.show, html.js .sell #sell.tog table.show {
+	.sell #sell a.show, .sell #sell.tog table.show {
 		display: none;
 	}
-	html.js .sell #sell.tog a.show, html.js .sell #sell table.show {
+	 .sell #sell.tog a.show, .sell #sell table.show {
 		display: block;
 	}
 }
@@ -135,8 +161,8 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 }
 @media only screen and (max-width: 320px) and (orientation: portrait) {
-	.js body {
-		font-size: .7em;
+	html body {
+		font-size: .66em;
 	}
 	figure a {
 		box-shadow: none;

@@ -163,11 +163,20 @@
 		display: table;
 		clear: both;
 	}
+    .verbose #main #article p {
+	margin: .7em 0 0;
+}
 }
 @media only screen and (max-width: 1000px) {
-	.verbose #main #article p {
-		margin-right: 0%;
-	}
+    .verbose #main #article p {
+        margin: .7em 0;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    #about_alpacas #main #article p {
+        margin: .7em 0;
+    }
 }
 @media screen and (max-width: 768px) {
 	#wrap {
@@ -224,7 +233,7 @@
 		margin-top: .7em;
 	}
 	.verbose #main p {
-		margin: .7em 0;
+		margin: 0 0 .7em;
 	}
 	#article p span {
 		display: inline-block;
@@ -354,11 +363,4 @@
 		top: 1%;
 	}
 }
-@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
-	#header {
-		padding-top: 22%;
-		background-image: url("../assets/header.png");
-		background-size: 100%;
-		display: block;
-	}
-}
+@media only screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {}

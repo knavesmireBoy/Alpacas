@@ -18,10 +18,10 @@ ul.loop a, th, .sell #tooltip div:first-child {
 figcaption {
 	text-align: center;
 	padding: .3em 0;
-	font: normal 1.4em "Handwritten", Georgia, Palatino, serif;
+	font: normal 1em "Handwritten", Georgia, Palatino, serif;
 }
 #sell figure {
-	border-color: darkolivegreen;
+	border-color: #556B2F;
 	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
 	background: #FFF;
 }
@@ -332,9 +332,8 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	border-color: #900;
 }
 #controls button {
-	background-color: #7F9933;
-	background-color: hsla(75, 50%, 40%, 1);
 	cursor: pointer;
+    background-color: #556B2F;
 	border: 1px solid #7F9933;
 	border: 1px solid hsla(75, 50%, 40%, 1);
 	border-radius: .2em;
@@ -353,6 +352,7 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 }
 #controls>button {
 	background-image: url(../assets/buttons_sprite_lowend.png);
+    background-color: hsla(50, 50%, 40%, .3);
 }
 #controls button:hover, #controls button:focus {
 	background-color: silver;
@@ -370,32 +370,17 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	background-position: 50% 44%;
 	opacity: 0.9;
 }
-#controls button {
-	background-color: hsla(50, 50%, 40%, .3);
-}
+/*styles for < ie9*/
 button#exit {
-	color: #7F9933;
-	color: hsla(75, 50%, 40%, .5);
-	padding: .2em .25em;
-	border-radius: 2em;
-	border: 0px solid #FFF;
-	font-size: 1.75em;
-	text-shadow: 1px 1px 1px hsla(75, 50%, 30%, 1);
+    border: 0px;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
-}
-button#exit:hover, button#exit:focus {
-	background-color: hsla(75, 50%, 40%, .5);
-	color: #FFF;
-	-webkit-transform: rotate(360deg);
-	transform: rotate(360deg);
-}
-*html button#exit {
-	background-image: url(../assets/close_transparent.png);
+    background-image: url(../assets/close_transparent.png);
 	background-color: #7F9933;
+	color: #7F9933;
 	margin: 0;
 	padding: 0;
 	font-size: 1em;
-	width: 1.5em;
-	height: 1.5em;
+	width: 2em;
+	height: 2em;
 }

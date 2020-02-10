@@ -25,9 +25,7 @@
 	background-position: 0 47%;
 }
 /*keep separate to keep early ie happy!*/
-
 /* ie6 requires "#nav a.current:visited" */
-
 #nav a.current, #nav a.current:visited, #nav a:active {
 	color: rgb(153, 0, 0);
 	background-position: 0 99%;
@@ -102,4 +100,20 @@ _NOT BE: progid: DXImageTransform
 	filter: -;
 	background: url("../assets/grass_960.png") 50% 100% no-repeat;
 }
+
+*html #welcome #header {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/header__964.png", sizingMethod="crop");
+}
+
+*html #welcome a#yag {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/yag_logo_ie.png", sizingMethod="scale");
+}
+*html #welcome #header h1 {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/ga_logo_ie.png", sizingMethod="crop");
+}
+
+*html #welcome  #footer, *html #welcome  #footer ul {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/grass_960.png", sizingMethod="crop");
+}
+
 /**/

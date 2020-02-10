@@ -180,6 +180,11 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 ul#thumbnails li a {
 	display: block;
 }
+ul#thumbnails li {
+	float: left;
+	width: 100%;
+	display: block;
+}
 ul#thumbnails {
 	margin: 6% auto 0;
 	/*clear*/
@@ -187,7 +192,7 @@ ul#thumbnails {
 	font-size: 1.03em;
 	padding: 1.2em;
 	/*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
-	_padding: 1.2em 1.2em .4em 1.2em;
+	*padding: 1.2em 1.2em .4em 1.2em;
 }
 ul#thumbnails.gallery {
 	padding: 4px;
@@ -195,20 +200,17 @@ ul#thumbnails.gallery {
 }
 ul#thumbnails.gallery li.portrait {
 	float: right;
-	width: 4.3em;
-	_width: 4.62em;
+	width: 5em;
+    clear: right;
+	*width: 5.3em;
 }
 ul#thumbnails.gallery li {
 	margin: 0.3em;
-	width: 5.7em;
-	_width: 6.1em;
+	width: 6.66em;
+	*width: 7.15em;
 	display: inline;
 }
-ul#thumbnails li {
-	float: left;
-	width: 100%;
-	display: block;
-}
+
 /* https://keithclark.co.uk/articles/moving-ie-specific-css-into-media-blocks/media-tests/ */
 
 @media screen only {
@@ -279,6 +281,7 @@ li#slide, li#paused {
 #controls, #controls button {
 	display: inline;
 	display: inline-block;
+    zoom: 1;
 }
 #controls {
 	display: table;

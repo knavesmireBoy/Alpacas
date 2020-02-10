@@ -2,39 +2,6 @@
 /*http://browserhacks.com/*/
 /*netrenderer: 9: 997; 10: 1016; 11: 850*/
 
-@media only screen {
-	#wrap #header {
-		background-image: url("../assets/header.png");
-	}
-	#nav a:hover, #nav a:active {
-		-webkit-transform: scale(1.01);
-		-ms-transform: scale(1.01);
-		transform: scale(1.01);
-		transform-origin: left;
-	}
-	#innerwrap #nav {
-		font: 700 1em/2.4 Verdana, sans-serif;
-	}
-	#innerwrap #main p {
-		text-shadow: 1px 1px 2px white;
-	}
-	#nav a, #nav a:link, #nav a:visited {
-		background-position: 0% -4%;
-		background-size: 1.75em;
-	}
-	#nav a:hover {
-		background-position: 0% 47%;
-	}
-	#wrap #footer {
-		background: url(../assets/grass.png) no-repeat 50% 0%;
-		background-size: 105%;
-	}
-	#wrap #footer ul {
-		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
-		background-repeat: repeat-x;
-		background-size: 150%;
-	}
-}
 @media only screen and (max-width: 768px) {
 	#wrap #header {
 		background-image: none;
@@ -125,4 +92,47 @@
 	#main p, #main hr {
 		animation: fade 3s ease-in;
 	}
+}
+/* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST */
+@media only screen {
+	#wrap #header {
+		background-image: url("../assets/header.png");
+	}
+	#nav a:hover, #nav a:active {
+		-webkit-transform: scale(1.01);
+		-ms-transform: scale(1.01);
+		transform: scale(1.01);
+		transform-origin: left;
+	}
+	#innerwrap #nav {
+		font: 700 1em/2.4 Verdana, sans-serif;
+	}
+	#innerwrap #main p {
+		text-shadow: 1px 1px 2px white;
+	}
+	#nav a, #nav a:link, #nav a:visited {
+		background-position: 0% -4%;
+		background-size: 1.75em;
+	}
+	#nav a:hover {
+		background-position: 0% 47%;
+	}
+	#wrap #footer {
+		background: url(../assets/grass.png) no-repeat 50% 0%;
+		background-size: 105%;
+	}
+	#wrap #footer ul {
+		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
+		background-repeat: repeat-x;
+		background-size: 150%;
+	}
+    h2 {
+	font: italic 3.2em "Handwritten", Georgia, cursive;
+    }
+    #nav a, #nav a:link, #nav a:visited {
+	background-image: url(../assets/links.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 -4%;
+	color: #080;
+}
 }

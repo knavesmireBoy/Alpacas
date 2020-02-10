@@ -237,6 +237,7 @@ if (!window.gAlp) {
 						exec = function () {
 							var setAttrs = utils.setAttrsFix(ie6 || ie7),
 								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
+								margin = "-100%";
 							utils.makeElement(prepSetStyles({
 								"margin-right": margin
 							}), ptL(setAttrs, always(true), 'setAttribute', config), anCr(mask_target), always(kid)).add();
@@ -259,6 +260,7 @@ if (!window.gAlp) {
 							try {
 								utils.highLighter.perform();
 								exec();
+                                //report.innerHTML = mask_target.childNodes.length;
 							} catch (e) {
 								report.innerHTML = e.message;
 							}
@@ -311,7 +313,8 @@ if (!window.gAlp) {
 			utils.addHandler('resize', window, _.throttle(handler, 66));
 			command.init(outcomes)();
 		};
-		document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
+		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
+        
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {

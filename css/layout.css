@@ -4,6 +4,10 @@ body {
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
+
+body#about_us {
+    background-color: navajowhite;
+}
 /*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
 #checkDummy {
 	margin-top: 1px;
@@ -15,18 +19,24 @@ body {
 #wrap, #footer, #main label.read-more-trigger, #main p {
 	position: relative;
 }
+
 #header, #aside img {
 	position: relative;
 }
-#wrap, #innerwrap, #nav li, #nav a, #footer {
+#wrap, #innerwrap, #footer/*, #nav li, #nav a */{
 	width: 100%;
 }
 #wrap, #article {
 	overflow: hidden;
 }
-#innerwrap, #main #aside, #nav ul, #header a, #main .read-more-target, #main label, #main input, #nav li, #footer {
+#innerwrap, #footer, #main #aside,  #header a, #main .read-more-target, #main label, #main input{
 	overflow: hidden;
 }
+/*ie 7*/
+#nav li /*,#nav ul */ {
+	overflow: hidden;
+}
+
 #header {
 	padding-top: 17em;
 }
@@ -81,12 +91,16 @@ a#yag {
 	width: 71%;
 	float: right;
 }
-.verbose #article p {
-	margin: .7em 0 0;
-}
 .no-cssgradients hr {
 	display: none;
 }
+
+.verbose #main #article p {
+    margin: 0.7em 0;
+}
+#about_alpacas #main #article p {
+        margin: .7em 35% .7em 0;
+    }
 /*https://css-tricks.com/all-about-floats/*/
 
 #footer {
@@ -129,8 +143,9 @@ a#yag {
 }
 /* set img color to red */
 
-.no-cssmask #aside img {
+#aside img {
 	float: right;
+    display: block;
 	color: red;
 }
 /* reset img color to white for ie > 6*/
@@ -155,6 +170,7 @@ a#yag {
 	right: -23%;
 	bottom: 3%;
 }
+/*??*/
 #nav, #main, #aside img {
 	*display: inline;
 }

@@ -45,7 +45,7 @@
 		}
 	}
 	@supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)) {
-		.sell #sell, ul#list {
+		#article:not(.five) .sell #sell, ul#list {
 			display: -webkit-box;
 			display: -ms-flexbox;
 			display: flex;
