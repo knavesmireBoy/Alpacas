@@ -3,7 +3,7 @@
 	z-index: -1;
 	display: block;
 }
-#alpacas_for_sale #main>div#aside {
+#alpacas_for_sale #main>#aside {
 	width: 72%;
 }
 #alpacas_for_sale.sell #main #aside {

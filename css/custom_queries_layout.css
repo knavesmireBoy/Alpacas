@@ -44,7 +44,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		width: 100%;
 	}
 	#sell a {
-		margin-left: 2%;
 		margin-left: 0%;
 	}
 	#sell.tog a.show {
@@ -55,7 +54,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		margin-left: 0%;
 	}
 	#stud_services.verbose #footer {
-		margin-top: 5%;
+		margin-top: 9%;
 	}
 	.js #alpacas_for_sale div#aside img {
 		margin: 0%;
@@ -65,7 +64,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#alpacas_for_sale  #main>#aside {
 		position: relative;
 		width: 100%;
-        right: -23%;
+        right: 0%;
 	}
 	#alpacas_for_sale.sell #main>#aside {
 		position: absolute;
@@ -73,7 +72,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     
     #alpacas_for_sale #footer {
         padding-top: 15%;
-        margin-top: -13%;
+        margin-top: -15%;
     }
     
     #alpacas_for_sale.sell #footer {
@@ -137,12 +136,11 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 }
 @media only screen and (max-width: 320px) and (orientation: portrait) {
-	#list, #sell {
-		font-size: 0.8em;
-	}
-	#list.tab, #list.tab+#sell {
-		font-size: 0.9em;
-	}
+    
+    .js body {
+        font-size: .7em;
+    }
+	
 	figure a {
 		box-shadow: none;
 	}
