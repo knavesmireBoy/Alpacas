@@ -36,17 +36,6 @@ if (!window.gAlp) {
 		return str.replace(reg, replacement);
 	}
 
-	function curryRight(fn) {
-		var args = _.rest(arguments);
-		if (args.length >= fn.length) {
-			return fn.apply(null, gAlp.Util.reverse(args));
-		} else {
-			return function () {
-				return curryRight.apply(null, [fn].concat(args, gAlp.Util.reverse(arguments)));
-			};
-		}
-	}
-
 	function invoke(ctxt, m, k, v) {
 		if (!k) {
 			return;
@@ -91,7 +80,6 @@ if (!window.gAlp) {
 		verbose = utils.getByClass('.verbose'),
 		//con = window.console.log.bind(window),
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
-		//threshold = Number(query.match(/[^\d]+(\d+)[^\d]+/)[1]),
 		getIndex = (function () {
 			if (mq) {
 				return function () {

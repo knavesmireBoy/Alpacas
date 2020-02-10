@@ -67,13 +67,11 @@ if (!window.gAlp) {
 	}
 
 	function inRange(i) {
+        //https://wsvincent.com/javascript-tilde/
+        //var res = ~"hello world".indexOf("w") ? true : false;
 		return i >= 0;
 	}
     
-    function setter(o, k, v) {
-		o[k] = v;
-	}
-
 	function extendFrom(sub, supa, keys, key) {
 		function mapper(method) {
 			if (sub[method] && _.isFunction(sub[method])) {
@@ -161,8 +159,8 @@ if (!window.gAlp) {
 		],
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			//return list.slice(_.random(0, end || list.length));
-			return list.slice(0,0);
+			return list.slice(_.random(0, end || list.length));
+			//return list.slice(0,0);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,

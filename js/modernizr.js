@@ -2456,6 +2456,43 @@ else {
 }
 !*/
       Modernizr.addTest('cssmask', testAllProps('maskRepeat', 'repeat-x', true));
+    
+    /*!
+{
+  "name": "CSS rgba",
+  "caniuse": "css3-colors",
+  "property": "rgba",
+  "tags": ["css"],
+  "notes": [{
+    "name": "CSSTricks Tutorial",
+    "href": "https://css-tricks.com/rgba-browser-support/"
+  }]
+}
+!*/
+
+  Modernizr.addTest('rgba', function() {
+    var style = createElement('a').style;
+    style.cssText = 'background-color:rgba(150,255,150,.5)';
+
+    return ('' + style.backgroundColor).indexOf('rgba') > -1;
+  });
+    
+      ;
+/*!
+{
+  "name": "CSS HSLA Colors",
+  "caniuse": "css3-colors",
+  "property": "hsla",
+  "tags": ["css"]
+}
+!*/
+
+  Modernizr.addTest('hsla', function() {
+    var style = createElement('a').style;
+    style.cssText = 'background-color:hsla(120,40%,100%,.5)';
+    return contains(style.backgroundColor, 'rgba') || contains(style.backgroundColor, 'hsla');
+  });
+
 
     
     	/*!
