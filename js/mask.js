@@ -323,7 +323,7 @@ if (!window.gAlp) {
 			utils.addHandler('resize', window, _.throttle(handler, 66));
 			command.init(outcomes)();
 		};
-		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
+		document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
