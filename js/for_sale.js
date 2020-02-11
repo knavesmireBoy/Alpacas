@@ -159,8 +159,8 @@ if (!window.gAlp) {
 		],
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			return list.slice(_.random(0, end || list.length));
-			//return list.slice(0,0);
+			//return list.slice(_.random(0, end || list.length));
+			return list.slice(0,0);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
