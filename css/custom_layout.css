@@ -268,6 +268,8 @@ li#slide, li#paused {
 	top: 0em;
 	z-index: 2;
 	opacity: 0;
+    display: table;
+	border-spacing: .5em;
 }
 #controls.static {
 	top: -3.5em;
@@ -282,11 +284,6 @@ li#slide, li#paused {
 	display: inline;
 	display: inline-block;
     zoom: 1;
-}
-#controls {
-	display: table;
-	width: auto;
-	border-spacing: .5em;
 }
 #controls button {
 	width: 1.5em;

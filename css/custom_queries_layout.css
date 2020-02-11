@@ -61,15 +61,11 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 }
 @media only screen and (max-width: 768px) {
-	#stud_services #article p {
-		margin-right: 0%;
-	}
+	
 	#gallery.showtime #header h2 {
 		margin: 0%;
 	}
-	.js #about_us #main>#aside {
-		width: 100%;
-	}
+	
 	#sell a {
 		margin-left: 0%;
 	}
@@ -80,9 +76,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#article div#sell figure a {
 		margin-left: 0%;
 	}
-	#stud_services.verbose #footer {
-		margin-top: 9%;
-	}
+	
 	.js #alpacas_for_sale #aside img {
 		margin: 0%;
 		float: none;

@@ -5,9 +5,6 @@ body {
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 
-body#about_us {
-    background-color: navajowhite;
-}
 /*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
 #checkDummy {
 	margin-top: 1px;
