@@ -1,13 +1,39 @@
-#footer    { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/grass.png")   }
-div#thumbnails dt a span    { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/sold_only.png")   }
-#copy p        { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/tintFadeNew.png")      }
-body#gal #footer  { background-image: none; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="")  }
-div.im img { filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0); }
-body#alpacas div.im  { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/alpacas.png")  }
-body#us div.im { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/honcho.png") }
-body#contact div.im { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/contact.png") }
-body#lnks div.im { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/links.png") }
-body#forsale div.im    { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/for_sale.png")   }
-body#stud div.im { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/stud.png") }
-body#upkeep div.im { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/upkeep.png") }
-body#home div.im  { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="images/Carlos.png") }
+/* hide from ie mac AND WATCH OUT FOR SPACE BETWEEN progid: AND DXImageTransform.
+MUST BE: progid:DXImageTransform
+_NOT BE: progid: DXImageTransform
+\*/
+*html #header {
+	background: none;
+	width: 100%;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/header_752.png", sizingMethod="crop");
+}
+*html a#yag img, *html #header h1 img, *html #alpacas_for_sale #main #aside img {
+	filter: alpha(opacity=0);
+}
+*html #footer {
+	background: none;
+	width: 100%;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/grass_960.png", sizingMethod="crop");
+}
+*html #footer ul {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/grass_960.png", sizingMethod="image");
+}
+
+*html #gallery #footer ul {
+	background: url("../assets/grass_960.png") 50% 0% no-repeat;
+	filter: alpha(opacity=50);
+}
+
+*html #header a{
+	margin: 0;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/ga_logo_ie.png", sizingMethod="crop")
+}
+
+*html #header a#yag {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/yag_logo_ie.png", sizingMethod="crop")
+}
+*html #alpacas_for_sale #main #aside {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../images/for_sale.png", sizingMethod="scale")
+}
+/**/

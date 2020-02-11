@@ -1,0 +1,79 @@
+html.js body#alpacas_for_sale {
+	background-color: white;
+	/*display: flex;
+	flex-direction: column;
+	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
+}
+/*
+html.flexboxlegacy body#gallery {
+	background-color: antiquewhite
+}
+
+html.flexboxtweener body#gallery {
+	background-color: honeydew;
+}
+
+html.flexwrap body#gallery {
+	background-color: azure;
+}
+
+html.flexbox body#gallery {
+	background-color: royalblue;
+}
+
+html.cssgrid body#gallery {
+	background-color: turquoise;
+}
+*/
+.flexboxlegacy .sell #sell {
+	display: -webkit-box;
+	/* OLD - iOS 6-, Safari 3.1-6 */
+	display: -moz-box;
+	/* OLD - Firefox 19- (buggy but mostly works) */
+	display: -ms-flexbox;
+	/* TWEENER - IE 10 */
+	display: -webkit-flex;
+	/* NEW - Chrome */
+	display: flex;
+	/* NEW, Spec - Opera 12.1, Firefox 20+ */
+	-webkit-box-align: start;
+	-ms-flex-align: start;
+	align-items: flex-start;
+}
+
+.flexboxlegacy .sell #sell>table {
+	-webkit-box-flex: 1;
+	-ms-flex: 1 1 auto;
+	flex: 1 0 auto;
+}
+
+/*https://css-tricks.com/using-flexbox/*/
+
+.flexboxlegacy #sell.extent figure {
+	margin: 0;
+    border-spacing: 0px;
+	/*-webkit-box-flex: 1;*/
+	/* OLD - iOS 6-, Safari 3.1-6 */
+	/*-moz-box-flex: 1;*/
+	/* OLD - Firefox 19- */
+	/* For old syntax, otherwise collapses. */
+	/*-webkit-flex: 1;*/
+	/* Chrome */
+	/*-ms-flex: 1;*/
+	/* IE 10 */
+	/*flex: 1;*/
+   -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    webkit-flex: 1;
+    ms-flex: 1;
+    flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -ms-flex-negative: 1;
+        flex-shrink: 1;
+    -ms-flex-preferred-size: 44%;
+        flex-basis: 44%;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    padding: 0;
+}

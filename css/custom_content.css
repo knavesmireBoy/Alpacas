@@ -1,135 +1,386 @@
-#forsale.selling #sell {
-	border: 1px solid;
+body.sell {
+	font: bold 0.85em Georgia, Palatino, serif;
 }
-
-#forsale #copy ul {
+ul.tab li a, #sell, #sell a, #sell figure {
+	border: solid 1px black;
+}
+ul.loop li a {
+	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
+	padding: 0.7em .5em 0.7em 2em;
+	color: #FFF;
+}
+ul.loop a, th, .sell #tooltip div:first-child {
+	color: #FFF;
 	font-weight: bold;
-	font-size: 1em;
-	color: hsla(80, 50%, 89%, 1);
-	border-bottom: solid 1px #99cc00;
+	background: #7F9933;
+	background: hsla(75, 50%, 40%, 1);
 }
-
-
-/* Following style: left and right borders turned to white when only top rule is required for the NO SALE status. Otherwise breadcrumb is top of a border that is complted by the following "sell" div
-ul.breadcrumb  { border-right: white; border-left: white }*/
-
-#forsale #copy ul li a {
-	color: #fff;
-	background: #99cc00;
-	background: hsla(80, 50%, 40%, 1);
-	padding: 0.45em 0 .45em 2em;
+figcaption {
+	text-align: center;
+	padding: .3em 0;
+	font: normal 1em "Handwritten", Georgia, Palatino, serif;
 }
-
-#forsale #copy ul li:first-child a {
-	padding-left: 1em;
+#sell figure {
+	border-color: #556B2F;
+	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
+	background: #FFF;
 }
-
-#forsale #copy ul li a:hover {
-	color: hsla(80, 50%, 89%, 1);
+#sell figure:hover {
+	background: linear-gradient(150deg, #FFF, rgb(227, 233, 200), #FFF, rgb(222, 233, 200)));
+	color: #6e2900;
+	border-color: black;
+}
+ul.tab a {
+	color: #7F9933;
+	text-transform: uppercase;
+}
+#article ul li a:hover {
 	text-decoration: none;
 }
-
-#forsale #copy ul li a::after {
+.no-nthchild ul.loop li a {
+	border-right: solid 1px #FFF;
+}
+ul.loop li:first-child a {
+	padding-left: 0.7em;
+}
+.nthchild ul.loop li:first-child a {
+	padding-left: 1em;
+}
+.no-nthchild ul.loop li a {
+	padding: .7em 1.2em;
+}
+ul.tab li a:hover {
+	color: hsla(75, 50%, 30%, 1);
+}
+ul.tab li.current a:hover {
+	color: hsla(75, 50%, 40%, 1);
+}
+ul.loop li a:hover {
+	color: #EBF2D8;
+	color: hsla(75, 50%, 90%, 1);
+}
+ul.loop li a::before {
+	content: "";
+	margin-left: 1px;
+	border: 2em solid transparent;
+	border-left-width: 1.2em;
+	border-left-color: #FFF;
+	border-right-width: 0;
+}
+ul.loop li a::after {
 	content: " ";
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */
 	border-bottom: 2em solid transparent;
+	border-left: 1.2em solid #7F9933;
 	border-left: 1.2em solid hsla(75, 50%, 40%, 1);
 }
-
-#forsale #copy ul li:nth-child(2) a {
+ul.loop li:nth-child(2) a {
+	background: #9FBF3F;
 	background: hsla(75, 50%, 50%, 1);
 }
-
-#forsale #copy ul li:nth-child(2) a::after {
+ul.loop li:nth-child(2) a::after {
+	border-left-color: #9FBF3F;
 	border-left-color: hsla(75, 50%, 50%, 1);
 }
-
-#forsale #copy ul li:nth-child(3) a {
+ul.loop li:nth-child(3) a {
+	background: #B2CC65;
 	background: hsla(75, 50%, 60%, 1);
 }
-
-#forsale #copy ul li:nth-child(3) a::after {
+ul.loop li:nth-child(3) a::after {
+	border-left-color: #B2CC65;
 	border-left-color: hsla(75, 50%, 60%, 1);
 }
-
-#forsale h2 {
-	text-decoration: line-through;
+#sell figure a {
+	border: solid 1px black;
+	box-shadow: 0px 0px 2px black;
 }
-
-#forsale.selling h2 {
-	text-decoration: none;
+#sell figure:hover a {
+	border: solid 1px #FFF;
 }
-
-#forsale.selling #sell {
-	border-color: #9c0;
-	box-shadow: inset 0 0 3em hsla(75, 50%, 50%, 1);
+#sell, #sell a, #sell table, #sell table td {
+	border-color: hsla(75, 50%, 40%, 1);
+	border-color: #7F9933;
 }
-
-#sell a {
-	border: 1px solid black;
-	background: white;
+ul.tab li a {
+	border-color: #7F9933;
+	border-color: hsla(75, 50%, 40%, 1);
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	background: #EBF2D8;
+	background: hsla(75, 50%, 90%, .5);
+	-webkit-transition: background 1.5s;
+	-o-transition: background 1.5s;
+	transition: background 1.5s;
+	text-shadow: 2px 2px 2px #FFF;
 }
+/* DO NOT SET #SELL TO POSITION RELATIVE OTHERWISE BOTTOM BORDER GETS CHOPPED*/
 
-table,
-th {
-	border: solid 1px hsla(75, 100%, 20%, 1);
+ul.tab li.current a {
+	background: #EBF2D8;
+	border-bottom-color: #EBF2D8;
 }
-
-th {
-	background-color: hsla(75, 100%, 20%, 1);
+#alpacas_for_sale h2 {
+	color: #944;
+	color: hsla(0, 100%, 30%, .3);
 }
+#alpacas_for_sale.sell h2 {
+	color: #900;
+	color: hsla(0, 100%, 30%, 1);
+}
+#sell {
+	background: #EBF2D8;
+}
+#sell>a {
+	background-color: #FFF;
+	background-color: rgba(255, 255, 255, .9);
+	box-shadow: 2px 2px 5px #FFF;
+	opacity: 1;
+}
+#sell table {
+	padding: 0px;
+}
+#sell table td, #sell table table td {
+	border-width: 1px 0 0;
+	padding: .5em;
+}
+/**/
 
-
+#sell table tbody {
+	border: 0px;
+	min-width: 100%;
+}
+#sell table td.nested {
+	padding: 0;
+	border-width: 0;
+}
+html.no-nthchild #sell table tr.odd td {
+    background: #F2F1DE;
+}
+#sell table th.odd {
+	border-right: solid 1px #FFF;
+}
+#sell table tr>th.odd {
+	border-right: solid 0px #FFF;
+}
+#sell table tr>th.odd+th {
+	border-left: solid 1px #FFF;
+}
+#sell table tr td.odd {
+	border-width: 1px 1px 0 0;
+}
+#sell table tr>td.odd {
+	border-width: 1px 0 0 0;
+}
+#sell table tr>td.odd+td {
+	border-width: 1px 0 0 1px;
+}
+#sell table table {
+	font-size: 1em;
+	border-width: 0;
+}
+#sell>table {
+	box-shadow: 0px 0px 20px rgba(255, 255, 255, .8);
+	opacity: .9;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+#sell table td:first-child+td {
+	border-width: 1px 0 0 1px;
+}
+#sell table td.description {
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #900;
+	text-transform: uppercase;
+	border-width: 1px 0 0;
+}
+#sell table tr:last-child td {
+	border-width: 1px 0 0;
+}
+#sell a:hover, #sell>table:hover {
+	opacity: .9;
+	-webkit-transform: scale(1.01);
+	-ms-transform: scale(1.01);
+	transform: scale(1.01);
+}
+tr:nth-child(7) td {
+	font-weight: bold;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	color: #900;
+}
+#sell table tr:nth-of-type(even) {
+	background-color: rgba(255, 255, 255, .5);
+}
+#sell table th {
+	vertical-align: middle;
+	text-transform: uppercase;
+	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
+	border-width: 0;
+}
+#sell table th:first-child {
+	border: solid 1px #FFF;
+	border: solid 1px rgba(255, 255, 255, .5);
+	border-width: 0 1px 0 0;
+}
+th:nth-child(odd) {
+	border-right-color: rgba(255, 255, 255, .2);
+}
+#sell table tr:last-child {
+	font-size: 1em;
+}
+#sell table table tr:last-child {
+	font-size: 1em;
+}
+td:last-child {
+	border-right-width: 0px solid black;
+}
+#tooltip {
+	position: absolute;
+	z-index: 3;
+	bottom: 0em;
+	font-weight: normal;
+	font-size: .7em;
+	opacity: 0;
+	-webkit-transform: translate(-10em, -10em);
+	-ms-transform: translate(-10em, -10em);
+	transform: translate(-10em, -10em);
+	-webkit-transition-property: opacity, -webkit-transform;
+	transition-property: opacity, -webkit-transform;
+	-o-transition-property: transform, opacity;
+	   transition-property: transform, opacity;
+	transition-property: transform, opacity, -webkit-transform;
+	-webkit-transition-duration: 2s;
+	-o-transition-duration: 2s;
+	transition-duration: 2s;
+}
+#tooltip.tip {
+	-webkit-transform: translate(10em, -3em);
+	-ms-transform: translate(10em, -3em);
+	transform: translate(10em, -3em);
+	opacity: .75;
+}
+#tooltip.tb1 {
+	-webkit-transform: translate(2em, -5em);
+	-ms-transform: translate(2em, -5em);
+	transform: translate(2em, -5em);
+	opacity: 1;
+}
+#tooltip.tb2 {
+	-webkit-transform: translate(2em, 10em);
+	-ms-transform: translate(2em, 10em);
+	transform: translate(2em, 10em);
+	z-index: 5;
+}
+#tooltip div:first-child {
+	background: #FFF;
+	padding: 3px;
+}
+#tooltip #triangle {
+	width: 0;
+	height: 0;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 12px solid #FFF;
+	margin: -1px 0px 0px 5em;
+}
+.sell #tooltip.tip {
+	-webkit-transform: translate(10em, 0em);
+	-ms-transform: translate(10em, 0em);
+	transform: translate(10em, 0em);
+}
+.sell #tooltip.tb1 {
+	-webkit-transform: translate(0em, 10em);
+	-ms-transform: translate(0em, 10em);
+	transform: translate(0em, 10em);
+}
+.sell #tooltip.tb2 {
+	-webkit-transform: translate(-50em, 10em);
+	-ms-transform: translate(-50em, 10em);
+	transform: translate(-50em, 10em);
+}
+.sell #tooltip {
+	bottom: 10em;
+	left: 0em;
+	opacity: 1;
+	-webkit-transform: translate(-11em, 0em);
+	-ms-transform: translate(-11em, 0em);
+	transform: translate(-11em, 0em);
+}
+#sell.extent+#tooltip {
+	visibility: hidden;
+}
+.sell #tooltip div:first-child {
+	text-shadow: 1px 1px 1px black;
+}
+.sell #tooltip #triangle {
+	border-top: 12px solid #7F9933;
+}
 /*"gallery"*/
 
+#thumbnails, ul#thumbnails li a {
+	border: 1px solid;
+}
 ul#thumbnails {
 	border-color: #9c0;
 }
-
-ul#thumbnails li a:link,
-ul#thumbnails li a:visited {
+ul#thumbnails li a:link, ul#thumbnails li a:visited {
 	border-color: black;
 }
-
-ul#thumbnails li a:hover,
-ul#thumbnails li a:active {
-	border-color: #900
+ul#thumbnails li a:hover, ul#thumbnails li a:active {
+	border-color: #900;
 }
-
-#swapping img {
-	outline: solid black 1px;
-}
-
-#placeholder div button {
-	background: rgba(99, 99, 99, .5);
-	background: hsla(75, 50%, 40%, .3);
-	color: rgba(255, 255, 255, .75);
+#controls button {
 	cursor: pointer;
-	border: 1px solid rgba(255, 255, 255, .75);
+    background-color: #556B2F;
+	border: 1px solid #7F9933;
+	border: 1px solid hsla(75, 50%, 40%, 1);
 	border-radius: .2em;
-	box-shadow: 2px 2px 2px black;
+	-webkit-box-shadow: 2px 2px 4px black;
+	box-shadow: 2px 2px 4px black;
 	text-shadow: 1px 1px 1px black;
-	/*
-    border-top-color: #9c0;
-    border-right-color: #900;
-    border-bottom-color: #080;
-    border-left-color: #C6C084;
-    outline: 0px solid #7F4E1E;*/
+	line-height: 1.6;
+	opacity: 1;
+	background-image: url(../assets/buttons_sprite_lowend8.png);
+	background-repeat: no-repeat;
+	background-position: 50% 0%;
 }
-
-#placeholder div button:hover,
-#placeholder div button:focus {
-	background: rgba(150, 150, 150, .5);
+#controls.static button {
+	border: 1px solid #FFF;
+	border: 1px solid rgba(255, 255, 255, .75);
+}
+#controls>button {
+	background-image: url(../assets/buttons_sprite_lowend.png);
+    background-color: hsla(50, 50%, 40%, .3);
+}
+#controls button:hover, #controls button:focus {
+	background-color: silver;
+	background-color: rgba(150, 150, 150, .5);
 	color: black;
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, .75);
 }
-
-#overlay {
-	opacity: 0.5;
+#controls button#backbutton {
+	background-position: 50% 14.5%;
 }
-
-#gal #footer,
-#gal #footer ul {
-	background-color: hsla(75, 50%, 40%, 1);
+#controls button#playbutton {
+	background-position: 50% 29%;
+}
+#controls.playing button#playbutton {
+	background-position: 50% 44%;
+	opacity: 0.9;
+}
+/*styles for < ie9*/
+button#exit {
+    border: 0px;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+    background-image: url(../assets/close_transparent.png);
+	background-color: #7F9933;
+	color: #7F9933;
+	margin: 0;
+	padding: 0;
+	font-size: 1em;
+	width: 2em;
+	height: 2em;
 }

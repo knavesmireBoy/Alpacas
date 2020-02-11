@@ -1,245 +1,193 @@
-html,
 body {
-	height: 100%;
-}
-
-body {
+	margin: 2em;
 	/*display: flex;
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
-	min-height: 100vh;
-	margin: 3%;
 }
 
-img,
-#sidebar a {
-	display: block;
+/*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
+#checkDummy {
+	margin-top: 1px;
+	display: none;
 }
-
-#footer,
-#content #copy p,
-#content label.read-more-trigger {
+#wrap {
+	margin: 0 auto;
+}
+#wrap, #footer, #main label.read-more-trigger, #main p {
 	position: relative;
 }
 
-/* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
-
-img {
+#header, #aside img {
+	position: relative;
+}
+#wrap, #innerwrap, #footer/*, #nav li, #nav a */{
 	width: 100%;
-	height: auto;
 }
-
-
-/*  the OUTER CONTAINER DIV  */
-
-#wrap {
-    /* https://colintoh.com/blog/display-table-anti-hero */
-	display: table;
-	margin: auto;
-    width: 100%;
-    padding-top: 40%;
+#wrap, #article {
+	overflow: hidden;
 }
-
-
-#header h1 {
-    text-indent: -500%;
-    white-space: nowrap;
-    font-size: 16px;
+#innerwrap, #footer, #main #aside,  #header a, #main .read-more-target, #main label, #main input{
+	overflow: hidden;
 }
-
-#ga_logo {
-    position: absolute;
-    right: 4%;
-	top: 2%;
-    width: 50%;
-	max-width: 16.5em;
-	display: block;
+/*ie 7*/
+#nav li /*,#nav ul */ {
+	overflow: hidden;
 }
 
 #header {
-	margin: 0 0 1em;
-	border: solid #9c0;
-	border-width: 0px 0px 1px;
-	width: 100%;
-	display: table;
+	padding-top: 17em;
 }
-
-#header>* {
-	display: table-cell;
-	vertical-align: bottom;
+#header h1 {
+	margin: -14% 0 0;
+	text-indent: 100%;
 }
-
-a#yag,
-#yorks,
-svg {
-	width: 12%;
-	width: 3em;
-	max-width: 3.75em;
+#header h2 {
+	/* fix IF supporting screen sizes below width of 800px */
+	margin-left: 28%;
 }
-
-#copy p {
-	display: inline;
-	margin: 0;
-}
-
-@keyframes entry {
-	0% {
-		left: 9999px;
-	}
-	90% {
-		left: -5px;
-	}
-	100% {
-		left: 0;
-	}
-}
-
-@keyframes enter {
-	0% {
-		bottom: -100em;
-	}
-	50% {
-		bottom: 1em;
-	}
-	100% {
-		bottom: 0em;
-	}
-}
-
-@keyframes fade {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
-#copy p:nth-of-type(1) {
-	animation: entry 1s 1 ease-out;
-}
-
-#copy p:nth-of-type(2) {
-	animation: entry 3s 1 ease-out;
-}
-
-#copy p:nth-of-type(3) {
-	animation: entry 5s 1 ease-out;
-}
-
-#copy p:nth-of-type(4) {
-	animation: entry 7s 1 ease-in-out;
-}
-
-
-/* https://codepen.io/Idered/pen/AeBgF */
-
-#content .read-more-trigger {
-	display: inline-block;
-	padding: 0 .5em;
-	color: #900;
-	font: .8em/2.5 'Droid Sans', sans-serif;
-	border: 1px solid #ddd;
-	border-radius: .25em;
-}
-
-#content .read-more-trigger:hover {
-	color: #080;
-}
-
-#content .read-more-state~.read-more-target p {
+#header a {
 	position: absolute;
-	opacity: 0;
+	width: 28%;
+	top: 0px;
+	left: 0px;
 }
-
-#content .read-more-state:checked~.read-more-target p {
-	position: relative;
-	opacity: 1;
-}
-
-.read-more-state~.read-more-trigger::before {
-	content: 'Read On';
-}
-
-.read-more-state:checked~.read-more-trigger::before {
-	content: 'Read It';
-}
-
-.wild img {
-	float: left;
-	position: relative;
-	animation: entry 2s 1 ease-out;
-}
-
-.wild img:last-child {
-	/*mask*/
-	margin-left: -500%;
-}
-
-.menu {
-	position: absolute;
-	display: block;
-	top: .7em;
-	height: 3em;
-}
-
-#sidebar ul {
+#header a h1 {
 	white-space: nowrap;
-	background: white;
-	position: absolute;
-	left: -9999px;
-	transition: font .5s;
+	width: 100%;
+	text-indent: 200%;
+}
+#header a h1 img {
+	margin: .5em 0 0;
+}
+a#yag {
+	top: 1%;
+	left: auto;
+	width: 16.6%;
+	right: -1em;
+}
+/* fix for ie at small screens */
+
+#nav div {
+	*display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	*min-width: 166px;
+}
+#nav {
+	width: 23%;
+	min-width: 18%;
+	z-index: 1;
+	margin-left: 1.5em;
+	float: left;
+}
+#nav a, #nav a:link, #nav a:visited {
+	padding: 0 0 0 2.5em;
+}
+#main {
+	padding: .8em 0 0;
+	width: 71%;
+	float: right;
+}
+.no-cssgradients hr {
+	display: none;
 }
 
-#menu-toggle:checked+ul {
-	top: 3em;
-	left: 3%;
+.verbose #main #article p {
+    margin: 0.7em 0;
 }
-
-#sidebar a {
-	padding: .6em;
-	height: 1%;
-	/*ie*/
-}
+#about_alpacas #main #article p {
+        margin: .7em 35% .7em 0;
+    }
+/*https://css-tricks.com/all-about-floats/*/
 
 #footer {
-	/*  animation-name: bobble;
-    animation-delay: 1s;
-    animation-iteration-count: 5;
-    animation-duration: 1s;*/
-	margin-bottom: 1em;
+	padding-top: 15%;
+	clear: both;
+	z-index: 1;
 }
-
 #footer ul {
 	padding: 22% 5% 3.5% 0;
+	padding: 3% 5% 3% 0;
 	line-height: 1.2;
+	line-height: 1;
 }
+#footer li {
+	display: inline-block;
+	display: inline;
+	zoom: 1;
+	margin-left: .25em;
+}
+#footer li:first-child::after {
+	content: " |";
+	margin-right: -.25em;
+}
+#innerwrap input {
+	cursor: pointer;
+	position: absolute;
+	left: -9999px;
+}
+#main #aside {
+	margin: 0;
+	position: absolute;
+	z-index: 0;
+	/* z-index required IF persisting with masking, explore clipping */
+	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
+.no-cssmask #main #aside {
+	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
+	z-index: -1;
+	display: none;
+}
+/* set img color to red */
 
+#aside img {
+	float: right;
+    display: block;
+	color: red;
+}
+/* reset img color to white for ie > 6*/
+
+#aside>img {
+	color: white;
+}
+/* target ie 7 separately*/
+
+*+html #aside img {
+	color: blue;
+}
+/* https://stopdesign.com/eg/ie5mac-bpf */
 
 /* Start Mac IE5 filter \*/
 
-div.wild img {}
+#main p, #main label.read-more-trigger {
+	z-index: 2;
+}
+#main>#aside {
+	width: 76%;
+	right: -23%;
+	bottom: 3%;
+}
+/*??*/
+#nav, #main, #aside img {
+	*display: inline;
+}
+/*
+#innerwrap  {
+    display: flex;
+    flex-flow: row-reverse;
+}
 
+#innerwrap  #nav{
+flex: 3 0 1%;
+margin-right: 6%;
+}
+#innerwrap  #main{
+flex: 10 0 1%;
+}
+
+@media only screen and (max-width: 768px) {
+
+}
+*/
 
 /* End Mac IE5 filter */
-
-.wild {
-	margin: 1em 0;
-	overflow: hidden;
-	z-index: -1;
-	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
-}
-
-.wild img {}
-
-#sidebar,
-#copy,
-#header h2,
-label.menu,
-#menu-toggle+ul {
-	z-index: 1;
-}
-
-.clip-svg {
-	clip-path: url(#myClip);
-}

@@ -1,246 +1,177 @@
-	@media screen and (min-device-width: 320px) {
-	#controls div button {
-		width: 1.8em;
-		height: 1.8em;
-		margin: 0 .3em;
+/* https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/ */
+/*https://css-tricks.com/logic-in-media-queries/*/
+/*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
+/*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/
+
+/*
+-moz-device-pixel-ratio
+Gives the number of device pixels per CSS pixel.
+Note: This media feature is also implemented by Webkit as -webkit-device-pixel-ratio. The min and max prefixes as implemented by Gecko are named min--moz-device-pixel-ratio and max--moz-device-pixel-ratio; but the same prefixes as implemented by Webkit are named -webkit-min-device-pixel-ratio and -webkit-max-device-pixel-ratio.
+*/
+
+@media only screen {
+	ul#thumbnails.gallery li {
+		width: 16.4%;
+		margin: .5%;
 	}
-	#controls {
-		top: 1.6em;
-		padding: 0 .5em;
+	ul#thumbnails.gallery li.portrait {
+		width: 12%;
 	}
-	.showtime #footer ul li {
-		visibility: hidden;
+	ul#thumbnails.gallery {
+		padding: .67%;
 	}
-	#controls div.buttons button {
-		letter-spacing: -6px;
-		padding-right: 6px;
+	ul#thumbnails li a {
+		float: none;/*?*/
 	}
-	#controls {
-		font-size: 1.5em;
+	#controls button {
+		background-image: url(../assets/buttons_sprite.png);
+		background-color: hsla(75, 50%, 40%, .3);
+		background-size: 128%;
+	}
+    button#exit {
+	color: hsla(75, 50%, 40%, .5);
+	padding: .2em .25em;
+	border-radius: 2em;
+	border: 0px solid #FFF;
+	font-size: 2em;
+	text-shadow: 1px 1px 1px hsla(75, 50%, 30%, 1);
+    background: none;
+        width: auto;
+        height: auto;
+        display: inline;
+}
+    
+    .no-textshadow button#exit {
+	color: hsla(75, 50%, 40%, 1);
+    }
+    
+    button#exit:hover, button#exit:focus {
+	background-color: hsla(75, 50%, 40%, .5);
+	color: #FFF;
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+}
+    figcaption {
+	font: normal 1.4em "Handwritten", Georgia, Palatino, serif;
+}
+}
+@media only screen and (max-width: 900px) {
+	#links #main #aside {
+		right: -30%;
 	}
 }
-
-@media screen and (orientation: portrait) and (max-device-width: 320px) {
-	body {
-		margin: 10px;
+@media only screen and (max-width: 768px) {
+	
+	#gallery.showtime #header h2 {
+		margin: 0%;
 	}
-	#swapping img#slidepic,
-	#swapping img#overlay {
-		margin-left: -300px;
+	
+	#sell a {
+		margin-left: 0%;
 	}
-	ul#thumbnails {
-		padding: 2px;
+	#sell.tog a.show {
+		margin: 0;
+		display: block;
 	}
-	ul#thumbnails li {
-		width: 47px;
-		margin: 2px;
+	#article div#sell figure a {
+		margin-left: 0%;
 	}
-	ul#thumbnails li.portrait {
-		width: 34px;
+	
+	.js #alpacas_for_sale #aside img {
+		margin: 0%;
+		float: none;
+		animation: enter 1s 1 ease-out;
 	}
-	#gal #footer ul {
-		padding: 2% 5%;
+	#alpacas_for_sale #main>#aside {
+		position: relative;
+		width: 100%;
+		right: 0%;
 	}
-}
-
-@media screen and (min-width: 480px) {
-	ul#thumbnails li {
-		width: 16.5%;
+	#alpacas_for_sale.sell #main>#aside {
+		position: absolute;
 	}
-	ul#thumbnails li.portrait {
-		width: 11.5%;
+	#alpacas_for_sale #footer {
+		padding-top: 15%;
+		margin-top: -15%;
 	}
-	#controls div button {
-		width: 2.5em;
-		height: 2.5em;
-		margin: 0 .5em;
-	}
-	#controls {
-		top: 2.25em;
-	}
-	#controls div.buttons button {
-		letter-spacing: -4px;
-		padding-right: 4px;
+	#alpacas_for_sale.sell #footer {
+		padding-top: 0;
+		margin-top: 9%;
 	}
 }
-
-@media screen and (orientation: landscape) and (max-device-width: 480px) {
-	body {
-		margin: 16px;
+@media only screen and (max-width: 667px) {
+	.touchevents .inplay #controls {
+		top: 2.1em;
 	}
-	.showtime #sidebar,
-	.showtime #header {
+	/*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
+	#sell.tog table.show {
 		position: absolute;
 		left: -9999px;
 	}
+	#sell a.show {
+		display: none;
+	}
+	#sell.tog a.show, #sell.extent a.show {
+		display: block;
+	}
+	#sell table.show {
+		position: static;
+		left: 0px;
+	}
+	sell #sell {
+		text-align: center;
+	}
+	/* if not using flex */
+	#sell table {
+		float: none;
+		width: 100%;
+		margin: 0;
+	}
+	ul.loop li a {
+		font-size: 1em;
+		padding: 1em .5em 1em 2em;
+	}
+	.sell #sell a.show, .sell #sell.tog table.show {
+		display: none;
+	}
+	 .sell #sell.tog a.show, .sell #sell table.show {
+		display: block;
+	}
+}
+@media only screen and (max-width: 667px) and (orientation: portrait) {
+	#controls {
+		font-size: 1.5em;
+	}
+	.touchevents .inplay #controls {
+		top: 2.2em;
+	}
+}
+@media only screen and (max-width: 375px) and (orientation: portrait) {
+	#list, #sell {
+		font-size: 0.9em;
+	}
+	#list.tab, #list.tab+#sell {
+		font-size: 0.95em;
+	}
+}
+@media only screen and (max-width: 320px) and (orientation: portrait) {
+	html body {
+		font-size: .66em;
+	}
+	figure a {
+		box-shadow: none;
+	}
+	ul#thumbnails.gallery li {
+		width: 16%;
+		margin: 1%;
+	}
 	ul#thumbnails {
-		padding: 3px;
+		padding: 1%;
 	}
-	ul#thumbnails li {
-		width: 73px;
-		margin: 2px;
+	#controls.static {
+		top: -2.7em;
 	}
-	ul#thumbnails li.portrait {
-		width: 51px;
-	}
-	#swapping img#slidepic,
-	#swapping img#overlay {
-		margin-left: -446px;
+	#alpacas_for_sale #tooltip {
+		bottom: 23em;
 	}
 }
-
-@media screen and (min-width: 481px) {
-	#controls {
-		top: 2.4em;
-	}
-	#controls div.buttons button {
-		letter-spacing: 2px;
-		padding: 0 0 0 2px;
-	}
-}
-
-@media screen and (orientation: landscape) and (min-width: 667px) {
-	#placeholder #swapping {
-		width: 80%;
-	}
-	.showtime #controls {
-		margin: 0 10%;
-		top: -3.3em;
-	}
-	#controls div button {
-		width: 2em;
-		height: 2em;
-		margin: 0 .4em;
-	}
-	#gal ul#thumbnails li {
-		/*	width: 32.33%;*/
-	}
-	#gal.showtime #footer ul li {
-		visibility: visible;
-	}
-	#gal.showtime #header,
-	#gal.showtime #footer {
-		clear: both;
-	}
-}
-
-@media screen and (min-device-width: 375px) and (max-device-width: 667px) {
-	#controls {
-		top: 1.9em;
-	}
-    
-    	ul#thumbnails li {
-		width: 106px;
-		margin: 2px;
-	}
-	ul#thumbnails li.portrait {
-		width: 73px;
-	}
-}
-    
-	@media screen and (min-width: 768px) {
-		#forsale div.wild {
-			position: absolute;
-			outline: 1px solid red;
-			width: 75%;
-			left: 25%;
-			bottom: 7%;
-		}
-		#forsale #footer {
-			margin-top: 0;
-		}
-		#gal.showtime #header,
-		#gal.showtime #footer {
-			position: static;
-			left: 0;
-		}
-		#gal.showtime #sidebar {
-			width: 0%;
-		}
-		#gal.showtime #content {
-			width: 100%;
-		}
-		#gal.showtime #header {
-			margin: 7% 0 0 0%;
-			width: 100%;
-		}
-		#gal.showtime #header h2 {
-			display: block;
-			margin-left: 10%;
-		}
-	}
-	@media screen and (min-width: 960px) {
-		#welcome div.wild img {
-			left: 18%;
-		}
-		#welcome #copy p:nth-last-of-type(1) {
-			display: block;
-			margin: 0;
-		}
-		#about_us div.wild {
-			bottom: 4%;
-			width: 67%;
-		}
-		#about_us #content .wild img:first-child {
-			position: absolute;
-			left: -9999px;
-		}
-		#about_us #content .wild img:last-child {
-			position: relative;
-			left: 0;
-			margin-left: 0%;
-		}
-		#about_alpacas div.wild {
-			right: -23%;
-			width: 80%;
-			bottom: 12%;
-		}
-		#about_alpacas #copy {
-			margin-right: 35%;
-		}
-		#about_alpacas .read-more-target p {
-			margin-right: 45%;
-		}
-		#about_alpacas .wild img.mask,
-		#contact_us .wild img.mask,
-		#upkeep .wild img.mask {
-			margin-left: -100.1%;
-		}
-		#stud_services div.wild {
-			bottom: 7%;
-			width: 75%;
-			right: -15%;
-		}
-		#stud_services #copy {
-			width: 30%;
-		}
-		#upkeep div.wild {
-			width: 95%;
-			bottom: 10%;
-			right: -18%;
-		}
-		#upkeep .read-more-target p,
-		#upkeep #copy {
-			margin-right: 40%;
-		}
-		#links div.wild {
-			right: -24%;
-			width: 90%;
-			bottom: 5%;
-		}
-		#contact_us div.wild {
-			right: -19%;
-			width: 64%;
-			bottom: 12%;
-		}
-		.showtime #controls {
-			top: -4em;
-		}
-	}
-	@media screen and (min-width: 1160px) {
-		#about_alpacas div.wild {
-			right: -23%;
-			width: 77%;
-			bottom: 10%;
-		}
-	}

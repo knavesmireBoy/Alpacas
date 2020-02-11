@@ -1,149 +1,140 @@
-@media screen and (min-width: 375px) and (-webkit-min-device-pixel-ratio: 2) {}
+/* https://stackoverflow.com/questions/6917639/css-media-query-not-working-in-ie-9 */
+/*http://browserhacks.com/*/
+/*netrenderer: 9: 997; 10: 1016; 11: 850*/
 
-@media screen and (min-width: 481px) {
-	/*http://nicolasgallagher.com/pure-css-gui-icons/ */
-	/*
-    #header a::before,
-    #header li::before,
-    #header a::after,
-    #header li::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        margin: -8px 0 0;
-        background: #C6C084;
+/* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
+@media only screen {
+	#wrap #header {
+		background-image: url("../assets/header.png");
+	}
+	#nav a:hover, #nav a:active {
+		-webkit-transform: scale(1.01);
+		-ms-transform: scale(1.01);
+		transform: scale(1.01);
+		transform-origin: left;
+	}
+	#innerwrap #nav {
+		font: 700 1em/2.4 Verdana, sans-serif;
+	}
+	#innerwrap #main p {
+		text-shadow: 1px 1px 2px white;
+	}
+	#nav a, #nav a:link, #nav a:visited {
+		background-position: 0% -4%;
+		background-size: 1.75em;
+	}
+	#nav a:hover {
+		background-position: 0% 47%;
+	}
+	#wrap #footer {
+		background: url(../assets/grass.png) no-repeat 50% 0%;
+		background-size: 105%;
+	}
+	#wrap #footer ul {
+		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
+		background-repeat: repeat-x;
+		background-size: 150%;
+	}
+    h2 {
+	font: italic 3.2em "Handwritten", Georgia, cursive;
     }
-    #header a:link,
-    #header a:visited {
-        color: #C6C084;
-    }
-    #header a:hover,
-    #header a:focus,
-    #header a:active {
-        background: #7F4E1E;
-    }
-         
-   #header a::before {
-    left:2px;
-    width:16px;
-    height:12px;
-    margin-top:-6px;
+    /* ... including this: */
+    #nav a, #nav a:link, #nav a:visited {
+	background-image: url(../assets/links.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 -4%;
+	color: #080;
 }
-   
-   #header a::after {
-    left:6px;
-    width:8px;
-    height:2px;
-    margin-top:-8px;
-}
-
- #header ul li::after {
-    left:6px;
-    width:8px;
-    height:8px;
-    margin-top:-4px;
-    background:#fff;*/
-	/* css3 */
-	/*   -webkit-border-radius:8px;
-    -moz-border-radius:8px;
-    border-radius:8px;
-     z-index: 99;
 }
 
-#header a:hover:after, #header a:hover:before,
-#header a:focus:after, #header a:focus:before,
-#header a:active:after, #header a:active:before {
-    background:#7F4E1E;
-}  
-    
-    #header a::before {
-        left: 5px;
-        width: 8px;
-        height: 12px;
-        border: 2px solid #C6C084;
-        background: transparent;
-    }
-    #header a::after {
-        left: 4px;
-        border-width: 3px;
-        border-style: solid;
-        border-color: #fff #C6C084 #C6C084 #fff;
-        margin-top: -9px;
-        background: transparent;
-    }
-    #header a:hover:before,
-    #header a:focus:before,
-    #header a:active:before {
-        border-color: #730800;
-        background: transparent;
-    }
-    #header a:hover:after,
-    #header a:focus:after,
-    #header a:active:after {
-        border-color: #fff #7F4E1E #7F4E1E #fff;
-    }
-      */
-}
-
-@media screen and (min-width: 768px) {
-	#wrap {
-		background: transparent url("../assets/header_960.png") no-repeat;
-		background-size: 100%;
+@media only screen and (max-width: 768px) {
+	#wrap #header {
+		background-image: none;
 	}
-	#sidebar ul,
-	#sidebar:active ul {
-		/*reset*/
-		background: transparent;
-		box-shadow: none;
-		border-width: 0px;
-		font-size: 1em;
+	#main hr {
+		display: none;
 	}
-	#sidebar li:last-child {
-		border-width: 0 0 1px 0;
+	#header h2 {
+		text-indent: 0px;
+		padding-bottom: .1em;
 	}
-	#sidebar a:hover {
-		background: transparent;
+	#nav a, #nav a:link, #nav a:visited {
+		background-image: none;
+		padding: 0em .8em;
 	}
-}
-
-@media screen and (min-width: 960px) {
-	#sidebar ul,
-	#sidebar:active ul,
-	#content {
-		font-size: .95em;
+	#nav ul, #nav:active ul {
+		border: solid #C6C084 1px;
+		background: #FBFCFC;
+		background: linear-gradient(90deg, #FBFCFC, white);
+		border-width: 0px 0px 1px 0px;
+		-webkit-box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
+		box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
+		line-height: 2.7;
+		z-index: 2;
 	}
-	#sidebar a:link,
-	#sidebar a:visited {
-		background: url("../assets/links.png") no-repeat;
-		background-size: 15%;
-		background-position: 0 -1%;
+	.menu {
+		-webkit-box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
+		box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
+		background: url(../assets/menu-icon.png) center no-repeat #C6C084;
+		background-size: 105%;
 	}
-	#sidebar a:hover {
-		background-position: 0 49%;
+	.menu:hover {
+		-webkit-transform: scale(90%);
+		-ms-transform: scale(90%);
+		transform: scale(90%);
 	}
-	#sidebar a:active {
-		background-position: 0 99%;
+	#nav li:last-child {
+		border-width: 0;
 	}
-	#welcome/*sidebar*/
-	ul li:nth-child(1) a,
-	#about_us ul li:nth-child(2) a,
-	#about_alpacas ul li:nth-child(3) a,
-	#upkeep ul li:nth-child(4) a,
-	#stud_services ul li:nth-child(5) a,
-	#forsale ul li:nth-child(6) a,
-	#links ul li:nth-child(7) a,
-	#contact_us ul li:nth-child(8) a,
-	#gal ul li:nth-child(9) a {
-		background: url("../assets/links.png") 0 99%/15% no-repeat;
+	#nav a:hover {
+		background-color: #eeeedd;
+		background-color: rgb(238, 238, 221);
+		text-shadow: 1px 1px 1px white;
 	}
-	/* override above, save repeating sidebar , wrap for weight*/
-	#wrap #footer ul li a {
-		color: white;
-		background: none;
+	/* https://codepen.io/Idered/pen/AeBgF*/
+	/* #main required to override #main { position: relative; }*/
+	#main .read-more-state~.read-more-trigger {
+		font: .8em/2.5 'Droid Sans', sans-serif;
+		border: 1px solid #ddd;
+		border-radius: .25em;
+	}
+	#main .read-more-state~.read-more-trigger::before {
+		content: 'Read On';
+		color: #900;
+		color: rgb(153, 0, 0);
+	}
+	#main .read-more-state:checked~.read-more-trigger::before {
+		content: 'Read It';
+	}
+	#main .read-more-trigger:hover, #main .read-more-state:checked~.read-more-trigger::before {
+		color: #080;
+		color: rgb(0, 136, 0);
+	}
+	#main .read-more-state~.read-more-target p {
+		position: absolute;
+		opacity: 0;
+	}
+	#main .read-more-state:checked~.read-more-target p, .ellipsis.touchevents #main .read-more-target p.show, .ellipsis.touchevents #main .read-more-state~.read-more-target p.elip {
+		position: relative;
+		opacity: 1;
+	}
+	.ellipsis.touchevents #main .read-more-state~.read-more-target p {
+		-webkit-transition: opacity 2s;
+		-o-transition: opacity 2s;
+		transition: opacity 2s;
+	}
+	.ellipsis.touchevents #main .read-more-state~.read-more-target p.elip {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	.ellipsis.touchevents #main .read-more-state~.read-more-target p.show {
+		white-space: normal;
+		text-overflow: inherit;
 	}
 }
-
-@media screen and (min-width: 1280px) {
-
+@media only screen and (min-width: 769px) {
+	#main p, #main hr {
+		animation: fade 3s ease-in;
+	}
 }
