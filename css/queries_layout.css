@@ -163,19 +163,17 @@
 		display: table;
 		clear: both;
 	}
-    .verbose #main #article p {
-	margin: .7em 0 0;
 }
-}
-@media only screen and (max-width: 1000px) {
-    .verbose #main #article p {
-        margin: .7em 0;
+
+@media only screen and (max-width: 1200px) {
+#upkeep #main #article p {
+        margin: .7em 0 0;
     }
 }
 
 @media only screen and (max-width: 850px) {
     #about_alpacas #main #article p {
-        margin: .7em 0;
+        margin: .7em 0 0;
     }
 }
 @media screen and (max-width: 768px) {
@@ -317,6 +315,10 @@
 	.verbose #wrap #footer {
 		margin-top: 1%;
 	}
+         .verbose #main #article p {
+        margin: .7em 0;
+    }
+
 	.js #article hr, .cssgradients hr {
 		display: none;
 	}
