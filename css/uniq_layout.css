@@ -22,6 +22,11 @@
 #about_alpacas p:first-of-type {
 	margin-right: 29%;
 }
+
+#about_alpacas #main #article p {
+    margin: .7em 35% 0 0;
+}
+
 #upkeep #main #aside {
 	width: 119%;
 	max-width: 60em;
@@ -29,16 +34,29 @@
 	bottom: 14%;
 }
 #upkeep p:first-of-type {
-	margin-right: 27%;
+	margin-right: 32%;
 }
+
+#upkeep #main #article p {
+    margin: .7em  27% 0 0;
+}
+
 #stud_services #main #aside {
 	width: 135%;
 	right: -20%;
 	bottom: 2%;
 }
+
 #stud_services.verbose #article p {
-	margin-right: 69%;
+	margin-right: 20%;
 }
+
+#stud_services.verbose #article {
+    padding: 1em;
+	background-color: darkkhaki;
+    width: 40%;
+}
+
 #links #main #aside {
 	width: 135%;
 	max-width: 75em;
@@ -48,7 +66,7 @@
 #contact_us #main #aside {
 	width: 95%;
 	max-width: 55em;
-	right: -20%;
+	right: -18%;
 	bottom: 13%;
 }
 #contact_us p {
