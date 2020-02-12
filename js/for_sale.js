@@ -159,8 +159,8 @@ if (!window.gAlp) {
 		],
 		utils = gAlp.Util,
 		sliceArray = function (list, end) {
-			//return list.slice(_.random(0, end || list.length));
-			return list.slice(0,0);
+			return list.slice(_.random(0, end || list.length));
+			//return list.slice(0,0);
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -230,11 +230,11 @@ if (!window.gAlp) {
 			adapter = adapter || {};
 			adapter = utils.simpleAdapter(allpairs, adapter, subject);
 			adapter[override] = function () {
-				subject.remove(subject);
+				subject.deleteListeners(subject);
 			};
 			return adapter;
 		},
-		handlerpair = ['addListener', 'remove'],
+		handlerpair = ['addListener', 'deleteListeners'],
 		renderpair = ['render', 'unrender'],
 		tooltip_pairs = [
 			['render', 'unrender'],

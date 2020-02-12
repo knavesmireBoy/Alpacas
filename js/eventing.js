@@ -101,7 +101,7 @@ window.gAlp.Eventing = (function (eventing) {
 				},
 				//rem: _.compose(curry2(splice)(0), curry2(isfound)(Infinity), _.partial(remove, list)),
 				//remove: _.compose(curry2(splice)(1), curry2(isfound)(0), _.partial(remove, list)),
-				remove: function (arg) {
+				deleteListeners: function (arg) {
 					var list = getList(),
 						item,
 						n;
@@ -166,7 +166,7 @@ window.gAlp.Eventing = (function (eventing) {
 			this.getElement = function () {
 				return config.element;
 			};
-			_.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
+			_.each(['prevent', 'deleteListeners', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 			this.el = config.element + '_' + window.gAlp.Eventing.listEvents().length + '_' + (count += 1) + '__' + config.element.id;
 			return _.extendOwn({}, this);
 		};
@@ -190,7 +190,7 @@ window.gAlp.Eventing = (function (eventing) {
 				return config.element;
 			};
             this.el = config.element + '_' + (count += 1);
-			_.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
+			_.each(['prevent', 'deleteListeners', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 			return _.extendOwn({}, this);
 		};
 	} else { // older browsers
@@ -211,7 +211,7 @@ window.gAlp.Eventing = (function (eventing) {
 				return config.element;
 			};
 			this.el = config.element + '_' + (count += 1);
-			_.each(['prevent', 'remove', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
+			_.each(['prevent', 'deleteListeners', 'flush', 'listEvents', 'triggerEvent'], _.partial(mapper, EventCache, this));
 			return _.extendOwn({}, this);
 		};
 	}

@@ -133,11 +133,11 @@
 			adapter = adapter || {};
 			adapter = utils.simpleAdapter(allpairs, adapter, subject);
 			adapter[override] = function () {
-				subject.remove(subject);
+				subject.deleteListeners(subject);
 			};
 			return adapter;
 		},
-		handlerpair = ['addListener', 'remove'],
+		handlerpair = ['addListener', 'deleteListeners'],
 		renderpair = ['render', 'unrender'],
 		adapterFactory = function () {
 			//fresh instance of curried function per adapter
@@ -174,7 +174,7 @@
 						});
 					//is res always 1???
 					if (!failed(res)) {
-						gAlp.Eventing.remove(res, 1);
+						gAlp.Eventing.deleteListeners(res, 1);
 					}
 				},
 				presenter_unrender = ptL(invokemethod, presenter, null, 'unrender'),
