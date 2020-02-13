@@ -199,8 +199,8 @@
 		mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
 	}
 	#upkeep #aside img {
-		-webkit-mask: url('../images/upkeep_masking.png') -1px 0px / cover;
-		mask: url('../images/upkeep_masking.png') -1px 0px / cover;
+		-webkit-mask: url('../images/upkeep_masking.png') -1px -1px / cover;
+		mask: url('../images/upkeep_masking.png') -1px -1px / cover;
 	}
 	#stud_services #aside img:first-child {
 		-webkit-mask: url('../images/stud_masking.png') -1px 0px / cover;

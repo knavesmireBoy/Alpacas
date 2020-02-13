@@ -164,15 +164,15 @@
 		clear: both;
 	}
 
-}
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1200px) {
 #upkeep #main #article p {
         margin: .7em 0 0;
     }
 }
 
 @media only screen and (max-width: 850px) {
-   #about_alpacas #main #article p {
+
+    #about_alpacas #main #article p {
         margin: .7em 0 0;
     }
 }
@@ -318,6 +318,7 @@
         .verbose #main #article p {
         margin: .7em 0;
     }
+
 	.js #article hr, .cssgradients hr {
 		display: none;
 	}

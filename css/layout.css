@@ -91,11 +91,13 @@ a#yag {
 .no-cssgradients hr {
 	display: none;
 }
-
 .verbose #main #article p {
     margin: 0.7em 0 0;
 }
 
+#about_alpacas #main #article p, #upkeep #main #article p {
+    margin: .7em 35% 0 0;
+    }
 /*https://css-tricks.com/all-about-floats/*/
 
 #footer {
