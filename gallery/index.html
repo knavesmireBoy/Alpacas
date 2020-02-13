@@ -18,13 +18,13 @@
 </head>             
 <body id="gallery">
 	<div id="wrap">
-		<div id="header">
+		<header role="banner">
 			<a href="..">
 			<h1>Granary Alpacas<img id="ga_logo" src="../assets/gA_logo_800.png"></h1></a>
 			<h2>Gallery</h2><a href="http://www.yorkshirealpacagroup.co.uk/" id="yag"><img src="../assets/yag_logo_800.png"></a>
-		</div>
+		</header>
 		<div id="innerwrap">
-			<div id="main">
+			<main role="main">
                 <ul id="thumbnails" class="gallery">
                     <li><a href="../gal/big/New_arrivals.jpg"><img alt="Our new arrivals" src="../gal/big/New_arrivals.jpg"></a></li>
                     <li><a href="../gal/big/PabloANDMum.jpg"><img alt="Pablo and Mum" src="../gal/big/PabloANDMum.jpg"></a></li>
@@ -44,9 +44,9 @@
                     <li><a href="../gal/big/wotthis.jpg"><img alt="What is this?" src="../gal/big/wotthis.jpg"></a></li>
                     <li><a href="../gal/big/Jose.jpg"><img alt="Jose" src="../gal/big/Jose.jpg"></a></li>
                 </ul>
-			</div>
-			<div id="nav">
-				<label class="menu" for="menu-toggle"></label> <input id="menu-toggle" type="checkbox">
+			</main>
+			<nav>
+				<div class="inner"><label class="menu" for="menu-toggle"></label> <input id="menu-toggle" type="checkbox">
                 <ul>
                     <li><a href="..">Welcome</a></li>
                     <li><a href="../about_us/">About Us</a></li>
@@ -59,8 +59,8 @@
                     <li><a href=".">Gallery</a></li>
                 </ul>
 			</div>
-		</div>
-		<div id="footer">
+            </nav></div>
+		<footer role="contentinfo">
 			<ul>
 				<li>
 					<a href="../contact_us/"><b>Tel:</b> 01759 373133</a>
@@ -69,7 +69,7 @@
 					<a href="mailto:info@granaryalpacas.co.uk">info@granaryalpacas.co.uk</a>
 				</li>
 			</ul>
-		</div>
+		</footer>
 	</div>
     
     <script src="../js/viewportSize.js"></script>

@@ -10,14 +10,14 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 */
 
 @media only screen {
-	ul#thumbnails.gallery li {
+	.gallery li {
 		width: 16.4%;
 		margin: .5%;
 	}
-	ul#thumbnails.gallery li.portrait {
+	.gallery li.portrait {
 		width: 12%;
 	}
-	ul#thumbnails.gallery {
+	.gallery {
 		padding: .67%;
 	}
 	ul#thumbnails li a {
@@ -55,14 +55,15 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	font: normal 1.4em "Handwritten", Georgia, Palatino, serif;
 }
 }
+
 @media only screen and (max-width: 900px) {
-	#links #main #aside {
+	#links main aside {
 		right: -30%;
 	}
 }
 @media only screen and (max-width: 768px) {
 	
-	#gallery.showtime #header h2 {
+	#gallery.showtime header h2 {
 		margin: 0%;
 	}
 	
@@ -73,28 +74,28 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		margin: 0;
 		display: block;
 	}
-	#article div#sell figure a {
+	article.intro div#sell figure a {
 		margin-left: 0%;
 	}
 	
-	.js #alpacas_for_sale #aside img {
+	.js #alpacas_for_sale aside img {
 		margin: 0%;
 		float: none;
 		animation: enter 1s 1 ease-out;
 	}
-	#alpacas_for_sale #main>#aside {
+	#alpacas_for_sale main>aside {
 		position: relative;
 		width: 100%;
 		right: 0%;
 	}
-	#alpacas_for_sale.sell #main>#aside {
+	#alpacas_for_sale.sell main>aside {
 		position: absolute;
 	}
-	#alpacas_for_sale #footer {
+	#alpacas_for_sale footer {
 		padding-top: 15%;
 		margin-top: -15%;
 	}
-	#alpacas_for_sale.sell #footer {
+	#alpacas_for_sale.sell footer {
 		padding-top: 0;
 		margin-top: 9%;
 	}
@@ -161,7 +162,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	figure a {
 		box-shadow: none;
 	}
-	ul#thumbnails.gallery li {
+	.gallery li {
 		width: 16%;
 		margin: 1%;
 	}

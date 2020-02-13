@@ -1,36 +1,36 @@
 .no-js body {
 	background-color: khaki;
 }
-#header {
+header {
 	background-image: url("../assets/header__964.png");
 	background-position: 50%;
 	background-repeat: no-repeat;
 }
-#nav {
+nav {
 	white-space: nowrap;
 	font: 700 1em/2 Verdana, sans-serif;
 }
-#nav li {
+nav li {
 	border-bottom: solid #C6C084 1px;
 }
-#nav a, #nav a:link, #nav a:visited {
+nav a, nav a:link, nav a:visited {
 	background-image: url(../assets/links.jpg);
 	background-repeat: no-repeat;
 	background-position: 0 -4%;
 	color: #080;
 }
-#nav a:hover {
+nav a:hover {
 	text-decoration: none;
 	color: #6e2900;
 	background-position: 0 47%;
 }
 /*keep separate to keep early ie happy!*/
-/* ie6 requires "#nav a.current:visited" */
-#nav a.current, #nav a.current:visited, #nav a:active {
+/* ie6 requires "nav a.current:visited" */
+nav a.current, nav a.current:visited, nav a:active {
 	color: rgb(153, 0, 0);
 	background-position: 0 99%;
 }
-#footer {
+footer {
 	font: 700 1.25em/200% Georgia;
 	letter-spacing: -1px;
 	white-space: nowrap;
@@ -38,18 +38,18 @@
 	background-position: 50% 0%;
 	color: white;
 }
-#footer ul {
+footer ul {
 	background-color: #759707;
 	border-top: solid 1px #9c0;
 	background-position: 50% 100%;
 }
-#footer li {
+footer li {
 	line-height: 2;
 }
-#footer a {
+footer a, footer a:link, footer a:visited{
 	color: white;
 }
-#footer, #footer ul {
+footer, footer ul {
 	background-image: url("../assets/grass_960.png");
 	background-repeat: no-repeat;
 }
@@ -64,7 +64,7 @@ hr {
 	background-position: 50%;
 	box-sizing: border-box;
 }
-#welcome #nav li:nth-child(1) a, #about_us #nav li:nth-child(2) a, #about_alpacas #nav li:nth-child(3) a, #upkeep #nav li:nth-child(4) a, #stud_services #nav li:nth-child(5) a, #alpacas_for_sale #nav li:nth-child(6) a, #links #nav li:nth-child(7) a, #contact_us #nav li:nth-child(8) a, #gallery #nav li:nth-child(9) a {
+#welcome nav li:nth-child(1) a, #about_us nav li:nth-child(2) a, #about_alpacas nav li:nth-child(3) a, #upkeep nav li:nth-child(4) a, #stud_services nav li:nth-child(5) a, #alpacas_for_sale nav li:nth-child(6) a, #links nav li:nth-child(7) a, #contact_us nav li:nth-child(8) a, #gallery nav li:nth-child(9) a {
 	color: #900;
 	background-position: 0 99%;
 }
@@ -73,46 +73,46 @@ MUST BE: progid:DXImageTransform
 _NOT BE: progid: DXImageTransform
 \*/
 
-*html #header {
+*html header {
 	background: none;
 	width: 100%;
 	/*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/header_752.png", sizingMethod="crop");*/
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/header__964.png", sizingMethod="crop");
 }
-*html a#yag img, *html #header h1 img, *html #alpacas_for_sale #main #aside img {
+*html a#yag img, *html header h1 img, *html #alpacas_for_sale main aside img {
 	filter: alpha(opacity=0);
 }
 *html a#yag {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/yag_logo_ie.png", sizingMethod="scale");
 }
-*html #header h1 {
+*html header h1 {
 	margin: 0;
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/ga_logo_ie.png", sizingMethod="crop");
 }
-*html #alpacas_for_sale #main #aside {
+*html #alpacas_for_sale main aside {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../images/for_sale.png", sizingMethod="scale");
 }
-*html #wrap #footer, *html #wrap #footer ul {
+*html #wrap footer, *html #wrap footer ul {
 	background: none;
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="../assets/grass_960.png", sizingMethod="crop");
 }
-*html #gallery #wrap #footer, *html #gallery #wrap #footer ul {
+*html #gallery #wrap footer, *html #gallery #wrap footer ul {
 	filter: -;
 	background: url("../assets/grass_960.png") 50% 100% no-repeat;
 }
 
-*html #welcome #header {
+*html #welcome header {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/header__964.png", sizingMethod="crop");
 }
 
 *html #welcome a#yag {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/yag_logo_ie.png", sizingMethod="scale");
 }
-*html #welcome #header h1 {
+*html #welcome header h1 {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/ga_logo_ie.png", sizingMethod="crop");
 }
 
-*html #welcome  #footer, *html #welcome  #footer ul {
+*html #welcome  footer, *html #welcome  footer ul {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/grass_960.png", sizingMethod="crop");
 }
 

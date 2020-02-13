@@ -47,7 +47,7 @@ img {
 	width: 100%;
 	/*	height: auto; */
 }
-img, #nav a {
+img, nav a {
 	display: block;
 }
 button {

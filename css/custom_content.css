@@ -34,7 +34,7 @@ ul.tab a {
 	color: #7F9933;
 	text-transform: uppercase;
 }
-#article ul li a:hover {
+article.intro ul li a:hover {
 	text-decoration: none;
 }
 .no-nthchild ul.loop li a {

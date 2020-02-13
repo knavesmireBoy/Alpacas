@@ -136,12 +136,12 @@
 	}
 }
 @media only screen {
-	#header {
+	header {
 		padding-top: 22%;
 		background-image: url("../assets/header.png");
 		background-size: 100%;
 	}
-	#nav {
+	nav {
 		margin-left: 1em;
 	}
 	#wrap #innerwrap {
@@ -151,14 +151,14 @@
 		min-width: 500px;
 		max-width: 80em;
 	}
-	#main #aside {
+	main aside {
 		position: absolute;
 	}
-	#aside {
+	aside {
 		-webkit-animation: alpacasBounce 3s 1 ease-out;
 		animation: alpacasBounce 3s 1 ease-out;
 	}
-	#aside:after {
+	aside:after {
 		content: "";
 		display: table;
 		clear: both;
@@ -166,13 +166,13 @@
 }
 
 @media only screen and (max-width: 1200px) {
-#upkeep #main #article p {
+#upkeep main article.intro p {
         margin: .7em 0 0;
     }
 }
 
 @media only screen and (max-width: 850px) {
-    #about_alpacas #main #article p {
+    #about_alpacas main article.intro p {
         margin: .7em 0 0;
     }
 }
@@ -180,27 +180,27 @@
 	#wrap {
 		min-width: 250px;
 	}
-	#header a h1 img {
+	header a h1 img {
 		margin: 0;
 	}
 	body {
 		margin: 3.5%;
 	}
-	#wrap, #main, #nav {
+	#wrap, main, nav {
 		width: 100%;
 	}
-	#header {
+	header {
 		display: table;
 		width: 100%;
 		padding-top: 14em;
 	}
-	#header>* {
+	header>* {
 		display: table-cell;
 		vertical-align: bottom;
 		margin: 0px;
 		width: 100%;
 	}
-	#header a:first-child {
+	header a:first-child {
 		width: 22em;
 		left: auto;
 		right: -3.7em;
@@ -210,7 +210,7 @@
 		bottom: -.1em;
 		width: 6em;
 	}
-	#nav ul, #nav:active ul {
+	nav ul, nav:active ul {
 		position: absolute;
 		left: -999em;
 		top: 3em;
@@ -230,105 +230,105 @@
 	.read-more-target {
 		margin-top: .7em;
 	}
-	.verbose #main p {
+	.verbose #wrap p {
 		margin: 0 0 .7em;
 	}
-	#article p span {
+	article.intro p span {
 		display: inline-block;
 		position: relative;
 	}
-	#article p span:nth-of-type(1), #contact_us #article p:nth-of-type(1) {
+	article.intro p span:nth-of-type(1), #contact_us article.intro p:nth-of-type(1) {
 		-webkit-animation: entry .5s ease-out;
 		animation: entry .5s ease-out;
 	}
-	#article p span:nth-of-type(2), #contact_us #article p:nth-of-type(2) {
+	article.intro p span:nth-of-type(2), #contact_us article.intro p:nth-of-type(2) {
 		-webkit-animation: entry 1.5s ease-out;
 		animation: entry 1.5s ease-out;
 	}
-	#article p span:nth-of-type(3), #contact_us #article p:nth-of-type(3) {
+	article.intro p span:nth-of-type(3), #contact_us article.intro p:nth-of-type(3) {
 		-webkit-animation: entry 2.5s ease-out;
 		animation: entry 2.5s ease-out;
 	}
-	#article p span:nth-of-type(4), #contact_us #article p:nth-of-type(4) {
+	article.intro p span:nth-of-type(4), #contact_us article.intro p:nth-of-type(4) {
 		-webkit-animation: entry 3s ease-in-out;
 		animation: entry 3s ease-in-out;
 	}
-	#article p span:nth-of-type(5), #contact_us #article p:nth-of-type(5) {
+	article.intro p span:nth-of-type(5), #contact_us article.intro p:nth-of-type(5) {
 		-webkit-animation: entry 3.5s ease-in-out;
 		animation: entry 3.5s ease-in-out;
 	}
-	#article p span:nth-of-type(6) {
+	article.intro p span:nth-of-type(6) {
 		-webkit-animation: entry 4s 1 ease-in-out;
 		animation: entry 4s 1 ease-in-out;
 	}
-	#stud_services #article p:nth-of-type(1) span:nth-of-type(1) {
+	#stud_services article.intro p:nth-of-type(1) span:nth-of-type(1) {
 		-webkit-animation: entry .5s ease-out;
 		animation: entry .5s ease-out;
 	}
-	#stud_services #article p:nth-of-type(1) span:nth-of-type(2) {
+	#stud_services article.intro p:nth-of-type(1) span:nth-of-type(2) {
 		-webkit-animation: entry 1s ease-out;
 		animation: entry 1s ease-out;
 	}
-	#stud_services #article p:nth-of-type(1) span:nth-of-type(3) {
+	#stud_services article.intro p:nth-of-type(1) span:nth-of-type(3) {
 		-webkit-animation: entry 1.5s ease-out;
 		animation: entry 1.5s ease-out;
 	}
-	#stud_services #article p:nth-of-type(2) span:nth-of-type(1) {
+	#stud_services article.intro p:nth-of-type(2) span:nth-of-type(1) {
 		-webkit-animation: entry 2.5s ease-out;
 		animation: entry 2.5s ease-out;
 	}
-	#stud_services #article p:nth-of-type(2) span:nth-of-type(2) {
+	#stud_services article.intro p:nth-of-type(2) span:nth-of-type(2) {
 		-webkit-animation: entry 3s ease-out;
 		animation: entry 3s ease-out;
 	}
-	#stud_services #article p:nth-of-type(3) span:nth-of-type(1) {
+	#stud_services article.intro p:nth-of-type(3) span:nth-of-type(1) {
 		-webkit-animation: entry 3.5s ease-out;
 		animation: entry 3.5s ease-out;
 	}
-	#stud_services #article p:nth-of-type(3) span:nth-of-type(2) {
+	#stud_services article.intro p:nth-of-type(3) span:nth-of-type(2) {
 		-webkit-animation: entry 4s ease-out;
 		animation: entry 4s ease-out;
 	}
-	#stud_services #article p:nth-of-type(4) span {
+	#stud_services article.intro p:nth-of-type(4) span {
 		-webkit-animation: entry 6s ease-out;
 		animation: entry 6s ease-out;
 	}
-	/*#wrap reqd to counter for example #welcome #main>#aside direct child selector reqd to hide rule from ie 6*/
-	#wrap #main #aside {
+	/*#wrap reqd to counter for example #welcome main>aside direct child selector reqd to hide rule from ie 6*/
+	#wrap main aside {
 		-webkit-animation: alpacasSlide 1s 1 ease-out;
 		animation: alpacasSlide 1s 1 ease-out;
 		position: static;
 		width: 100%;
 	}
-	#main .read-more-trigger {
+	main .read-more-trigger {
 		display: inline-block;
 		padding: 0 .5em;
 		margin: .5em 0;
 	}
-	.ellipsis.touchevents #main .read-more-trigger {
+	.ellipsis.touchevents main .read-more-trigger {
 		display: none;
 	}
-	#wrap #footer {
+	#wrap footer {
 		padding-top: 0%;
 		margin-top: 9%;
 	}
-	.verbose #wrap #footer {
+	.verbose #wrap footer {
 		margin-top: 1%;
 	}
-         .verbose #main #article p {
+    .verbose #wrap article.intro p {
         margin: .7em 0;
     }
 
-	.js #article hr, .cssgradients hr {
+	.js article.intro hr, .cssgradients hr {
 		display: none;
 	}
-	.js body.sell #innerwrap #main #aside {
+	.js body.sell #innerwrap main aside {
 		display: none;
 	}
-	#header {
+	header {
 		background: none;
 	}
-	#aside img {
+	aside img {
 		float: none;
 	}
 }
@@ -338,27 +338,27 @@
 	body {
 		font-size: 0.8em;
 	}
-	#header {
+	header {
 		padding-top: 11em;
 	}
-	#header h1 {
+	header h1 {
 		margin: -1.9em 0 0;
 	}
 	a#yag {
 		width: 5em;
 	}
-	#footer li {
+	footer li {
 		display: block;
 		line-height: 1.3;
 		margin: 0;
 	}
-	#footer li:first-child::after {
+	footer li:first-child::after {
 		content: "";
 		margin: 0;
 	}
 }
 @media screen\0 {
-	#header a {
+	header a {
 		top: -5%;
 	}
 	a#yag {

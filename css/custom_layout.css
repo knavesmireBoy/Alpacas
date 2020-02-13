@@ -1,40 +1,40 @@
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
 
-#alpacas_for_sale #main #aside {
+#alpacas_for_sale main aside {
 	width: 100%;
 	z-index: -1;
 	display: block;
 }
-#alpacas_for_sale #main>#aside {
+#alpacas_for_sale main>aside {
 	width: 72%;
 }
-#alpacas_for_sale.sell #main #aside {
+#alpacas_for_sale.sell main aside {
 	display: none;
 }
 /* early ie requires ul#list, ul#list li to pull content above #sell div */
-#alpacas_for_sale #aside, ul#list, ul#list li, ul#thumbnails, #gallery #main, #controls {
+#alpacas_for_sale aside, ul#list, ul#list li, ul#thumbnails, #gallery main, #controls {
 	position: relative;
 }
 #sell, #sell a, ul#thumbnails, ul#thumbnails a, ul#list {
 	overflow: hidden;
 }
-#alpacas_for_sale #main #aside {
+#alpacas_for_sale main aside {
 	position: absolute;
 	bottom: 12%;
 	right: 0%;
 	margin: 0;
 	z-index: 1;
 }
-#alpacas_for_sale #aside img {
+#alpacas_for_sale aside img {
 	float: none;
 }
-#alpacas_for_sale .sell #aside, .touch {
+#alpacas_for_sale .sell aside, .touch {
 	left: -9999px;
 }
-#article {
+article.intro {
 	*height: 1%;
 }
-#alpacas_for_sale #header {
+#alpacas_for_sale header {
 	z-index: 0;
 	margin-bottom: 1em;
 }
@@ -95,7 +95,7 @@ ul.loop li a::after, ul.loop li a::before {
 	*padding: .6em .3em;
 	*height: 1%;
 }
-#sell table, #sell.tog table.show, #sell.extent table.show, .sell #aside {
+#sell table, #sell.tog table.show, #sell.extent table.show, .sell aside {
 	position: absolute;
 	left: -9999px;
 }
@@ -138,7 +138,7 @@ html.js #sell a, html.js #sell table {
 html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 	*display: block;
 }
-#alpacas_for_sale #article {
+#alpacas_for_sale article.intro {
 	position: relative;
 	width: 100%;
 }
@@ -183,7 +183,6 @@ ul#thumbnails li a {
 ul#thumbnails li {
 	float: left;
 	width: 100%;
-	display: block;
 }
 ul#thumbnails {
 	margin: 6% auto 0;
@@ -240,15 +239,15 @@ ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thum
 ul#thumbnails li.go {
 	visibility: hidden;
 }
-#gallery #footer {
+#gallery footer {
 	padding: 0%;
 	margin-top: 4%;
 	border-width: 0px;
 }
-#gallery.showtime #footer {
+#gallery.showtime footer {
 	margin-top: 0%;
 }
-#gallery #footer ul>* {
+#gallery footer ul>* {
 	-webkit-transition: all 1s;
 	-o-transition: all 1s;
 	transition: all 1s;
@@ -276,7 +275,7 @@ li#slide, li#paused {
 	opacity: 1;
 	border: solid 1px red;
 }
-#gallery #main {
+#gallery main {
 	padding: 0;
 	text-align: center;
 }
@@ -302,10 +301,10 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
 .touchevents #gallery.showtime #innerwrap {
 	padding-bottom: 6em;
 }
-.touchevents #gallery.showtime #footer {
+.touchevents #gallery.showtime footer {
 	margin-top: -5em;
 }
-.touchevents #wrap.inplay #footer ul>* {
+.touchevents #wrap.inplay footer ul>* {
 	opacity: 0;
 }
 .no-touchevents button#forwardbutton:hover {

@@ -4,7 +4,7 @@
 /*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
-(function (doc, visiblity, mq, query, cssanimations, touchevents, report) {
+(function (doc, visiblity, mq, query, cssanimations, touchevents, report, main, footer) {
 	"use strict";
 
 	function getResult(arg) {
@@ -178,8 +178,8 @@
 					}
 				},
 				presenter_unrender = ptL(invokemethod, presenter, null, 'unrender'),
-				$exit = makeElement(doTwice(utils.getter)('getElement'), ptL(clicker, _.compose(fixcache, presenter_unrender)), utils.setText('&#x2716'), ptL(setAttrs, exitconf), anCrIn(thumbs, $('main')), always('button')),
-				$controls = makeElement(ptL(klasAdd, 'static'), ptL(setAttrs, controlsconf), anCr($('main')), always('div'));
+				$exit = makeElement(doTwice(utils.getter)('getElement'), ptL(clicker, _.compose(fixcache, presenter_unrender)), utils.setText('&#x2716'), ptL(setAttrs, exitconf), anCrIn(thumbs, main), always('button')),
+				$controls = makeElement(ptL(klasAdd, 'static'), ptL(setAttrs, controlsconf), anCr(main), always('div'));
 			comp.add(_.extend(gAlp.Composite(), $thumbs, {
 				unrender: ptL(klasAdd, 'gallery', thumbs)
 			}));
@@ -432,7 +432,7 @@
 				var enterHandler = ptL(utils.addHandler, 'mouseenter'),
 					handler = ptL(klasAdd, 'static', getControls);
 				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, handler), getControls)();
-				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, ptL(klasRem, 'static', getControls)))($('footer'));
+				_.compose(stage_two_rpt.add, adapterFactory(), utils.addEvent(enterHandler, ptL(klasRem, 'static', getControls)))(footer);
 				stage_two_rpt.add(command);
 			},
 			makeToolTip = function () {
@@ -596,18 +596,7 @@
 						makeElement(ptL(setAttrs, conf), anCr(getResult(tgt)), always('button')).render();
 					});
 				},
-				handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render),
-                doHandler = function(e){
-                    try {
-                      handler(e); 
-                        utils.highLighter.perform();
-                        //report.innerHTML = navigator.userAgent;
-                    }
-                    catch(er){
-                        report.innerHTML = er;
-                    }
-                    
-                };
+				handler = _.compose(ptL(makeButtons, ptL($, 'controls')), prepareNavHandlers, stage_one_comp.render);
 			presenter.addAll(stage_one_comp, stage_one_rpt, stage_two_comp);
 			stage_two_comp.addAll(stage_two_rpt, stage_two_persist);
             utils.highLighter.perform();
@@ -615,4 +604,4 @@
 			_.compose(stage_one_comp.add, myrevadapter, utils.addEvent(clicker, ptL(invokeWhen, isImg, handler)))(thumbs);
 		}());
 	}());
-}(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
+}(document, 'show', Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0], document.getElementsByTagName('main')[0], document.getElementsByTagName('footer')[0]));

@@ -4,33 +4,33 @@
 
 /* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
 @media only screen {
-	#wrap #header {
+	#wrap header {
 		background-image: url("../assets/header.png");
 	}
-	#nav a:hover, #nav a:active {
+	nav a:hover, nav a:active {
 		-webkit-transform: scale(1.01);
 		-ms-transform: scale(1.01);
 		transform: scale(1.01);
 		transform-origin: left;
 	}
-	#innerwrap #nav {
+	#innerwrap nav {
 		font: 700 1em/2.4 Verdana, sans-serif;
 	}
-	#innerwrap #main p {
+	#innerwrap main p {
 		text-shadow: 1px 1px 2px white;
 	}
-	#nav a, #nav a:link, #nav a:visited {
+	nav a, nav a:link, nav a:visited {
 		background-position: 0% -4%;
 		background-size: 1.75em;
 	}
-	#nav a:hover {
+	nav a:hover {
 		background-position: 0% 47%;
 	}
-	#wrap #footer {
+	#wrap footer {
 		background: url(../assets/grass.png) no-repeat 50% 0%;
 		background-size: 105%;
 	}
-	#wrap #footer ul {
+	#wrap footer ul {
 		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
 		background-repeat: repeat-x;
 		background-size: 150%;
@@ -39,7 +39,7 @@
 	font: italic 3.2em "Handwritten", Georgia, cursive;
     }
     /* ... including this: */
-    #nav a, #nav a:link, #nav a:visited {
+    nav a, nav a:link, nav a:visited {
 	background-image: url(../assets/links.jpg);
 	background-repeat: no-repeat;
 	background-position: 0 -4%;
@@ -48,21 +48,21 @@
 }
 
 @media only screen and (max-width: 768px) {
-	#wrap #header {
+	#wrap header {
 		background-image: none;
 	}
-	#main hr {
+	main hr {
 		display: none;
 	}
-	#header h2 {
+	header h2 {
 		text-indent: 0px;
 		padding-bottom: .1em;
 	}
-	#nav a, #nav a:link, #nav a:visited {
+	nav a, nav a:link, nav a:visited {
 		background-image: none;
 		padding: 0em .8em;
 	}
-	#nav ul, #nav:active ul {
+	nav ul, nav:active ul {
 		border: solid #C6C084 1px;
 		background: #FBFCFC;
 		background: linear-gradient(90deg, #FBFCFC, white);
@@ -83,58 +83,58 @@
 		-ms-transform: scale(90%);
 		transform: scale(90%);
 	}
-	#nav li:last-child {
+	nav li:last-child {
 		border-width: 0;
 	}
-	#nav a:hover {
+	nav a:hover {
 		background-color: #eeeedd;
 		background-color: rgb(238, 238, 221);
 		text-shadow: 1px 1px 1px white;
 	}
 	/* https://codepen.io/Idered/pen/AeBgF*/
-	/* #main required to override #main { position: relative; }*/
-	#main .read-more-state~.read-more-trigger {
+	/* main required to override main { position: relative; }*/
+	main .read-more-state~.read-more-trigger {
 		font: .8em/2.5 'Droid Sans', sans-serif;
 		border: 1px solid #ddd;
 		border-radius: .25em;
 	}
-	#main .read-more-state~.read-more-trigger::before {
+	main .read-more-state~.read-more-trigger::before {
 		content: 'Read On';
 		color: #900;
 		color: rgb(153, 0, 0);
 	}
-	#main .read-more-state:checked~.read-more-trigger::before {
+	main .read-more-state:checked~.read-more-trigger::before {
 		content: 'Read It';
 	}
-	#main .read-more-trigger:hover, #main .read-more-state:checked~.read-more-trigger::before {
+	main .read-more-trigger:hover, main .read-more-state:checked~.read-more-trigger::before {
 		color: #080;
 		color: rgb(0, 136, 0);
 	}
-	#main .read-more-state~.read-more-target p {
+	main .read-more-state~.read-more-target p {
 		position: absolute;
 		opacity: 0;
 	}
-	#main .read-more-state:checked~.read-more-target p, .ellipsis.touchevents #main .read-more-target p.show, .ellipsis.touchevents #main .read-more-state~.read-more-target p.elip {
+	main .read-more-state:checked~.read-more-target p, .ellipsis.touchevents main .read-more-target p.show, .ellipsis.touchevents main .read-more-state~.read-more-target p.elip {
 		position: relative;
 		opacity: 1;
 	}
-	.ellipsis.touchevents #main .read-more-state~.read-more-target p {
+	.ellipsis.touchevents main .read-more-state~.read-more-target p {
 		-webkit-transition: opacity 2s;
 		-o-transition: opacity 2s;
 		transition: opacity 2s;
 	}
-	.ellipsis.touchevents #main .read-more-state~.read-more-target p.elip {
+	.ellipsis.touchevents main .read-more-state~.read-more-target p.elip {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-	.ellipsis.touchevents #main .read-more-state~.read-more-target p.show {
+	.ellipsis.touchevents main .read-more-state~.read-more-target p.show {
 		white-space: normal;
 		text-overflow: inherit;
 	}
 }
 @media only screen and (min-width: 769px) {
-	#main p, #main hr {
+	main p, main hr {
 		animation: fade 3s ease-in;
 	}
 }
