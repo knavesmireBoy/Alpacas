@@ -112,7 +112,9 @@
 		lis = _.toArray(thumbs.getElementsByTagName('li')),
 		getCurrentSlide = _.compose(utils.getZero, ptL(utils.getByClass, 'show', thumbs, 'li')),
 		isPortrait = ptL(function (el) {
-			return utils.getClassList(el).contains('portrait');
+            var img = getDomTargetImg(el);
+            return img.offsetHeight > img.offsetWidth;
+			//return utils.getClassList(el).contains('portrait');
 		}),
 		hideCurrent = _.compose(utils.hide, getCurrentSlide),
 		doShow = function (next) {

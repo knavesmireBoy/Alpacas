@@ -1,6 +1,8 @@
 /* https://stackoverflow.com/questions/6917639/css-media-query-not-working-in-ie-9 */
 /*http://browserhacks.com/*/
 /*netrenderer: 9: 997; 10: 1016; 11: 850*/
+/*https://stackoverflow.com/questions/41847420/media-queries-deprecated
+http://cssmediaqueries.com/overview.html*/
 
 /* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
 @media only screen {

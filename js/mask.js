@@ -301,6 +301,7 @@ if (!window.gAlp) {
 				};
 			return utils.getBest(cond, [swap, standard])();
 		};
+
 	if (!cssmask || swapimg[0]) {
 		constr = function () {
 			return factory(always(swapper));
@@ -316,7 +317,6 @@ if (!window.gAlp) {
 			command.init(outcomes)();
 		};
 		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
-        
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
