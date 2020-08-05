@@ -97,26 +97,29 @@
 			-webkit-box-flex: 0;
 			-ms-flex: 0 0 auto;
 			flex: 0 0 auto;
-		}
+		}        
 	}
+
 	/*@supports (display: grid){ }*/
 
 	/* https://www.smashingmagazine.com/2019/02/css-browser-support/ */
 
 	@supports(column-gap: 20px) {
 		ul#thumbnails.gallery {
-			display: -ms-grid;
+			padding: .6em;
+            display: -ms-grid;
 			display: grid;
-			grid-template-columns: repeat(5, 1fr) .7242fr;
+			grid-template-columns: repeat(5, 1fr) .75fr;
 			/*
         superfluous and buggers up layout in Chrome
         grid-template-rows: repeat(6, 16.666%);
         */
-			grid-gap: .33em;
+			grid-gap: .6em;
 		}
 		main ul#thumbnails.gallery li {
 			margin: 0px;
 			width: auto;
+            border-width: 0;
 		}
 		/*http://nthmaster.com/*/
 		/*up to 5th*/

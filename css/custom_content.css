@@ -319,7 +319,7 @@ td:last-child {
 }
 /*"gallery"*/
 
-#thumbnails, ul#thumbnails li a {
+#thumbnails, ul#thumbnails li a{
 	border: 1px solid;
 }
 ul#thumbnails {

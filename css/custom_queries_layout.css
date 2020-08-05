@@ -10,14 +10,19 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 */
 
 @media only screen {
-	.gallery li {
-		width: 16.4%;
-		margin: .5%;
+        
+	 ul#thumbnails.gallery li, ul#thumbnails.gallery li a {
+		box-sizing: border-box;
 	}
-	.gallery li.portrait {
-		width: 12%;
+    
+    ul#thumbnails.gallery li {
+		width: 17.35%;
 	}
-	.gallery {
+   
+	ul#thumbnails.gallery li.portrait {
+		width: 13.25%;
+	}
+	ul#thumbnails.gallery {
 		padding: .67%;
 	}
 	ul#thumbnails li a {

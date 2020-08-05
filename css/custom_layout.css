@@ -1,5 +1,10 @@
 /*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 #alpacas_for_sale main aside {
 	width: 100%;
 	z-index: -1;
@@ -15,7 +20,7 @@
 #alpacas_for_sale aside, ul#list, ul#list li, ul#thumbnails, #gallery main, #controls {
 	position: relative;
 }
-#sell, #sell a, ul#thumbnails, ul#thumbnails a, ul#list {
+#sell, #sell a, ul#thumbnails,  ul#list {
 	overflow: hidden;
 }
 #alpacas_for_sale main aside {
@@ -179,7 +184,9 @@ html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
 
 ul#thumbnails li a {
 	display: block;
+
 }
+
 ul#thumbnails li {
 	float: left;
 	width: 100%;
@@ -195,30 +202,38 @@ ul#thumbnails {
 }
 ul#thumbnails.gallery {
 	padding: 4px;
-	padding: 0.3em;
 }
+/* base INITIAL settings on 800px screen @screen use %*/
 ul#thumbnails.gallery li.portrait {
 	float: right;
-	width: 5em;
+	width: 4.259em;
     clear: right;
 	*width: 5.3em;
 }
 ul#thumbnails.gallery li {
-	margin: 0.3em;
-	width: 6.66em;
+	border: solid 4px white;
+    width: 5.69em;
 	*width: 7.15em;
 	display: inline;
 }
 
-/* https://keithclark.co.uk/articles/moving-ie-specific-css-into-media-blocks/media-tests/ */
+ul#thumbnails.gallery {}
+ul#thumbnails.gallery li {
+    width: 105px;
+    width: 8em;
+}
+ul#thumbnails.gallery li.portrait {
+    width: 78px;
+    width: 5.9em;
+}
+
+/* https://keithclark.co.uk/articles/moving-ie-specific-css-into-media-blocks/media-tests/ 
 
 @media screen only {
-	ul#thumbnails.gallery {
-		padding: 3%;
-	}
+    ul#thumbnails.gallery {}
 	ul#thumbnails.gallery li {
 		width: 79px;
-		width: 6.4em;
+		width: 8em;
 	}
 	ul#thumbnails.gallery li.portrait {
 		width: 60px;
@@ -273,7 +288,6 @@ li#slide, li#paused {
 #controls.static {
 	top: -3.5em;
 	opacity: 1;
-	border: solid 1px red;
 }
 #gallery main {
 	padding: 0;
@@ -327,3 +341,4 @@ button#exit {
 	transition: all 1s;
 	float: right;
 }
+
