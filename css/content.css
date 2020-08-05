@@ -112,7 +112,7 @@ _NOT BE: progid: DXImageTransform
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/ga_logo_ie.png", sizingMethod="crop");
 }
 
-*html #welcome  footer, *html #welcome  footer ul {
+*html #welcome footer, *html #welcome footer ul {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/grass_960.png", sizingMethod="crop");
 }
 

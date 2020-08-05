@@ -21,14 +21,21 @@ header, aside img {
 	position: relative;
     width: 100%;
 }
-#wrap, #innerwrap, footer/*, nav li, nav a */{
+
+header a img {
+	position: relative;
+}
+#wrap, #innerwrap, header, footer, nav, nav li, nav a {
 	width: 100%;
 }
 #wrap, article.intro {
 	overflow: hidden;
 }
-#innerwrap, footer, main aside,  header a, main .read-more-target, main label, main input{
+#innerwrap, footer, main aside,  header a, main .read-more-target, main label, main input {
 	overflow: hidden;
+}
+.read-more-target {
+    margin-top: .7em;
 }
 /*ie 7*/
 nav li /*,nav ul */ {
@@ -51,6 +58,7 @@ header a {
 	width: 28%;
 	top: 0px;
 	left: 0px;
+    outline: solid 1px red;
 }
 header a h1 {
 	white-space: nowrap;

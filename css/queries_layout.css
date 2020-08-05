@@ -163,6 +163,11 @@
 		display: table;
 		clear: both;
 	}
+    .read-more-target {
+    margin-top: 0;
+}
+    #contactarea {
+    }
 }
 
 @media only screen and (max-width: 1200px) {

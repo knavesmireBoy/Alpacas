@@ -719,7 +719,8 @@ gAlp.Util = (function () {
 							getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
 							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
 							getTerm = _.compose(curry2(getter)('id'), ptL(byIndex, 0), getBody),
-							links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
+							//links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
+							links = _.compose(getLinks, gAlp.Util.getZero, curry3(simpleInvoke)('nav')('getElementsByTagName'))(document),
 							found = ptL(_.filter, _.toArray(links), function (link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});

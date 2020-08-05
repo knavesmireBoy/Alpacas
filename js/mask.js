@@ -77,8 +77,8 @@ if (!window.gAlp) {
 			return document.getElementById(str);
 		},
 		//paras = $('article').getElementsByTagName('p'),
-		paras = utils.getByClass('.intro')[0],
-		verbose = utils.getByClass('.verbose'),
+		paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
+        verbose = utils.getByClass('.verbose'),
 		//con = window.console.log.bind(window),
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
 		getIndex = (function () {
@@ -119,7 +119,7 @@ if (!window.gAlp) {
 		},
 		constr,
 		player,
-		memoFactory = function (target, copy) {
+        memoFactory = function (target, copy) {
 			var hyperlinks = {},
 				ran = false,
 				ret = {
@@ -183,13 +183,14 @@ if (!window.gAlp) {
 				};
 			};
 		}, //split
-		do_split = doSplitz(paras.length * 2),
-		readmoretarget = utils.getByClass('read-more-target')[0],
+        do_split = doSplitz(paras.length * 2),
+        readmoretarget = utils.getByClass('read-more-target')[0],
 		parag = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
 		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
 		addElip = ptL(_.every, [readmoretarget], getResult),
-		enableElip = _.compose(ptL(utils.doWhen, addElip, ptL(utils.addClass, 'elip', parag[0]))),
-		addElipHandler = ptL(_.every, [noScrollBars, readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
+		enableElip = _.compose(ptL(utils.doWhen, addElip, ptL(utils.addClass, 'elip', parag[0])));
+        
+		var addElipHandler = ptL(_.every, [noScrollBars, readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
 		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
 		enableElipHandler = _.compose(ptL(utils.doWhen, addElipHandler, ptL(ellipsis_handler, readmoretarget))),
 		scroller = function (percent) {
@@ -206,7 +207,7 @@ if (!window.gAlp) {
                 handler = function () {
                     command.execute();
                     //scroller(0.2);
-                    setTimeout(ptL(scroller, 0.2), 3333)
+                    setTimeout(ptL(scroller, 0.2), 3333);
 				};
             handler();
 			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
@@ -237,7 +238,7 @@ if (!window.gAlp) {
 						},
 						exec = function () {
 							var setAttrs = utils.setAttrsFix(ie6 || ie7),
-								margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
+								//margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
 								margin = "-100%";
 							utils.makeElement(prepSetStyles({
 								"margin-right": margin
@@ -300,6 +301,7 @@ if (!window.gAlp) {
 				};
 			return utils.getBest(cond, [swap, standard])();
 		};
+
 	if (!cssmask || swapimg[0]) {
 		constr = function () {
 			return factory(always(swapper));
@@ -315,7 +317,6 @@ if (!window.gAlp) {
 			command.init(outcomes)();
 		};
 		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
-        
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {

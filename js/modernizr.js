@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.5.0
- * Build https://modernizr.com/download?-bgpositionshorthand-boxshadow-hsla-rgba-textshadow-backgroundsize-cssanimations-cssgrid_cssgridlegacy-cssmask-flexbox-flexboxlegacy-flexboxtweener-flexwrap-nthchild-opacity-requestanimationframe-svgasimg-svgfilters-addtest-atrule-domprefixes-hasevent-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-printshiv-setclasses-testallprops-testprop-teststyles-dontmin
+ * Build https://modernizr.com/download?-documentfragment-bgpositionshorthand-boxshadow-hsla-rgba-textshadow-backgroundsize-cssanimations-cssgrid_cssgridlegacy-cssmask-flexbox-flexboxlegacy-flexboxtweener-flexwrap-nthchild-opacity-requestanimationframe-svgasimg-svgfilters-addtest-atrule-domprefixes-hasevent-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-printshiv-setclasses-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -86,7 +86,33 @@
   // Overwrite name so constructor name is nicer :D
   Modernizr = new Modernizr();
 
-  
+  /*!
+{
+  "name": "Document Fragment",
+  "property": "documentfragment",
+  "notes": [{
+    "name": "W3C DOM Level 1 Reference",
+    "href": "https://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html#ID-B63ED1A3"
+  }, {
+    "name": "SitePoint Reference",
+    "href": "http://reference.sitepoint.com/javascript/DocumentFragment"
+  }, {
+    "name": "QuirksMode Compatibility Tables",
+    "href": "http://www.quirksmode.org/m/w3c_core.html#t112"
+  }],
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "knownBugs": ["false-positive on Blackberry 9500, see QuirksMode note"],
+  "tags": []
+}
+!*/
+/* DOC
+Append multiple elements to the DOM within a single insertion.
+*/
+
+  Modernizr.addTest('documentfragment', function() {
+    return 'createDocumentFragment' in document &&
+      'appendChild' in docElement;
+  });
 /*!
 {
   "name": "SVG filters",
