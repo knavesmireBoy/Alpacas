@@ -310,9 +310,7 @@
 		padding: 0 .5em;
 		margin: .5em 0;
 	}
-	.ellipsis.touchevents main .read-more-trigger {
-		display: none;
-	}
+	
 	#wrap footer {
 		padding-top: 0%;
 		margin-top: 9%;
@@ -371,3 +369,8 @@
 	}
 }
 @media only screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {}
+@media only screen and (min-width: 769px) {
+.ellipsis.touchevents main .read-more-trigger {
+		display: none;
+	}
+}
