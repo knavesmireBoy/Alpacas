@@ -325,8 +325,6 @@ if (!window.gAlp) {
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
-		//var p = document.getElementById('article').querySelector('p');
-		//p.innerHTML = document.documentElement.className;
 		_.each(paras.getElementsByTagName('p'), split_handler);
 	}
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));

@@ -374,3 +374,7 @@
 		display: none;
 	}
 }
+
+.ellipsis.touchevents main .read-more-trigger {
+		display: none;
+	}
