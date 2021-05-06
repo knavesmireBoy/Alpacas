@@ -32,8 +32,8 @@ if (!window.gAlp) {
 		o[k] = v;
 	}
 
-	function replacer(str, replacement, reg) {
-		return str.replace(reg, replacement);
+	function replacer(str, cb, reg) {
+		return str.replace(reg, cb);
 	}
 
 	function invoke(ctxt, m, k, v) {
@@ -73,10 +73,7 @@ if (!window.gAlp) {
 		curry2 = utils.curryTwice(),
 		curry3 = utils.curryThrice(),
 		ptL = _.partial,
-		$ = function (str) {
-			return document.getElementById(str);
-		},
-		//paras = $('article').getElementsByTagName('p'),
+		//paras = utils.$('article').getElementsByTagName('p'),
 		paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
         verbose = utils.getByClass('.verbose'),
 		//con = window.console.log.bind(window),
@@ -123,6 +120,7 @@ if (!window.gAlp) {
 			var hyperlinks = {},
 				ran = false,
 				ret = {
+                    //callback for str.replace
 					set: function () {
 						ran = true;
 						return '|';
@@ -130,15 +128,19 @@ if (!window.gAlp) {
 					unset: function () {
 						return '<strong>$1</strong>';
 					},
+                    //callback for str.replace
 					store: function (match, attrs, content) {
+                        console.log(content);
 						content = content.replace(/&nbsp;/, ' ');
 						hyperlinks[content] = attrs;
 						return '[' + content + ']';
 					},
+                    //callback for str.replace
 					retrieve: function (match, content) {
 						return '<a' + hyperlinks[content] + '>' + content + '</a>';
 					},
 					revert: function (i, cb) {
+                        console.log(i)
 						if (ran) {
 							ran = false;
 							target.innerHTML = copy;
@@ -155,6 +157,7 @@ if (!window.gAlp) {
         anCr = utils.append(),
 		doSplitz = function (count) {
 			return function (target, copy) {
+                
 				var doReplace = curry3(replacer),
 					memo = memoFactory(target, copy),
 					//pipe is used to surround text that will be emphasised so <strong>Sampson</strong> becomes |Strong|
@@ -183,7 +186,7 @@ if (!window.gAlp) {
 				};
 			};
 		}, //split
-        do_split = doSplitz(paras.length * 2),
+        do_split = doSplitz(2),
         readmoretarget = utils.getByClass('read-more-target')[0],
 		parag = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
 		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
@@ -209,10 +212,12 @@ if (!window.gAlp) {
                     //scroller(0.2);
                     setTimeout(ptL(scroller, 0.2), 3333);
 				};
+                                
             handler();
 			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
 		},
 		split_handler = function (p) {
+            //array cb
 			splitHandler(p, p.innerHTML);
 		},
 		swapimg = utils.getByClass("swap"),
@@ -322,6 +327,6 @@ if (!window.gAlp) {
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
 		//var p = document.getElementById('article').querySelector('p');
 		//p.innerHTML = document.documentElement.className;
-		_.each(paras, split_handler);
+		_.each(paras.getElementsByTagName('p'), split_handler);
 	}
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
