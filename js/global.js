@@ -263,8 +263,9 @@ gAlp.Util = (function () {
 			left: left
 		};
 	}
-
-	function getScrollThreshold(el, percent) {
+    
+    
+    function getScrollThreshold(el, percent) {
 		try {
 			var elementOffsetTop = getElementOffset(el).top,
 				elementHeight = el.offsetHeight || el.getBoundingClientRect().height,
@@ -732,6 +733,8 @@ gAlp.Util = (function () {
 				this.perform();
 			}
 		},
+
+        
 		insert: function (flag) {
 			if (flag) {
 				return function (ref, anc) {

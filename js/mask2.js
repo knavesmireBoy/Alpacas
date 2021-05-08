@@ -31,11 +31,6 @@ if (!window.gAlp) {
 	function setter(o, k, v) {
 		o[k] = v;
 	}
-
-	function replacer(str, cb, reg) {
-		return str.replace(reg, cb);
-	}
-
 	function invoke(ctxt, m, k, v) {
 		if (!k) {
 			return;
@@ -70,8 +65,8 @@ if (!window.gAlp) {
 		return ptlHandler(el, _.compose(_.partial(handlerwrap, ptlHandler, ptl, el), _.partial(ptl, res)));
 	}
 	var utils = gAlp.Util,
-		curry2 = utils.curryTwice(),
-		curry3 = utils.curryThrice(),
+		curry2 = utils.curryFactory(2),
+		curry3 = utils.curryFactory(3),
 		ptL = _.partial,
         /*
         con = function(a){
@@ -79,8 +74,7 @@ if (!window.gAlp) {
             return a;
         },
         */
-		paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
-        verbose = utils.getByClass('.verbose'),
+		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
 		//con = window.console.log.bind(window),
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
 		getIndex = (function () {
@@ -100,8 +94,7 @@ if (!window.gAlp) {
 				return ptL(isBig, threshold);
 			}
 		}()),
-		noScrollBars = ptL(gAlp.Util.gtThan, viewportSize.getHeight, always(document.body.clientHeight)),
-		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
+	
 		switchAction = function (collection, bool) {
 			var i = bool ? Number(!getIndex()) : getIndex();
 			return collection[i];
@@ -121,76 +114,11 @@ if (!window.gAlp) {
 		},
 		constr,
 		player,
-        memoFactory = function (target, copy) {
-			var hyperlinks = {},
-				ran = false,
-				ret = {
-                    //callback for str.replace
-					set: function () {
-						ran = true;
-						return '|';
-					},
-					unset: function () {
-						return '<strong>$1</strong>';
-					},
-                    //callback for str.replace
-					store: function (match, attrs, content) {
-						content = content.replace(/&nbsp;/, ' ');
-						hyperlinks[content] = attrs;
-						return '[' + content + ']';
-					},
-                    //callback for str.replace
-					retrieve: function (match, content) {
-						return '<a' + hyperlinks[content] + '>' + content + '</a>';
-					},
-					revert: function (i, cb) {
-						if (ran) {
-							ran = false;
-							target.innerHTML = copy;
-							hyperlinks = {};
-						}
-						if (i > 0) {
-							cb();
-						}
-					}
-				};
-			return ret;
-		},
-		//anCr = curryRight(utils.setAnchor)(utils.getNewElement)(null),
         anCr = utils.append(),
-		doSplitz = function (count) {
-			return function (target, copy) {
-                /*
-                converts a para to a series of spans
-                */
-				var doReplace = curry3(replacer),
-					memo = memoFactory(target, copy),
-					//pipe is used to surround text that will be emphasised so <strong>Sampson</strong> becomes |Strong|
-					getStrong = doReplace(new RegExp('<\\/?[^a>]+>', 'g'))(memo.set),
-					/*a la Markdown links take this form [linked text](link URL) so replace <a href ="/path">My Text</a> with [My Text](href ="/path")*/
-					getLinks = doReplace(new RegExp('<a([^>]*)>([^<]+)<\\/a>', 'g'))(memo.store), //store hyperlinks attributes
-					setStrong = doReplace(new RegExp('\\|(.+?)\\|', 'g'))('<strong>$1</strong>'),
-					setLinks = doReplace(new RegExp('\\[(.+?)\\]', 'g'))(memo.retrieve),
-					input = _.compose(getStrong,  getLinks),
-					output = _.compose(setStrong, setLinks),
-					exec = function () {
-						var face = utils.getComputedStyle(target, 'font-family').split(',')[0],
-							size = Math.round(parseFloat(utils.getComputedStyle(target, 'font-size'))),
-							splitter = window.gAlp.Splitter();
-						target.innerHTML = input(target.innerHTML);                      
-						splitter.init(target, face.replace('\\', ''), size);
-						target.innerHTML = output(splitter.output('span'));
-						utils.show(target);
-						count -= 1;
-					};
-				return {
-					execute: function () {
-						return memo.revert(count, exec);
-					}
-				};
-			};
-		}, //split
-        do_split = doSplitz(2),
+        /*
+        paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
+        verbose = utils.getByClass('.verbose'),
+        noScrollBars = ptL(gAlp.Util.gtThan, viewportSize.getHeight, always(document.body.clientHeight)),
         readmoretarget = utils.getByClass('read-more-target')[0],
 		parag = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
 		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
@@ -224,6 +152,8 @@ if (!window.gAlp) {
             //array cb
 			splitHandler(p, p.innerHTML);
 		},
+            
+            */
 		swapimg = utils.getByClass("swap"),
 		getKid = function () {
 			return utils.getDomChild(utils.getNodeByTag('img'))(mask_target.firstChild);
@@ -325,10 +255,12 @@ if (!window.gAlp) {
 			utils.addHandler('resize', window, _.throttle(handler, 66));
 			command.init(outcomes)();
 		};
-		//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
 		utils.addHandler('load', window, ptL(player, constr()));
 	} //cssmask
+    /*
 	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
 		_.each(paras.getElementsByTagName('p'), split_handler);
 	}
+    */
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
+//document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;

@@ -1,12 +1,12 @@
 /*jslint nomen: true */
 /*global window: false */
-/*global speakEasy: false */
+/*global gAlp: false */
 /*global document: false */
 /*global _: false */
-if (!window.speakEasy) {
-	window.speakEasy = {};
+if (!window.gAlp) {
+	window.gAlp = {};
 }
-speakEasy.Util = (function() {
+gAlp.Util = (function() {
 	"use strict";
 
 	function spreadify(fn, fnThis) {
@@ -231,8 +231,8 @@ speakEasy.Util = (function() {
 		return function(actions) {
 			var f = _.partial(thunk, alternate(0, 2));
 			return function() {
-				//return speakEasy.Util.getBest(f, [_.partial(actions[0], arg), _.partial(actions[1], arg)])();
-				return speakEasy.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
+				//return gAlp.Util.getBest(f, [_.partial(actions[0], arg), _.partial(actions[1], arg)])();
+				return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
 			};
 		};
 	}
@@ -367,7 +367,7 @@ speakEasy.Util = (function() {
 	}
 
 	function baseNestedElements(ancor, outer, inner, hash) {
-		var anCr = speakEasy.Util.append();
+		var anCr = gAlp.Util.append();
 		return _.compose(anCr(_.compose(anCr(ancor), utils.always(outer))))(inner);
 	}
 
@@ -392,17 +392,17 @@ speakEasy.Util = (function() {
 
 	function handleScroll($el, cb, klas) {
 		if (!$el.getElementsByTagName) {
-			if (speakEasy.Intaface) {
-				var inta = new speakEasy.Intaface('Element', ['render', 'unrender', 'getElement']);
-				speakEasy.Intaface.ensures($el, inta);
+			if (gAlp.Intaface) {
+				var inta = new gAlp.Intaface('Element', ['render', 'unrender', 'getElement']);
+				gAlp.Intaface.ensures($el, inta);
 			}
 			handleElement($el, cb);
 		} else { //default treatment
 			//getPageOffset() > ($el.offsetTop - window.innerHeight)
 			if (getPageOffset() > cb($el)) {
-				speakEasy.Util.addClass(klas, $el);
+				gAlp.Util.addClass(klas, $el);
 			} else {
-				speakEasy.Util.removeClass(klas, $el);
+				gAlp.Util.removeClass(klas, $el);
 			}
 		}
 	}
@@ -454,13 +454,14 @@ speakEasy.Util = (function() {
 			return 0;
 		}
 		xtra = xtra || (top * percent);
+        //document.getElementsByTagName('h2')[0].innerHTML = xtra;
 		return xtra - window.innerHeight;
 	}
 
     function getClassList(el) {
         if(el){
         if(typeof el.classList === 'undefined'){
-            return speakEasy.ClassList(el);
+            return gAlp.ClassList(el);
         }
 		return el.classList;
         }
@@ -716,7 +717,7 @@ speakEasy.Util = (function() {
 				//$('report').innerHTML = '!'+e.message;
 			}
 			bound = unbound;
-			bound = _.partial(speakEasy.Util.invokeWhen, validate, bound);
+			bound = _.partial(gAlp.Util.invokeWhen, validate, bound);
 			doEachFactory(config, bound, target, bool)();
 			return target;
 		};
@@ -743,7 +744,7 @@ speakEasy.Util = (function() {
 	}
 	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
 	function setFromArray(validate, method, classArray, target) {
-        //speakEasy.Util.report(target.classList);
+        //gAlp.Util.report(target.classList);
 		//target may be a function returning a target element
         //safeguard if classArray is space delimited string "foo bar"
         classArray = classArray.split ? classArray.split(' ') : classArray; 
@@ -786,7 +787,7 @@ speakEasy.Util = (function() {
 		var classInvokers = [invoker('querySelectorAll', document.querySelectorAll), invoker('getElementsByClassName', document.getElementsByClassName)],
 			mefilter = function(elem) {
 				klas = klas.match(/^\./) ? klas.substring(1) : klas;
-				return speakEasy.Util.getClassList(elem).contains(klas);
+				return gAlp.Util.getClassList(elem).contains(klas);
 			},
 			ran = false,
 			pre = _.partial(prefix, '.'),
@@ -818,7 +819,7 @@ speakEasy.Util = (function() {
 					//el.setAttribute(k, map[k]);
                 o = {};
 								o[k] =  map[k]; //to support ie 6,7
-          speakEasy.Util.setAttributes(o, el);
+          gAlp.Util.setAttributes(o, el);
 				}
 			}
 		}
@@ -870,7 +871,7 @@ speakEasy.Util = (function() {
 
 	function addHandler(type, func, el) {
 		//console.log(arguments);
-		return speakEasy.Eventing.init.call(speakEasy.Eventing, type, func, el).addListener();
+		return gAlp.Eventing.init.call(gAlp.Eventing, type, func, el).addListener();
 	}
 
 	function validator(message, fun) {
@@ -1239,7 +1240,7 @@ speakEasy.Util = (function() {
 				byTen = curry2(divideBy)(10),
 				mysums = _.map([red, green, blue], curry2(sum)),
 				ceil = _.compose(Math.ceil, byTen, fromFull),
-				terminate = curry2(speakEasy.Util.isEqual)(255),
+				terminate = curry2(gAlp.Util.isEqual)(255),
 				repeat;
 			if (element.fade) {
 				window.clearTimeout(element.fade);
@@ -1252,7 +1253,7 @@ speakEasy.Util = (function() {
 				return mysums[i](n);
 			});
 			repeat = function() {
-				speakEasy.Util.fadeUp.apply(null, [element].concat(mysums));
+				gAlp.Util.fadeUp.apply(null, [element].concat(mysums));
 			};
 			element.fade = window.setTimeout(repeat, 100);
 		},
@@ -1327,29 +1328,29 @@ speakEasy.Util = (function() {
 			var html = document.documentElement || document.getElementsByTagName('html')[0];
 			return function(str, el) {
 				el = el || html;
-				return speakEasy.Util.getClassList(el).contains(str);
+				return gAlp.Util.getClassList(el).contains(str);
 			};
 		}()),
 		hasFeature: (function() {
 			var html = document.documentElement || document.getElementsByTagName('html')[0];
 			return function(str) {
-				return speakEasy.Util.getClassList(html).contains(str);
+				return gAlp.Util.getClassList(html).contains(str);
 			};
 		}()),
 		hide: _.partial(setFromArray, always(true), 'remove', ['show']),
 		highLighter: {
 			perform: function() {
-				if (!speakEasy.Util.hasFeature('nthchild')) { // utils.hasFeature('nthchild') || Modernizr.nthchild
+				if (!gAlp.Util.hasFeature('nthchild')) { // utils.hasFeature('nthchild') || Modernizr.nthchild
 					this.perform = function() {
 						var ptL = _.partial,
 							getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
 							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
 							getTerm = _.compose(curry2(getter)('id'), ptL(byIndex, 0), getBody),
-							links = _.compose(getLinks, speakEasy.Util.getZero, curry3(simpleInvoke)('nav')('getElementsByTagName'))(document),
+							links = _.compose(getLinks, gAlp.Util.getZero, curry3(simpleInvoke)('nav')('getElementsByTagName'))(document),
 							found = ptL(_.filter, _.toArray(links), function(link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});
-						_.compose(ptL(speakEasy.Util.addClass, 'current'), ptL(byIndex, 0), found)();
+						_.compose(ptL(gAlp.Util.addClass, 'current'), ptL(byIndex, 0), found)();
 					};
 				} else {
 					this.perform = function() {};
@@ -1391,7 +1392,7 @@ speakEasy.Util = (function() {
 			undo: function () {}
 		};
             if(flag){
-              speakEasy.Util.command = dummy;
+              gAlp.Util.command = dummy;
             }
             return dummy;
             
@@ -1457,6 +1458,7 @@ speakEasy.Util = (function() {
 		},
 		setAnchor: setAnchor,
 		setAttributes: _.partial(setFromFactory(!window.addEventListener), always(true), 'setAttribute'),
+        setAttrsFix: setFromFactory, //keep as may be in use, but prefer above
 		//setAttrsValidate: _.partial(setFromFactory(!window.addEventListener)),
 		setFromArray: setFromArray,
 		setScrollHandlers: function(collection, getThreshold, klas) {
@@ -1464,7 +1466,7 @@ speakEasy.Util = (function() {
 			// for a good intro into throttling and debouncing, see:
 			// https://css-tricks.com/debouncing-throttling-explained-examples/
 			klas = klas || 'show';
-			var deferHandle = curry33(handleScroll)(klas)(getThreshold || speakEasy.Util.getScrollThreshold),
+			var deferHandle = curry33(handleScroll)(klas)(getThreshold || gAlp.Util.getScrollThreshold),
 				funcs = _.map(collection, deferHandle);
 			return _.map(_.map(funcs, curry2(_.throttle)(100)), _.partial(addHandler, 'scroll', window));
 		},
@@ -1518,7 +1520,7 @@ speakEasy.Util = (function() {
 		
 		supportTest: function(el, prop, reg) {
 			var getBg = curry3(simpleInvoke)(reg)('match');
-			return getBg(speakEasy.Util.getComputedStyle(el, prop));
+			return getBg(gAlp.Util.getComputedStyle(el, prop));
 		},
 		toggleClass: _.partial(setFromArray, always(true), 'toggle'),
 		toggle: _.partial(setFromArray, always(true), 'toggle', ['show']),
