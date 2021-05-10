@@ -233,8 +233,6 @@ gAlp.Composite = (function () {
 			if (!flag && this.rev) {
 				return this.back(true);
 			}
-			//this.position++;
-			//this.position = this.position % this.group.members.length;
 			this.position = this.advance(this.position);
 			var result = {
 				value: this.group.members[this.position],
@@ -245,15 +243,11 @@ gAlp.Composite = (function () {
 		back: function (flag) {
 			if (!this.rev || flag) {
 				this.group.members = this.group.members.reverse();
-				//this.position = this.group.members.length - 1 - (this.position);
 				this.position = this.group.members.length - 2 - (this.position);
-				//this.position = this.position % this.group.members.length;
 				this.position = this.advance(this.position);
 				this.rev = !this.rev;
-				return this.forward(this.rev);
-			} else {
-				return this.forward(this.rev);
-			}
+			} 
+            return this.forward(this.rev);
 		},
 		play: function () {
 			return this.forward(true).value;
