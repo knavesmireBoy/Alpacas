@@ -81,22 +81,23 @@ if (!window.gAlp) {
         thrice = utils.curryFactory(3),
 		eventing = utils.eventer,
         readmoretarget = utils.getByClass('read-more-target')[0],
-        verbose = utils.getByClass('.verbose'),
+        verbose = utils.findByClass('.verbose'),
         doElip = ptL(utils.addClass, 'elip'),
         undoElip = ptL(utils.removeClass, 'elip'),
+        isElip = ptL(utils.findByClass, 'elip'),
         show = _.compose(doElip, utils.getNext, utils.getNext, ptL(utils.addClassVal, validate, 'add', 'show')),
         hide = _.compose(undoElip, utils.getNext, utils.getNext, ptL(utils.removeClass, 'show')),
-        
         para = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
         handleEl = _.compose(ptL(getGreater, ptL(getPageOffset, false)), twice(utils.getScrollThreshold)(0.1)),
         display = _.compose(ptL(invokeArg), ptL(utils.getBest, handleEl, [show, hide])),
-        cb = quatro(invokeMethod2)(_)('each')(para)(display),
+        doDisplay = ptL(utils.invokeWhen, isElip, display),
+        onscroll = quatro(invokeMethod2)(_)('each')(para)(doDisplay),
         //invoke execute to add scroll event listener IF conditions are met, remove on resize??
-        $cb = twicedefer(invokeMethod)('execute')(eventing('scroll', [], _.throttle(cb, 100), window)),
-		addElip = ptL(_.every, [readmoretarget], getResult),
+        $scroller = twicedefer(invokeMethod)('execute')(eventing('scroll', [], _.throttle(onscroll, 100), window)),
+		//addElip = ptL(_.every, [readmoretarget], getResult),
 		enableElip = _.compose(ptL(utils.doWhen, readmoretarget, ptL(doElip, para[0]))),
 		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
-        enableScrollHandlers = _.compose(ptL(utils.doWhen, addScrollHandlers, $cb)),
+        enableScrollHandlers = _.compose(ptL(utils.doWhen, addScrollHandlers, $scroller)),
         threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
         getPredicate = (function () {
 			if (mq) {
@@ -176,22 +177,23 @@ if (!window.gAlp) {
         paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
 		// now re-check on scroll
 		splitHandler = function () {
-            var command = do_split.apply(null, arguments),
-                handler = function () {
-                    command.execute();
-				};
+            var $command = do_split.apply(null, arguments),
+            handler = twicedefer(invokeMethod)('execute')($command); 
             handler();
-            eventing('resize', [], _.debounce(handler, 2000, true), window).execute();
+            /*splitting is set to run just twice, WATCH OUT when resizing to more than 769 as there will be a lag to getPredicate
+            and the split will occur in the wrong context. In actual fact would probably only effect iMacs on rotation
+            */
+            eventing('resize', [], _.debounce(handler, 44), window).execute();
 		},
 		split_handler = function (p) {
 			splitHandler(p, p.innerHTML);
-		};
-    
-	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
-		_.each(paras.getElementsByTagName('p'), split_handler);
-	}
-    
+		},
+        splitLoad = quatro(invokeMethod2)(_)('each')(paras.getElementsByTagName('p'))(split_handler),
+        doHandleSplit = ptL(_.every, [verbose, !Modernizr.touchevents, Modernizr.cssanimations, getPredicate], getResult);
+        eventing('load', [], _.compose(ptL(utils.invokeWhen, doHandleSplit, splitLoad)), window).execute();
+        
     enableScrollHandlers();
+    /*first para is split into spans and then animated, when complete load second para*/
     window.setTimeout(enableElip, 3333);
     
-}(Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.touchevents, Modernizr.cssanimations));
+}(Modernizr.mq('only all'), '(max-width: 769px)', Modernizr.touchevents, Modernizr.cssanimations));

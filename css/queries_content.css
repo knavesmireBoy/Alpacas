@@ -119,7 +119,6 @@ http://cssmediaqueries.com/overview.html*/
 	main .read-more-state:checked~.read-more-target p, .ellipsis.touchevents main .read-more-target p.show, .ellipsis.touchevents main .read-more-state~.read-more-target p.elip {
 		position: relative;
 		opacity: 1;
-        color: blue;
 	}
 	.ellipsis.touchevents main .read-more-state~.read-more-target p {
 		-webkit-transition: opacity 2s;
@@ -134,7 +133,6 @@ http://cssmediaqueries.com/overview.html*/
 	.ellipsis.touchevents main .read-more-state~.read-more-target p.show {
 		white-space: normal;
 		text-overflow: inherit;
-        color:red;
 	}
 }
 @media only screen and (min-width: 769px) {
