@@ -189,7 +189,7 @@ if (!window.gAlp) {
 			splitHandler(p, p.innerHTML);
 		},
         splitLoad = quatro(invokeMethod2)(_)('each')(paras.getElementsByTagName('p'))(split_handler),
-        doHandleSplit = ptL(_.every, [verbose, !Modernizr.touchevents, Modernizr.cssanimations, getPredicate], getResult);
+        doHandleSplit = ptL(_.every, [verbose, Modernizr.touchevents, Modernizr.cssanimations, getPredicate], getResult);
         eventing('load', [], _.compose(ptL(utils.invokeWhen, doHandleSplit, splitLoad)), window).execute();
         
     enableScrollHandlers();
