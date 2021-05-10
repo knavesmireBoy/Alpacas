@@ -135,11 +135,7 @@
 		opacity: 1;
 	}
 }
-article.intro p span:nth-of-type(1), #contact_us article.intro p:nth-of-type(1) {
-		-webkit-animation: entry .5s ease-out;
-		animation: entry .5s ease-out;
-        color: red;
-	}
+
 @media only screen {
 	header {
 		padding-top: 22%;

@@ -5,16 +5,11 @@
 /*global gAlp: false */
 /*global _: false */
 /*global setTimeout: false */
-/*global viewportSize: false */
 if (!window.gAlp) {
 	window.gAlp = {};
 }
 (function (doc, mask_target, swapper, states, mq, query, cssmask, cssanimations, touchevents, report) {
 	"use strict";
-
-	function getResult(arg) {
-		return _.isFunction(arg) ? arg() : arg;
-	}
 
 	function always(VALUE) {
 		return function () {
@@ -52,21 +47,8 @@ if (!window.gAlp) {
 		return window.viewportSize.getWidth() > n;
 	}
 
-	function helper(el, node, klas) {
-		var p = el.getElementsByTagName(node);
-		return _.filter(p, function (para) {
-			return !gAlp.Util.getClassList(para).contains(klas);
-		})[0];
-	}
 
-	function handlerwrap(ptlHandler, ptl, el) {
-		var res = helper(el, 'p', 'show');
-		gAlp.Util.addClass('elip', res);
-		return ptlHandler(el, _.compose(_.partial(handlerwrap, ptlHandler, ptl, el), _.partial(ptl, res)));
-	}
 	var utils = gAlp.Util,
-		curry2 = utils.curryFactory(2),
-		curry3 = utils.curryFactory(3),
 		ptL = _.partial,
         /*
         con = function(a){
@@ -115,45 +97,6 @@ if (!window.gAlp) {
 		constr,
 		player,
         anCr = utils.append(),
-        /*
-        paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
-        verbose = utils.getByClass('.verbose'),
-        noScrollBars = ptL(gAlp.Util.gtThan, viewportSize.getHeight, always(document.body.clientHeight)),
-        readmoretarget = utils.getByClass('read-more-target')[0],
-		parag = readmoretarget ? readmoretarget.getElementsByTagName('p') : [],
-		ellipsis_handler = ptL(handlerwrap, ptL(utils.addHandler, 'touchend'), utils.show),
-		addElip = ptL(_.every, [readmoretarget], getResult),
-		enableElip = _.compose(ptL(utils.doWhen, addElip, ptL(utils.addClass, 'elip', parag[0])));
-        
-		var addElipHandler = ptL(_.every, [noScrollBars, readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
-		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
-		enableElipHandler = _.compose(ptL(utils.doWhen, addElipHandler, ptL(ellipsis_handler, readmoretarget))),
-		scroller = function (percent) {
-			var setScrollHandlers = ptL(utils.setScrollHandlers, parag, curry2(utils.getScrollThreshold)(percent)),
-				enableScrollHandlers = _.compose(ptL(utils.doWhen, addScrollHandlers, setScrollHandlers));
-			enableScrollHandlers();
-			enableElipHandler();
-			enableElip();
-			//parag[0].innerHTML = document.documentElement.className;
-		},
-		// now re-check on scroll
-		splitHandler = function () {
-            var command = do_split.apply(null, arguments),
-                handler = function () {
-                    command.execute();
-                    //scroller(0.2);
-                    setTimeout(ptL(scroller, 0.2), 3333);
-				};
-                                
-            handler();
-			return utils.addHandler('resize', window, _.debounce(handler, 2000, true));
-		},
-		split_handler = function (p) {
-            //array cb
-			splitHandler(p, p.innerHTML);
-		},
-            
-            */
 		swapimg = utils.getByClass("swap"),
 		getKid = function () {
 			return utils.getDomChild(utils.getNodeByTag('img'))(mask_target.firstChild);

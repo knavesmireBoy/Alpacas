@@ -8,7 +8,7 @@ if (!window.gAlp) {
 	window.gAlp = {};
 }
 
-(function(mq, query, touchevents, cssanimations){ 
+(function(mq, query){ 
     "use strict";
     
     
@@ -20,8 +20,8 @@ if (!window.gAlp) {
         return o[m]();
     }
     
-    function invokeMethod2(b,a,m,o){
-        return o[m](a, b);
+    function invokeEach(cb,coll,m,o){
+        return o[m](coll, cb);
     }
     
     function invokeArg(f, arg){
@@ -54,26 +54,19 @@ if (!window.gAlp) {
         return utils.hasClass('elip', tgt);
     }
     
-    function F () {
-        if(!utils.findByClass('show')){
-            _.each(para, function(p, i){
-                report(i);
-                //i && utils.removeClass('elip', p);
-            })
-        }
-        
-        //report(utils.findByClass('show'))
-    }
     
     var utils = gAlp.Util,
+        /*
         con = function(arg){
             console.log(arg);
             return arg;
         },
+       
          report = function(arg){
             document.querySelector('h2').innerHTML = arg;
             return arg;
         },
+         */
 		ptL = _.partial,
         twice = utils.curryFactory(2),
         twicedefer = utils.curryFactory(2, true),
@@ -91,10 +84,9 @@ if (!window.gAlp) {
         handleEl = _.compose(ptL(getGreater, ptL(getPageOffset, false)), twice(utils.getScrollThreshold)(0.1)),
         display = _.compose(ptL(invokeArg), ptL(utils.getBest, handleEl, [show, hide])),
         doDisplay = ptL(utils.invokeWhen, isElip, display),
-        onscroll = quatro(invokeMethod2)(_)('each')(para)(doDisplay),
+        onscroll = quatro(invokeEach)(_)('each')(para)(doDisplay),
         //invoke execute to add scroll event listener IF conditions are met, remove on resize??
         $scroller = twicedefer(invokeMethod)('execute')(eventing('scroll', [], _.throttle(onscroll, 100), window)),
-		//addElip = ptL(_.every, [readmoretarget], getResult),
 		enableElip = _.compose(ptL(utils.doWhen, readmoretarget, ptL(doElip, para[0]))),
 		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
         enableScrollHandlers = _.compose(ptL(utils.doWhen, addScrollHandlers, $scroller)),
@@ -180,15 +172,14 @@ if (!window.gAlp) {
             var $command = do_split.apply(null, arguments),
             handler = twicedefer(invokeMethod)('execute')($command); 
             handler();
-            /*splitting is set to run just twice, WATCH OUT when resizing to more than 769 as there will be a lag to getPredicate
-            and the split will occur in the wrong context. In actual fact would probably only effect iMacs on rotation
+            /*splitting is set to run just twice (doSplitz(2)), WATCH OUT when resizing to more than 769 as there will be a lag (debounce) to getPredicate and the split will occur in the wrong context. In actual fact would probably only effect iMacs on rotation We're safe anyway as CSS only kicks in below 769, but we want the html to be correct
             */
-            eventing('resize', [], _.debounce(handler, 44), window).execute();
+            eventing('resize', [], _.debounce(handler, 44), window, true).execute();
 		},
 		split_handler = function (p) {
 			splitHandler(p, p.innerHTML);
 		},
-        splitLoad = quatro(invokeMethod2)(_)('each')(paras.getElementsByTagName('p'))(split_handler),
+        splitLoad = quatro(invokeEach)(_)('each')(paras.getElementsByTagName('p'))(split_handler),
         doHandleSplit = ptL(_.every, [verbose, Modernizr.touchevents, Modernizr.cssanimations, getPredicate], getResult);
         eventing('load', [], _.compose(ptL(utils.invokeWhen, doHandleSplit, splitLoad)), window).execute();
         
@@ -196,4 +187,4 @@ if (!window.gAlp) {
     /*first para is split into spans and then animated, when complete load second para*/
     window.setTimeout(enableElip, 3333);
     
-}(Modernizr.mq('only all'), '(max-width: 769px)', Modernizr.touchevents, Modernizr.cssanimations));
+}(Modernizr.mq('only all'), '(max-width: 769px)'));
