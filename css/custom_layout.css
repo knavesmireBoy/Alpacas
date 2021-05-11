@@ -196,7 +196,6 @@ ul#thumbnails {
 	/*clear
     transform: scale(.95);*/
     width: 90%;
-    
 	font-size: 1.03em;
 	padding: 1.2em;
 	/*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
@@ -358,4 +357,21 @@ button#exit {
 	transition: all 1s;
 	float: right;
 }
+
+/*
+.js #exit {
+	width: 2em;
+	height: 2em;
+	left: 100%;
+	margin: .5em 0 .5em -2.5em;
+	display: block;
+	background: url("../images/resource/sticks_sprite_fat.png") no-repeat;
+	background-position: 50% 0%;
+	background-size: 100%;
+	position: relative;
+}
+.js #exit:hover, .js #exit:focus {
+	background-position: 50% 106%;
+}
+*/
 

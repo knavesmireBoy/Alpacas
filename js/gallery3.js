@@ -142,6 +142,7 @@
 	}
 
 	function doMethod(o, v, p) {
+        //console.log(arguments);
 		return o[p] && o[p](v);
 	}
 
@@ -249,7 +250,7 @@
 		onLoad = function(img, path, promise) {
 			var ret;
 			if (promise) {
-				//ret = promise.then(getLI(img));
+				ret = promise.then(getLI(img));
 			}
 			img.src = path;
 			return ret;
@@ -528,6 +529,7 @@
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
 						$controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
+                        console.log($controller);
 						doMakePause(getPausePath());
 					}
 				},
