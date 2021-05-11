@@ -370,17 +370,3 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 	background-position: 50% 44%;
 	opacity: 0.9;
 }
-/*styles for < ie9*/
-button#exit {
-    border: 0px;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-    background-image: url(../assets/close_transparent.png);
-	background-color: #7F9933;
-	color: #7F9933;
-	margin: 0;
-	padding: 0;
-	font-size: 1em;
-	width: 2em;
-	height: 2em;
-}
