@@ -223,9 +223,11 @@ gAlp.Composite = (function () {
 		}
 		return group;
 	};
+
 	gAlp.LoopIterator.from = function (coll, advancer) {
 		return new gAlp.LoopIterator(gAlp.Group.from(coll), advancer);
 	};
+   
 	gAlp.LoopIterator.onpage = null;
 	gAlp.LoopIterator.cross_page = null;
 	gAlp.LoopIterator.prototype = {
@@ -254,7 +256,8 @@ gAlp.Composite = (function () {
 		},
 		current: function () {
 			var result = {
-				value: this.group.members[this.position],
+				members: this.group.members,
+                value: this.group.members[this.position],
 				index: this.position
 			};
 			return result;

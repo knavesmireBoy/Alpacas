@@ -242,14 +242,22 @@ ul#thumbnails.gallery li.portrait {
 }
 /**/
 
-ul#thumbnails li {
-	display: none;
+ul#thumbnails li, .inplay li#paused {
+	position: absolute;
+    left: -9999px;
 	opacity: 0;
 }
-ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul#thumbnails li#paused, ul#thumbnails li#base {
-	display: block;
+ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide,  ul#thumbnails li#base {
+	position: relative;
+    left: 0;
 	opacity: 1;
+    filter: alpha(opacity=100);
+	/* IE8 and lower */
+	zoom: 1;
+	/* Triggers "hasLayout" in IE 7 and lower */
+    /*
 	*display: inline;
+    */
 }
 ul#thumbnails li.go {
 	visibility: hidden;

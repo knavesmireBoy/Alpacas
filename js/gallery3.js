@@ -21,6 +21,12 @@
 			}
 		};
 	}
+    
+    function filter(coll, pred1, pred2){
+        var tmp = _.filter(coll, pred1),
+            arr = _.filter(coll, pred2);
+        return arr.concat(tmp);
+    }
 
 	function viewBoxDims(s) {
 		var a = s.split(' ').slice(-2);
@@ -191,6 +197,7 @@
 		main = document.getElementsByTagName('main')[0],
 		getThumbs = doComp(utils.getZero, ptL(utils.getByTag, 'ul', main)),
 		getAllPics = doComp(ptL(utils.getByTag, 'img'), getThumbs),
+        mypics = _.toArray(getAllPics()),
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		getTarget = utils.drillDown([mytarget]),
 		getTargetSrc = utils.drillDown([mytarget, 'src']),
@@ -252,7 +259,7 @@
 				[k, v]
 			]);
 		},
-		getPausePath = ptL(utils.getBest, doComp(ptL(utils.hasClass, 'portrait'), getThumbs), [pausepath + 'pauseLong.png', pausepath + 'pause.png']),
+		getPausePath = ptL(utils.getBest, doComp(ptL(utils.hasClass, 'portrait'), getThumbs), [pausepath + 'pause_long.png', pausepath + 'pause.png']),
 		doMakeBase = function(source, target) {
 			var img = addElements();
 			doMap(img.parentNode, [
@@ -314,35 +321,15 @@
 		threshold = Number(query.match(number_reg)[1]),
 		getEnvironment = ptL(utils.isDesktop, threshold),
 		slide_player = {
-			execute: function(page_index, picsrc) {
-				var reordered = utils.shuffleArray(pages.getList())(page_index),
-					mylscp = _.map(reordered, pages.getLscpPics),
-					myptrt = _.map(reordered, pages.getPortraitPics),
-					is_portrait = _.filter(myptrt, function(arr) {
-						return _.find(arr, ptL(equalNum, picsrc));
-					}),
-					group = pages.doGroup(pages.fixPageOrder(pages.getLeadingGroup(myptrt, mylscp, !!is_portrait[0]), picsrc));
-				Looper.onpage = Looper.from(_.map(group, makePath), doInc(getLength(group)));
-			},
-			undo: function(page_index) {
-				/*restores on page iterator post slideshow
-				if omitted manual navigation would cross page boundaries*/
-				var page,
-					gallery_pics,
-					list = pages.getList();
-				Looper.cross_page = Looper.from(list, doInc(getLength(list)));
-				Looper.cross_page.set(page_index);
-				page = Looper.cross_page.get();
-				$LI.query(page);
-				gallery_pics = _.filter(getAllPics(), function(img) {
-					return !getLI(img).id;
-				});
-				_.each(gallery_pics, function(img, i) {
-					populatePage(img, makePath(page[i]), 'src');
-				});
-				Looper.onpage = Looper.from(_.map(gallery_pics, function(img) {
+			execute: function(coll) {                
+                Looper.onpage = Looper.from(_.map(coll, function(img) {
 					return img.src;
-				}), doInc(getLength(gallery_pics)));
+				}), doInc(getLength(coll)));
+			},
+			undo: function(coll) {
+				Looper.onpage = Looper.from(_.map(coll, function(img) {
+					return img.src;
+				}), doInc(getLength(coll)));
 				Looper.onpage.find(getBaseSrc());
 			}
 		},
@@ -352,17 +339,28 @@
 				return img.src;
 			}), doInc(getLength(getAllPics())));
 		},
+        get_player = ptL(utils.getBest, _.negate(in_play), [slide_player, makeDummy()]),
 		get_play_iterator = function(flag) {
-			/*
-			//if we are inplay (ie pause or playing) we neither want to call enter or exit so a dummy object is returned
-			var myint = pages.findInt(getBaseSrc),
-				page_index = pages.findIndex(getBaseSrc),
-				m = flag ? 'execute' : 'undo',
-				slider = get_player();
-			con(slider, in_play());
-			slider[m](page_index, myint);
-            */
-		},
+            var coll,
+                status = Looper.onpage.current(),
+                outcomes = [_.negate(queryOrientation), queryOrientation],
+                tmp = _.map(_.filter(_.map(getAllPics(), getLI), function(li){
+                    return !li.id;
+                }), getDomTargetImg),
+                i = outcomes[0](tmp[status.index]) ? 0 : 1,
+                m = 'undo',
+                slider = get_player();
+            if(flag){
+                m = 'execute'; 
+                coll = utils.shuffleArray(tmp)(status.index);
+                coll =  i ? filter(coll, outcomes[0], outcomes[1]) : filter(coll, outcomes[1], outcomes[0]);
+            }
+            else {
+                coll = tmp;
+            }
+            //if we are inplay (ie pause or playing) we neither want to call enter or exit so a dummy object is returned
+            slider[m](coll);
+        },
 		setindex = function(arg) {
 			if (!Looper.onpage) {
 				do_page_iterator();
@@ -483,6 +481,7 @@
 			player = playmaker();
 			return {
 				execute: function () {
+
 					if (!recur.t) {
 						get_play_iterator(true);
 					}
@@ -521,7 +520,7 @@
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
-				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, doExitShow, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
+				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, /*doExitShow,*/ doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
 				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loader)('base')(nextcaller)].concat(farewell))(getResult),
 				prev_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loader)('base')(prevcaller)].concat(farewell))(getResult),
 				controller = function () {
@@ -572,6 +571,7 @@
 		$setup = {},
 		setup = function(e) {
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
+            
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
 			var buttons = ['backbutton', 'playbutton', 'forwardbutton'],
@@ -611,4 +611,4 @@
 	$setup.execute();
 	//cb = doComp(twice(invoke)(), ptL(utils.getBest, isImg, [doComp(setindex, getTarget), function (){}]));
 	//eventing('click', event_actions.slice(0, 1), cb, getThumbs()).execute();
-}(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../images/resource/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));
+}(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../assets/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));
