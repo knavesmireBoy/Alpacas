@@ -17,12 +17,6 @@
 			}
 		};
 	}
-
-	function filter1(coll, pred1, pred2) {
-		var tmp = _.filter(coll, pred1),
-			arr = _.filter(coll, pred2);
-		return arr.concat(tmp);
-	}
     
     function filter(coll, pred1) {
 		var tmp = _.filter(coll, pred1),
@@ -35,22 +29,6 @@
 			execute: function () {},
 			undo: function () {}
 		};
-	}
-
-	function invokeMethod(o) {
-		return function (m) {
-			return o[m] && o[m].apply(null, _.rest(arguments));
-		};
-	}
-
-	function doPartial(flag, f) {
-		var F = _.partial(flag, f);
-		if (flag && _.isBoolean(flag)) {
-			F = function (elem) {
-				return _.partial(f, elem);
-			};
-		}
-		return F;
 	}
 
 	function doubleGet(o, sub, v, p) {
@@ -85,18 +63,9 @@
 		return i + 1;
 	}
 
-	function equalNum(tgt, cur) {
-		return cur === tgt || parseFloat(cur) === parseFloat(tgt);
-	}
-
 	function invoke(f, arg) {
 		arg = _.isArray(arg) ? arg : [arg];
 		return f.apply(null, arg);
-	}
-
-	function invokeCB(arg, cb) {
-		arg = _.isArray(arg) ? arg : [arg];
-		return cb.apply(null, arg);
 	}
 
 	function invokeBridge(arr) {
@@ -283,7 +252,6 @@
 				return img.src;
 			}), doInc(getLength(getAllPics())));
 		},
-		get_player = ptL(utils.getBest, _.negate(in_play), [slide_player, makeDummy()]),
 		get_play_iterator = function (flag) {
 			var coll,
 				status = Looper.onpage.current(),
@@ -292,8 +260,7 @@
 					return !li.id;
 				}), getDomTargetImg),
 				i = outcomes[0](tmp[status.index]) ? 0 : 1,
-				m = 'undo',
-				slider = get_player();
+				m = 'undo';
 			if (flag) {
 				m = 'execute';
                 //re-order
