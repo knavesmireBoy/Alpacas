@@ -193,12 +193,18 @@ ul#thumbnails li {
 }
 ul#thumbnails {
 	margin: 6% auto 0;
-	/*clear*/
-	width: 90%;
+	/*clear
+    transform: scale(.95);*/
+    width: 90%;
+    
 	font-size: 1.03em;
 	padding: 1.2em;
 	/*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
 	*padding: 1.2em 1.2em .4em 1.2em;
+    transition: width 1s ease-in-out;
+}
+ul#thumbnails.portrait {
+    width: 60%;
 }
 ul#thumbnails.gallery {
 	padding: 4px;
