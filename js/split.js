@@ -81,8 +81,9 @@ if (!window.gAlp) {
 		onscroll = quatro(invokeEach)(_)('each')(para)(doDisplay),
 		//invoke execute to add scroll event listener IF conditions are met, remove on resize??
 		$scroller = twicedefer(invokeMethod)('execute')(eventing('scroll', [], _.throttle(onscroll, 100), window)),
-		enableElip = _.compose(ptL(utils.doWhen, readmoretarget, ptL(doElip, para[0]))),
-		addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
+        addScrollHandlers = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents], getResult),
+		addElipHandler = ptL(_.every, [readmoretarget, Modernizr.ellipsis, Modernizr.touchevents, ptL(Modernizr.mq, query)], getResult),
+        enableElip = _.compose(ptL(utils.doWhen, addElipHandler, ptL(doElip, para[0]))),
 		enableScrollHandlers = _.compose(ptL(utils.doWhen, addScrollHandlers, $scroller)),
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
 		getPredicate = (function () {
