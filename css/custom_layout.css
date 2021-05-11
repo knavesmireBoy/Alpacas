@@ -187,6 +187,10 @@ ul#thumbnails li a {
 
 }
 
+#gallery {
+    background-color: firebrick;
+}
+
 ul#thumbnails li {
 	float: left;
 	width: 100%;

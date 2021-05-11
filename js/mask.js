@@ -58,6 +58,8 @@ if (!window.gAlp) {
         */
 		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
 		//con = window.console.log.bind(window),
+        //event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
+		eventing = utils.eventer,
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
 		getIndex = (function () {
 			if (mq) {
@@ -195,15 +197,11 @@ if (!window.gAlp) {
 						prepAction(outcomes, true)();
 					}
 				};
-			utils.addHandler('resize', window, _.throttle(handler, 66));
+            eventing('resize', [], _.throttle(handler, 66), window).execute();
 			command.init(outcomes)();
 		};
-		utils.addHandler('load', window, ptL(player, constr()));
+        eventing('load', [], ptL(player, constr()), window).execute();
+
 	} //cssmask
-    /*
-	if (touchevents && cssanimations && !(_.isEmpty(verbose)) && !getPredicate()) {
-		_.each(paras.getElementsByTagName('p'), split_handler);
-	}
-    */
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
 //document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;

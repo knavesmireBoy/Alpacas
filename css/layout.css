@@ -100,7 +100,11 @@ main {
 	display: none;
 }
 .verbose #wrap article.intro p {
-    margin: 0;
+    margin: 0 35% .5em 0;
+}
+
+.verbose article p {
+    margin: .5em 35% .5em 0;
 }
 /*https://css-tricks.com/all-about-floats/*/
 
