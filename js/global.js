@@ -6,11 +6,64 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-gAlp.Util = (function () {
+gAlp.Util = (function() {
 	"use strict";
 
+	function spreadify(fn, fnThis) {
+		/* accepts unlimited arguments */
+		return function() {
+			// Holds the processed arguments for use by `fn`
+			var i,
+				spreadArgs = [],
+				length = arguments.length,
+				currentArg;
+			for (i = 0; i < length; i++) {
+				currentArg = arguments[i];
+				if (Array.isArray(currentArg)) {
+					spreadArgs = spreadArgs.concat(currentArg);
+				} else {
+					spreadArgs.push(currentArg);
+				}
+			}
+			fn.apply(fnThis || null, spreadArgs);
+		};
+	}
+
+    function FauxPromise (args) {
+		//must be an array of functions, AND the first gets run last
+		this.cbs = _.compose.apply(null, args);
+	}
+	FauxPromise.prototype.then = function() {
+		return this.cbs.apply(null, arguments);
+	};
+
+	function doOnce() {
+		return function(i) {
+			return function() {
+				var res = i > 0;
+				i -= 1;
+				return res > 0;
+			};
+		};
+	}
+    
+    function undef(prop){
+        return typeof prop === 'undefined';
+    }
+
+	function Message(k, v) {
+		this.key = k;
+		this.value = v;
+	}
+	Message.prototype.getKey = function() {
+		return this.key;
+	};
+	Message.prototype.getValue = function() {
+		return this.value;
+	};
+
 	function toCamelCase(variable) {
-		return variable.replace(/-([a-z])/g, function (str, letter) {
+		return variable.replace(/-([a-z])/g, function(str, letter) {
 			return letter.toUpperCase();
 		});
 	}
@@ -19,24 +72,50 @@ gAlp.Util = (function () {
 		return _.isFunction(arg) ? arg() : arg;
 	}
 
-	function existy(x) {
-		return x != null;
-	}
-
 	function fail(thing) {
 		throw new Error(thing);
 	}
 
 	function noOp() {
-		return function () {};
+		return function() {};
 	}
-    
-    function gtEq(x, y) {
+
+	function sum(x, y) {
+		return getResult(x) + getResult(y);
+	}
+
+	function subtract(a, b) {
+		return b - a;
+	}
+
+	function divideBy(a, b) {
+		return a / b;
+	}
+
+	function gtEq(x, y) {
 		return getResult(x) >= getResult(y);
 	}
 
 	function lsEq(x, y) {
 		return getResult(x) <= getResult(y);
+	}
+
+	function gtThan(x, y, flag) {
+		if (flag) {
+			return gtEq(x, y);
+		}
+		return getResult(x) > getResult(y);
+	}
+
+	function lsThan(x, y, flag) {
+		if (flag) {
+			return lsEq(x, y);
+		}
+		return getResult(x) < getResult(y);
+	}
+
+	function existy(x) {
+		return x != null;
 	}
 
 	function cat() {
@@ -48,21 +127,21 @@ gAlp.Util = (function () {
 		}
 	}
 
+	function construct(head, tail) {
+		return head && cat([head], _.toArray(tail));
+	}
+
 	function mapcat(fun, coll) {
 		var res = _.map(coll, fun);
 		return cat.apply(null, res);
 	}
 
-	function construct(head, tail) {
-		return head && cat([head], _.toArray(tail));
-	}
-
 	function always(val) {
-		return function () {
+		return function() {
 			return val;
 		};
 	}
-
+    
 	function regExp(str, flag) {
 		return new RegExp(str, flag);
 	}
@@ -70,18 +149,28 @@ gAlp.Util = (function () {
 	function nested(f1, f2, item) {
 		return f2(f1(item));
 	}
-
+    
 	function setter(o, k, v) {
-		//console.log(arguments)
-		getResult(o)[k] = v;
+        o = getResult(o);
+        if(o && !undef(o[k])) { 
+            o[k] = v;
+        }
+    }
+    
+    function lazySet(v, o, k) {
+        return setter(o, k, v);
 	}
+    
 
-	function getter(o, k) {
-		return o[k];
+    function getter(o, p) {
+        o = getResult(o);
+        if(o && !undef(o[p])) { 
+            return o[p];
+        }
 	}
 
 	function setret(o, k, v) {
-		o[k] = v;
+		setter(o, k, v);
 		return o;
 	}
 
@@ -99,8 +188,25 @@ gAlp.Util = (function () {
 		return o[m](arg);
 	}
     
-    function mittleInvoke(m, arg, o) {
-		return o[m](arg);
+      function doMethod(o, v, p) {
+          o = getResult(o);
+          return o && o[p] && o[p](v);
+	}
+    
+    
+    function lazyVal(v, o, p) {
+		return doMethod(o, v, p);
+	}
+
+
+	function doInvoke(o, m) {
+		//console.log(_.rest(arguments, 2));
+		return o[m].apply(o, _.rest(arguments, 2));
+	}
+
+	function mittleInvoke(m, arg, o) {
+        o = o || document;
+		return getResult(o)[m](arg);
 	}
 
 	function applyFunction(f, args) {
@@ -117,16 +223,28 @@ gAlp.Util = (function () {
 
 	function doAlternate() {
 		function alternate(i, n) {
-			return function () {
+			return function() {
 				i = (i += 1) % n;
 				return i;
 			};
 		}
-		return function (actions) {
+		return function(actions) {
 			var f = _.partial(thunk, alternate(0, 2));
-			return function () {
-				return gAlp.Util.getBest(f, actions)();
+			return function() {
+				//return gAlp.Util.getBest(f, [_.partial(actions[0], arg), _.partial(actions[1], arg)])();
+				return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
 			};
+		};
+	}
+
+	function doNTimes() {
+		function once(i) {
+			return function() {
+				return i-- > 0;
+			};
+		}
+		return function(actions) {
+			return spreadify(actions[0]);
 		};
 	}
 
@@ -136,24 +254,19 @@ gAlp.Util = (function () {
 		return node.cloneNode(deep);
 	}
 
-	function insertAfter(newElement, targetElement) {
-		var parent = targetElement.parentNode;
-		if (parent.lastChild === targetElement) {
-			parent.appendChild(newElement);
-		} else if (newElement) {
-			parent.insertBefore(newElement, targetElement.nextSibling);
-		}
+	function textNode(txt) {
+		return document.createTextNode(txt);
 	}
 
 	function render(anc, refnode, el) {
 		//console.log(arguments)
-		return getResult(anc).insertBefore(getResult(el), getResult(refnode));
+		return anc.insertBefore(getResult(el), getResult(refnode));
 	}
 	//get ye this. setAnchor effectively returns strategy(getNewElement in reality), which expects one argument
 	//(string, element, null/undef) and returns new element, clone or fragment
 	//getNewElement invokes render with the new element
 	function setAnchor(anchor, refnode, strategy) {
-		return _.compose(_.partial(render, anchor, refnode), strategy);
+		return _.compose(_.partial(render, getResult(anchor), refnode), strategy);
 	}
 
 	function getNextElement(node) {
@@ -176,6 +289,27 @@ gAlp.Util = (function () {
 		return null;
 	}
 
+	function getWhatElement(p) {
+		return function getWhat(node) {
+			if (node && node.nodeType === 1) {
+				return node;
+			}
+			if (node && node[p]) {
+				return getWhat(node[p]);
+			}
+			return null;
+		};
+	}
+
+	function insertAfter(newElement, targetElement) {
+		var parent = targetElement.parentNode;
+		if (parent.lastChild === targetElement) {
+			parent.appendChild(newElement);
+		} else if (newElement) {
+			parent.insertBefore(newElement, getNextElement(targetElement.nextSibling));
+		}
+	}
+
 	function getTargetNode(node, reg, dir) {
 		if (!node) {
 			return null;
@@ -188,6 +322,14 @@ gAlp.Util = (function () {
 		}
 		return node;
 	}
+    
+    function fillArray(value, len) {
+        var arr = [];
+        for (var i = 0; i < len; i++) {
+            arr.push(value);
+        }
+        return arr;
+    }
 
 	function drillDown(arr) {
 		var a = arr && arr.slice && arr.slice();
@@ -202,17 +344,31 @@ gAlp.Util = (function () {
 				return o && o[prop];
 			};
 		}
-		return function (o) {
+		return function(o) {
 			return o;
 		};
 	}
 
 	function validateRemove(node) {
+        node = getResult(node);
 		return node && node.parentNode;
 	}
 
 	function removeElement(node) {
-		return node.parentNode.removeChild(node);
+		return node.parentNode.removeChild(getResult(node));
+	}
+
+	function getElementWidth(el) {
+		return el.getBoundingClientRect().height || el.offsetWidth;
+	}
+
+	function getElementHeight(el) {
+		return el.getBoundingClientRect().height || el.offsetHeight;
+	}
+
+	function baseNestedElements(ancor, outer, inner, hash) {
+		var anCr = gAlp.Util.append();
+		return _.compose(anCr(_.compose(anCr(ancor), utils.always(outer))))(inner);
 	}
 
 	function getPageOffset(bool) {
@@ -224,6 +380,9 @@ gAlp.Util = (function () {
 	}
 
 	function handleElement($el, cb) {
+		if (!$el.getElement()) {
+			$el.init();
+		}
 		if (getPageOffset() > cb($el.getElement())) {
 			$el.render();
 		} else {
@@ -233,10 +392,13 @@ gAlp.Util = (function () {
 
 	function handleScroll($el, cb, klas) {
 		if (!$el.getElementsByTagName) {
-			var inta = new gAlp.Intaface('Element', ['render', 'unrender', 'getElement']);
-			gAlp.Intaface.ensures($el, inta);
+			if (gAlp.Intaface) {
+				var inta = new gAlp.Intaface('Element', ['render', 'unrender', 'getElement']);
+				gAlp.Intaface.ensures($el, inta);
+			}
 			handleElement($el, cb);
 		} else { //default treatment
+			//getPageOffset() > ($el.offsetTop - window.innerHeight)
 			if (getPageOffset() > cb($el)) {
 				gAlp.Util.addClass(klas, $el);
 			} else {
@@ -263,36 +425,164 @@ gAlp.Util = (function () {
 			left: left
 		};
 	}
-    
-    
+
     function getScrollThreshold(el, percent) {
+        /*park this
+		var documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+		var po = getPageOffset(),
+		elementOffsetTop = utils.getElementOffset(el).top,
+		elementHeight = utils.getElementHeight(el);
+		depth = elementOffsetTop + elementHeight,
+		scrolled = po + window.viewportSize.getHeight();
+		(po+window.innerHeight) - (elementOffsetTop + elementHeight) ===  po-threshold;
+		*/
+		var xtra,
+			elementHeight,
+			top;
 		try {
-			var elementOffsetTop = getElementOffset(el).top,
-				elementHeight = el.offsetHeight || el.getBoundingClientRect().height,
-				wh = window.innerHeight,
-				extra = elementHeight * (percent || 0.0);
-			return (elementOffsetTop - wh) + extra;
+			elementHeight = el.offsetHeight || el.getBoundingClientRect().height;
+			top = getElementOffset(el).top;
+            if(isNaN(percent)){
+              xtra =  top + elementHeight;  
+            }
+            if(percent < 1){
+                //allow 0.5, as well as 1.5 for example
+                percent = 1 + percent;
+            }
+               
 		} catch (e) {
 			return 0;
 		}
+		xtra = xtra || (top * percent);
+        //document.getElementsByTagName('h2')[0].innerHTML = xtra;
+		return xtra - window.innerHeight;
 	}
 
-	function getClassList(el) {
-		return el && (el.classList || gAlp.ClassList(el));
+    function getClassList(el) {
+        if(el){
+        if(typeof el.classList === 'undefined'){
+            return gAlp.ClassList(el);
+        }
+		return el.classList;
+        }
+        return '';
 	}
 
+	function curryFactory(i, defer) {
+		function curry1(fun) {
+			return function(firstArg) {
+				return fun(firstArg);
+			};
+		}
+
+		function curry11(fun) {
+			return function(firstArg) {
+				return function() {
+					return fun(firstArg);
+				};
+			};
+		}
+
+		function curry2(fun) {
+			return function(secondArg) {
+				return function(firstArg) {
+					return fun(firstArg, secondArg);
+				};
+			};
+		}
+
+		function curry22(fun) {
+			return function(secondArg) {
+				return function(firstArg) {
+					return function() {
+						return fun(firstArg, secondArg);
+					};
+				};
+			};
+		}
+
+		function curry3(fun) {
+			return function(last) {
+				return function(middle) {
+					return function(first) {
+						return fun(first, middle, last);
+					};
+				};
+			};
+		}
+
+		function curry33(fun) {
+			return function(last) {
+				return function(middle) {
+					return function(first) {
+						return function() {
+							return fun(first, middle, last);
+						};
+					};
+				};
+			};
+		}
+
+		function curry4(fun) {
+			return function(fourth) {
+				return function(third) {
+					return function(second) {
+						return function(first) {
+							return fun(first, second, third, fourth);
+						};
+					};
+				};
+			};
+		}
+
+		function curry44(fun) {
+			return function(fourth) {
+				return function(third) {
+					return function(second) {
+						return function(first) {
+							return function() {
+								return fun(first, second, third, fourth);
+							};
+						};
+					};
+				};
+			};
+		}
+		var once = {
+				imm: curry1,
+				defer: curry11
+			},
+			twice = {
+				imm: curry2,
+				defer: curry22
+			},
+			thrice = {
+				imm: curry3,
+				defer: curry33
+			},
+			quart = {
+				imm: curry4,
+				defer: curry44
+			},
+			coll = [null, once, twice, thrice, quart],
+			ret = coll[i];
+		return ret && defer ? ret.defer : ret ? ret.imm : function() {};
+	} //factory
+	/*  imm: (f) => (arg) => f(arg),
+	    defer: (f) => (arg) => () => f(arg)
+	  },*/
 	function curry2(fun) {
-		return function (secondArg) {
-			return function (firstArg) {
+		return function(secondArg) {
+			return function(firstArg) {
 				return fun(firstArg, secondArg);
 			};
 		};
 	}
 
 	function curry22(fun) {
-		return function (secondArg) {
-			return function (firstArg) {
-				return function () {
+		return function(secondArg) {
+			return function(firstArg) {
+				return function() {
 					return fun(firstArg, secondArg);
 				};
 			};
@@ -300,9 +590,9 @@ gAlp.Util = (function () {
 	}
 
 	function curry3(fun) {
-		return function (last) {
-			return function (middle) {
-				return function (first) {
+		return function(last) {
+			return function(middle) {
+				return function(first) {
 					return fun(first, middle, last);
 				};
 			};
@@ -310,10 +600,10 @@ gAlp.Util = (function () {
 	}
 
 	function curry33(fun) {
-		return function (last) {
-			return function (middle) {
-				return function (first) {
-					return function () {
+		return function(last) {
+			return function(middle) {
+				return function(first) {
+					return function() {
 						return fun(first, middle, last);
 					};
 				};
@@ -322,10 +612,10 @@ gAlp.Util = (function () {
 	}
 
 	function curry4(fun) {
-		return function (fourth) {
-			return function (third) {
-				return function (second) {
-					return function (first) {
+		return function(fourth) {
+			return function(third) {
+				return function(second) {
+					return function(first) {
 						return fun(first, second, third, fourth);
 					};
 				};
@@ -334,11 +624,11 @@ gAlp.Util = (function () {
 	}
 
 	function curry44(fun) {
-		return function (fourth) {
-			return function (third) {
-				return function (second) {
-					return function (first) {
-						return function () {
+		return function(fourth) {
+			return function(third) {
+				return function(second) {
+					return function(first) {
+						return function() {
 							return fun(first, second, third, fourth);
 						};
 					};
@@ -353,6 +643,13 @@ gAlp.Util = (function () {
 		return res && action.apply(null, args);
 	}
 
+    function invokeThen(validate, action) {
+        console.log(arguments)
+		var args = _.rest(arguments, 2),
+			res = validate.apply(null, args);
+        return res && action(res);
+	}
+
 	function doWhen(cond, action) {
 		if (getResult(cond)) {
 			return action();
@@ -361,14 +658,14 @@ gAlp.Util = (function () {
 		}
 	}
 
-	function invoker(NAME, METHOD) {
-		return function (target) {
+    function invoker(NAME, METHOD) {
+		return function(target) {
 			if (!existy(target)) {
 				fail("Must provide a target");
 			}
 			var targetMethod = target[NAME],
 				args = _.rest(arguments);
-			return doWhen((existy(targetMethod) && METHOD === targetMethod), function () {
+			return doWhen((existy(targetMethod) && METHOD === targetMethod), function() {
 				return targetMethod.apply(target, args);
 			});
 		};
@@ -377,7 +674,7 @@ gAlp.Util = (function () {
 	function dispatch() {
 		var funs = _.toArray(arguments),
 			size = funs.length;
-		return function (target) {
+		return function(target) {
 			var ret,
 				args = _.rest(arguments),
 				fun,
@@ -403,12 +700,12 @@ gAlp.Util = (function () {
 			if (bool) {
 				return _.partial(_.extendOwn, target, config);
 			}
-			return function () {
+			return function() {
 				_.forEach(_.invert(config), bound);
 			};
 		}
-		return function (validate, method, config, target) {
-			var unbound = function () {
+		return function(validate, method, config, target) {
+			var unbound = function() {
 					//console.log(validate, method, config, target)
 					target[method].apply(target, arguments);
 				},
@@ -426,9 +723,11 @@ gAlp.Util = (function () {
 		};
 	}
 
-	function setFromArray(validate, method, classArray, target) {
-		//console.log(arguments)
+	function setFromArray1(validate, method, classArray, target) {
 		//target may be a function returning a target element
+		if (!target) {
+			return null;
+		}
 		var fn,
 			tgt = getClassList(getResult(target)),
 			args = _.rest(arguments, 3);
@@ -443,6 +742,41 @@ gAlp.Util = (function () {
 		_.each(_.flatten([classArray]), fn);
 		return target;
 	}
+	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
+	function setFromArray(validate, method, classArray, target) {
+        //gAlp.Util.report(target.classList);
+		//target may be a function returning a target element
+        //safeguard if classArray is space delimited string "foo bar"
+        classArray = classArray.split ? classArray.split(' ') : classArray; 
+      
+		var fn,
+			tgt,
+			args,
+			bool = false,
+			rest = 3;
+		if (_.isBoolean(target)) {
+			rest = 4;
+			bool = target;
+			target = _.rest(arguments, rest)[0];
+		} else if (!target) {
+			return null;
+		}
+		tgt = getClassList(getResult(target));
+		args = _.rest(arguments, rest);
+		validate = _.partial(applyFunction, validate, args);
+		if (!tgt) {
+			return target;
+		}
+		fn = tgt && _.partial(simpleInvoke, tgt, method);
+		if (rest === 4) {
+			fn = tgt && _.partial(doInvoke, tgt, method, classArray, bool);
+		}
+		if (validate) {
+			fn = _.partial(invokeWhen, _.partial(validate, getResult(target)), fn);
+		}
+		_.each(_.flatten([classArray]), fn);
+		return target;
+	}
 
 	function filterTagsByClass(el, tag, cb) {
 		var tags = _.toArray(el.getElementsByTagName(tag));
@@ -451,15 +785,15 @@ gAlp.Util = (function () {
 
 	function getPolyClass(proto, klas, el, tag) {
 		var classInvokers = [invoker('querySelectorAll', document.querySelectorAll), invoker('getElementsByClassName', document.getElementsByClassName)],
-			mefilter = function (el) {
+			mefilter = function(elem) {
 				klas = klas.match(/^\./) ? klas.substring(1) : klas;
-				return gAlp.Util.getClassList(el).contains(klas);
+				return gAlp.Util.getClassList(elem).contains(klas);
 			},
 			ran = false,
 			pre = _.partial(prefix, '.'),
-			byTag = _.partial(filterTagsByClass, el || document, tag || '*', mefilter),
+			byTag = _.partial(filterTagsByClass, getResult(el) || document, tag || '*', mefilter),
 			dispatcher = dispatch.apply(null, classInvokers.concat(byTag)),
-			nested = function (klass) {
+			nested = function(klass) {
 				var res = dispatcher(proto, klass);
 				if ((!res || !res[0]) && klass && !ran) {
 					ran = true;
@@ -470,13 +804,38 @@ gAlp.Util = (function () {
 		return nested(pre(klas));
 	}
 
+	function attrMap(el, map, style) {
+		var k,
+		o;
+		for (k in map) {
+			if (map.hasOwnProperty(k)) {
+				if (k.match(/^te?xt$/)) {
+					el.innerHTML = map[k];
+					continue;
+				}
+				if (style) {
+					el.style.setProperty(k, map[k]);
+				} else {
+					//el.setAttribute(k, map[k]);
+                o = {};
+								o[k] =  map[k]; //to support ie 6,7
+          gAlp.Util.setAttributes(o, el);
+				}
+			}
+		}
+		return el;
+	}
+
 	function reverseArray(array) {
 		var i,
 			L = array.length,
 			old;
+		//FRWL, YOLT, OHMSS, LALD
 		array = _.toArray(array);
 		for (i = 0; i < Math.floor(L / 2); i += 1) {
 			old = array[i];
+			//1:FRWL / LALD
+			//2: YOLT / OHMSS
 			array[i] = array[L - 1 - i];
 			array[L - 1 - i] = old;
 		}
@@ -486,60 +845,103 @@ gAlp.Util = (function () {
 	function composer() {
 		var args = _.toArray(arguments),
 			//may just be creating/selecting an unadorned element
-			/* if more than one argument get the last argument, otherwise get then only argument*/
+			/* if more than one argument get the last argument, otherwise get the only argument*/
 			select = args[1] ? args.splice(-1, 1)[0] : args[0];
 		return _.compose.apply(null, args)(select());
 	}
 
-	function prepareListener(handler, fn, el) {
-		var listener,
-			wrapper = function (func) {
-				var args = _.rest(arguments),
-					e = _.last(arguments);
-				listener.prevent(e);
-				//avoid sending Event object as it may wind up as the useCapture argument in the listener
-				func.apply(el || null, args.splice(-1, 1));
-			},
-			wrapped = _.wrap(fn, wrapper);
-		//calls addHandler which calls addListener which invokes the addEventListener/attachEvent method
-		listener = handler(wrapped);
-		return listener;
+	function prepareListener(extent) {
+		return function(handler, fn, el) {
+			var listener,
+				wrapper = function(func) {
+					var args = _.rest(arguments),
+						e = _.last(arguments);
+					extent = extent || 'prevent';
+					listener[extent](e);
+					// el = el ? getResult(el) : null;
+					//avoid sending Event object as it may wind up as the useCapture argument in the listener
+					func.apply(el || null, args.splice(-1, 1));
+				},
+				wrapped = _.wrap(fn, wrapper);
+			//calls addHandler which calls addListener which invokes the addEventListener/attachEvent method
+			listener = handler(wrapped);
+			return listener;
+		};
 	}
 
 	function addHandler(type, func, el) {
-		//console.log(arguments)
+		//console.log(arguments);
 		return gAlp.Eventing.init.call(gAlp.Eventing, type, func, el).addListener();
 	}
 
 	function validator(message, fun) {
-		var f = function () {
+		var f = function() {
 			//console.log(arguments)
 			return fun.apply(fun, arguments);
 		};
 		f.message = message;
 		return f;
 	}
-	//note a function that ignores any state of x or y will return the first element if true and last if false
-	function best(fun, coll) {
-		return _.reduce(_.toArray(coll), function (x, y) {
-			return fun(x, y) ? x : y;
+	//note a function that ignores any state of champ or contender will return the first element if true and last if false
+	function best(fun, coll, arg) {
+		if(_.isArray(fun)){
+			fun = fun[0];
+		}
+        coll = _.toArray(coll);
+		if(arg){
+			coll = _.map(coll, function(ptl){
+				return _.partial(ptl, arg)
+			});
+		}
+		fun = arg ? _.partial(fun, arg) : fun;
+
+		return _.reduce(coll, function(champ, contender) {
+			return fun(champ, contender) ? champ : contender;
 		});
 	}
+    
+    function bestPred(fun, coll, arg) {
+		if(_.isArray(fun)){
+			fun = fun[0];
+		}
+        coll = _.toArray(coll);
+		fun = arg ? _.partial(fun, arg) : fun;
+		return _.reduce(coll, function(champ, contender) {
+			return fun(champ, contender) ? champ : contender;
+		});
+	}
+    
+    function bestColl(fun, coll, arg) {
+		if(_.isArray(fun)){
+			fun = fun[0];
+		}
+        coll = _.toArray(coll);
+		if(arg){
+			coll = _.map(coll, function(ptl){
+				return _.partial(ptl, arg)
+			});
+		}
+		return _.reduce(coll, function(champ, contender) {
+			return fun(champ, contender) ? champ : contender;
+		});
+	}
+    
+    
 
 	function simpleAdapter(allpairs, adapter, subject) {
 		/*expects eg: [['shout', 'cry'],['bark', 'whine']]
 		NOT [['shout', 'bark'],['cry', 'whine']]
 		ALSO no arguments are assumed. It is simple*/
 		var ptl,
-			prepPairs = function (allpairs) {
+			prepPairs = function(allpairs) {
 				return _.zip(allpairs[0], allpairs[1]);
 			},
-			performer = function (that, subject, method) {
+			performer = function(that, subject, method) {
 				subject[method]();
 				return that;
 			};
-		_.each(prepPairs(allpairs), function (pairs) {
-			_.each(pairs, function (method, i) {
+		_.each(prepPairs(allpairs), function(pairs) {
+			_.each(pairs, function(method, i) {
 				if (!i) {
 					ptl = method;
 				} else {
@@ -547,87 +949,193 @@ gAlp.Util = (function () {
 				}
 			});
 		});
-		adapter.getSubject = function () {
+		adapter.getSubject = function() {
 			return subject;
 		};
 		return adapter;
 	}
+
+	function getEventObject(e) {
+		return e || window.event;
+	}
 	var getNewElement = dispatch(curry2(cloneNode)(true), _.bind(document.createElement, document), _.bind(document.createDocumentFragment, document)),
-		removeNodeOnComplete = _.wrap(removeElement, function (f, node) {
+		removeNodeOnComplete = _.wrap(removeElement, function(f, node) {
 			if (validateRemove(node)) {
 				return f(node);
 			}
 		}),
 		slice = Array.prototype.slice,
-		makeElement = function () {
+		makeElement = function() {
 			var el,
 				args = slice.call(arguments);
 			return {
-				init: function () {},
-				add: function () {
+				init: function() {},
+				add: function() {
 					el = composer.apply(null, args);
 					return this;
 				},
-				add2: function (e) {
+				add2: function(e) {
 					el = composer.apply(null, args.concat(always(e)));
 					return this;
 				},
-				remove: function () {
+				remove: function() {
 					var removed = removeNodeOnComplete(el);
 					el = null;
 					return removed;
 				},
-				get: function () {
+				get: function() {
 					return el;
 				}
 			};
 		},
-		machElement = function () {
+		machElement = function() {
 			var el,
-				args = slice.call(arguments);
+				args = slice.call(arguments),
+				//slice because we want a copy
+				select = args[1] ? args.slice(0).splice(-1, 1)[0] : args[0];
 			return {
-				init: function () {},
-				render: function (e) {
+				render: function(e) {
 					//console.log(e && e.target && e.target.src)
 					/*don't do this: args = args.concat(always(e))
 					add 'select' argument on-the-fly (see composer)
 					fresh argument to the persisted Element object */
+					//console.log(args);
 					el = composer.apply(null, e ? args.concat(always(e)) : args);
 					return this;
 				},
-				unrender: function () {
+				init: function() {
+					/*may sometimes just want to get a reference to an (existing) element without adding class, attrs, eventHandlers*/
+					el = select();
+				},
+				unrender: function() {
 					var removed = removeNodeOnComplete(getResult(el));
 					el = null;
 					return removed;
 				},
-				getElement: function () {
+				getElement: function() {
 					return el;
 				}
 			};
-		};
+		},
+		myEventListener = (function(flag) {
+			if (flag) {
+				return {
+					add: function(el, type, fn) {
+						el && el.addEventListener(type, fn, false);
+					},
+					remove: function(el, type, fn) {
+						el && el.removeEventListener(type, fn, false);
+					},
+					preventers: {
+						preventDefault: function(e) {
+							e.preventDefault();
+						},
+						stopPropagation: function(e) {
+							e.stopPropagation();
+						},
+						stopImmediatePropagation: function(e) {
+							e.stopImmediatePropagation();
+						}
+					}
+				};
+			}
+			return {
+				add: function(el, type, fn) {
+					el && el.attachEvent('on' + type, fn);
+				},
+				remove: function(el, type, fn) {
+					el && el.detachEvent('on' + type, fn);
+				},
+				preventers: {
+					preventDefault: function(e) {
+						e = getEventObject(e);
+						e.returnValue = false;
+					},
+					stopPropagation: function(e) {
+						e = getEventObject(e);
+						e.cancelBubble = true;
+					},
+					stopImmediatePropagation: function() {}
+				}
+			};
+		}(window.addEventListener)),
+		SimpleXhrFactory = (function() {
+			// The three branches.
+			var standard = {
+					createXhrObject: function() {
+						return new window.XMLHttpRequest();
+					}
+				},
+				activeXNew = {
+					createXhrObject: function() {
+						return new window.ActiveXObject('Msxml2.XMLHTTP');
+					}
+				},
+				activeXOld = {
+					createXhrObject: function() {
+						return new window.ActiveXObject('Microsoft.XMLHTTP');
+					}
+				},
+				// To assign the branch, try each method; return whatever doesn't fail.
+				testObject;
+			try {
+				testObject = standard.createXhrObject();
+				return standard; // Return this if no error was thrown.
+			} catch (e) {
+				try {
+					testObject = activeXNew.createXhrObject();
+					return activeXNew; // Return this if no error was thrown.
+				} catch (er) {
+					try {
+						testObject = activeXOld.createXhrObject();
+						return activeXOld; // Return this if no error was thrown.
+					} catch (error) {
+						throw new Error('No XHR object found in this environment.');
+					}
+				}
+			}
+		}());
 	return {
+		$: function(str) {
+			return document.getElementById(str);
+		},
 		addClass: _.partial(setFromArray, always(true), 'add'),
+        addClassVal: _.partial(setFromArray),
 		/*handlers MAY need wrapping in a function that calls prevent default, stop propagation etc..
 		which needs to be cross browser see EventCache.prevent */
-		addEvent: function (handler, func) {
-			return function (el) {
-				var partial = el ? _.partial(handler, el) : _.partial(handler);
-				return prepareListener(partial, func, el);
+		addEvent: function(handler, func, extent) {
+			return function(el) {
+				//console.log(el);
+				el = getResult(el);
+				var partial = el && _.isElement(el) ? _.partial(handler, el) : _.partial(handler);
+				return prepareListener(extent)(partial, func, el);
 			};
 		},
 		addHandler: addHandler,
 		always: always,
-		append: function (flag) {
+		append: function(flag) {
 			if (flag) {
 				return curry33(setAnchor)(getNewElement)(null);
 			}
 			return curry3(setAnchor)(getNewElement)(null);
 		},
 		byIndex: byIndex,
-		conditional: function () {
+        climbDom: function(n, el){
+            n = n || 1;
+            return drillDown(fillArray('parentNode', n))(el);
+        },
+        climbDomPlus: function(dir, n, el){
+            n = n || 1;
+            return drillDown(fillArray(dir, n))(el);
+        },
+        command:  {
+			execute: function () {},
+			undo: function () {}
+		},
+		conditional: function() {
 			var validators = _.toArray(arguments);
-			return function (fun, arg) {
-				var errors = mapcat(function (isValid) {
+			return function(fun, arg) {
+				var errors = mapcat(function(isValid) {
 					return isValid(arg) ? [] : [isValid.message];
 				}, validators);
 				if (!_.isEmpty(errors)) {
@@ -636,42 +1144,142 @@ gAlp.Util = (function () {
 				return fun(arg);
 			};
 		},
-		silent_conditional: function () {
-			var validators = _.toArray(arguments);
-			return function (fun, arg) {
-				var errors = mapcat(function (isValid) {
-					return isValid(arg) ? [] : [isValid.message];
-				}, validators);
-				if (!_.isEmpty(errors)) {
-					return;
-					//throw new Error(errors.join(", "));
-				}
-				return fun(arg);
-			};
+		construct: construct,
+        COR: function (predicate, action) {
+            return {
+                setSuccessor: function (s) {
+                    this.successor = s;
+                },
+                handle: function () {
+                    if (predicate.apply(this, arguments)) {
+                        return action.apply(this, arguments);
+                    } else if (this.successor) {
+                        return this.successor.handle.apply(this.successor, arguments);
+                    }
+                }
+            };
+        },
+		createTextNode: function(text, ancor) {
+			getResult(ancor).appendChild(document.createTextNode(text));
+			return ancor;
 		},
 		curry4: curry4,
-		curryTwice: function (flag) {
+		curryTwice: function(flag) {
 			return flag ? curry22 : curry2;
 		},
-		curryThrice: function (flag) {
+		curryThrice: function(flag) {
 			return flag ? curry33 : curry3;
 		},
-		curryFourFold: function (flag) {
+		curryFourFold: function(flag) {
 			return flag ? curry44 : curry4;
 		},
+		curryFactory: curryFactory,
 		doAlternate: doAlternate,
+		doMap: function doMap(el, v) {
+			if (Array.isArray(v[0][0])) {
+				_.each(v[0], function(sub) {
+					return attrMap(getResult(el), _.object([
+						[sub[0], sub[1]]
+					]), true);
+				});
+			} else {
+				_.each(v, function(sub) {
+					return attrMap(getResult(el), _.object([
+						[sub[0], sub[1]]
+					]));
+				});
+			}
+			return el;
+		},
+		/*USAGE:
+        var once = doOnce(),
+        actions = [func1, func2, ...];
+        function (flag) {
+        var f = ptL(thunk, once(1));
+        return best(f, actions)();
+				}; */
+		doMethod: doMethod,
+        doOnce: doOnce,
 		doWhen: doWhen,
 		drillDown: drillDown,
-		findIndex: function (collection, predicate) {
+		//https://medium.com/@dtipson/creating-an-es6ish-compose-in-javascript-ac580b95104a
+		eventer: function(type, actions, fn, el) {
+            
+			function preventer(wrapped, e) {
+                //invoke method allows a function to be invoked directly NOT as an event listener
+                if(e){
+				_.each(actions, function(a) {
+					myEventListener.preventers[a](e);
+				});
+                }
+				return wrapped(e);
+			}
+			fn = _.wrap(fn, preventer);
+			el = getResult(el);
+			return {
+				execute: function() {
+                    //console.log('exec: ', el, fn)
+					myEventListener.add(el, type, fn);
+					return this;
+				},
+				undo: function() {
+					myEventListener.remove(el, type, fn);
+                   // console.log('undo: ', el, fn)
+					return this;
+				},
+				getEl: function() {
+					return el;
+				},
+                invoke: function(){
+                    fn.apply(null, arguments);
+                }
+			};
+		},
+		fadeUp: function(element, red, green, blue) {
+			var fromFull = curry2(subtract)(255),
+				byTen = curry2(divideBy)(10),
+				mysums = _.map([red, green, blue], curry2(sum)),
+				ceil = _.compose(Math.ceil, byTen, fromFull),
+				terminate = curry2(gAlp.Util.isEqual)(255),
+				repeat;
+			if (element.fade) {
+				window.clearTimeout(element.fade);
+			}
+			element.style.backgroundColor = "rgb(" + red + "," + green + "," + blue + ")";
+			if (_.every([red, green, blue], terminate)) {
+				return;
+			}
+			mysums = [red, green, blue].map(ceil).map(function(n, i) {
+				return mysums[i](n);
+			});
+			repeat = function() {
+				gAlp.Util.fadeUp.apply(null, [element].concat(mysums));
+			};
+			element.fade = window.setTimeout(repeat, 100);
+		},
+        FauxPromise: FauxPromise,
+		findByClass: _.compose(curry2(getter)(0), _.partial(getPolyClass, document)),
+		findIndex: function(collection, predicate) {
 			return _.findIndex(collection, predicate || always(true));
 		},
 		getBest: best,
-		getBody: function () {
-			return document.body || document.getElementsByTagName('body')[0];
+		getBestPred: bestPred,
+		getBestColl: bestColl,
+		getBody: function(flag) {
+			var body = document.body || document.getElementsByTagName('body')[0];
+			if (flag) {
+				body.className = '';
+			}
+			return body;
 		},
 		getByClass: _.partial(getPolyClass, document),
+		getByTag: _.partial(mittleInvoke, 'getElementsByTagName'),
 		getClassList: getClassList,
-		getComputedStyle: function (element, styleProperty) {
+		getChild: _.compose(getNextElement, drillDown(['firstChild'])),
+		getComputedStyle: function(element, styleProperty) {
+			if (!element || !styleProperty) {
+				return null;
+			}
 			var computedStyle = null,
 				def = document.defaultView || window;
 			if (typeof element.currentStyle !== 'undefined') {
@@ -680,101 +1288,131 @@ gAlp.Util = (function () {
 				computedStyle = def.getComputedStyle(element, null);
 			}
 			if (computedStyle) {
-				return computedStyle[styleProperty] || computedStyle[toCamelCase(styleProperty)];
+				try {
+					return computedStyle[styleProperty] || computedStyle[toCamelCase(styleProperty)];
+				} catch (e) {
+					return computedStyle[styleProperty];
+				}
 			}
 		},
 		getDefaultAction: _.partial(best, noOp()),
 		getDomChild: curry3(getTargetNode)('firstChild'),
+		getDomChildDefer: curry33(getTargetNode)('firstChild'),
 		getDomParent: curry3(getTargetNode)('parentNode'),
-        getByTag: _.partial(mittleInvoke, 'getElementsByTagName'),
+		getElementWidth: getElementWidth,
+		getElementHeight: getElementHeight,
+		getElementOffset: getElementOffset,
+		getFirstChild: getWhatElement('firstChild'),
+		getSibling: curry3(getTargetNode)('nextSibling'),
 		getNewElement: getNewElement,
 		getNext: _.partial(nested, curry2(getter)('nextSibling'), getNextElement), // expects node //?//
 		getNextElement: getNextElement, //expects node.nextSibling
 		getNodeByTag: curry2(regExp)('i'),
-		getPredicate: function (cond, predicate) {
+		getParent: drillDown(['parentNode']),
+		getPredicate: function(cond, predicate) {
 			return predicate(getResult(cond)) ? predicate : _.negate(predicate);
 		},
 		getPreviousElement: getPreviousElement, //?//
 		getPrevious: _.partial(nested, curry2(getter)('previousSibling'), getPreviousElement),
 		getScrollThreshold: getScrollThreshold,
+		getSubArray: function(coll, tgt) {
+			function reducer(acc, cur) {
+				return _.contains(cur, tgt) ? cur : acc;
+			}
+			return _.reduce(coll, reducer);
+		},
 		getZero: _.partial(byIndex, 0),
 		getter: getter,
-        gtThan: function (x, y, flag) {
-			if (flag) {
-				return gtEq(x, y);
-			}
-			return getResult(x) > getResult(y);
-		},
-		hasFeature: (function () {
+		gtThan: gtThan,
+		hasClass: (function() {
 			var html = document.documentElement || document.getElementsByTagName('html')[0];
-			return function (str) {
+			return function(str, el) {
+				el = el || html;
+				return gAlp.Util.getClassList(el).contains(str);
+			};
+		}()),
+		hasFeature: (function() {
+			var html = document.documentElement || document.getElementsByTagName('html')[0];
+			return function(str) {
 				return gAlp.Util.getClassList(html).contains(str);
 			};
 		}()),
 		hide: _.partial(setFromArray, always(true), 'remove', ['show']),
 		highLighter: {
-			perform: function () {
+			perform: function() {
 				if (!gAlp.Util.hasFeature('nthchild')) { // utils.hasFeature('nthchild') || Modernizr.nthchild
-					this.perform = function () {
+					this.perform = function() {
 						var ptL = _.partial,
 							getBody = curry3(simpleInvoke)('body')('getElementsByTagName'),
 							getLinks = curry3(simpleInvoke)('a')('getElementsByTagName'),
 							getTerm = _.compose(curry2(getter)('id'), ptL(byIndex, 0), getBody),
-							//links = _.compose(getLinks, curry3(simpleInvoke)('nav')('getElementById'))(document),
 							links = _.compose(getLinks, gAlp.Util.getZero, curry3(simpleInvoke)('nav')('getElementsByTagName'))(document),
-							found = ptL(_.filter, _.toArray(links), function (link) {
+							found = ptL(_.filter, _.toArray(links), function(link) {
 								return new RegExp(link.innerHTML.replace(/ /gi, '_'), 'i').test(getTerm(document));
 							});
 						_.compose(ptL(gAlp.Util.addClass, 'current'), ptL(byIndex, 0), found)();
 					};
 				} else {
-					this.perform = function () {};
+					this.perform = function() {};
 				}
 				this.perform();
 			}
 		},
-
-        
-		insert: function (flag) {
+		insert: function(flag) {
 			if (flag) {
-				return function (ref, anc) {
+				return function(ref, anc) {
 					return curry33(setAnchor)(getNewElement)(ref)(anc);
 				};
 			}
-			return function (ref, anc) {
+			return function(ref, anc) {
 				return curry3(setAnchor)(getNewElement)(ref)(anc);
 			};
 		},
 		insertAfter: insertAfter,
-		invokeRest: function (m, o) {
+		insertBefore: function(refnode, tgt) {
+			refnode.parentNode.insertBefore(tgt, refnode);
+		},
+		invokeOnFirst: _.partial(invokeWhen, _.compose(_.negate, always)),
+		invokeRest: function(m, o) {
 			return o[m].apply(o, _.rest(arguments, 2));
 		},
+		invokeThen: invokeThen,
 		invokeWhen: invokeWhen,
 		invoker: invoker,
-		isEqual: function (x, y) {
+		isDesktop: _.partial(gtThan, window.viewportSize.getWidth),
+		isEqual: function(x, y) {
 			return getResult(x) === getResult(y);
 		},
-        lsThan: function (x, y, flag) {
-			if (flag) {
-				return lsEq(x, y);
-			}
-			return getResult(x) < getResult(y);
-		},
+        lazySet: lazySet,
+        lazyVal: lazyVal,
+		lsThan: lsThan,
+        makeCommand: function(flag){
+            var dummy = {
+			execute: function () {},
+			undo: function () {}
+		};
+            if(flag){
+              gAlp.Util.command = dummy;
+            }
+            return dummy;
+            
+        },
 		machElement: machElement,
 		makeElement: makeElement,
-		map: function (coll, mapper) {
+		map: function(coll, mapper) {
 			return _.map(coll, mapper);
 		},
-		move: function (flag) {
+		mapcat: mapcat,
+		move: function(flag) {
 			if (flag) {
 				return curry33(setAnchor)(_.identity)(null);
 			}
 			return curry3(setAnchor)(_.identity)(null);
 		},
-		each: function (o, m, coll) {
-			o[m] = function () {
+		each: function(o, m, coll) {
+			o[m] = function() {
 				var args = arguments;
-				_.each(coll, function (member) {
+				_.each(coll, function(member) {
 					return member[m].apply(member, args);
 				});
 			};
@@ -783,11 +1421,47 @@ gAlp.Util = (function () {
 		removeNodeOnComplete: removeNodeOnComplete,
 		render: render,
 		reverse: reverseArray,
+		//https://gomakethings.com/how-to-serialize-form-data-into-an-object-with-vanilla-js
+		serializeObject: function(form) {
+			var obj = {},
+				options = [];
+			// Loop through each field in the form
+			Array.prototype.slice.call(form.elements).forEach(function(field) {
+				// Skip some fields we don't need
+				if (!field.name || field.disabled || ['file', 'reset', 'submit', 'button'].indexOf(field.type) > -1) {
+					return;
+				}
+				// Handle multi-select fields
+				if (field.type === 'select-multiple') {
+					// Create an array of selected values
+					// Loop through the options and add selected ones
+					Array.prototype.slice.call(field.options).forEach(function(option) {
+						if (!option.selected) {
+							return;
+						}
+						options.push(option.value);
+					});
+				}
+				// If there are any selection options, add them to the object
+				if (options.length) {
+					obj[field.name] = options;
+				}
+				// If it's a checkbox or radio button and it's not checked, skip it
+				if (['checkbox', 'radio'].indexOf(field.type) > -1 && !field.checked) {
+					return;
+				}
+				obj[field.name] = field.value;
+			});
+			// Do stuff with the field...
+			// Return the object
+			return obj;
+		},
 		setAnchor: setAnchor,
 		setAttributes: _.partial(setFromFactory(!window.addEventListener), always(true), 'setAttribute'),
-		setAttrsFix: setFromFactory, //keep as may be in use, but prefer above
+        setAttrsFix: setFromFactory, //keep as may be in use, but prefer above
+		//setAttrsValidate: _.partial(setFromFactory(!window.addEventListener)),
 		setFromArray: setFromArray,
-		setScrollHandlers: function (collection, getThreshold, klas) {
+		setScrollHandlers: function(collection, getThreshold, klas) {
 			// ensure we don't fire this handler too often
 			// for a good intro into throttling and debouncing, see:
 			// https://css-tricks.com/debouncing-throttling-explained-examples/
@@ -798,27 +1472,69 @@ gAlp.Util = (function () {
 		},
 		setText: curry3(setAdapter)('innerHTML'),
 		setter: setter,
-		show: _.partial(setFromArray, always(true), 'add', ['show']),
-		simpleAdapter: simpleAdapter,
-		toggleClass: _.partial(setFromArray, always(true), 'toggle'),
-		validator: validator,
-		shout: function (m) {
-			var applier = function (f, args) {
-				return function () {
-					f.apply(null, args);
+        shout: function(m) {
+            var slice = Array.prototype.slice;
+			var applier = function(f, args) {
+				return function() {
+					f.apply(null, slice.call(args).concat(slice.call(arguments)));
 				};
 			};
 			return applier(_.bind(window[m], window), _.rest(arguments));
 		},
-		getDummyTarget: function (k, v) {
+		show: _.partial(setFromArray, always(true), 'add', ['show']),
+		shuffleArray: function shuffle(coll) {
+			return function(start, deleteCount) {
+				if (start === -1) {
+					return coll;
+				}
+				deleteCount = isNaN(deleteCount) ? coll.length - 1 : deleteCount;
+				start = isNaN(start) ? 0 : start;
+				return coll.splice(start, deleteCount).concat(coll);
+			};
+		},
+		silent_conditional: function() {
+			var validators = _.toArray(arguments);
+			return function(fun, arg) {
+				var errors = mapcat(function(isValid) {
+					return isValid(arg) ? [] : [isValid.message];
+				}, validators);
+				if (!_.isEmpty(errors)) {
+					return errors;
+					//throw new Error(errors.join(", "));
+				}
+				return fun(arg);
+			};
+		},
+		simple_conditional: function() {
+			var validators = _.toArray(arguments);
+			return function(v, k) {
+				var errors = mapcat(function(isValid) {
+					return isValid(k, v) ? [] : [k, isValid.message];
+					//return isValid(k, v) ? [] : [new Message(k, v)];
+				}, validators);
+				return errors;
+			};
+		},
+		simpleAdapter: simpleAdapter,
+		SimpleXhrFactory: SimpleXhrFactory,
+		
+		supportTest: function(el, prop, reg) {
+			var getBg = curry3(simpleInvoke)(reg)('match');
+			return getBg(gAlp.Util.getComputedStyle(el, prop));
+		},
+		toggleClass: _.partial(setFromArray, always(true), 'toggle'),
+		toggle: _.partial(setFromArray, always(true), 'toggle', ['show']),
+		validator: validator,
+		getDummyTarget: function(k, v) {
 			var tgt = {};
 			tgt[k] = v;
 			return {
 				target: tgt
 			};
 		},
-		report: function (arg) {
-			document.getElementsByTagName('h2')[0].innerHTML = arg;
-		}
+		report: function(arg) {
+            document.getElementsByTagName('h2')[0].innerHTML = arg ? arg : document.documentElement.className;
+		},
+		dog: 'spadger'
 	}; //end
 }());
