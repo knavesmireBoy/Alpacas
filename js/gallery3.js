@@ -400,6 +400,7 @@
 					bool = coll[0] === coll[1],
 					body = utils.getClassList(utils.getBody()),
 					m = bool ? 'remove' : 'add';
+                //body.add('swap');
 				body[m]('swap');
 				return !bool;
 			}
@@ -571,7 +572,6 @@
 		$setup = {},
 		setup = function(e) {
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
-            
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
 			var buttons = ['backbutton', 'playbutton', 'forwardbutton'],

@@ -242,12 +242,12 @@ ul#thumbnails.gallery li.portrait {
 }
 /**/
 
-ul#thumbnails li, .inplay li#paused {
+ul#thumbnails li, .inplay li#paused,  .swap #base {
 	position: absolute;
     left: -9999px;
 	opacity: 0;
 }
-ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide,  ul#thumbnails li#base {
+ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide, ul li#base {
 	position: relative;
     left: 0;
 	opacity: 1;
@@ -280,6 +280,9 @@ ul#thumbnails li.go {
 
 li#slide, li#paused {
 	margin-left: -100%;
+}
+.swap #slide {
+    margin-left: 0;
 }
 #controls {
 	font-size: 1.8em;
