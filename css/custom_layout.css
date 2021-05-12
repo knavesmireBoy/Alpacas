@@ -103,6 +103,7 @@ ul#list li, ul#list li a {
 	margin-right: 0%;
 	width: 100%;
 }
+
 /* early ie requires ul#list, ul#list li to pull content above #sell div */
 
 #controls, #alpacas_for_sale aside, ul#list, ul#thumbnails, #gallery main, ul#list li {
