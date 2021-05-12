@@ -71,7 +71,6 @@ footer a, footer a:link, footer a:visited{
 	box-sizing: border-box;
 }
 
-
 #welcome nav li:nth-child(1) a, #about_us nav li:nth-child(2) a, #about_alpacas nav li:nth-child(3) a, #upkeep nav li:nth-child(4) a, #stud_services nav li:nth-child(5) a, #alpacas_for_sale nav li:nth-child(6) a, #links nav li:nth-child(7) a, #contact_us nav li:nth-child(8) a, #gallery nav li:nth-child(9) a {
 	color: #900;
 	background-position: 0 99%;

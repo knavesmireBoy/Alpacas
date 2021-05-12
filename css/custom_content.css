@@ -1,7 +1,13 @@
+figcaption {
+	text-align: center;
+	padding: .3em 0;
+	font: normal 1em "Handwritten", Georgia, Palatino, serif;
+}
+
 body.sell {
 	font: bold 0.85em Georgia, Palatino, serif;
 }
-ul.tab li a, #sell, #sell a, #sell figure {
+ul.tab li a, #sell a, #sell figure, #sell {
 	border: solid 1px black;
 }
 ul.loop li a {
@@ -15,11 +21,7 @@ ul.loop a, th, .sell #tooltip div:first-child {
 	background: #7F9933;
 	background: hsla(75, 50%, 40%, 1);
 }
-figcaption {
-	text-align: center;
-	padding: .3em 0;
-	font: normal 1em "Handwritten", Georgia, Palatino, serif;
-}
+
 #sell figure {
 	border-color: #556B2F;
 	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
