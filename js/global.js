@@ -644,7 +644,6 @@ gAlp.Util = (function() {
 	}
 
     function invokeThen(validate, action) {
-        console.log(arguments)
 		var args = _.rest(arguments, 2),
 			res = validate.apply(null, args);
         return res && action(res);
@@ -744,6 +743,7 @@ gAlp.Util = (function() {
 	}
 	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
 	function setFromArray(validate, method, classArray, target) {
+        //console.log(arguments)
         //gAlp.Util.report(target.classList);
 		//target may be a function returning a target element
         //safeguard if classArray is space delimited string "foo bar"

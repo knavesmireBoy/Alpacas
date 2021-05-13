@@ -15,6 +15,10 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
+    
+    function add(a, b) {
+		return a + b;
+	}
 
 	function gtThan(a, b) {
 		return getResult(a) > getResult(b);
@@ -104,9 +108,24 @@ if (!window.gAlp) {
         return _.compose(f2, f1);
     }
     
-     function precomp3(f1, f2, f3){
-        return _.compose(f3, f2, f1);
+    function doMethod(o, v, p) {
+		//console.log(arguments);
+		return o[p] && o[p](v);
+	}
+
+    
+     function doHref(img){
+         var a = img.parentNode;
+         utils.setAttributes({href: doParse(img.src)}, a);
+         if(!utils.getPrevious(a)){
+             utils.show(a);
+             klasAdd('sell', utils.getBody);
+         }
     }
+    
+      function sliceArray(list, end) {
+			return list.slice(_.random(0, end || list.length));
+		}
     
   
 
@@ -199,13 +218,7 @@ if (!window.gAlp) {
         ptL = _.partial,
 		doComp = _.compose,
 		Looper = gAlp.LoopIterator,
-        sliceArray = function (list, end) {
-			return list.slice(_.random(0, end || list.length));
-		},
-        lib = [{src: 'href'}],
-        source_href = function(ret, o, p){
-            return ret[lib[p]] = o[p];
-        },
+
         bonds_select = sliceArray(bonds),
 		bonds_len = bonds_select.length,
 		curryFactory = utils.curryFactory,
@@ -217,29 +230,29 @@ if (!window.gAlp) {
 		twicedefer = curryFactory(2, true),
 		thrice = curryFactory(3),
 		thricedefer = curryFactory(3, true),
+        
+        parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
+		doMap = utils.doMap,
+		doGet = twice(utils.getter),
+		doVal = doGet('value'),
+		doParse = doComp(ptL(add, '../'), doGet(0), parser),
+		// doParse = _.identity,
+        
 		deferMap = thricedefer(doCallbacks)('map'),
 		delayMap = thrice(doCallbacks)('map'),
 		deferEach = thricedefer(doCallbacks)('each'),
 		delayEach = thrice(doCallbacks)('each'),
-        deferAttrs = deferMap(bonds_select)(ptL(partialize, utils.setAttributes)),
         intro = utils.findByClass('intro'),
 		anCr = utils.append(),
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
         doMap = utils.doMap,
-        selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
-       //ancr2 = ptL(anCr(utils.findByTag('main')), 'img'),
-        //ancr3 = ptL(anCr(selldiv()), 'img'),
-        ancr4 = doComp(ptL(invokeArg, 'img'), anCr, ptL(anCr(selldiv()), 'a')),
-        f = deferEach(delayMap(deferAttrs)(ptL(precomp, ancr4)))(getResult);
-     
-    
+        deferAttrs = deferMap(bonds_select)(ptL(partialize, doComp(doHref, utils.setAttributes))),
 
-    
-    f();
-    
-    con(intro)
+        selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
+        ancr4 = doComp(ptL(invokeArg, 'img'), anCr, ptL(anCr(selldiv()), 'a')),
+        f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr4)))(getResult);
     
     
     
