@@ -112,6 +112,14 @@ if (!window.gAlp) {
 		//console.log(arguments);
 		return o[p] && o[p](v);
 	}
+    
+    function modulo(n, i) {
+		return i % n;
+	}
+
+	function increment(i) {
+		return i + 1;
+	}
 
     
      function doHref(img){
@@ -123,14 +131,11 @@ if (!window.gAlp) {
          }
     }
     
-      function sliceArray(list, end) {
+    function sliceArray(list, end) {
 			return list.slice(_.random(0, end || list.length));
 		}
     
-  
-
-    
-	var alpacas = [
+    var alpacas = [
 			[
 				["Granary Grace", "Price on Application"],
 				["D.O.B.", "24.07.2005"],
@@ -207,10 +212,6 @@ if (!window.gAlp) {
         
         bonds = [{src: '../assets/hb.jpg'}, {src: '../assets/ca.jpg'}, {src: '../assets/lp.jpg'}],
         utils = gAlp.Util,
-        con2 = _.wrap(console.log, function(f, arg){
-            f(arg);
-            return arg;
-        }),
         con = function(arg){
             console.log(arg);
             return arg;
@@ -234,9 +235,9 @@ if (!window.gAlp) {
         parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
+        getLength = doGet('length'),
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
-		// doParse = _.identity,
         
 		deferMap = thricedefer(doCallbacks)('map'),
 		delayMap = thrice(doCallbacks)('map'),
@@ -247,12 +248,18 @@ if (!window.gAlp) {
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
-        doMap = utils.doMap,
+        doInc = function (n) {
+			return doComp(ptL(modulo, n), increment);
+		},
         deferAttrs = deferMap(bonds_select)(ptL(partialize, doComp(doHref, utils.setAttributes))),
-
-        selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
+        selldiv = doComp(con, ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
         ancr4 = doComp(ptL(invokeArg, 'img'), anCr, ptL(anCr(selldiv()), 'a')),
-        f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr4)))(getResult);
+        f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr4)))(getResult),
+        doLoop = function(coll){
+            Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
+			};
+        
+    doLoop(utils.getByTag('a', intro))
     
     
     
