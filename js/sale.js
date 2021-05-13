@@ -209,13 +209,17 @@ if (!window.gAlp) {
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
         doMap = utils.doMap,
-        ancr = ptL(anCr(utils.findByTag('main')), 'img'),
-        f = deferEach(delayMap(deferAttrs)(ptL(precomp, ancr)))(getResult);
+        ancr1 = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(utils.findByTag('main')), 'div')),
+       //ancr2 = ptL(anCr(utils.findByTag('main')), 'img'),
+        ancr3 = ptL(anCr(ancr1()), 'img'),
+        f = deferEach(delayMap(deferAttrs)(ptL(precomp, ancr3)))(getResult);
      
     
-f();    
     
-    con(bonds_select);
+    
+
+    
+    f();
     
     
     
