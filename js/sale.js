@@ -61,6 +61,14 @@ if (!window.gAlp) {
 			return o[m](arg);
 		}
 	}
+    
+      function invoke(f){
+        return f.apply(null, _.rest(arguments));
+    }
+    
+    function invokeArg(arg, f){
+        return f(arg);
+    }
 
 	function caller(ctxt, ptl, arg, m) {
 		return ptl(ctxt)[m](arg);
@@ -95,6 +103,12 @@ if (!window.gAlp) {
     function precomp(f1, f2){
         return _.compose(f2, f1);
     }
+    
+     function precomp3(f1, f2, f3){
+        return _.compose(f3, f2, f1);
+    }
+    
+  
 
     
 	var alpacas = [
@@ -188,6 +202,10 @@ if (!window.gAlp) {
         sliceArray = function (list, end) {
 			return list.slice(_.random(0, end || list.length));
 		},
+        lib = [{src: 'href'}],
+        source_href = function(ret, o, p){
+            return ret[lib[p]] = o[p];
+        },
         bonds_select = sliceArray(bonds),
 		bonds_len = bonds_select.length,
 		curryFactory = utils.curryFactory,
@@ -204,23 +222,24 @@ if (!window.gAlp) {
 		deferEach = thricedefer(doCallbacks)('each'),
 		delayEach = thrice(doCallbacks)('each'),
         deferAttrs = deferMap(bonds_select)(ptL(partialize, utils.setAttributes)),
+        intro = utils.findByClass('intro'),
 		anCr = utils.append(),
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
         doMap = utils.doMap,
-        ancr1 = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(utils.findByTag('main')), 'div')),
+        selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
        //ancr2 = ptL(anCr(utils.findByTag('main')), 'img'),
-        ancr3 = ptL(anCr(ancr1()), 'img'),
-        f = deferEach(delayMap(deferAttrs)(ptL(precomp, ancr3)))(getResult);
+        //ancr3 = ptL(anCr(selldiv()), 'img'),
+        ancr4 = doComp(ptL(invokeArg, 'img'), anCr, ptL(anCr(selldiv()), 'a')),
+        f = deferEach(delayMap(deferAttrs)(ptL(precomp, ancr4)))(getResult);
      
-    
-    
     
 
     
     f();
     
+    con(intro)
     
     
     
