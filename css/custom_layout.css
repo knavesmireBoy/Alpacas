@@ -151,10 +151,8 @@ ul#list li, ul#list li a {
 #alpacas_for_sale .sell aside, .touch {
 	left: -9999px;
 }
-#alpacas_for_sale.sell main aside {
-	display: none;
-}
-.sell aside, #sell table, #sell.tog table.show, #sell.extent table.show {
+
+.sell aside, #sell table,  #sell.tog table.show, #sell.extent table.show {
 	position: absolute;
 	left: -9999px;
 }
