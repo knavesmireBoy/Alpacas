@@ -1132,6 +1132,10 @@ gAlp.Util = (function() {
 			execute: function () {},
 			undo: function () {}
 		},
+        con:  function(arg){
+            window.console.log(arg);
+            return arg;
+        },
 		conditional: function() {
 			var validators = _.toArray(arguments);
 			return function(fun, arg) {

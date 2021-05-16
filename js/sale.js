@@ -19,6 +19,10 @@ if (!window.gAlp) {
     function add(a, b) {
 		return a + b;
 	}
+    
+    function equals(a, b) {
+		return getResult(a) === getResult(b);
+	}
 
 	function gtThan(a, b) {
 		return getResult(a) > getResult(b);
@@ -70,8 +74,9 @@ if (!window.gAlp) {
         return f.apply(null, _.rest(arguments));
     }
     
-    function invokeArg(arg, f){
-        return f(arg);
+    
+     function invokeArg(f, arg){
+         return f(arg);
     }
 
 	function caller(ctxt, ptl, arg, m) {
@@ -123,12 +128,28 @@ if (!window.gAlp) {
 
     
      function doHref(img){
+         if(img.src) {
          var a = img.parentNode;
          utils.setAttributes({href: doParse(img.src)}, a);
          if(!utils.getPrevious(a)){
              utils.show(a);
              klasAdd('sell', utils.getBody);
          }
+    }
+     }
+    
+    function undoCaption(e){
+        var goFig = utils.getDomChild(utils.getNodeByTag('figure'));
+        doComp(utils.removeNodeOnComplete, goFig, ptL(klasRem, 'extent'), getParent, twice(invokeArg)(utils.$('sell')), thrice(doMethod)('appendChild'), _.identity)(e);
+    }
+        
+    function doCaption(a, i){
+        var fig = twice(invokeArg)('figure'),
+            caption = twice(invokeArg)('figcaption'),
+            append = thrice(doMethod)('appendChild')(a),
+            cap = utils.getter(captions.slice(-bonds_len), i);
+
+       doComp(ptL(klasAdd, 'extent'), ptL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, doGet('parentNode'), utils.hide)(a);
     }
     
     function sliceArray(list, end) {
@@ -210,16 +231,13 @@ if (!window.gAlp) {
 			]
 		],
         
-        bonds = [{src: '../assets/hb.jpg'}, {src: '../assets/ca.jpg'}, {src: '../assets/lp.jpg'}],
+        bonds = [{src: '../assets/contact.jpg'}, {src: '../assets/hb.jpg'}, {src: '../assets/ca.jpg'}, {src: '../assets/lp.jpg'},{src: '../assets/mb.jpg'}, {src: '../assets/aw.jpg'}],
+        captions = ['leanne', 'honor', 'claudine', 'luciana', 'martine', 'aki'],
         utils = gAlp.Util,
-        con = function(arg){
-            console.log(arg);
-            return arg;
-        },
         ptL = _.partial,
+        mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		doComp = _.compose,
 		Looper = gAlp.LoopIterator,
-
         bonds_select = sliceArray(bonds),
 		bonds_len = bonds_select.length,
 		curryFactory = utils.curryFactory,
@@ -236,6 +254,8 @@ if (!window.gAlp) {
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
         getLength = doGet('length'),
+        getTarget = doGet(mytarget),
+        getParent = doGet('parentNode'),
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
         
@@ -251,18 +271,36 @@ if (!window.gAlp) {
         doInc = function (n) {
 			return doComp(ptL(modulo, n), increment);
 		},
+        node_from_target = utils.drillDown([mytarget, 'nodeName']),
         deferAttrs = deferMap(bonds_select)(ptL(partialize, doComp(doHref, utils.setAttributes))),
-        selldiv = doComp(con, ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
-        ancr4 = doComp(ptL(invokeArg, 'img'), anCr, ptL(anCr(selldiv()), 'a')),
-        f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr4)))(getResult),
+        selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
+        ancr = doComp(twice(invokeArg)('img'), anCr, ptL(anCr(selldiv()), 'a')),
+        f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr)))(getResult),
         doLoop = function(coll){
             Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
-			};
+			},
+        deferShow,
+        deferMembers,
+        deferNext,
+        isIMG = ptL(equals, 'IMG'),
+        doDisplay,
+        goGet,
+        doFind;
+            
+        // utils.drillDown(['value']), _.bind(Looper.onpage.current, Looper.onpage),
+    doLoop(utils.getByTag('a', intro));
+    deferMembers = deferEach(Looper.onpage.current().members);
+    doFind = _.bind(Looper.onpage.find, Looper.onpage);
+    goGet = _.bind(Looper.onpage.get, Looper.onpage);
+    //deferEach(Looper.onpage.current().members)(undoCaption);
+    //doDisplay = doComp(utils.con, goGet, doFind, ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(getParent, getTarget)));
+    doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGet, doFind, getParent, getTarget));
+    
+    deferMembers(doCaption)();
+    deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
+    deferNext = doComp(doCaption, deferShow, deferEach(deferMembers)(utils.hide));
+    eventing('click', event_actions.slice(0), doDisplay, utils.$('sell')).execute();
         
-    doLoop(utils.getByTag('a', intro))
-    
-    
-    
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
