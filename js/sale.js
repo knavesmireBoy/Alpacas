@@ -235,12 +235,13 @@ if (!window.gAlp) {
 				["src", "../images/sale/rico.jpg"]
 			]
 		],
-        con = utils.con, 
+       
         
         bonds = [{src: '../assets/contact.jpg'}, {src: '../assets/hb.jpg'}, {src: '../assets/ca.jpg'}, {src: '../assets/lp.jpg'},{src: '../assets/mb.jpg'}, {src: '../assets/aw.jpg'}],
         captions = ['leanne', 'honor', 'claudine', 'luciana', 'martine', 'aki'],
         utils = gAlp.Util,
         ptL = _.partial,
+         con = utils.con, 
        
         mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		doComp = _.compose,
@@ -317,6 +318,9 @@ if (!window.gAlp) {
         doLoop = function(coll){
             Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
 			},          
+        doListen = function(coll){
+            Looper.listen = Looper.from(coll, doInc(getLength(coll)));
+			}, 
         gt4 = twicedefer(gtThan)(4)(bonds_len),
         gt3 = twicedefer(gtThan)(3)(bonds_len),
         mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
@@ -332,7 +336,8 @@ if (!window.gAlp) {
         doDisplay,
         goGet,
         doFind,
-        undo = thricedefer(doMethod)('undo')(null)($displayer);
+        doExec = thricedefer(doMethod)('execute')(null),
+        $displayer = {};
             
         // utils.drillDown(['value']), _.bind(Looper.onpage.current, Looper.onpage),
     doLoop(utils.getByTag('a', intro));
@@ -345,8 +350,13 @@ if (!window.gAlp) {
     deferMembers(doCaption)();
     deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
     deferNext = doComp(doCaption, deferShow, deferEach(deferMembers)(utils.hide));
-    eventing('click', event_actions.slice(0), doDisplay, utils.$('sell')).execute();
-    eventing('click', event_actions.slice(0), deferEach(Looper.onpage.current().members)(doCaption), report).execute();
+    $displayer = eventing('click', event_actions.slice(0), function(e){
+        doDisplay(e);
+        $displayer.undo();
+        
+    }, utils.$('sell')).execute();
+    
+    eventing('click', event_actions.slice(0), doComp((doExec)($displayer), deferMembers(doCaption)), report).execute();
     eventing('resize', [], clear, window).execute();
     doOutcome();
     
