@@ -119,6 +119,10 @@ if (!window.gAlp) {
 		return o[p] && o[p](v);
 	}
     
+    function doMethodRet(o, item) {
+       return doMethod(o, v, p);
+	}
+    
     function lazyVal(v, o, p) {
 		return doMethod(o, v, p);
 	}
@@ -243,7 +247,7 @@ if (!window.gAlp) {
 			]
 		],
         
-        loop_captions = ['Alpacas For Sale', 'Next Alpaca'],
+        loop_captions = ['Alpacas For Sale'],
        
         
         bonds = [{src: '../assets/contact.jpg'}, {src: '../assets/hb.jpg'}, {src: '../assets/ca.jpg'}, {src: '../assets/lp.jpg'},{src: '../assets/mb.jpg'}, {src: '../assets/aw.jpg'}],
@@ -277,6 +281,7 @@ if (!window.gAlp) {
         parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
         doMethodDefer = thricedefer(doMethod),
         true_captions = doMethodDefer('slice')(-bonds_len)(captions),
+        prepLoopTabs = doComp(con, thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getZero, true_captions),
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
         getLength = doGet('length'),
@@ -329,8 +334,6 @@ if (!window.gAlp) {
         makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {id: 'list'}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
         //doLI = doComp(invoke, utils.setText, twice(invoke)('li'), anCr, makeUL),
         makeTabs = deferEach(true_captions)(ptL(utils.invokeWhen, utils.always(bonds_len), doLI)),
-
-
         
         selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
         ancr = doComp(twice(invokeArg)('img'), anCr, ptL(anCr(selldiv()), 'a')),
@@ -377,11 +380,7 @@ if (!window.gAlp) {
     eventing('click', event_actions.slice(0), deferNext, report).execute();
     eventing('resize', [], clear, window).execute();
     doOutcome(); 
-    makeTabs();
-    
-    loop_captions.splice(1, 0, true_captions()[0]);
-    con(loop_captions);
-    
+    makeTabs();    
     
     con(thricedefer(doMethod)('slice')(-bonds_len)(captions));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
