@@ -743,7 +743,7 @@ gAlp.Util = (function() {
 	}
 	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
 	function setFromArray(validate, method, classArray, target) {
-        //console.log(arguments)
+        console.log(arguments)
         //gAlp.Util.report(target.classList);
 		//target may be a function returning a target element
         //safeguard if classArray is space delimited string "foo bar"
@@ -896,6 +896,15 @@ gAlp.Util = (function() {
 		fun = arg ? _.partial(fun, arg) : fun;
 
 		return _.reduce(coll, function(champ, contender) {
+			return fun(champ, contender) ? champ : contender;
+		});
+	}
+    
+    function bestOnly(fun, coll) {
+		if(_.isArray(fun)){
+			fun = fun[0];
+		}
+		return _.reduce(_.toArray(coll), function(champ, contender) {
 			return fun(champ, contender) ? champ : contender;
 		});
 	}
@@ -1268,6 +1277,7 @@ gAlp.Util = (function() {
 			return _.findIndex(collection, predicate || always(true));
 		},
 		getBest: best,
+		getBestOnly: bestOnly,
 		getBestPred: bestPred,
 		getBestColl: bestColl,
 		getBody: function(flag) {

@@ -11,6 +11,7 @@ if (!window.gAlp) {
 	"use strict";
 
 	function noOp() {}
+    
 
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
@@ -240,6 +241,13 @@ if (!window.gAlp) {
 		Looper = gAlp.LoopIterator,
         bonds_select = sliceArray(bonds),
 		bonds_len = bonds_select.length,
+        
+        lookup = {
+			4: 'four',
+			5: 'five',
+			6: 'six'
+		},
+        
 		curryFactory = utils.curryFactory,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
@@ -256,18 +264,40 @@ if (!window.gAlp) {
         getLength = doGet('length'),
         getTarget = doGet(mytarget),
         getParent = doGet('parentNode'),
+        getZero = doGet(0),
+        getOne = doGet(1),
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
         
 		deferMap = thricedefer(doCallbacks)('map'),
 		delayMap = thrice(doCallbacks)('map'),
 		deferEach = thricedefer(doCallbacks)('each'),
+		deferEvery = thricedefer(doCallbacks)('every'),
 		delayEach = thrice(doCallbacks)('each'),
         intro = utils.findByClass('intro'),
 		anCr = utils.append(),
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
+        
+        
+        number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
+		threshold = Number(query.match(number_reg)[1]),
+		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
+		getEnvironment = (function () {
+			if (mq) {
+				return _.partial(Modernizr.mq, query);
+			} else {
+				return isDesktop;
+			}
+		}()),
+		negate = function (cb) {
+			if (!getEnvironment()) {
+				getEnvironment = _.negate(getEnvironment);
+				cb();
+			}
+		},
+        
         doInc = function (n) {
 			return doComp(ptL(modulo, n), increment);
 		},
@@ -278,7 +308,15 @@ if (!window.gAlp) {
         f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr)))(getResult),
         doLoop = function(coll){
             Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
-			},
+			},          
+        gt4 = twicedefer(gtThan)(4)(bonds_len),
+        gt3 = twicedefer(gtThan)(3)(bonds_len),
+        mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+        addLoopClass = ptL(klasAdd, 'loop', intro),
+        addTabClass = ptL(klasAdd, 'tab', intro),
+        outcomes = [[gt4, addLoopClass], [mob4, addLoopClass], [utils.always(bonds_len), addTabClass], [utils.always(true), function(){}]],
+        doOutcome = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
+        clear = doComp(doOutcome, deferEach(['loop', 'tab'])(twice(klasRem)(intro))),
         deferShow,
         deferMembers,
         deferNext,
@@ -292,14 +330,16 @@ if (!window.gAlp) {
     deferMembers = deferEach(Looper.onpage.current().members);
     doFind = _.bind(Looper.onpage.find, Looper.onpage);
     goGet = _.bind(Looper.onpage.get, Looper.onpage);
-    //deferEach(Looper.onpage.current().members)(undoCaption);
-    //doDisplay = doComp(utils.con, goGet, doFind, ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(getParent, getTarget)));
+
     doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGet, doFind, getParent, getTarget));
     
     deferMembers(doCaption)();
     deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
     deferNext = doComp(doCaption, deferShow, deferEach(deferMembers)(utils.hide));
     eventing('click', event_actions.slice(0), doDisplay, utils.$('sell')).execute();
+    eventing('resize', [], clear, window).execute();
+    eventing('load', [], doOutcome, window).execute();
+    
         
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
