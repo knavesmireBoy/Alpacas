@@ -163,8 +163,10 @@ if (!window.gAlp) {
     
     function doLI(caption, i){
         var li = twice(invokeArg)('li'),
-            link = twice(invokeArg)('a');
-        doComp(utils.setText(caption), link, anCr, li, anCr, getUL)();
+            link = twice(invokeArg)('a'),
+            current = ptL(klasAdd, 'current'),
+            well = ptL(utils.getBest, _.negate(utils.always(i)), [current, _.identity]);
+        doComp(utils.setText(caption), link, anCr, con, well, li, anCr, getUL)();
     }
     
     
@@ -334,6 +336,7 @@ if (!window.gAlp) {
         makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {id: 'list'}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
         //doLI = doComp(invoke, utils.setText, twice(invoke)('li'), anCr, makeUL),
         makeTabs = deferEach(true_captions)(ptL(utils.invokeWhen, utils.always(bonds_len), doLI)),
+        //makeTabs2 = doComp(ptL(klasAdd, 'current'), thrice(lazyVal)()),
         
         selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
         ancr = doComp(twice(invokeArg)('img'), anCr, ptL(anCr(selldiv()), 'a')),
@@ -347,8 +350,8 @@ if (!window.gAlp) {
         addLoopClass = ptL(klasAdd, 'loop', makeUL),
         addTabClass = ptL(klasAdd, 'tab', makeUL),
         outcomes = [[gt4, addLoopClass], [mob4, addLoopClass], [utils.always(bonds_len), addTabClass], [utils.always(true), function(){}]],
-        doOutcome = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
-        clear = doComp(doOutcome, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),
+        addULClass = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
+        clear = doComp(addULClass, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),
         deferShow,
         deferMembers,
         deferNext,
@@ -358,8 +361,6 @@ if (!window.gAlp) {
         doFind,
         doExec = thricedefer(doMethod)('execute')(null),
         $displayer;
-            
-        // utils.drillDown(['value']), _.bind(Looper.onpage.current, Looper.onpage),
     doLoop(utils.getByTag('a', intro));
     deferMembers = deferEach(Looper.onpage.current().members);
     doFind = _.bind(Looper.onpage.find, Looper.onpage);
@@ -367,7 +368,7 @@ if (!window.gAlp) {
 
     doDisplay = ptL(utils.invokeWhen, doComp(utils.con, isIMG, node_from_target), doComp(deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGet, doFind, getParent, getTarget));
     
-    deferMembers(doCaption)();
+    //deferMembers(doCaption)();
     deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
     deferNext = doComp(deferShow, deferMembers(utils.hide));
     $displayer = eventing('click', event_actions.slice(0), function(e){
@@ -379,10 +380,9 @@ if (!window.gAlp) {
     //eventing('click', event_actions.slice(0), doComp((doExec)($displayer), deferMembers(doCaption)), report).execute();
     eventing('click', event_actions.slice(0), deferNext, report).execute();
     eventing('resize', [], clear, window).execute();
-    doOutcome(); 
+    addULClass(); 
     makeTabs();    
     
-    con(thricedefer(doMethod)('slice')(-bonds_len)(captions));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
