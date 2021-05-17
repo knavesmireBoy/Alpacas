@@ -157,6 +157,13 @@ if (!window.gAlp) {
        doComp(ptL(klasAdd, 'extent'), ptL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
     }
     
+    function doLI(caption, i){
+        var li = twice(invokeArg)('li'),
+            link = twice(invokeArg)('a');
+        doComp(utils.setText(caption), link, anCr, li, anCr, getUL)();
+    }
+    
+    
     function sliceArray(list, end) {
 			return list.slice(_.random(0, end || list.length));
 		}
@@ -235,6 +242,8 @@ if (!window.gAlp) {
 				["src", "../images/sale/rico.jpg"]
 			]
 		],
+        
+        loop_captions = ['Alpacas For Sale', 'Next Alpaca'],
        
         
         bonds = [{src: '../assets/contact.jpg'}, {src: '../assets/hb.jpg'}, {src: '../assets/ca.jpg'}, {src: '../assets/lp.jpg'},{src: '../assets/mb.jpg'}, {src: '../assets/aw.jpg'}],
@@ -266,6 +275,8 @@ if (!window.gAlp) {
 		thricedefer = curryFactory(3, true),
         
         parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
+        doMethodDefer = thricedefer(doMethod),
+        true_captions = doMethodDefer('slice')(-bonds_len)(captions),
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
         getLength = doGet('length'),
@@ -312,23 +323,29 @@ if (!window.gAlp) {
 		},
         node_from_target = utils.drillDown([mytarget, 'nodeName']),
         deferAttrs = deferMap(bonds_select)(ptL(partialize, doComp(doHref, utils.setAttributes))),
+        getUL = ptL(utils.findByTag, 'ul', intro),
+        loopUL = doComp(ptL(utils.climbDom, 2), utils.setText('Alpacas For Sale'), twice(invoke)('a'), anCr, twice(invoke)('li'), anCr),
+        
+        makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {id: 'list'}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
+        //doLI = doComp(invoke, utils.setText, twice(invoke)('li'), anCr, makeUL),
+        makeTabs = deferEach(true_captions)(ptL(utils.invokeWhen, utils.always(bonds_len), doLI)),
+
+
+        
         selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
         ancr = doComp(twice(invokeArg)('img'), anCr, ptL(anCr(selldiv()), 'a')),
         f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr)))(getResult),
         doLoop = function(coll){
             Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
-			},          
-        doListen = function(coll){
-            Looper.listen = Looper.from(coll, doInc(getLength(coll)));
-			}, 
+			},           
         gt4 = twicedefer(gtThan)(4)(bonds_len),
         gt3 = twicedefer(gtThan)(3)(bonds_len),
         mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
-        addLoopClass = ptL(klasAdd, 'loop', intro),
-        addTabClass = ptL(klasAdd, 'tab', intro),
+        addLoopClass = ptL(klasAdd, 'loop', makeUL),
+        addTabClass = ptL(klasAdd, 'tab', makeUL),
         outcomes = [[gt4, addLoopClass], [mob4, addLoopClass], [utils.always(bonds_len), addTabClass], [utils.always(true), function(){}]],
         doOutcome = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
-        clear = doComp(doOutcome, deferEach(['loop', 'tab'])(twice(klasRem)(intro))),
+        clear = doComp(doOutcome, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),
         deferShow,
         deferMembers,
         deferNext,
@@ -337,7 +354,7 @@ if (!window.gAlp) {
         goGet,
         doFind,
         doExec = thricedefer(doMethod)('execute')(null),
-        $displayer = {};
+        $displayer;
             
         // utils.drillDown(['value']), _.bind(Looper.onpage.current, Looper.onpage),
     doLoop(utils.getByTag('a', intro));
@@ -349,18 +366,24 @@ if (!window.gAlp) {
     
     deferMembers(doCaption)();
     deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
-    deferNext = doComp(doCaption, deferShow, deferEach(deferMembers)(utils.hide));
+    deferNext = doComp(deferShow, deferMembers(utils.hide));
     $displayer = eventing('click', event_actions.slice(0), function(e){
         doDisplay(e);
         $displayer.undo();
         
     }, utils.$('sell')).execute();
     
-    eventing('click', event_actions.slice(0), doComp((doExec)($displayer), deferMembers(doCaption)), report).execute();
+    //eventing('click', event_actions.slice(0), doComp((doExec)($displayer), deferMembers(doCaption)), report).execute();
+    eventing('click', event_actions.slice(0), deferNext, report).execute();
     eventing('resize', [], clear, window).execute();
-    doOutcome();
+    doOutcome(); 
+    makeTabs();
     
-        
+    loop_captions.splice(1, 0, true_captions()[0]);
+    con(loop_captions);
+    
+    
+    con(thricedefer(doMethod)('slice')(-bonds_len)(captions));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
