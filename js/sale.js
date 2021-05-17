@@ -32,6 +32,28 @@ if (!window.gAlp) {
 	function lsThanEq(a, b) {
 		return a <= b;
 	}
+    
+    function existy(x) {
+		return x != null;
+	}
+
+	function cat() {
+		var head = _.first(arguments);
+		if (existy(head)) {
+			return head.concat.apply(head, _.rest(arguments));
+		} else {
+			return [];
+		}
+	}
+
+	function construct(head, tail) {
+		return head && cat([head], _.toArray(tail));
+	}
+
+	function mapcat(fun, coll) {
+		var res = _.map(coll, fun);
+		return cat.apply(null, res);
+	}
 
 	function callWith(m, ctxt) {
 		return m.call(ctxt);
@@ -73,6 +95,10 @@ if (!window.gAlp) {
     
       function invoke(f){
         return f.apply(null, _.rest(arguments));
+      }
+    
+    function getterBridge(arr){
+        return utils.getter(arr[1], arr[0]);
     }
     
     
@@ -115,7 +141,7 @@ if (!window.gAlp) {
     }
     
     function doMethod(o, v, p) {
-		//console.log(arguments);
+		console.log(arguments);
 		return o[p] && o[p](v);
 	}
     
@@ -164,9 +190,8 @@ if (!window.gAlp) {
     function doLI(caption, i){
         var li = twice(invokeArg)('li'),
             link = twice(invokeArg)('a'),
-            current = ptL(klasAdd, 'current'),
-            well = ptL(utils.getBest, _.negate(utils.always(i)), [current, _.identity]);
-        doComp(utils.setText(caption), link, anCr, con, well, li, anCr, getUL)();
+            doCurrent = ptL(utils.getBest, _.negate(utils.always(i)), [ptL(klasAdd, 'current'), _.identity]);
+        doComp(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
     }
     
     
@@ -281,16 +306,16 @@ if (!window.gAlp) {
 		thricedefer = curryFactory(3, true),
         
         parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
-        doMethodDefer = thricedefer(doMethod),
-        true_captions = doMethodDefer('slice')(-bonds_len)(captions),
-        prepLoopTabs = doComp(con, thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getZero, true_captions),
-		doMap = utils.doMap,
+        doMap = utils.doMap,
 		doGet = twice(utils.getter),
+        getZero = doGet(0),
+        getOne = doGet(1),
+        doMethodDefer = thricedefer(doMethod),
+        true_captions = doMethodDefer('slice')(-bonds_len)(captions),		
         getLength = doGet('length'),
         getTarget = doGet(mytarget),
         getParent = doGet('parentNode'),
-        getZero = doGet(0),
-        getOne = doGet(1),
+        
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
         
@@ -329,15 +354,14 @@ if (!window.gAlp) {
 			return doComp(ptL(modulo, n), increment);
 		},
         node_from_target = utils.drillDown([mytarget, 'nodeName']),
+        text_from_target = utils.drillDown([mytarget, 'innerHTML']),
         deferAttrs = deferMap(bonds_select)(ptL(partialize, doComp(doHref, utils.setAttributes))),
         getUL = ptL(utils.findByTag, 'ul', intro),
         loopUL = doComp(ptL(utils.climbDom, 2), utils.setText('Alpacas For Sale'), twice(invoke)('a'), anCr, twice(invoke)('li'), anCr),
         
         makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {id: 'list'}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
-        //doLI = doComp(invoke, utils.setText, twice(invoke)('li'), anCr, makeUL),
-        makeTabs = deferEach(true_captions)(ptL(utils.invokeWhen, utils.always(bonds_len), doLI)),
-        //makeTabs2 = doComp(ptL(klasAdd, 'current'), thrice(lazyVal)()),
-        
+        //makeTabs = deferEach(true_captions)(ptL(utils.invokeWhen, utils.always(bonds_len), doLI)),        
+        makeTabs = deferEach(true_captions)(doLI),        
         selldiv = doComp(ptL(utils.setAttributes, {id: 'sell'}), ptL(anCr(intro), 'div')),
         ancr = doComp(twice(invokeArg)('img'), anCr, ptL(anCr(selldiv()), 'a')),
         f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr)))(getResult),
@@ -357,31 +381,58 @@ if (!window.gAlp) {
         deferNext,
         isIMG = ptL(equals, 'IMG'),
         doDisplay,
-        goGet,
+        goGetValue,
+        goGetIndex,
         doFind,
-        doExec = thricedefer(doMethod)('execute')(null),
-        $displayer;
+        makeCaptions,
+        captionsORtabs,
+        prepLoopTabs,
+        $displayer,
+        events = [utils.shout('alert', 'home'), utils.shout('alert','awao'), noOp, noOp],
+        wanna = ptL(eventing, 'click', [], doComp(con, getOne, ptL(utils.getBest, doComp(con, getOne), _.zip(navExes, events))));
+    
+    //doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), _.zip(navExes, events)))
+    
+    var reset = function (e) {
+        var events = [utils.shout('home'), utils.shout('awao')],
+            composed = doComp(thrice(lazyVal)('match'), text_from_target)(e),
+            best = ptL(utils.getBest, function (arr) {
+                return composed(arr[0]);
+            }, _.zip(navExes, events));
+        
+        doComp(utils.getDefaultAction, best)()();
+						};
+    
     doLoop(utils.getByTag('a', intro));
     deferMembers = deferEach(Looper.onpage.current().members);
-    doFind = _.bind(Looper.onpage.find, Looper.onpage);
-    goGet = _.bind(Looper.onpage.get, Looper.onpage);
+    makeCaptions = deferMembers(doCaption);
+    captionsORtabs = [[gt4, makeCaptions], [mob4, makeCaptions], [utils.always(bonds_len), makeTabs],[utils.always(true), function(){}]];
 
-    doDisplay = ptL(utils.invokeWhen, doComp(utils.con, isIMG, node_from_target), doComp(deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGet, doFind, getParent, getTarget));
+    doFind = _.bind(Looper.onpage.find, Looper.onpage);
+    goGetValue = doComp(doGet('value'), _.bind(Looper.onpage.current, Looper.onpage));
+    goGetIndex = doComp(doGet('index'), _.bind(Looper.onpage.current, Looper.onpage));
     
-    //deferMembers(doCaption)();
+    prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult)),
+        
+    doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp($$('list'), deferEach(prepLoopTabs)(doLI), deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+        
     deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
     deferNext = doComp(deferShow, deferMembers(utils.hide));
     $displayer = eventing('click', event_actions.slice(0), function(e){
-        doDisplay(e);
-        $displayer.undo();
+        if(doDisplay(e)){
+           $displayer.undo();  
+        }
+       
         
     }, utils.$('sell')).execute();
     
-    //eventing('click', event_actions.slice(0), doComp((doExec)($displayer), deferMembers(doCaption)), report).execute();
     eventing('click', event_actions.slice(0), deferNext, report).execute();
     eventing('resize', [], clear, window).execute();
-    addULClass(); 
-    makeTabs();    
+    addULClass();
+    utils.getBest(doComp(invoke, getZero), captionsORtabs)[1]();
+    var funcs = _.map(_.map(navExes, thrice(doMethod)('match')), twice(invoke)('sale'));
+    
+  doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero), _.zip(funcs, events)))();
     
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
