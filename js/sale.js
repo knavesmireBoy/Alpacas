@@ -389,9 +389,9 @@ if (!window.gAlp) {
         prepLoopTabs,
         $displayer,
         navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
-        events = [utils.shout('alert', 'home'), utils.shout('alert','awao'), utils.shout('alert','mile'), noOp],
-        nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
-        $nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
+        events,
+        nav_listener,
+        $nav_listener;
     
     //doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), _.zip(navExes, events)))
     
@@ -409,43 +409,32 @@ if (!window.gAlp) {
     deferMembers = deferEach(Looper.onpage.current().members);
     makeCaptions = deferMembers(doCaption);
     captionsORtabs = [[gt4, makeCaptions], [mob4, makeCaptions], [utils.always(bonds_len), makeTabs],[utils.always(true), function(){}]];
+    
+    deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
+    deferNext = doComp(deferShow, deferMembers(utils.hide));
 
     doFind = _.bind(Looper.onpage.find, Looper.onpage);
     goGetValue = doComp(doGet('value'), _.bind(Looper.onpage.current, Looper.onpage));
     goGetIndex = doComp(doGet('index'), _.bind(Looper.onpage.current, Looper.onpage));
     
-    prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult)),
+    prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult));
+    
+    events = [deferNext, utils.shout('alert','awao'), utils.shout('alert','mile'), noOp];
+    nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target);
+    $nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
         
     doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(thrice(doMethod)('execute')(null), $nav_listener, deferEach(prepLoopTabs)(doLI), deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
         
-    deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
-    deferNext = doComp(deferShow, deferMembers(utils.hide));
+    
     $displayer = eventing('click', event_actions.slice(0), function(e){
         if(doDisplay(e)){
            $displayer.undo();  
-        }
-       
-        
+        }        
     }, utils.$('sell')).execute();
-    
-    eventing('click', event_actions.slice(0), deferNext, report).execute();
     eventing('resize', [], clear, window).execute();
     addULClass();
     utils.getBest(doComp(invoke, getZero), captionsORtabs)[1]();
-   // var funcs = _.map(_.map(navExes, thrice(doMethod)('match')), twice(invoke)('sale'));
-   // doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero), _.zip(funcs, events)))();
-    //var funcs = deferMap(_.map(navExes, thrice(doMethod)('match')))(twice(invoke));
     
-    function F(f1, f2, arg){
-        return doComp(f1, f2)(arg)
-    }
-    /*
-    var funcs = delayMap(_.map(navExes, thrice(doMethod)('match')));
-    doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero), _.zip(funcs(twice(invoke)('sale')), events)))();
-    */
-    
-    var funcs = delayMap(_.map(navExes, thrice(doMethod)('match')));
-    doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), funcs, twice(invoke), text_from_target);
     
     
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
