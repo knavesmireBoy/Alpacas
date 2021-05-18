@@ -389,6 +389,7 @@ if (!window.gAlp) {
         prepLoopTabs,
         $displayer,
         events = [utils.shout('alert', 'home'), utils.shout('alert','awao'), noOp, noOp],
+        events2 = ptL(utils.getter, [utils.shout('alert', 'home'), utils.shout('alert','awao'), noOp, noOp]),
         wanna = ptL(eventing, 'click', [], doComp(con, getOne, ptL(utils.getBest, doComp(con, getOne), _.zip(navExes, events))));
     
     //doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), _.zip(navExes, events)))
@@ -430,9 +431,21 @@ if (!window.gAlp) {
     eventing('resize', [], clear, window).execute();
     addULClass();
     utils.getBest(doComp(invoke, getZero), captionsORtabs)[1]();
-    var funcs = _.map(_.map(navExes, thrice(doMethod)('match')), twice(invoke)('sale'));
+   // var funcs = _.map(_.map(navExes, thrice(doMethod)('match')), twice(invoke)('sale'));
+   // doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero), _.zip(funcs, events)))();
+    //var funcs = deferMap(_.map(navExes, thrice(doMethod)('match')))(twice(invoke));
     
-  doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero), _.zip(funcs, events)))();
+    function F(f1, f2, arg){
+        return doComp(f1, f2)(arg)
+    }
+    /*
+    var funcs = delayMap(_.map(navExes, thrice(doMethod)('match')));
+    doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero), _.zip(funcs(twice(invoke)('sale')), events)))();
+    */
+    
+    var funcs = delayMap(_.map(navExes, thrice(doMethod)('match')));
+    doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), funcs, twice(invoke))('next');
+    
     
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
