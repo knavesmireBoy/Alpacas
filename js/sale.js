@@ -15,11 +15,11 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-    
-    function makeDummy() {
+
+	function makeDummy() {
 		return {
-			execute: function () {},
-			undo: function () {}
+			execute: function() {},
+			undo: function() {}
 		};
 	}
 
@@ -196,20 +196,19 @@ if (!window.gAlp) {
 		var li = twice(invokeArg)('li'),
 			link = twice(invokeArg)('a'),
 			doCurrent = ptL(utils.getBest, _.negate(utils.always(i)), [ptL(klasAdd, 'current'), _.identity]);
-        doComp(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
-        /*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-        if(utils.findByClass('tab') && i && !arr[i+1]){
-            eventing('click', [], function(e){
-                _.compose(ptL(klasRem, 'current'), ptL(utils.findByClass, 'current'))();
-                doComp(ptL(klasAdd, 'current'), getParent, getTarget)(e);
-                var reg = new RegExp(text_from_target(e), 'i'),
-                    cb = thrice(doMethod)('match')(reg);
-                Looper.onpage.visit(utils.hide);
-                Looper.onpage.set(_.findIndex(true_captions(), cb));
-                _.compose(utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
-                
-        }, getUL).execute();
-        }
+		doComp(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
+		/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
+		if (utils.findByClass('tab') && i && !arr[i + 1]) {
+			eventing('click', [], function(e) {
+				_.compose(ptL(klasRem, 'current'), ptL(utils.findByClass, 'current'))();
+				doComp(ptL(klasAdd, 'current'), getParent, getTarget)(e);
+				var reg = new RegExp(text_from_target(e), 'i'),
+					cb = thrice(doMethod)('match')(reg);
+				Looper.onpage.visit(utils.hide);
+				Looper.onpage.set(_.findIndex(true_captions(), cb));
+				_.compose(utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+			}, getUL).execute();
+		}
 	}
 
 	function sliceArray(list, end) {
@@ -378,7 +377,6 @@ if (!window.gAlp) {
 		makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {
 			id: 'list'
 		}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
-        
 		makeTabs = deferEach(true_captions)(doLI_cb),
 		selldiv = doComp(ptL(utils.setAttributes, {
 			id: 'sell'
@@ -388,8 +386,7 @@ if (!window.gAlp) {
 		doLoop = function(coll) {
 			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
 		},
-        
-        doListen = function(coll) {
+		doListen = function(coll) {
 			Looper.listen = Looper.from(coll, increment(getLength(coll)));
 		},
 		gt4 = twicedefer(gtThan)(4)(bonds_len),
@@ -405,85 +402,59 @@ if (!window.gAlp) {
 		],
 		addULClass = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
 		clear = doComp(addULClass, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),
-		deferShow,
-		deferNext,
-		deferMembers,
-		doDisplay,
-		goGetValue,
-		goGetIndex,
-		doFind,
-		makeCaptions,
-		captionsORtabs,
-        restoreCaptions,
-        bindCurrent,
-		prepLoopTabs,
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
-		events,
-        $toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')), 
-		nav_listener,
-		$nav_listener,
-        navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
-        delayExecute = thrice(doMethod)('execute')(null),
-        delayUndo = thrice(doMethod)('undo')(null),
+		$toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
+		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
+		delayExecute = thrice(doMethod)('execute')(null),
+		delayEl = thrice(doMethod)('getEl')(null),
+		delayUndo = thrice(doMethod)('undo')(null),
 		isIMG = ptL(equals, 'IMG'),
-        $displayer = makeDummy(),
-        $toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
-        $listeners;
-    
-	doLoop(utils.getByTag('a', intro));
-    
-	deferMembers = deferEach(Looper.onpage.current().members);
-	makeCaptions = deferMembers(doCaption_cb);
-    bindCurrent = _.bind(Looper.onpage.current, Looper.onpage);
-	captionsORtabs = [
-		[gt4, makeCaptions],
-		[mob4, makeCaptions],
-		[utils.always(bonds_len), makeTabs],
-		[utils.always(true), function() {}]
-	];
-	deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
-	deferNext = doComp(deferShow, deferMembers(utils.hide));
-	doFind = _.bind(Looper.onpage.find, Looper.onpage);
-	goGetValue = doComp(doGet('value'), bindCurrent);
-	goGetIndex = doComp(doGet('index'), bindCurrent);
-    
-    restoreCaptions = doComp(ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')),
-    
-	prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult));
-    
-	events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext), 
-              restoreCaptions, 
-              noOp, noOp];
-    
-	nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target);
-    
-	$nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
-    
-	doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(utils.always($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
-    
-	$displayer = eventing('click', event_actions.slice(0), function(e) {
-        var $toggler = doDisplay(e);
-		if ($toggler) {
-			$displayer.undo();
-            $toggler.execute();
-		}
-	}, utils.$('sell'));
-    
-    
-    events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext), 
-              doComp(ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')), 
-              utils.shout('alert', 'mile'), noOp];
-    
-	eventing('resize', [], clear, window).execute();
-	addULClass();
-	utils.getBest(doComp(invoke, getZero), captionsORtabs)[1]();
-    
-    if(utils.findByClass('loop')){
-        $displayer.execute();
-    }
-    else {
-       $toggle.execute(); 
-    }
+		$displayer = makeDummy(),
+		$toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
+		$listeners,
+		factory = function() {
+			doLoop(utils.getByTag('a', intro));
+			var deferMembers = deferEach(Looper.onpage.current().members),
+				makeCaptions = deferMembers(doCaption_cb),
+				bindCurrent = _.bind(Looper.onpage.current, Looper.onpage),
+				captionsORtabs = [
+					[gt4, makeCaptions],
+					[mob4, makeCaptions],
+					[utils.always(bonds_len), makeTabs],
+					[utils.always(true), function() {}]
+				],
+				deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage)),
+				deferNext = doComp(deferShow, deferMembers(utils.hide)),
+				doFind = _.bind(Looper.onpage.find, Looper.onpage),
+				goGetValue = doComp(doGet('value'), bindCurrent),
+				goGetIndex = doComp(doGet('index'), bindCurrent),
+				restoreCaptions = doComp(addULClass, delayExecute, twice(invoke)(utils), ptL(utils.drillDown, ['eventer', 'club', 1]), delayUndo, utils.always($toggle), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')),
+				prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult)),
+				events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
+					restoreCaptions,
+					noOp, noOp
+				],
+				nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
+				$nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list')),
+				doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(utils.always($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+            
+			$displayer = eventing('click', event_actions.slice(0), function(e) {
+				var $toggler = doDisplay(e);
+				if ($toggler) {
+					$displayer.undo();
+					$toggler.execute();
+				}
+			}, utils.$('sell'));
+			eventing('resize', [], clear, window).execute();
+			addULClass();
+			utils.getBest(doComp(invoke, getZero), captionsORtabs)[1]();
+			if (utils.findByClass('loop')) {
+				$displayer.execute();
+			} else {
+				$toggle.execute();
+			}
+		};
+    factory();
     
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,

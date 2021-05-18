@@ -1140,7 +1140,6 @@ gAlp.Util = (function() {
         },
         command:  {
 			execute: function () {
-                console.log('ex');
             },
 			undo: function () {}
 		},
@@ -1234,8 +1233,10 @@ gAlp.Util = (function() {
 			el = getResult(el);
 			return {
 				execute: function() {
+                    //console.log(this);
                     //console.log('exec: ', el, fn)
 					myEventListener.add(el, type, fn);
+                    gAlp.Util.eventer.club.push(this);
 					return this;
 				},
 				undo: function() {
@@ -1248,6 +1249,9 @@ gAlp.Util = (function() {
 				},
                 invoke: function(){
                     fn.apply(null, arguments);
+                },
+                restore: function(i){
+                    gAlp.Util.eventer.club[i].execute();
                 }
 			};
 		},
@@ -1559,3 +1563,5 @@ gAlp.Util = (function() {
 		dog: 'spadger'
 	}; //end
 }());
+
+gAlp.Util.eventer.club = [];
