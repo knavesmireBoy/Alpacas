@@ -197,7 +197,6 @@ if (!window.gAlp) {
                 doComp(ptL(klasAdd, 'current'), getParent, getTarget)(e);
                 var reg = new RegExp(text_from_target(e), 'i'),
                     cb = thrice(doMethod)('match')(reg);
-                
                 Looper.onpage.visit(utils.hide);
                 Looper.onpage.set(_.findIndex(true_captions(), cb));
                 _.compose(utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
@@ -397,6 +396,7 @@ if (!window.gAlp) {
 		deferShow,
 		deferMembers,
         delayExecute = thrice(doMethod)('execute')(null),
+        delayUndo = thrice(doMethod)('undo')(null),
 		deferNext,
 		isIMG = ptL(equals, 'IMG'),
 		doDisplay,
@@ -432,18 +432,20 @@ if (!window.gAlp) {
 	prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult));
     
 	events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext), 
-              doComp(ptL(con, $displayer), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')), 
+              doComp(delayExecute, utils.always($displayer), delayUndo, utils.always($toggle), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')), 
               utils.shout('alert', 'mile'), noOp];
     
 	nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target);
     
 	$nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
     
-	doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+	doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(utils.always($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
     
 	$displayer = eventing('click', event_actions.slice(0), function(e) {
-		if (doDisplay(e)) {
+        var $toggler = doDisplay(e);
+		if ($toggler) {
 			$displayer.undo();
+            $toggler.execute();
 		}
 	}, utils.$('sell'));
     
