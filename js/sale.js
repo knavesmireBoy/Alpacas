@@ -15,6 +15,13 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
+    
+    function makeDummy() {
+		return {
+			execute: function () {},
+			undo: function () {}
+		};
+	}
 
 	function add(a, b) {
 		return a + b;
@@ -324,6 +331,7 @@ if (!window.gAlp) {
 		doGet = twice(utils.getter),
 		getZero = doGet(0),
 		getOne = doGet(1),
+		getExec = doGet('execute'),
 		doMethodDefer = thricedefer(doMethod),
 		true_captions = doMethodDefer('slice')(-bonds_len)(captions),
 		getLength = doGet('length'),
@@ -380,6 +388,10 @@ if (!window.gAlp) {
 		doLoop = function(coll) {
 			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
 		},
+        
+        doListen = function(coll) {
+			Looper.listen = Looper.from(coll, increment(getLength(coll)));
+		},
 		gt4 = twicedefer(gtThan)(4)(bonds_len),
 		gt3 = twicedefer(gtThan)(3)(bonds_len),
 		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
@@ -394,29 +406,35 @@ if (!window.gAlp) {
 		addULClass = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
 		clear = doComp(addULClass, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),
 		deferShow,
-		deferMembers,
-        delayExecute = thrice(doMethod)('execute')(null),
-        delayUndo = thrice(doMethod)('undo')(null),
 		deferNext,
-		isIMG = ptL(equals, 'IMG'),
+		deferMembers,
 		doDisplay,
 		goGetValue,
 		goGetIndex,
 		doFind,
 		makeCaptions,
 		captionsORtabs,
+        restoreCaptions,
+        bindCurrent,
 		prepLoopTabs,
-		$displayer = {},
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		events,
         $toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')), 
 		nav_listener,
 		$nav_listener,
+        navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
+        delayExecute = thrice(doMethod)('execute')(null),
+        delayUndo = thrice(doMethod)('undo')(null),
+		isIMG = ptL(equals, 'IMG'),
+        $displayer = makeDummy(),
+        $toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
         $listeners;
     
 	doLoop(utils.getByTag('a', intro));
+    
 	deferMembers = deferEach(Looper.onpage.current().members);
 	makeCaptions = deferMembers(doCaption_cb);
+    bindCurrent = _.bind(Looper.onpage.current, Looper.onpage);
 	captionsORtabs = [
 		[gt4, makeCaptions],
 		[mob4, makeCaptions],
@@ -426,14 +444,16 @@ if (!window.gAlp) {
 	deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
 	deferNext = doComp(deferShow, deferMembers(utils.hide));
 	doFind = _.bind(Looper.onpage.find, Looper.onpage);
-	goGetValue = doComp(doGet('value'), _.bind(Looper.onpage.current, Looper.onpage));
-	goGetIndex = doComp(doGet('index'), _.bind(Looper.onpage.current, Looper.onpage));
+	goGetValue = doComp(doGet('value'), bindCurrent);
+	goGetIndex = doComp(doGet('index'), bindCurrent);
+    
+    restoreCaptions = doComp(ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')),
     
 	prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult));
     
 	events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext), 
-              doComp(delayExecute, utils.always($displayer), delayUndo, utils.always($toggle), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')), 
-              utils.shout('alert', 'mile'), noOp];
+              restoreCaptions, 
+              noOp, noOp];
     
 	nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target);
     
@@ -451,7 +471,7 @@ if (!window.gAlp) {
     
     
     events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext), 
-              doComp(ptL(con, $displayer), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')), 
+              doComp(ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')), 
               utils.shout('alert', 'mile'), noOp];
     
 	eventing('resize', [], clear, window).execute();

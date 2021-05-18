@@ -1139,7 +1139,9 @@ gAlp.Util = (function() {
             return drillDown(fillArray(dir, n))(el);
         },
         command:  {
-			execute: function () {},
+			execute: function () {
+                console.log('ex');
+            },
 			undo: function () {}
 		},
         con:  function(arg){
