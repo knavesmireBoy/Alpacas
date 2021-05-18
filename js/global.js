@@ -1273,6 +1273,9 @@ gAlp.Util = (function() {
         FauxPromise: FauxPromise,
 		findByClass: _.compose(curry2(getter)(0), _.partial(getPolyClass, document)),
 		findByTag: _.compose(curry2(getter)(0), _.partial(mittleInvoke, 'getElementsByTagName')),
+        findByTag2: function(i){
+            return _.compose(curry2(getter)(i), _.partial(mittleInvoke, 'getElementsByTagName'));
+        },
 		findIndex: function(collection, predicate) {
 			return _.findIndex(collection, predicate || always(true));
 		},

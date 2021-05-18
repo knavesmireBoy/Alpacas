@@ -12,6 +12,9 @@ if (!window.gAlp) {
 
 	function noOp() {}
     
+    function go(txt, el){
+        return doComp(el, txt);
+    }
 
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
@@ -141,7 +144,7 @@ if (!window.gAlp) {
     }
     
     function doMethod(o, v, p) {
-		console.log(arguments);
+		//console.log(arguments);
 		return o[p] && o[p](v);
 	}
     
@@ -419,7 +422,7 @@ if (!window.gAlp) {
     
     prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult));
     
-    events = [doComp(con, ptL(utils.getter,  true_captions), goGetIndex, doFind, deferNext), function(){console.log(this);}, utils.shout('alert','mile'), noOp];
+    events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter,  true_captions), goGetIndex, doFind, deferNext), function(){console.log(this);}, utils.shout('alert','mile'), noOp];
     nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target);
     $nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
         
