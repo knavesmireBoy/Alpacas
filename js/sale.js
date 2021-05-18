@@ -195,7 +195,7 @@ if (!window.gAlp) {
 	function doLI_cb(caption, i, arr) {
 		var li = twice(invokeArg)('li'),
 			link = twice(invokeArg)('a'),
-			doCurrent = ptL(utils.getBest, _.negate(utils.always(i)), [ptL(klasAdd, 'current'), _.identity]);
+			doCurrent = ptL(utils.getBest, _.negate(always(i)), [ptL(klasAdd, 'current'), _.identity]);
 		doComp(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 		/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
 		if (utils.findByClass('tab') && i && !arr[i + 1]) {
@@ -205,8 +205,9 @@ if (!window.gAlp) {
 				var reg = new RegExp(text_from_target(e), 'i'),
 					cb = thrice(doMethod)('match')(reg);
 				Looper.onpage.visit(utils.hide);
+				//Looper.onpage.visit(utils.hide);
 				Looper.onpage.set(_.findIndex(true_captions(), cb));
-				_.compose(utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+				_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
 			}, getUL).execute();
 		}
 	}
@@ -302,14 +303,17 @@ if (!window.gAlp) {
 		}, {
 			src: '../assets/aw.jpg'
 		}],
-		captions = ['leanne', 'honor', 'claudine', 'luciana', 'martine', 'aki'],
+		//captions = ['leanne', 'honor', 'claudine', 'luciana', 'martine', 'aki'],
+		captions = ["Granary Grace", "Granary Maria", "Granary Pilar", "Granary Juanito", "Newland Becky", "Granary Enrico"],
 		utils = gAlp.Util,
 		ptL = _.partial,
 		con = utils.con,
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		doComp = _.compose,
 		Looper = gAlp.LoopIterator,
-		bonds_select = sliceArray(bonds),
+		alpacas_select = sliceArray(alpacas),
+		alp_len = alpacas_select.length,
+        bonds_select = sliceArray(bonds),
 		bonds_len = bonds_select.length,
 		lookup = {
 			4: 'four',
@@ -319,20 +323,24 @@ if (!window.gAlp) {
 		curryFactory = utils.curryFactory,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
+        reverse = utils.invoker('reverse', Array.prototype.reverse),
+		validator = utils.validator,
 		once = utils.doOnce(),
 		defer_once = curryFactory(1, true),
 		twice = curryFactory(2),
 		twicedefer = curryFactory(2, true),
 		thrice = curryFactory(3),
+		thriceplus = curryFactory(4),
 		thricedefer = curryFactory(3, true),
 		parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
+		always = utils.always,
 		getZero = doGet(0),
 		getOne = doGet(1),
 		getExec = doGet('execute'),
 		doMethodDefer = thricedefer(doMethod),
-		true_captions = doMethodDefer('slice')(-bonds_len)(captions),
+		true_captions = doMethodDefer('slice')(-alp_len)(captions),
 		getLength = doGet('length'),
 		getTarget = doGet(mytarget),
 		getParent = doGet('parentNode'),
@@ -348,6 +356,8 @@ if (!window.gAlp) {
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
+        byIndex = utils.byIndex,
+        setAttrs = utils.setAttributes,
 		$ = thrice(lazyVal)('getElementById')(document),
 		$$ = thricedefer(lazyVal)('getElementById')(document),
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
@@ -373,7 +383,6 @@ if (!window.gAlp) {
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
 		deferAttrs = deferMap(bonds_select)(ptL(partialize, doComp(doHref, utils.setAttributes))),
 		getUL = ptL(utils.findByTag, 'ul', intro),
-		loopUL = doComp(ptL(utils.climbDom, 2), utils.setText('Alpacas For Sale'), twice(invoke)('a'), anCr, twice(invoke)('li'), anCr),
 		makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {
 			id: 'list'
 		}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
@@ -381,13 +390,88 @@ if (!window.gAlp) {
 		selldiv = doComp(ptL(utils.setAttributes, {
 			id: 'sell'
 		}), ptL(anCr(intro), 'div')),
-		ancr = doComp(twice(invokeArg)('img'), anCr, ptL(anCr(selldiv()), 'a')),
-		f = delayEach(delayMap(deferAttrs)(ptL(precomp, ancr)))(getResult),
 		doLoop = function(coll) {
 			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
 		},
-		doListen = function(coll) {
-			Looper.listen = Looper.from(coll, increment(getLength(coll)));
+        
+        checkDataLength = validator('no alpacas for sale', always(alp_len)),
+		checkJSenabled = validator('javascript is not enabled', checkDummy),
+		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
+		renderTable = _.compose(anCr(selldiv), always('table')),
+		iterateTable = function(getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
+			return function(getAnchor, subject, k, l, m) {
+				var table = getAnchor(), //<table></table
+					//optional tbody reqd for IE
+					render = anCr(table),
+					tbody = _.compose(render, ptL(_.identity))('tbody'),
+					c = thriceplus(caller)('match')(/^other/i)(utils.drillDown(['innerHTML'])),
+					addspan,
+					doRow = _.compose(anCr(tbody)),
+					tableconfig = {
+						cellspacing: 0
+					},
+					addTableAttrs = {},
+					addImgAttrs = {},
+					addLinkAttrs = {},
+					tmp;
+				_.each(subject.slice(0, -2), function(tr, j) {
+					var row,
+						type = !j ? 'th' : 'td',
+						supportsNthChild = validator('hard coding class not required', always(!Modernizr.nthchild)),
+						isOdd = validator('is not an odd numbered row', always(j % 2)),
+						isFirstRow = ptL(validator, 'is NOT first row'),
+						isTableHead = ptL(validator, 'is NOT table head'),
+                        dospan = ptL(_.compose(ptL(utils.isEqual, 1), utils.drillDown(['length']))),
+						doOdd = onValidation(supportsNthChild, isOdd),
+						provisionalID,
+						assignId = function(str) {
+							addImgAttrs.alt = getId(str);
+							addTableAttrs = ptL(setAttrs, tableconfig);
+						},
+						maybeClass = ptL(onValidation(validator('no match found', c), supportsNthChild), doDescription);
+					_.each(tr, function(td, i, data) {
+						//partially apply the RETURNED function from onValidation with (partially applied) function to invoke
+						addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
+						row = row || doFreshRow(ptL(doRow, 'tr'), i);
+						provisionalID = onValidation(isFirstRow(always(Number(!i))), isTableHead(ptL(utils.isEqual, type, 'th')));
+						provisionalID(ptL(assignId, td));
+						_.compose(maybeClass, addspan, utils.setText(td), anCr(row))(type);
+						doOdd(_.compose(doOddRow, always(row)));
+					});
+				});
+				render = anCr(table.parentNode);
+				addLinkAttrs = _.extend(addLinkAttrs, {
+					href: getPath(subject)
+				});
+				addLinkAttrs = ptL(setAttrs, addLinkAttrs);
+				addImgAttrs = _.extend(addImgAttrs, {
+					src: getPath(subject)
+				});
+				addImgAttrs = ptL(setAttrs, addImgAttrs);
+				tmp = _.compose(addLinkAttrs, render, always('a'))();
+				render = anCr(tmp);
+				_.compose(addImgAttrs, render, always('img'))();
+				addTableAttrs(table);
+                utils.doWhen(!k, ptL(utils.show, table));
+                utils.doWhen(!k, ptL(utils.show, tmp));
+			};
+		},
+		doLoad = function(coll, cb) {
+			var loadData = function(data, render, driver) {
+					_.each(data, ptL(driver, render));
+				},
+				getId = _.compose(ptL(byIndex, 1), thrice(simpleInvoke)(' ')('split')),
+				doRow = onValidation(validator('is first row', ptL(utils.isEqual, 0))),
+				doColspan = ptL(setAttrs, {
+					colSpan: 2 //!!!!////camelCase!!!!
+				}),
+				getPath = function(array) {
+					return array.slice(-1)[0][1];
+				},
+				configureTable = iterateTable(getId, getPath, doRow, doColspan, ptL(klasAdd, 'description'), ptL(klasAdd, 'odd'));
+			loadData(coll, cb, configureTable);
+            klasAdd('sell', utils.getBody);
+			return true;
 		},
 		gt4 = twicedefer(gtThan)(4)(bonds_len),
 		gt3 = twicedefer(gtThan)(3)(bonds_len),
@@ -397,38 +481,42 @@ if (!window.gAlp) {
 		outcomes = [
 			[gt4, addLoopClass],
 			[mob4, addLoopClass],
-			[utils.always(bonds_len), addTabClass],
-			[utils.always(true), function() {}]
+			[always(bonds_len), addTabClass],
+			[always(true), function() {}]
 		],
 		addULClass = doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), outcomes)),
-		clear = doComp(addULClass, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),
-		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
-		$toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
+		clear = doComp(addULClass, deferEach(['loop', 'tab'])(twice(klasRem)(makeUL))),                
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		delayExecute = thrice(doMethod)('execute')(null),
-		delayEl = thrice(doMethod)('getEl')(null),
 		delayUndo = thrice(doMethod)('undo')(null),
 		isIMG = ptL(equals, 'IMG'),
-		$displayer = makeDummy(),
 		$toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
-		$listeners,
+        $displayer = {},
 		factory = function() {
-			doLoop(utils.getByTag('a', intro));
+            maybeLoad(ptL(doLoad, alpacas_select, renderTable));
+            doLoop(utils.getByTag('a', intro));
+            
+            Looper.onpage.visit = function(cb){
+                _.each(this.group.members, cb);
+                _.each(_.map(this.group.members, utils.getPrevious), cb);
+            }
+            
 			var deferMembers = deferEach(Looper.onpage.current().members),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.onpage.current, Looper.onpage),
 				captionsORtabs = [
 					[gt4, makeCaptions],
 					[mob4, makeCaptions],
-					[utils.always(bonds_len), makeTabs],
-					[utils.always(true), function() {}]
+					[always(bonds_len), makeTabs],
+					[always(true), function() {}]
 				],
+                showCurrent = doComp(con, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage)),
 				deferNext = doComp(deferShow, deferMembers(utils.hide)),
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = doComp(doGet('value'), bindCurrent),
 				goGetIndex = doComp(doGet('index'), bindCurrent),
-				restoreCaptions = doComp(addULClass, delayExecute, twice(invoke)(utils), ptL(utils.drillDown, ['eventer', 'club', 1]), delayUndo, utils.always($toggle), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')),
+				restoreCaptions = doComp(addULClass, delayExecute, twice(invoke)(utils), ptL(utils.drillDown, ['eventer', 'club', 1]), delayUndo, always($toggle), ptL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, ptL(utils.findByClass, 'show')),
 				prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult)),
 				events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
@@ -436,8 +524,7 @@ if (!window.gAlp) {
 				],
 				nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list')),
-				doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(utils.always($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
-            
+				doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(always($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
 			$displayer = eventing('click', event_actions.slice(0), function(e) {
 				var $toggler = doDisplay(e);
 				if ($toggler) {
@@ -453,9 +540,9 @@ if (!window.gAlp) {
 			} else {
 				$toggle.execute();
 			}
+            
 		};
-    factory();
-    
+	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
