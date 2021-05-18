@@ -11,6 +11,7 @@ article.intro {
 	margin: 1%;
 	padding: 1.2em 1.2em 0;
 	vertical-align: bottom;
+    box-sizing: border-box;
 }
 ul.tab {
 	transform: translateX(-1000px);
