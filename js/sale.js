@@ -195,6 +195,13 @@ if (!window.gAlp) {
             eventing('click', [], function(e){
                 _.compose(ptL(klasRem, 'current'), ptL(utils.findByClass, 'current'))();
                 doComp(ptL(klasAdd, 'current'), getParent, getTarget)(e);
+                var reg = new RegExp(text_from_target(e), 'i'),
+                    cb = thrice(doMethod)('match')(reg);
+                
+                Looper.onpage.visit(utils.hide);
+                Looper.onpage.set(_.findIndex(true_captions(), cb));
+                _.compose(utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+                
         }, getUL).execute();
         }
 	}
