@@ -63,6 +63,9 @@ ul.loop li a::after, ul.loop li a::before {
 .sell .tog a {
 	margin-left: 0;
 }
+#sell.tog {
+    background: red;
+}
 #sell {
 	display: none;
 	overflow: hidden;

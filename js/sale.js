@@ -172,12 +172,12 @@ if (!window.gAlp) {
 		}
 	}
 
-	function undoCaption(e) {
+	function undoCaption_cb(e) {
 		var goFig = utils.getDomChild(utils.getNodeByTag('figure'));
 		doComp(utils.removeNodeOnComplete, goFig, ptL(klasRem, 'extent'), getParent, twice(invokeArg)(utils.$('sell')), thrice(doMethod)('appendChild'), _.identity)(e);
 	}
 
-	function doCaption(a, i) {
+	function doCaption_cb(a, i) {
 		var fig = twice(invokeArg)('figure'),
 			caption = twice(invokeArg)('figcaption'),
 			append = thrice(doMethod)('appendChild')(a),
@@ -185,11 +185,18 @@ if (!window.gAlp) {
 		doComp(ptL(klasAdd, 'extent'), ptL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
 	}
 
-	function doLI(caption, i) {
+	function doLI_cb(caption, i, arr) {
 		var li = twice(invokeArg)('li'),
 			link = twice(invokeArg)('a'),
 			doCurrent = ptL(utils.getBest, _.negate(utils.always(i)), [ptL(klasAdd, 'current'), _.identity]);
-		doComp(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
+        doComp(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
+        /*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
+        if(utils.findByClass('tab') && i && !arr[i+1]){
+            eventing('click', [], function(e){
+                _.compose(ptL(klasRem, 'current'), ptL(utils.findByClass, 'current'))();
+                doComp(ptL(klasAdd, 'current'), getParent, getTarget)(e);
+        }, getUL).execute();
+        }
 	}
 
 	function sliceArray(list, end) {
@@ -357,8 +364,8 @@ if (!window.gAlp) {
 		makeUL = doComp(invoke, ptL(utils.getBest, getUL, [getUL, doComp(ptL(utils.setAttributes, {
 			id: 'list'
 		}), ptL(anCrIn($$('sell'), intro), 'ul'))])),
-		//makeTabs = deferEach(true_captions)(ptL(utils.invokeWhen, utils.always(bonds_len), doLI)),        
-		makeTabs = deferEach(true_captions)(doLI),
+        
+		makeTabs = deferEach(true_captions)(doLI_cb),
 		selldiv = doComp(ptL(utils.setAttributes, {
 			id: 'sell'
 		}), ptL(anCr(intro), 'div')),
@@ -395,13 +402,14 @@ if (!window.gAlp) {
 		$displayer = {},
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		events,
+        $toggle = eventing('click', event_actions.slice(0), ptL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')), 
 		nav_listener,
 		$nav_listener,
         $listeners;
     
 	doLoop(utils.getByTag('a', intro));
 	deferMembers = deferEach(Looper.onpage.current().members);
-	makeCaptions = deferMembers(doCaption);
+	makeCaptions = deferMembers(doCaption_cb);
 	captionsORtabs = [
 		[gt4, makeCaptions],
 		[mob4, makeCaptions],
@@ -424,13 +432,13 @@ if (!window.gAlp) {
     
 	$nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
     
-	doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI), deferMembers(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+	doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
     
 	$displayer = eventing('click', event_actions.slice(0), function(e) {
 		if (doDisplay(e)) {
 			$displayer.undo();
 		}
-	}, utils.$('sell')).execute();
+	}, utils.$('sell'));
     
     
     events = [doComp(invoke, ptL(precomp, ptL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, ptL(utils.getter, true_captions), goGetIndex, doFind, deferNext), 
@@ -440,6 +448,13 @@ if (!window.gAlp) {
 	eventing('resize', [], clear, window).execute();
 	addULClass();
 	utils.getBest(doComp(invoke, getZero), captionsORtabs)[1]();
+    
+    if(utils.findByClass('loop')){
+        $displayer.execute();
+    }
+    else {
+       $toggle.execute(); 
+    }
     
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
