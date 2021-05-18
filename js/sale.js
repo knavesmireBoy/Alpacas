@@ -419,11 +419,11 @@ if (!window.gAlp) {
     
     prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult));
     
-    events = [deferNext, utils.shout('alert','awao'), utils.shout('alert','mile'), noOp];
+    events = [doComp(con, ptL(utils.getter,  true_captions), goGetIndex, doFind, deferNext), function(){console.log(this);}, utils.shout('alert','mile'), noOp];
     nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target);
     $nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
         
-    doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(thrice(doMethod)('execute')(null), $nav_listener, deferEach(prepLoopTabs)(doLI), deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+    doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(thrice(doMethod)('execute')(null), $nav_listener, deferEach(prepLoopTabs)(doLI), deferMembers(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
         
     
     $displayer = eventing('click', event_actions.slice(0), function(e){
