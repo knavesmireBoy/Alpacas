@@ -388,9 +388,10 @@ if (!window.gAlp) {
         captionsORtabs,
         prepLoopTabs,
         $displayer,
-        events = [utils.shout('alert', 'home'), utils.shout('alert','awao'), noOp, noOp],
-        events2 = ptL(utils.getter, [utils.shout('alert', 'home'), utils.shout('alert','awao'), noOp, noOp]),
-        wanna = ptL(eventing, 'click', [], doComp(con, getOne, ptL(utils.getBest, doComp(con, getOne), _.zip(navExes, events))));
+        navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
+        events = [utils.shout('alert', 'home'), utils.shout('alert','awao'), utils.shout('alert','mile'), noOp],
+        nav_listener = doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
+        $nav_listener = ptL(eventing, 'click', [], nav_listener, $$('list'));
     
     //doComp(invoke, getOne, ptL(utils.getBestOnly, doComp(invoke, getZero), _.zip(navExes, events)))
     
@@ -415,7 +416,7 @@ if (!window.gAlp) {
     
     prepLoopTabs = doComp(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([doComp(goGetIndex, doFind), true_captions])(getResult)),
         
-    doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp($$('list'), deferEach(prepLoopTabs)(doLI), deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+    doDisplay = ptL(utils.invokeWhen, doComp(isIMG, node_from_target), doComp(thrice(doMethod)('execute')(null), $nav_listener, deferEach(prepLoopTabs)(doLI), deferEach(Looper.onpage.current().members)(undoCaption), ptL(klasRem, 'extent'), ptL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
         
     deferShow = doComp(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage));
     deferNext = doComp(deferShow, deferMembers(utils.hide));
@@ -444,7 +445,7 @@ if (!window.gAlp) {
     */
     
     var funcs = delayMap(_.map(navExes, thrice(doMethod)('match')));
-    doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), funcs, twice(invoke))('next');
+    doComp(invoke, getOne, ptL(utils.getBest, doComp(_.identity, getZero)), twice(_.zip)(events), funcs, twice(invoke), text_from_target);
     
     
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
