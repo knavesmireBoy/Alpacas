@@ -180,8 +180,8 @@ if (!window.gAlp) {
 	function increment(i) {
 		return i + 1;
 	}
-
-	function doHref(img) {
+    
+    function doHref(img) {
 		if (img.src) {
 			var a = img.parentNode;
 			gAlp.Util.setAttributes({
@@ -193,43 +193,13 @@ if (!window.gAlp) {
 			}
 		}
 	}
-    	function undoCaption_cb(a, i) {
-		var sell = utils.$('sell'),
-			goFig = PTL(utils.findByTag(0), 'figure', sell),
-			goTbl = PTL(utils.findByTag(i), 'table', sell),
-			when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, goTbl()));
-        
-        
-		_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
-	}
 
-	function doCaption_cb(a, i) {
-		var fig = twice(invokeArg)('figure'),
-			caption = twice(invokeArg)('figcaption'),
-			append = thrice(doMethod)('appendChild')(a),
-			cap = utils.getter(captions.slice(-alp_len), i);
-		_.compose(PTL(klasAdd, 'extent'), PTL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
-	}
+	
+    	
 
-	function doLI_cb(caption, i, arr) {
-		var li = twice(invokeArg)('li'),
-			link = twice(invokeArg)('a'),
-			doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
-		_.compose(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
-		/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-		if (utils.findByClass('tab') && i && !arr[i + 1]) {
-			eventing('click', [], function (e) {
-				_.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
-				_.compose(PTL(klasAdd, 'current'), getParent, getTarget)(e);
-				var reg = new RegExp(text_from_target(e), 'i'),
-					cb = thrice(doMethod)('match')(reg);
-				Looper.onpage.visit(utils.hide);
-				Looper.onpage.set(_.findIndex(true_captions(), cb));
-				_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
-			}, getUL).execute();
-		}
-	}
+	
 
+	
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
 	}
@@ -323,6 +293,44 @@ if (!window.gAlp) {
         mytarget = !window.addEventListener ? 'srcElement' : 'target',
         reverse = utils.invoker('reverse', Array.prototype.reverse),
 		validator = utils.validator,
+        
+         undoCaption_cb = function(a, i) {
+		var sell = utils.$('sell'),
+			goFig = PTL(utils.findByTag(0), 'figure', sell),
+			goTbl = PTL(utils.findByTag(i), 'table', sell),
+			when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, goTbl()));
+        
+        
+		_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
+	},
+        
+         doLI_cb = function(caption, i, arr) {
+		var li = twice(invokeArg)('li'),
+			link = twice(invokeArg)('a'),
+			doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
+		_.compose(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
+		/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
+		if (utils.findByClass('tab') && i && !arr[i + 1]) {
+			eventing('click', [], function (e) {
+				_.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
+				_.compose(PTL(klasAdd, 'current'), getParent, getTarget)(e);
+				var reg = new RegExp(text_from_target(e), 'i'),
+					cb = thrice(doMethod)('match')(reg);
+				Looper.onpage.visit(utils.hide);
+				Looper.onpage.set(_.findIndex(true_captions(), cb));
+				_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+			}, getUL).execute();
+		}
+	},
+        
+         doCaption_cb = function(a, i) {
+		var fig = twice(invokeArg)('figure'),
+			caption = twice(invokeArg)('figcaption'),
+			append = thrice(doMethod)('appendChild')(a),
+			cap = utils.getter(captions.slice(-alp_len), i);
+		_.compose(PTL(klasAdd, 'extent'), PTL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
+	},
+
         
         alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
