@@ -514,7 +514,7 @@ if (!window.gAlp) {
             
             Looper.onpage.visit = function(cb){
                 _.each(this.group.members, cb);
-                _.each(_.map(this.group.members, utils.getPrevious), cb);
+                //_.each(_.map(this.group.members, utils.getPrevious), cb);
             }
             
 			var deferMembers = deferEach(Looper.onpage.current().members),
