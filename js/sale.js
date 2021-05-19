@@ -193,8 +193,7 @@ if (!window.gAlp) {
 			}
 		}
 	}
-
-	function undoCaption_cb(a, i) {
+    	function undoCaption_cb(a, i) {
 		var sell = utils.$('sell'),
 			goFig = PTL(utils.findByTag(0), 'figure', sell),
 			goTbl = PTL(utils.findByTag(i), 'table', sell),
@@ -309,34 +308,24 @@ if (!window.gAlp) {
 			]
 		],
 		loop_captions = ['Alpacas For Sale'],
-		bonds = [{
-			src: '../assets/contact.jpg'
-		}, {
-			src: '../assets/hb.jpg'
-		}, {
-			src: '../assets/ca.jpg'
-		}, {
-			src: '../assets/lp.jpg'
-		}, {
-			src: '../assets/mb.jpg'
-		}, {
-			src: '../assets/aw.jpg'
-		}],
 		captions = (function (coll) {
 			return _.map(coll, function (sub) {
 				return sub[0][0];
 			});
 		}(alpacas)),
 		utils = gAlp.Util,
+        con = utils.con,
 		PTL = _.partial,
-		con = utils.con,
-		mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		COMP = _.compose,
-		Looper = gAlp.LoopIterator,
-		alpacas_select = sliceArray(alpacas),
+        ALWAYS = utils.always,
+        event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
+		eventing = utils.eventer,
+        mytarget = !window.addEventListener ? 'srcElement' : 'target',
+        reverse = utils.invoker('reverse', Array.prototype.reverse),
+		validator = utils.validator,
+        
+        alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
-		bonds_select = sliceArray(bonds),
-		bonds_len = bonds_select.length,
 		lookup = {
 			1: 'intro',
 			2: 'intro',
@@ -345,13 +334,8 @@ if (!window.gAlp) {
 			5: 'five',
 			6: 'six'
 		},
-		//nth = COMP(twice(fnull)(['intro']), twicedefer(klasAdd)(intro), PTL(utils.getter, lookup, alp_len)),
 		nth = utils.getter(lookup, alp_len),
-		curryFactory = utils.curryFactory,
-		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
-		eventing = utils.eventer,
-		reverse = utils.invoker('reverse', Array.prototype.reverse),
-		validator = utils.validator,
+		curryFactory = utils.curryFactory,		
 		once = utils.doOnce(),
 		defer_once = curryFactory(1, true),
 		twice = curryFactory(2),
@@ -359,28 +343,16 @@ if (!window.gAlp) {
 		thrice = curryFactory(3),
 		thriceplus = curryFactory(4),
 		thricedefer = curryFactory(3, true),
+        
 		parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
-		doMap = utils.doMap,
-		doGet = twice(utils.getter),
-		ALWAYS = utils.always,
-		getZero = doGet(0),
-		getOne = doGet(1),
-		getPrev = doGet('nextSibling'),
-		getExec = doGet('execute'),
-		doMethodDefer = thricedefer(doMethod),
-		true_captions = doMethodDefer('slice')(-alp_len)(captions),
-		getLength = doGet('length'),
-		getTarget = doGet(mytarget),
-		getParent = doGet('parentNode'),
-		doVal = doGet('value'),
-		//doLookup = PTL(utils.invokeWhen, PTL(utils.getter, lookup, alp_len), COMP(klasAdd)),
-		doParse = COMP(PTL(add, '../'), doGet(0), parser),
-		deferMap = thricedefer(doCallbacks)('map'),
+        doMethodDefer = thricedefer(doMethod),
+        deferMap = thricedefer(doCallbacks)('map'),
 		delayMap = thrice(doCallbacks)('map'),
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferEvery = thricedefer(doCallbacks)('every'),
 		delayEach = thrice(doCallbacks)('each'),
-		intro = utils.findByClass('intro'),
+		doMap = utils.doMap,
+	
 		anCr = utils.append(),
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
@@ -389,6 +361,18 @@ if (!window.gAlp) {
 		setAttrs = utils.setAttributes,
 		$ = thrice(lazyVal)('getElementById')(document),
 		$$ = thricedefer(lazyVal)('getElementById')(document),
+        doGet = twice(utils.getter),
+		getZero = doGet(0),
+		getOne = doGet(1),
+		getPrev = doGet('nextSibling'),
+		getExec = doGet('execute'),
+		getLength = doGet('length'),
+		getTarget = doGet(mytarget),
+		getParent = doGet('parentNode'),
+		doVal = doGet('value'),
+		doParse = COMP(PTL(add, '../'), doGet(0), parser),
+        isIMG = PTL(equals, 'IMG'),
+        
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
@@ -405,15 +389,20 @@ if (!window.gAlp) {
 				cb();
 			}
 		},
-		doInc = function (n) {
+        doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
+		},
+        Looper = gAlp.LoopIterator,
+        doLoop = function (coll) {
+			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
 		},
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
+        intro = utils.findByClass('intro'),
+        true_captions = doMethodDefer('slice')(-alp_len)(captions),        
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
-		deferAttrs = deferMap(alpacas_select)(PTL(partialize, COMP(doHref, setAttrs))),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
@@ -422,9 +411,7 @@ if (!window.gAlp) {
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
 		}), PTL(anCr(intro), 'div')),
-		doLoop = function (coll) {
-			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
-		},
+		
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		supportsNthChild = validator('hard coding class not required', ALWAYS(!Modernizr.nthchild)),
@@ -433,7 +420,6 @@ if (!window.gAlp) {
 		iterateTable = function (getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
 			return function (getAnchor, subject, k) {
 				var table = getAnchor(), //<table></table
-					//optional tbody reqd for IE
 					render = anCr(table),
 					tbody = COMP(render, PTL(_.identity))('tbody'),
 					c = thriceplus(caller)('match')(/^other/i)(utils.drillDown(['innerHTML'])),
@@ -520,7 +506,7 @@ if (!window.gAlp) {
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		delayExecute = thrice(doMethod)('execute')(null),
 		delayUndo = thrice(doMethod)('undo')(null),
-		isIMG = PTL(equals, 'IMG'),
+		
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		$displayer = {},
 		factory = function () {
@@ -564,6 +550,7 @@ if (!window.gAlp) {
 			}, utils.$('sell'));
 			eventing('resize', [], clear, window).execute();
 			addULClass();
+            klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
 			if (utils.findByClass('loop')) {
 				$displayer.execute();
@@ -572,7 +559,6 @@ if (!window.gAlp) {
 			}
 		};
 	factory();
-	klasAdd([nth], intro);
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4
