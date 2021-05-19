@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, limits) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes) {
 	"use strict";
 
 	function noOp() {}
@@ -21,62 +21,12 @@ if (!window.gAlp) {
 		gAlp.Util.hide(gAlp.Util.getPrevious(el));
 	}
 
-	function makeDummy() {
-		return {
-			execute: function () {},
-			undo: function () {}
-		};
-	}
-
-	function makePartial(flag) {
-		return function (p1, p2, i, array) {
-			if (flag && !array[i + 1]) {
-				return p1(p2);
-			}
-			return _.partial(p1, p2);
-		};
-	}
-
-	function add(a, b) {
-		return a + b;
-	}
-
 	function equals(a, b) {
 		return getResult(a) === getResult(b);
 	}
 
 	function gtThan(a, b) {
 		return getResult(a) > getResult(b);
-	}
-
-	function lsThanEq(a, b) {
-		return a <= b;
-	}
-
-	function existy(x) {
-		return x != null;
-	}
-
-	function cat() {
-		var head = _.first(arguments);
-		if (existy(head)) {
-			return head.concat.apply(head, _.rest(arguments));
-		} else {
-			return [];
-		}
-	}
-
-	function construct(head, tail) {
-		return head && cat([head], _.toArray(tail));
-	}
-
-	function mapcat(fun, coll) {
-		var res = _.map(coll, fun);
-		return cat.apply(null, res);
-	}
-
-	function callWith(m, ctxt) {
-		return m.call(ctxt);
 	}
 
 	function onValidation() {
@@ -102,10 +52,6 @@ if (!window.gAlp) {
 		//return true;
 	}
 
-	function stringOp(reg, o, m) {
-		return o[m](reg);
-	}
-
 	function simpleInvoke(o, m, arg) {
 		//gAlp.Util.report(o[m]);
 		if (arguments.length >= 3) { //allow for superfluous arguments 
@@ -115,10 +61,6 @@ if (!window.gAlp) {
 
 	function invoke(f) {
 		return f.apply(null, _.rest(arguments));
-	}
-
-	function invokeArr(f, arr) {
-		return f.apply(null, arr);
 	}
 
 	function getterBridge(arr) {
@@ -133,30 +75,8 @@ if (!window.gAlp) {
 		return ptl(ctxt)[m](arg);
 	}
 
-	function inRange(i) {
-		//https://wsvincent.com/javascript-tilde/
-		//var res = ~"hello world".indexOf("w") ? true : false;
-		return i >= 0;
-	}
-
-	function extendFrom(sub, supa, keys, key) {
-		function mapper(method) {
-			if (sub[method] && _.isFunction(sub[method])) {
-				supa[method] = function () {
-					return supa[keys][supa[key]][method].apply(sub[key], arguments);
-				};
-			}
-		}
-		_.each(_.keys(sub), mapper);
-		return supa;
-	}
-
 	function doCallbacks(cb, coll, p) {
 		return _[p](getResult(coll), cb);
-	}
-
-	function partialize(f, arg) {
-		return _.partial(f, arg);
 	}
 
 	function precomp(f1, f2) {
@@ -167,7 +87,6 @@ if (!window.gAlp) {
 		//console.log(arguments);
 		return o[p] && o[p](v);
 	}
-
 
 	function lazyVal(v, o, p) {
 		return doMethod(o, v, p);
@@ -180,26 +99,7 @@ if (!window.gAlp) {
 	function increment(i) {
 		return i + 1;
 	}
-    
-    function doHref(img) {
-		if (img.src) {
-			var a = img.parentNode;
-			gAlp.Util.setAttributes({
-				href: doParse(img.src)
-			}, a);
-			if (!utils.getPrevious(a)) {
-				utils.show(a);
-				klasAdd('sell', utils.getBody);
-			}
-		}
-	}
 
-	
-    	
-
-	
-
-	
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
 	}
@@ -284,55 +184,15 @@ if (!window.gAlp) {
 			});
 		}(alpacas)),
 		utils = gAlp.Util,
-        con = utils.con,
+		con = utils.con,
 		PTL = _.partial,
 		COMP = _.compose,
-        ALWAYS = utils.always,
-        event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
+		ALWAYS = utils.always,
+		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
-        mytarget = !window.addEventListener ? 'srcElement' : 'target',
-        reverse = utils.invoker('reverse', Array.prototype.reverse),
+		mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		validator = utils.validator,
-        
-         undoCaption_cb = function(a, i) {
-		var sell = utils.$('sell'),
-			goFig = PTL(utils.findByTag(0), 'figure', sell),
-			goTbl = PTL(utils.findByTag(i), 'table', sell),
-			when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, goTbl()));
-        
-        
-		_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
-	},
-        
-         doLI_cb = function(caption, i, arr) {
-		var li = twice(invokeArg)('li'),
-			link = twice(invokeArg)('a'),
-			doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
-		_.compose(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
-		/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-		if (utils.findByClass('tab') && i && !arr[i + 1]) {
-			eventing('click', [], function (e) {
-				_.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
-				_.compose(PTL(klasAdd, 'current'), getParent, getTarget)(e);
-				var reg = new RegExp(text_from_target(e), 'i'),
-					cb = thrice(doMethod)('match')(reg);
-				Looper.onpage.visit(utils.hide);
-				Looper.onpage.set(_.findIndex(true_captions(), cb));
-				_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
-			}, getUL).execute();
-		}
-	},
-        
-         doCaption_cb = function(a, i) {
-		var fig = twice(invokeArg)('figure'),
-			caption = twice(invokeArg)('figcaption'),
-			append = thrice(doMethod)('appendChild')(a),
-			cap = utils.getter(captions.slice(-alp_len), i);
-		_.compose(PTL(klasAdd, 'extent'), PTL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
-	},
-
-        
-        alpacas_select = sliceArray(alpacas),
+		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
 		lookup = {
 			1: 'intro',
@@ -343,44 +203,32 @@ if (!window.gAlp) {
 			6: 'six'
 		},
 		nth = utils.getter(lookup, alp_len),
-		curryFactory = utils.curryFactory,		
-		once = utils.doOnce(),
-		defer_once = curryFactory(1, true),
+		curryFactory = utils.curryFactory,
 		twice = curryFactory(2),
 		twicedefer = curryFactory(2, true),
 		thrice = curryFactory(3),
 		thriceplus = curryFactory(4),
 		thricedefer = curryFactory(3, true),
-        
-		parser = thrice(doMethod)('match')(/assets\/\w+\.jpe?g$/),
-        doMethodDefer = thricedefer(doMethod),
-        deferMap = thricedefer(doCallbacks)('map'),
+		doMethodDefer = thricedefer(doMethod),
+		deferMap = thricedefer(doCallbacks)('map'),
 		delayMap = thrice(doCallbacks)('map'),
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferEvery = thricedefer(doCallbacks)('every'),
-		delayEach = thrice(doCallbacks)('each'),
-		doMap = utils.doMap,
-	
 		anCr = utils.append(),
 		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
 		byIndex = utils.byIndex,
 		setAttrs = utils.setAttributes,
-		$ = thrice(lazyVal)('getElementById')(document),
 		$$ = thricedefer(lazyVal)('getElementById')(document),
-        doGet = twice(utils.getter),
+		doGet = twice(utils.getter),
 		getZero = doGet(0),
 		getOne = doGet(1),
-		getPrev = doGet('nextSibling'),
-		getExec = doGet('execute'),
 		getLength = doGet('length'),
 		getTarget = doGet(mytarget),
 		getParent = doGet('parentNode'),
 		doVal = doGet('value'),
-		doParse = COMP(PTL(add, '../'), doGet(0), parser),
-        isIMG = PTL(equals, 'IMG'),
-        
+		isIMG = PTL(equals, 'IMG'),
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
@@ -397,17 +245,14 @@ if (!window.gAlp) {
 				cb();
 			}
 		},
-        doInc = function (n) {
-			return COMP(PTL(modulo, n), increment);
-		},
-        Looper = gAlp.LoopIterator,
-        doLoop = function (coll) {
-			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
+        throttler = function (callback) {
+			negate(noOp);
+            eventing('resize', [], _.throttle(_.partial(negate, callback), 66), window).execute();
 		},
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
-        intro = utils.findByClass('intro'),
-        true_captions = doMethodDefer('slice')(-alp_len)(captions),        
+		intro = utils.findByClass('intro'),
+		true_captions = doMethodDefer('slice')(-alp_len)(captions),
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
@@ -415,14 +260,51 @@ if (!window.gAlp) {
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
 		}), PTL(anCrIn($$('sell'), intro), 'ul'))])),
+		Looper = gAlp.LoopIterator,
+		doCaption_cb = function (a, i) {
+			var fig = twice(invokeArg)('figure'),
+				caption = twice(invokeArg)('figcaption'),
+				append = thrice(doMethod)('appendChild')(a),
+				cap = utils.getter(captions.slice(-alp_len), i);
+			_.compose(PTL(klasAdd, 'extent'), PTL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
+		},
+		undoCaption_cb = function (a, i) {
+			var sell = utils.$('sell'),
+				goFig = PTL(utils.findByTag(0), 'figure', sell),
+				goTbl = PTL(utils.findByTag(i), 'table', sell),
+				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, goTbl()));
+			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
+		},
+		doLI_cb = function (caption, i, arr) {
+			var li = twice(invokeArg)('li'),
+				link = twice(invokeArg)('a'),
+				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
+			_.compose(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
+			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
+			if (utils.findByClass('tab') && i && !arr[i + 1]) {
+				eventing('click', [], function (e) {
+					_.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
+					_.compose(PTL(klasAdd, 'current'), getParent, getTarget)(e);
+					var reg = new RegExp(text_from_target(e), 'i'),
+						cb = thrice(doMethod)('match')(reg);
+					Looper.onpage.visit(utils.hide);
+					Looper.onpage.set(_.findIndex(true_captions(), cb));
+					_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+				}, getUL).execute();
+			}
+		},
+		doInc = function (n) {
+			return COMP(PTL(modulo, n), increment);
+		},
+		doLoop = function (coll) {
+			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
+		},
 		makeTabs = deferEach(true_captions)(doLI_cb),
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
 		}), PTL(anCr(intro), 'div')),
-		
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
-		supportsNthChild = validator('hard coding class not required', ALWAYS(!Modernizr.nthchild)),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
 		renderTable_CB = COMP(anCr(selldiv), ALWAYS('table')),
 		iterateTable = function (getId, getPath, doFreshRow, doSpan, doDescription, doOddRow) {
@@ -514,7 +396,6 @@ if (!window.gAlp) {
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		delayExecute = thrice(doMethod)('execute')(null),
 		delayUndo = thrice(doMethod)('undo')(null),
-		
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		$displayer = {},
 		factory = function () {
@@ -556,9 +437,11 @@ if (!window.gAlp) {
 					$toggler.execute();
 				}
 			}, utils.$('sell'));
-			eventing('resize', [], clear, window).execute();
+			//eventing('resize', [], clear, window).execute();
+            
+            throttler(clear);
 			addULClass();
-            klasAdd([nth], intro);
+			klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
 			if (utils.findByClass('loop')) {
 				$displayer.execute();
@@ -567,7 +450,4 @@ if (!window.gAlp) {
 			}
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
-	lo: 3,
-	hi: 4
-}));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</]));
