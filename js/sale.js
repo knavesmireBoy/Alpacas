@@ -15,6 +15,22 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
+    
+    function fnull(fun /*, defaults */ ) {
+		var defaults = _.rest(arguments);
+		return function( /* args */ ) {
+			var args = _.map(arguments, function(e, i) {
+				return existy(e) ? e : defaults[i];
+			});
+			return fun.apply(null, args);
+		};
+	}
+
+    
+    function hide(el){
+        utils.hide(el);
+        utils.hide(utils.getPrevious(el));
+    }
 
 	function makeDummy() {
 		return {
@@ -114,6 +130,11 @@ if (!window.gAlp) {
 	function invoke(f) {
 		return f.apply(null, _.rest(arguments));
 	}
+    
+    function invokeArr(f, arr) {
+		return f.apply(null, arr);
+	}
+
 
 	function getterBridge(arr) {
 		return utils.getter(arr[1], arr[0]);
@@ -199,8 +220,10 @@ if (!window.gAlp) {
 	function undoCaption_cb(a, i) {
 		var sell = utils.$('sell'),
             goFig = PTL(utils.findByTag(0), 'figure', sell),
-            goTbl = PTL(utils.findByTag(i), 'table', sell);
-        COMP(PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
+            goTbl = PTL(utils.findByTag(i), 'table', sell),
+            pass = COMP(PTL(invokeArr, equals), PTL(_.map, [PTL(utils.findByClass, 'show'), _.identity]), twice(PTL))(a),
+            when = PTL(utils.doWhen, pass, PTL(utils.show, goTbl()));        
+        COMP(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 
 	}
 
@@ -338,10 +361,14 @@ if (!window.gAlp) {
         bonds_select = sliceArray(bonds),
 		bonds_len = bonds_select.length,
 		lookup = {
-			4: 'four',
+			1: 'intro',
+			2: 'intro',
+			3: 'intro',
+            4: 'four',
 			5: 'five',
 			6: 'six'
 		},
+        //nth = COMP(twice(fnull)(['intro']), twicedefer(klasAdd)(intro), PTL(utils.getter, lookup, alp_len)),
         nth = utils.getter(lookup, alp_len),
 		curryFactory = utils.curryFactory,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
@@ -361,6 +388,7 @@ if (!window.gAlp) {
 		ALWAYS = utils.always,
 		getZero = doGet(0),
 		getOne = doGet(1),
+		getPrev = doGet('nextSibling'),
 		getExec = doGet('execute'),
 		doMethodDefer = thricedefer(doMethod),
 		true_captions = doMethodDefer('slice')(-alp_len)(captions),
@@ -405,6 +433,11 @@ if (!window.gAlp) {
 		},
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
+        
+        gt4 = twicedefer(gtThan)(4)(alp_len),
+		gt3 = twicedefer(gtThan)(3)(alp_len),
+		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+        
 		deferAttrs = deferMap(alpacas_select)(PTL(partialize, COMP(doHref, setAttrs))),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
@@ -477,8 +510,11 @@ if (!window.gAlp) {
 				render = anCr(tmp);
 				COMP(addImgAttrs, render, ALWAYS('img'))();
 				addTableAttrs(table);
-                utils.doWhen(!k, PTL(utils.show, table));
-                utils.doWhen(!k, PTL(utils.show, tmp));
+                if(!k && !gt4() && !mob4()){
+                    utils.show(table);
+                    utils.show(tmp);  
+                }
+                
 			};
 		},
 		doLoad = function(coll, cb) {
@@ -498,9 +534,7 @@ if (!window.gAlp) {
             klasAdd('sell', utils.getBody);
 			return true;
 		},
-		gt4 = twicedefer(gtThan)(4)(alp_len),
-		gt3 = twicedefer(gtThan)(3)(alp_len),
-		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+		
 		addLoopClass = PTL(klasAdd, 'loop', makeUL),
 		addTabClass = PTL(klasAdd, 'tab', makeUL),
 		outcomes = [
@@ -518,7 +552,9 @@ if (!window.gAlp) {
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
         $displayer = {},
 		factory = function() {
+            
             maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
+
             doLoop(utils.getByTag('a', intro));
             
             Looper.onpage.visit = function(cb){
@@ -526,10 +562,7 @@ if (!window.gAlp) {
                 _.each(_.map(this.group.members, utils.getPrevious), cb);
             }
             
-            con(expandMembers(Looper.onpage.current().members));
-            
 			var members = Looper.onpage.current().members,
-                
                 deferMembers = deferEach(members),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.onpage.current, Looper.onpage),
@@ -539,9 +572,9 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function() {}]
 				],
-                showCurrent = COMP(con, utils.getPrevious, utils.show, doGet('value')),
+                showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
-				deferNext = COMP(deferShow, deferMembers(utils.hide)),
+				deferNext = COMP(deferShow, deferMembers(hide)),
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
@@ -554,6 +587,8 @@ if (!window.gAlp) {
 				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+
+            
 			$displayer = eventing('click', event_actions.slice(0), function(e) {
 				var $toggler = doDisplay(e);
 				if ($toggler) {
@@ -563,6 +598,7 @@ if (!window.gAlp) {
 			}, utils.$('sell'));
 			eventing('resize', [], clear, window).execute();
 			addULClass();
+
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
 			if (utils.findByClass('loop')) {
 				$displayer.execute();
@@ -573,7 +609,11 @@ if (!window.gAlp) {
 		};
 	factory();
     klasAdd([nth], intro);
-     
+    
+    
+    
+    //COMP(PTL(equals), PTL(utils.findByClass, 'show'), utils.getPrevious, _.identity)
+         
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,
 	hi: 4

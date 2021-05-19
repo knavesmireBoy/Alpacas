@@ -135,6 +135,16 @@ gAlp.Util = (function() {
 		var res = _.map(coll, fun);
 		return cat.apply(null, res);
 	}
+    
+    	function fnull(fun /*, defaults */ ) {
+		var defaults = _.rest(arguments);
+		return function( /* args */ ) {
+			var args = _.map(arguments, function(e, i) {
+				return existy(e) ? e : defaults[i];
+			});
+			return fun.apply(null, args);
+		};
+	}
 
 	function always(val) {
 		return function() {
@@ -308,6 +318,7 @@ gAlp.Util = (function() {
 		} else if (newElement) {
 			parent.insertBefore(newElement, getNextElement(targetElement.nextSibling));
 		}
+        return newElement;
 	}
 
 	function getTargetNode(node, reg, dir) {
@@ -467,6 +478,15 @@ gAlp.Util = (function() {
         }
         return '';
 	}
+    
+     function makePartial(flag){
+        return  function (p1, p2, i, array){
+            if(flag && !array[i+1]){
+                return p1(p2);
+            }
+            return _.partial(p1, p2);
+        };
+    }
 
 	function curryFactory(i, defer) {
 		function curry1(fun) {
@@ -936,6 +956,10 @@ gAlp.Util = (function() {
 	}
     
     
+    function partialize(ptl, arg){
+        return _.partial(ptl, arg);
+    }
+    
 
 	function simpleAdapter(allpairs, adapter, subject) {
 		/*expects eg: [['shout', 'cry'],['bark', 'whine']]
@@ -1339,6 +1363,7 @@ gAlp.Util = (function() {
 		},
 		getPreviousElement: getPreviousElement, //?//
 		getPrevious: _.partial(nested, curry2(getter)('previousSibling'), getPreviousElement),
+		//getPrevious: _.compose(_.partial(nested, curry2(getter)('previousSibling')), _.partial(partialize, getPreviousElement)),
 		getScrollThreshold: getScrollThreshold,
 		getSubArray: function(coll, tgt) {
 			function reducer(acc, cur) {
