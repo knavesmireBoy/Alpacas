@@ -232,23 +232,6 @@ if (!window.gAlp) {
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
-		getEnvironment = (function () {
-			if (mq) {
-				return _.partial(Modernizr.mq, query);
-			} else {
-				return isDesktop;
-			}
-		}()),
-		negate = function (cb) {
-			if (!getEnvironment()) {
-				getEnvironment = _.negate(getEnvironment);
-				cb();
-			}
-		},
-        throttler = function (callback) {
-			negate(noOp);
-            eventing('resize', [], _.throttle(_.partial(negate, callback), 66), window).execute();
-		},
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
 		intro = utils.findByClass('intro'),
@@ -256,6 +239,16 @@ if (!window.gAlp) {
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+		mob44 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+        
+        getEnvironment = (function () {
+			if (mq) {
+				return _.partial(Modernizr.mq, query);
+			} else {
+				return isDesktop;
+			}
+		}()),
+		
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
@@ -275,21 +268,25 @@ if (!window.gAlp) {
 				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, goTbl()));
 			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
+        
+        tabCallback = function(pred, tgt, reg){
+            if(getResult(pred)){
+                _.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
+                klasAdd('current', tgt);
+                Looper.onpage.visit(utils.hide);
+                Looper.onpage.set(_.findIndex(true_captions(), thrice(doMethod)('match')(reg)));
+                _.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+            }
+        },
 		doLI_cb = function (caption, i, arr) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
 				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
 			_.compose(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-			if (utils.findByClass('tab') && i && !arr[i + 1]) {
-				eventing('click', [], function (e) {
-					_.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
-					_.compose(PTL(klasAdd, 'current'), getParent, getTarget)(e);
-					var reg = new RegExp(text_from_target(e), 'i'),
-						cb = thrice(doMethod)('match')(reg);
-					Looper.onpage.visit(utils.hide);
-					Looper.onpage.set(_.findIndex(true_captions(), cb));
-					_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+			if (i && !arr[i + 1]) {
+                eventing('click', [], function (e) {
+					tabCallback(PTL(utils.findByClass, 'tab'), COMP(getParent, getTarget)(e), new RegExp(text_from_target(e), 'i'));
 				}, getUL).execute();
 			}
 		},
@@ -405,6 +402,7 @@ if (!window.gAlp) {
 				_.each(this.group.members, cb);
 				_.each(_.map(this.group.members, utils.getPrevious), cb);
 			};
+                        
 			var members = Looper.onpage.current().members,
 				deferMembers = deferEach(members),
 				makeCaptions = deferMembers(doCaption_cb),
@@ -422,24 +420,47 @@ if (!window.gAlp) {
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
 				restoreCaptions = COMP(addULClass, delayExecute, twice(invoke)(utils), PTL(utils.drillDown, ['eventer', 'club', 1]), delayUndo, ALWAYS($toggle), PTL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+                
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
+                
+                makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
+                
 				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
 					noOp, noOp
                          ],
 				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), delayExecute, $nav_listener, deferEach(prepLoopTabs)(doLI_cb), deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget));
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
+                negate = function (cb) {
+                    if (!getEnvironment()) {
+                        getEnvironment = _.negate(getEnvironment);
+                        if(!utils.findByClass('extent')){
+                            if(mob44()){
+                                COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete)(utils.$('list'));
+                   // cb();
+                            }
+                            else {
+                                COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete)(utils.$('list'));
+                                con(99);
+                            }
+                        }
+                    }
+                
+		},
+        throttler = function (callback) {
+			negate(noOp);
+            eventing('resize', [], _.throttle(_.partial(negate, callback), 66), window).execute();
+		},
+        
+            
 			$displayer = eventing('click', event_actions.slice(0), function (e) {
 				var $toggler = doDisplay(e);
 				if ($toggler) {
 					$displayer.undo();
 					$toggler.execute();
 				}
-			}, utils.$('sell'));
-			//eventing('resize', [], clear, window).execute();
-            
-            throttler(clear);
+			}, utils.$('sell'));            
 			addULClass();
 			klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
@@ -448,6 +469,8 @@ if (!window.gAlp) {
 			} else {
 				$toggle.execute();
 			}
+            throttler(clear);
 		};
+    
 	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</]));
