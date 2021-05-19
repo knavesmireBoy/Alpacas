@@ -438,14 +438,16 @@ if (!window.gAlp) {
                 
                 reLoop = COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
                 reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
+                tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
                 
-                reDoTabs = deferAlt([reTab, reLoop]),
+                reDoTabs = deferAlt(tabCBS),
                 
                 negate = function (cb) {
                     if (!getEnvironment()) {
                         getEnvironment = _.negate(getEnvironment);
-                        con('mob')
-                        if(!utils.findByClass('extent') && utils.findByClass('sell')){
+                       // if(!utils.findByClass('extent') && utils.findByClass('sell')){
+                            cb();
+                            /*
                             if(mob4()){
                               reLoop();
                                 con('loop')
@@ -454,13 +456,17 @@ if (!window.gAlp) {
                                 reTab();
                                 con('tab');
                             }
-                        }
+                            */
+                       // }
+                        
                     }
                 
 		},
         throttler = function (callback) {
 			negate(noOp);
-            eventing('resize', [], _.throttle(_.partial(negate, callback), 66), window).execute();
+            var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell')])(getResult),
+                doCallback = PTL(utils.doWhen, pred, callback);            
+            eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
 		},
         
             
