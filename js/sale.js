@@ -194,6 +194,7 @@ if (!window.gAlp) {
 		validator = utils.validator,
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
+        /*bit lazy but ensures each extent (one alpaca, two alpaca, more.. has some class to add, defaults to intro which it already has, saves an ugly class of undefined*/
 		lookup = {
 			1: 'intro',
 			2: 'intro',
@@ -457,6 +458,7 @@ if (!window.gAlp) {
 				$toggle.execute();
 			}
 			throttler(reDoTabs);
+            //utils.highLighter.perform();
 		};
 	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</]));
