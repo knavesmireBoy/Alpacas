@@ -187,11 +187,18 @@ if (!window.gAlp) {
 			}
 		}
 	}
+    
+    function undoCaption_cb1(e) {
+		var goFig = utils.getDomChild(utils.getNodeByTag('figure'));
+		COMP(utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(utils.$('sell')), thrice(doMethod)('appendChild'), _.identity)(e);
+	}
 
-	function undoCaption_cb(a) {
-		var goFig = PTL(utils.findByTag, 'figure', utils.$('sell'));
+	function undoCaption_cb(a, i) {
+		var sell = utils.$('sell'),
+            goFig = PTL(utils.findByTag(0), 'figure', sell),
+            goTbl = PTL(utils.findByTag(i), 'table', sell);
+        COMP(PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 
-		COMP(utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(utils.$('sell')), thrice(doMethod)('appendChild'), _.identity)(a);
 	}
 
 	function doCaption_cb(a, i) {
@@ -397,7 +404,7 @@ if (!window.gAlp) {
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
 		deferAttrs = deferMap(alpacas_select)(PTL(partialize, COMP(doHref, setAttrs))),
-		getUL = PTL(utils.findByTag, 'ul', intro),
+		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
 		}), PTL(anCrIn($$('sell'), intro), 'ul'))])),
@@ -534,7 +541,7 @@ if (!window.gAlp) {
 				goGetIndex = COMP(doGet('index'), bindCurrent),
 				restoreCaptions = COMP(addULClass, delayExecute, twice(invoke)(utils), PTL(utils.drillDown, ['eventer', 'club', 1]), delayUndo, ALWAYS($toggle), PTL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
-				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag2(1), 'a', $$('list'))), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
+				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
 					noOp, noOp
 				],
