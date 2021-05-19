@@ -439,26 +439,11 @@ if (!window.gAlp) {
                 reLoop = COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
                 reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
                 tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
-                
                 reDoTabs = deferAlt(tabCBS),
-                
                 negate = function (cb) {
                     if (!getEnvironment()) {
                         getEnvironment = _.negate(getEnvironment);
-                       // if(!utils.findByClass('extent') && utils.findByClass('sell')){
                             cb();
-                            /*
-                            if(mob4()){
-                              reLoop();
-                                con('loop')
-                            }
-                            else {
-                                reTab();
-                                con('tab');
-                            }
-                            */
-                       // }
-                        
                     }
                 
 		},
