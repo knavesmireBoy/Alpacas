@@ -31,6 +31,9 @@ if (!window.gAlp) {
         };
     }
    
+    function expandMembers(coll){
+        return _.zip(_.map(coll, utils.getPrevious), coll);
+    }
 
 	function add(a, b) {
 		return a + b;
@@ -222,7 +225,6 @@ if (!window.gAlp) {
 				var reg = new RegExp(text_from_target(e), 'i'),
 					cb = thrice(doMethod)('match')(reg);
 				Looper.onpage.visit(utils.hide);
-				//Looper.onpage.visit(utils.hide);
 				Looper.onpage.set(_.findIndex(true_captions(), cb));
 				COMP(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
 			}, getUL).execute();
@@ -521,10 +523,14 @@ if (!window.gAlp) {
             
             Looper.onpage.visit = function(cb){
                 _.each(this.group.members, cb);
-                //_.each(_.map(this.group.members, utils.getPrevious), cb);
+                _.each(_.map(this.group.members, utils.getPrevious), cb);
             }
             
-			var deferMembers = deferEach(Looper.onpage.current().members),
+            con(expandMembers(Looper.onpage.current().members));
+            
+			var members = Looper.onpage.current().members,
+                
+                deferMembers = deferEach(members),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.onpage.current, Looper.onpage),
 				captionsORtabs = [
@@ -534,7 +540,7 @@ if (!window.gAlp) {
 					[ALWAYS(true), function() {}]
 				],
                 showCurrent = COMP(con, utils.getPrevious, utils.show, doGet('value')),
-				deferShow = COMP(utils.show, doGet('value'), _.bind(Looper.onpage.forward, Looper.onpage)),
+				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
 				deferNext = COMP(deferShow, deferMembers(utils.hide)),
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = COMP(doGet('value'), bindCurrent),
