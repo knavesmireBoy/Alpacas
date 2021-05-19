@@ -204,6 +204,7 @@ if (!window.gAlp) {
 		},
 		nth = utils.getter(lookup, alp_len),
 		curryFactory = utils.curryFactory,
+        defer_once = curryFactory(1, true),
 		twice = curryFactory(2),
 		twicedefer = curryFactory(2, true),
 		thrice = curryFactory(3),
@@ -228,6 +229,7 @@ if (!window.gAlp) {
 		getTarget = doGet(mytarget),
 		getParent = doGet('parentNode'),
 		doVal = doGet('value'),
+        doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
 		isIMG = PTL(equals, 'IMG'),
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
@@ -405,6 +407,7 @@ if (!window.gAlp) {
                         
 			var members = Looper.onpage.current().members,
 				deferMembers = deferEach(members),
+                deferAlt = defer_once(doAlt),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.onpage.current, Looper.onpage),
 				captionsORtabs = [
@@ -432,17 +435,24 @@ if (!window.gAlp) {
 				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
+                
+                reLoop = COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
+                reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
+                
+                reDoTabs = deferAlt([reTab, reLoop]),
+                
                 negate = function (cb) {
                     if (!getEnvironment()) {
                         getEnvironment = _.negate(getEnvironment);
-                        if(!utils.findByClass('extent')){
-                            if(mob44()){
-                                COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete)(utils.$('list'));
-                   // cb();
+                        con('mob')
+                        if(!utils.findByClass('extent') && utils.findByClass('sell')){
+                            if(mob4()){
+                              reLoop();
+                                con('loop')
                             }
                             else {
-                                COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete)(utils.$('list'));
-                                con(99);
+                                reTab();
+                                con('tab');
                             }
                         }
                     }
@@ -469,7 +479,7 @@ if (!window.gAlp) {
 			} else {
 				$toggle.execute();
 			}
-            throttler(clear);
+            throttler(reDoTabs);
 		};
     
 	factory();
