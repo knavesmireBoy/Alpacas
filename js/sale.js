@@ -191,6 +191,7 @@ if (!window.gAlp) {
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
+        allow = !touchevents ? 2 : 0,
 		validator = utils.validator,
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
@@ -299,6 +300,7 @@ if (!window.gAlp) {
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
 		}), PTL(anCr(intro), 'div')),
+        makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow),
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
@@ -458,6 +460,7 @@ if (!window.gAlp) {
 				$toggle.execute();
 			}
 			throttler(reDoTabs);
+            makeToolTip().init();
             //utils.highLighter.perform();
 		};
 	factory();

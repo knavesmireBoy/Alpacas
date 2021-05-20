@@ -23,7 +23,7 @@ ul.loop, ul.tab {
 	transform: translateX(0px);
 }
 ul.tab li {
-	margin-right: 1em;
+	margin-right: .1em;
 }
 ul.tab a {
 	padding: 0.7em 1.3em;
@@ -64,9 +64,7 @@ ul.loop li a::after, ul.loop li a::before {
 .sell .tog a {
 	margin-left: 0;
 }
-#sell.tog {
-    background: red;
-}
+
 #sell {
 	display: none;
 	overflow: hidden;
