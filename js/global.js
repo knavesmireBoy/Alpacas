@@ -1588,5 +1588,5 @@ gAlp.Util = (function() {
 		dog: 'spadger'
 	}; //end
 }());
-
+//the MOST simple implementation
 gAlp.Util.eventer.club = [];

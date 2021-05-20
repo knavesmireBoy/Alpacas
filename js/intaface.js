@@ -137,7 +137,8 @@ if (!window.gAlp) {
 			core.Intaface.ensureImplements.apply(core.Intaface, arguments);
 		} catch (e) {
             noOp();
-			//console.log(e.message);
+			window.console.log(e.message);
+			//throw(e.message);
 		}
 	};
 }(gAlp));

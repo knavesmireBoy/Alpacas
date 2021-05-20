@@ -15,6 +15,15 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
+    function create(constructor) {
+        var factory = constructor.bind.apply(constructor, arguments);
+        return new factory();
+    }
+    
+    function partialize(ptl){
+        return _.partial.apply(null, _.rest(arguments));
+    }
+
 
 	function hide(el) {
 		gAlp.Util.hide(el);
@@ -70,7 +79,7 @@ if (!window.gAlp) {
 	function invokeArg(f, arg) {
 		return f(arg);
 	}
-
+    
 	function caller(ctxt, ptl, arg, m) {
 		return ptl(ctxt)[m](arg);
 	}
@@ -231,25 +240,24 @@ if (!window.gAlp) {
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferIndex = thricedefer(doCallbacks)('findIndex'),
 		deferEvery = thricedefer(doCallbacks)('every'),
+        doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
+        doGet = twice(utils.getter),
+        getZero = doGet(0),
+		getOne = doGet(1),
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
-		byIndex = utils.byIndex,
 		setAttrs = utils.setAttributes,
 		$$ = thricedefer(lazyVal)('getElementById')(document),
-		doGet = twice(utils.getter),
-		getZero = doGet(0),
-		getOne = doGet(1),
+        intro = utils.findByClass('intro'),
 		getTarget = doGet(mytarget),
 		getParent = doGet('parentNode'),
-		doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
 		isIMG = PTL(equals, 'IMG'),
-		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
-		threshold = Number(query.match(number_reg)[1]),
-		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
-		intro = utils.findByClass('intro'),
+        number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
+		threshold = Number(query.match(number_reg)[1]),
+		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
 		true_captions = doMethodDefer('slice')(-alp_len)(captions),
         indexFromTab = deferIndex(true_captions()),
 		gt4 = twicedefer(gtThan)(4)(alp_len),
@@ -281,10 +289,12 @@ if (!window.gAlp) {
 				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, showtable()));
 			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), showtable, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
-		tab_cb = function (pred, displayer, tgt, matcher) {
+		tab_cb = function (pred, $displayer, tgt, matcher) {
 			if (getResult(pred)) {
-                displayer.hide();
-                displayer.show(tgt);
+                var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
+                gAlp.Intaface.ensures($displayer, iDisplayer);
+                $displayer.hide();
+                $displayer.show(tgt);
 				Looper.onpage.visit(utils.hide);
 				COMP(_.bind(Looper.onpage.set, Looper.onpage),  indexFromTab(matcher))();
 				COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
@@ -299,6 +309,8 @@ if (!window.gAlp) {
 			if (i && !inRange(arr, i)) {
                 eventing('click', [], function (e) {
                     tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), thrice(doMethod)('match')(new RegExp(text_from_target(e), 'i')));
+                    
+                          
 				}, getUL).execute();
 			}
 		},
@@ -380,7 +392,7 @@ if (!window.gAlp) {
 			var loadData = function (data, render, driver) {
 					_.each(data, PTL(driver, render));
 				},
-				getId = COMP(PTL(byIndex, 1), thrice(simpleInvoke)(' ')('split')),
+				getId = COMP(PTL(utils.byIndex, 1), thrice(simpleInvoke)(' ')('split')),
 				doRow = onValidation(validator('is first row', PTL(utils.isEqual, 0))),
 				doColspan = PTL(setAttrs, {
 					colSpan: 2 //!!!!////camelCase!!!!
@@ -450,14 +462,16 @@ if (!window.gAlp) {
 						cb();
 					}
 				},
-				throttler = function (callback) {
+				throttler = function (cb) {
 					negate(noOp);
-					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell')])(getResult),
-						doCallback = PTL(utils.doWhen, pred, callback);
+					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), mob4])(getResult),
+						doCallback = PTL(utils.doWhen, pred, cb);
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
 				},
 				$displayer = eventing('click', event_actions.slice(0), function (e) {
-					var $toggler = doDisplay(e);
+					var $toggler = doDisplay(e),
+                        iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
+                    gAlp.Intaface.ensures($toggler, iCommand);
 					if ($toggler) {
 						$displayer.undo();
 						$toggler.execute();
@@ -473,6 +487,11 @@ if (!window.gAlp) {
 			}
 			throttler(reDoTabs);
             makeToolTip().init();
+     
+ var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp), ALWAYS('j[a-z]'));
+            
+            console.log(reg())
+                    
             //utils.highLighter.perform();
 		};
 	factory();

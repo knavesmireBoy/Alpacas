@@ -56,7 +56,6 @@ window.gAlp.Eventing = (function (eventing) {
 		EventCache = (function (list) {
 			var remove = function (coll, arg) {
 					var res = _.findIndex(coll, function (cur) {
-						//console.log(cur.el, arg.el)
 						return cur === arg;
 					});
 					if (res !== -1) {
