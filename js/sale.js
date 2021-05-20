@@ -103,6 +103,19 @@ if (!window.gAlp) {
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
 	}
+    
+    function inRange(coll, i){
+        return coll[i + 1];
+    }
+    
+    function makeDisplayer(klas){
+        
+        return {
+            show: _.partial(klasAdd, klas),
+            hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
+        };
+    }
+        
 	var alpacas = [
 			[
 				["Granary Grace", "Price on Application"],
@@ -213,12 +226,12 @@ if (!window.gAlp) {
 		thriceplus = curryFactory(4),
 		thricedefer = curryFactory(3, true),
 		doMethodDefer = thricedefer(doMethod),
+        delayMap = thrice(doCallbacks)('map'),
 		deferMap = thricedefer(doCallbacks)('map'),
-		delayMap = thrice(doCallbacks)('map'),
 		deferEach = thricedefer(doCallbacks)('each'),
+		deferIndex = thricedefer(doCallbacks)('findIndex'),
 		deferEvery = thricedefer(doCallbacks)('every'),
 		anCr = utils.append(),
-		anCrIn = utils.insert(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
 		byIndex = utils.byIndex,
@@ -227,10 +240,8 @@ if (!window.gAlp) {
 		doGet = twice(utils.getter),
 		getZero = doGet(0),
 		getOne = doGet(1),
-		getLength = doGet('length'),
 		getTarget = doGet(mytarget),
 		getParent = doGet('parentNode'),
-		doVal = doGet('value'),
 		doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
 		isIMG = PTL(equals, 'IMG'),
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
@@ -240,6 +251,7 @@ if (!window.gAlp) {
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
 		intro = utils.findByClass('intro'),
 		true_captions = doMethodDefer('slice')(-alp_len)(captions),
+        indexFromTab = deferIndex(true_captions()),
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
@@ -253,7 +265,7 @@ if (!window.gAlp) {
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
-		}), PTL(anCrIn($$('sell'), intro), 'ul'))])),
+		}), PTL(utils.insert()($$('sell'), intro), 'ul'))])),
 		Looper = gAlp.LoopIterator,
 		doCaption_cb = function (a, i) {
 			var fig = twice(invokeArg)('figure'),
@@ -265,28 +277,28 @@ if (!window.gAlp) {
 		undoCaption_cb = function (a, i) {
 			var sell = utils.$('sell'),
 				goFig = PTL(utils.findByTag(0), 'figure', sell),
-				goTbl = PTL(utils.findByTag(i), 'table', sell),
-				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, goTbl()));
-			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), goTbl, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
+				showtable = PTL(utils.findByTag(i), 'table', sell),
+				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, showtable()));
+			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), showtable, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
-		tabCallback = function (pred, tgt, reg) {
+		tab_cb = function (pred, displayer, tgt, matcher) {
 			if (getResult(pred)) {
-				_.compose(PTL(klasRem, 'current'), PTL(utils.findByClass, 'current'))();
-				klasAdd('current', tgt);
+                displayer.hide();
+                displayer.show(tgt);
 				Looper.onpage.visit(utils.hide);
-				Looper.onpage.set(_.findIndex(true_captions(), thrice(doMethod)('match')(reg)));
-				_.compose(utils.show, utils.getPrevious, utils.show, doVal, _.bind(Looper.onpage.current, Looper.onpage))();
+				COMP(_.bind(Looper.onpage.set, Looper.onpage),  indexFromTab(matcher))();
+				COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
 			}
 		},
 		doLI_cb = function (caption, i, arr) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
 				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
-			_.compose(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
+			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-			if (i && !arr[i + 1]) {
-				eventing('click', [], function (e) {
-					tabCallback(PTL(utils.findByClass, 'tab'), COMP(getParent, getTarget)(e), new RegExp(text_from_target(e), 'i'));
+			if (i && !inRange(arr, i)) {
+                eventing('click', [], function (e) {
+                    tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), thrice(doMethod)('match')(new RegExp(text_from_target(e), 'i')));
 				}, getUL).execute();
 			}
 		},
@@ -294,7 +306,7 @@ if (!window.gAlp) {
 			return COMP(PTL(modulo, n), increment);
 		},
 		doLoop = function (coll) {
-			Looper.onpage = Looper.from(coll, doInc(getLength(coll)));
+			Looper.onpage = Looper.from(coll, doInc(doGet('length')(coll)));
 		},
 		makeTabs = deferEach(true_captions)(doLI_cb),
 		selldiv = COMP(PTL(setAttrs, {
