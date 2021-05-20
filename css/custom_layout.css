@@ -8,8 +8,8 @@ article.intro {
 	*height: 1%;
 }
 .extent figure {
-	margin: 1%;
-	padding: 1.2em 1.2em 0;
+	margin: .3em;
+	padding: 1em 1em 0;
 	vertical-align: bottom;
     box-sizing: border-box;
 }
