@@ -308,9 +308,11 @@ if (!window.gAlp) {
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
 			if (i && !inRange(arr, i)) {
                 eventing('click', [], function (e) {
+                    /*
                     tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), thrice(doMethod)('match')(new RegExp(text_from_target(e), 'i')));
+                    */
                     
-                          
+                    tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), utils.con, twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));                          
 				}, getUL).execute();
 			}
 		},
@@ -487,10 +489,7 @@ if (!window.gAlp) {
 			}
 			throttler(reDoTabs);
             makeToolTip().init();
-     
- var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp), ALWAYS('j[a-z]'));
-            
-            console.log(reg())
+            //var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
                     
             //utils.highLighter.perform();
 		};
