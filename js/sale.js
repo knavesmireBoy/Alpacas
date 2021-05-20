@@ -15,19 +15,14 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-    function create(constructor) {
-        var factory = constructor.bind.apply(constructor, arguments);
-        return new factory();
-    }
-    
-    function partialize(ptl){
-        return _.partial.apply(null, _.rest(arguments));
-    }
+	//    https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
+	function create(constructor) {
+		var Factory = constructor.bind.apply(constructor, arguments);
+		return new Factory();
+	}
 
-
-	function hide(el) {
-		gAlp.Util.hide(el);
-		gAlp.Util.hide(gAlp.Util.getPrevious(el));
+	function partialize() {
+		return _.partial.apply(null, _.rest(arguments));
 	}
 
 	function equals(a, b) {
@@ -79,7 +74,7 @@ if (!window.gAlp) {
 	function invokeArg(f, arg) {
 		return f(arg);
 	}
-    
+
 	function caller(ctxt, ptl, arg, m) {
 		return ptl(ctxt)[m](arg);
 	}
@@ -112,19 +107,12 @@ if (!window.gAlp) {
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
 	}
-    
-    function inRange(coll, i){
-        return coll[i + 1];
-    }
-    
-    function makeDisplayer(klas){
-        
-        return {
-            show: _.partial(klasAdd, klas),
-            hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
-        };
-    }
-        
+
+	function inRange(coll, i) {
+		return coll[i + 1];
+	}
+
+	
 	var alpacas = [
 			[
 				["Granary Grace", "Price on Application"],
@@ -213,11 +201,11 @@ if (!window.gAlp) {
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
-        allow = !touchevents ? 2 : 0,
+		allow = !touchevents ? 2 : 0,
 		validator = utils.validator,
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
-        /*bit lazy but ensures each extent (one alpaca, two alpaca, more.. has some class to add, defaults to intro which it already has, saves an ugly class of undefined*/
+		/*bit lazy but ensures each extent (one alpaca, two alpaca, more.. has some class to add, defaults to intro which it already has, saves an ugly class of undefined*/
 		lookup = {
 			1: 'intro',
 			2: 'intro',
@@ -235,31 +223,41 @@ if (!window.gAlp) {
 		thriceplus = curryFactory(4),
 		thricedefer = curryFactory(3, true),
 		doMethodDefer = thricedefer(doMethod),
-        delayMap = thrice(doCallbacks)('map'),
+		delayMap = thrice(doCallbacks)('map'),
 		deferMap = thricedefer(doCallbacks)('map'),
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferIndex = thricedefer(doCallbacks)('findIndex'),
 		deferEvery = thricedefer(doCallbacks)('every'),
-        doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
-        doGet = twice(utils.getter),
-        getZero = doGet(0),
+		doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
+		doGet = twice(utils.getter),
+		getZero = doGet(0),
 		getOne = doGet(1),
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
 		setAttrs = utils.setAttributes,
 		$$ = thricedefer(lazyVal)('getElementById')(document),
-        intro = utils.findByClass('intro'),
+		intro = utils.findByClass('intro'),
 		getTarget = doGet(mytarget),
 		getParent = doGet('parentNode'),
 		isIMG = PTL(equals, 'IMG'),
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
-        number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
+		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
 		true_captions = doMethodDefer('slice')(-alp_len)(captions),
-        indexFromTab = deferIndex(true_captions()),
+		indexFromTab = deferIndex(true_captions()),
+        makeDisplayer = function (klas) {
+            return {
+                show: _.partial(klasAdd, klas),
+                hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
+            };
+        },
+        hide = function (el) {
+            utils.hide(el);
+            utils.hide(utils.getPrevious(el));
+        },
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
@@ -291,12 +289,12 @@ if (!window.gAlp) {
 		},
 		tab_cb = function (pred, $displayer, tgt, matcher) {
 			if (getResult(pred)) {
-                var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
-                gAlp.Intaface.ensures($displayer, iDisplayer);
-                $displayer.hide();
-                $displayer.show(tgt);
+				var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
+				gAlp.Intaface.ensures($displayer, iDisplayer);
+				$displayer.hide();
+				$displayer.show(tgt);
 				Looper.onpage.visit(utils.hide);
-				COMP(_.bind(Looper.onpage.set, Looper.onpage),  indexFromTab(matcher))();
+				COMP(_.bind(Looper.onpage.set, Looper.onpage), indexFromTab(matcher))();
 				COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
 			}
 		},
@@ -307,12 +305,11 @@ if (!window.gAlp) {
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
 			if (i && !inRange(arr, i)) {
-                eventing('click', [], function (e) {
-                    /*
-                    tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), thrice(doMethod)('match')(new RegExp(text_from_target(e), 'i')));
-                    */
-                    
-                    tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), utils.con, twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));                          
+				eventing('click', [], function (e) {
+					/*
+					tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), thrice(doMethod)('match')(new RegExp(text_from_target(e), 'i')));
+					*/
+					tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));
 				}, getUL).execute();
 			}
 		},
@@ -326,7 +323,7 @@ if (!window.gAlp) {
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
 		}), PTL(anCr(intro), 'div')),
-        makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow),
+		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow),
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
@@ -472,8 +469,8 @@ if (!window.gAlp) {
 				},
 				$displayer = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
-                        iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
-                    gAlp.Intaface.ensures($toggler, iCommand);
+						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
+					gAlp.Intaface.ensures($toggler, iCommand);
 					if ($toggler) {
 						$displayer.undo();
 						$toggler.execute();
@@ -488,10 +485,9 @@ if (!window.gAlp) {
 				$toggle.execute();
 			}
 			throttler(reDoTabs);
-            makeToolTip().init();
-            //var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
-                    
-            //utils.highLighter.perform();
+			makeToolTip().init();
+			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
+			//utils.highLighter.perform();
 		};
 	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</]));
