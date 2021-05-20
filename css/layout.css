@@ -5,46 +5,48 @@ body {
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 
-/*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
-#checkDummy {
-	margin-top: 1px;
-	display: none;
+header {
+	padding-top: 17em;
 }
-#wrap {
-	margin: 0 auto;
+
+nav {
+	width: 23%;
+	min-width: 18%;
+	z-index: 1;
+	margin-left: 1.5em;
+	float: left;
 }
-#wrap, footer, main label.read-more-trigger, main p {
-	position: relative;
+
+main {
+	padding: .8em 0 0;
+	width: 71%;
+	float: right;
+}
+/*https://css-tricks.com/all-about-floats/*/
+
+footer {
+	padding-top: 15%;
+	clear: both;
+	z-index: 1;
 }
 
 header, aside img {
 	position: relative;
     width: 100%;
 }
+main aside {
+	margin: 0;
+	position: absolute;
+	z-index: 0;
+	/* z-index required IF persisting with masking, explore clipping */
+	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
 
-header a img {
-	position: relative;
-}
-#wrap, #innerwrap, header, footer, nav, nav li, nav a {
-	width: 100%;
-}
-#wrap, article.intro {
-	overflow: hidden;
-}
-#innerwrap, footer, main aside,  header a, main .read-more-target, main label, main input {
-	overflow: hidden;
-}
-.read-more-target {
-    margin-top: .7em;
-}
 /*ie 7*/
 nav li /*,nav ul */ {
 	overflow: hidden;
 }
 
-header {
-	padding-top: 17em;
-}
 header h1 {
 	margin: -14% 0 0;
 	text-indent: 100%;
@@ -59,56 +61,6 @@ header a {
 	top: 0px;
 	left: 0px;
 }
-header a h1 {
-	white-space: nowrap;
-	width: 100%;
-	text-indent: 200%;
-}
-header a h1 img {
-	margin: .5em 0 0;
-}
-a#yag {
-	top: 1%;
-	left: auto;
-	width: 16.6%;
-	right: -1em;
-}
-/* fix for ie at small screens */
-
-nav div {
-	*display: inline-block;
-	*display: inline;
-	*zoom: 1;
-	*min-width: 166px;
-}
-nav {
-	width: 23%;
-	min-width: 18%;
-	z-index: 1;
-	margin-left: 1.5em;
-	float: left;
-}
-nav a, nav a:link, nav a:visited {
-	padding: 0 0 0 2.5em;
-}
-main {
-	padding: .8em 0 0;
-	width: 71%;
-	float: right;
-}
-.no-cssgradients hr {
-	display: none;
-}
-.verbose #wrap article.intro p {
-    margin: 0;
-}
-/*https://css-tricks.com/all-about-floats/*/
-
-footer {
-	padding-top: 15%;
-	clear: both;
-	z-index: 1;
-}
 footer ul {
 	padding: 22% 5% 3.5% 0;
 	padding: 3% 5% 3% 0;
@@ -121,26 +73,12 @@ footer li {
 	zoom: 1;
 	margin-left: .25em;
 }
-footer li:first-child::after {
-	content: " |";
-	margin-right: -.25em;
-}
-#innerwrap input {
-	cursor: pointer;
-	position: absolute;
-	left: -9999px;
-}
-main aside {
-	margin: 0;
-	position: absolute;
-	z-index: 0;
-	/* z-index required IF persisting with masking, explore clipping */
-	/* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
-}
-.no-cssmask main aside {
-	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
-	z-index: -1;
-	display: none;
+/* fix for ie at small screens */
+nav div {
+	*display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	*min-width: 166px;
 }
 /* set img color to red */
 
@@ -159,6 +97,49 @@ aside>img {
 *+html aside img {
 	color: blue;
 }
+header a h1 {
+	white-space: nowrap;
+	width: 100%;
+	text-indent: 200%;
+}
+
+header a img {
+	position: relative;
+}
+header a h1 img {
+	margin: .5em 0 0;
+}
+
+nav a, nav a:link, nav a:visited {
+	padding: 0 0 0 2.5em;
+}
+
+.read-more-target {
+    margin-top: .7em;
+}
+.no-cssgradients hr {
+	display: none;
+}
+
+.verbose article p {
+    margin: .5em 35% .5em 0;
+}
+
+footer li:first-child::after {
+	content: " |";
+	margin-right: -.25em;
+}
+
+.verbose article.intro p {
+    margin: 0 35% .5em 0;
+}
+
+.no-cssmask main aside {
+	/*hide while js masking kicks in ONLY for browswers that don't support masking*/
+	z-index: -1;
+	display: none;
+}
+
 /* https://stopdesign.com/eg/ie5mac-bpf */
 
 /* Start Mac IE5 filter \*/
@@ -175,6 +156,7 @@ main>aside {
 nav, main, aside img {
 	*display: inline;
 }
+
 /*
 #innerwrap  {
     display: flex;
@@ -195,3 +177,38 @@ flex: 10 0 1%;
 */
 
 /* End Mac IE5 filter */
+
+/*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
+#checkDummy {
+	margin-top: 1px;
+	display: none;
+}
+#wrap {
+	margin: 0 auto;
+}
+footer, main p, main label.read-more-trigger, #wrap {
+	position: relative;
+}
+
+header, footer, nav li, nav a, #wrap, #innerwrap {
+	width: 100%;
+}
+#wrap, article.intro {
+	overflow: hidden;
+}
+footer, main aside,  header a, main label, main input, main .read-more-target, #innerwrap {
+	overflow: hidden;
+}
+
+#innerwrap input {
+	cursor: pointer;
+	position: absolute;
+	left: -9999px;
+}
+
+a#yag {
+	top: 1%;
+	left: auto;
+	width: 16.6%;
+	right: -1em;
+}

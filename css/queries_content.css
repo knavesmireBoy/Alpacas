@@ -6,28 +6,43 @@ http://cssmediaqueries.com/overview.html*/
 
 /* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
 @media only screen {
-	#wrap header {
-		background-image: url("../assets/header.png");
-	}
-	nav a:hover, nav a:active {
+    
+     h2 {
+	font: italic 3.2em "Handwritten", Georgia, cursive;
+    }
+    
+    nav a:hover, nav a:active {
 		-webkit-transform: scale(1.01);
 		-ms-transform: scale(1.01);
 		transform: scale(1.01);
 		transform-origin: left;
 	}
-	#innerwrap nav {
-		font: 700 1em/2.4 Verdana, sans-serif;
+    
+    nav a:hover {
+		background-position: 0% 47%;
 	}
-	#innerwrap main p {
-		text-shadow: 1px 1px 2px white;
-	}
+	
 	nav a, nav a:link, nav a:visited {
 		background-position: 0% -4%;
 		background-size: 1.75em;
 	}
-	nav a:hover {
-		background-position: 0% 47%;
+      
+    /* ... including this: */
+    nav a, nav a:link, nav a:visited {
+	background-image: url(../assets/links.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 -4%;
+	color: #080;
+}
+	
+    #wrap header {
+		background-image: url("../assets/header.png");
 	}
+	
+	#innerwrap nav {
+		font: 700 1em/2.4 Verdana, sans-serif;
+	}
+	
 	#wrap footer {
 		background: url(../assets/grass.png) no-repeat 50% 0%;
 		background-size: 105%;
@@ -37,22 +52,14 @@ http://cssmediaqueries.com/overview.html*/
 		background-repeat: repeat-x;
 		background-size: 150%;
 	}
-    h2 {
-	font: italic 3.2em "Handwritten", Georgia, cursive;
-    }
-    /* ... including this: */
-    nav a, nav a:link, nav a:visited {
-	background-image: url(../assets/links.jpg);
-	background-repeat: no-repeat;
-	background-position: 0 -4%;
-	color: #080;
-}
+    #innerwrap main p {
+		text-shadow: 1px 1px 2px white;
+	}
+ 
 }
 
 @media only screen and (max-width: 768px) {
-	#wrap header {
-		background-image: none;
-	}
+	
 	main hr {
 		display: none;
 	}
@@ -133,6 +140,9 @@ http://cssmediaqueries.com/overview.html*/
 	.ellipsis.touchevents main .read-more-state~.read-more-target p.show {
 		white-space: normal;
 		text-overflow: inherit;
+	}
+    #wrap header {
+		background-image: none;
 	}
 }
 @media only screen and (min-width: 769px) {

@@ -67,11 +67,11 @@ if (!window.gAlp) {
 	}
 
 	function inRange(i) {
-        //https://wsvincent.com/javascript-tilde/
-        //var res = ~"hello world".indexOf("w") ? true : false;
+		//https://wsvincent.com/javascript-tilde/
+		//var res = ~"hello world".indexOf("w") ? true : false;
 		return i >= 0;
 	}
-    
+
 	function extendFrom(sub, supa, keys, key) {
 		function mapper(method) {
 			if (sub[method] && _.isFunction(sub[method])) {
@@ -164,11 +164,11 @@ if (!window.gAlp) {
 		},
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
-        lookup = {
-            4: 'four',
-            5: 'five',
-            6: 'six'
-        },
+		lookup = {
+			4: 'four',
+			5: 'five',
+			6: 'six'
+		},
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
@@ -179,17 +179,15 @@ if (!window.gAlp) {
 				return isDesktop;
 			}
 		}()),
-        
-          negate = function(cb){
-              if (!getEnvironment()) {
-                  getEnvironment = _.negate(getEnvironment);
-                  cb();
-              }
-          },
-        
+		negate = function (cb) {
+			if (!getEnvironment()) {
+				getEnvironment = _.negate(getEnvironment);
+				cb();
+			}
+		},
 		throttler = function (callback) {
-            negate(noOp);      
-			return utils.addHandler('resize', window, _.throttle(ptL(negate, callback), 66));
+			negate(noOp);
+			return utils.addHandler('resize', window, _.throttle(_.partial(negate, callback), 66));
 		},
 		$ = function (str) {
 			return document.getElementById(str);
@@ -214,7 +212,7 @@ if (!window.gAlp) {
 		getDomTargetLink = utils.getDomChild(utils.getNodeByTag('a')),
 		getDomTargetImage = utils.getDomChild(utils.getNodeByTag('img')),
 		clicker = ptL(utils.addHandler, 'click'),
-		allow = !touchevents ? 2 : 2,
+		allow = !touchevents ? 2 : 0,
 		getTargetLink = doDrillDown(['childNodes', 1, 'firstChild']),
 		eventBridge = function (action, e) {
 			var getText = doDrillDown(['target', 'nodeName']),
@@ -258,7 +256,7 @@ if (!window.gAlp) {
 		checkDataLength = validator('no alpacas for sale', always(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
-        $sell = utils.machElement(ptL(setAttrs, {
+		$sell = utils.machElement(ptL(setAttrs, {
 			id: 'sell'
 		}), anCr(article), always('div')),
 		renderTable = _.compose(anCr($sell.render().getElement()), always('table')),
@@ -293,7 +291,7 @@ if (!window.gAlp) {
 							addTableAttrs = ptL(setAttrs, tableconfig);
 						},
 						maybeClass = ptL(onValidation(validator('no match found', c), supportsNthChild), doDescription);
-                    _.each(tr, function (td, i, data) {
+					_.each(tr, function (td, i, data) {
 						//partially apply the RETURNED function from onValidation with (partially applied) function to invoke
 						addspan = ptL(onValidation(validator('is NOT a single column row', ptL(dospan, data))), doSpan);
 						row = row || doFreshRow(ptL(doRow, 'tr'), i);
@@ -402,7 +400,7 @@ if (!window.gAlp) {
 					elements.addAll($tbl, $lnk);
 					head.add(elements);
 				});
-                head.remove = noOp;//default remove is recursive, but we want these elements to persist
+				head.remove = noOp; //default remove is recursive, but we want these elements to persist
 				return head;
 			}(gAlp.Composite([]))),
 			$body = makeBody(),
@@ -432,8 +430,8 @@ if (!window.gAlp) {
 				});
 				return coll;
 			},
-            routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
-            layout = (function (myroutes) {
+			routes = getNavTypeFactory(['tab', 'loop'], alp_len, limits),
+			layout = (function (myroutes) {
 				var mapLinktoTitle = function (link) {
 						var getHref = doThrice(simpleInvoke)(linkEx)('match');
 						return _.compose(ptL(callWith, ''.capitalize), ptL(byIndex, 1), getHref, doDrillDown(['href']))(link);
@@ -476,10 +474,10 @@ if (!window.gAlp) {
 							}
 						}
 						var reset = function () {
-                            var comp = my_head.get(2);//stage_two
+								var comp = my_head.get(2); //stage_two
 								comp.unrender();
 								comp.remove();
-                            my_head.get(1).render();
+								my_head.get(1).render();
 							},
 							events = [setText, reset, noOp, noOp];
 						return function (e) {
@@ -505,7 +503,7 @@ if (!window.gAlp) {
 								return $el;
 							},
 							validator: eventBridge,
-							renderList: function(){}
+							renderList: function () {}
 						},
 						tab: {
 							getId: always('tab'),
@@ -517,10 +515,10 @@ if (!window.gAlp) {
 							renderList: function (i) {
 								my_list_elements.unrender();
 								my_list_elements.get(i).render();
-                                /*
-                                var getSellStyle = _.compose(doThrice(setter)('-1px')('marginTop'), doDrillDown(['style']), doThriceDefer(simpleInvoke)(null)('getElement')($sell));
-                                */
-                            }
+								/*
+								var getSellStyle = _.compose(doThrice(setter)('-1px')('marginTop'), doDrillDown(['style']), doThriceDefer(simpleInvoke)(null)('getElement')($sell));
+								*/
+							}
 						}
 					},
 					mystate = (function (states) {
@@ -563,14 +561,15 @@ if (!window.gAlp) {
 				my_stage_two.add($nav); //3
 				my_stage_two.add(my_nav); //4
 				my_nav.add(my_list_comp); //mynav0
-				$nav.render();  
+				$nav.render();
 				prepStageThree(i);
 			},
 			prepStageTwoBridge = function (i) {
-                prepStageTwo(i < 0 ? 0 : i);
+				prepStageTwo(i < 0 ? 0 : i);
 			},
 			prepStageOne = function () {
-				var myExtent = function (head, el) {
+				var res,
+                    myExtent = function (head, el) {
 						var $el = makeComp(makeElement(ptL(klasAdd, 'extent'), always(el)));
 						$el.unrender = ptL(klasRem, 'extent', el);
 						head.add($el);
@@ -584,22 +583,21 @@ if (!window.gAlp) {
 				myExtent(my_figure_comp, $sell.getElement());
 				my_stage_one.add(my_figure_comp); //0
 				addListener2Comp(my_stage_one, ptL(layout.state.validator, dofind), $sell.getElement()); //2
-                
-                var res = _.find(utils.getByTag('img', document), function(el){
-                    //console.log(utils.getComputedStyle(el, 'color'))
-                    return utils.getComputedStyle(el, 'color') !== 'white';
-                });
-                utils.doWhen(res, ptL(klasAdd, lookup[alp_len], article));
-                //report.innerHTML = res;
+				res = _.find(utils.getByTag('img', document), function (el) {
+					//console.log(utils.getComputedStyle(el, 'color'))
+					return utils.getComputedStyle(el, 'color') !== 'white';
+				});
+				utils.doWhen(res, ptL(klasAdd, lookup[alp_len], article));
+				//report.innerHTML = res;
 			},
 			swap = function () {
 				var i = _.findIndex(my_presenter.get(), ptL(utils.isEqual, my_presenter.get(null))),
 					comp = my_head.get(2).get(4); //my_nav
-                //scenario where we move from loop to tab BUT before we have an active UL, ie in "gallery" mode
-                if(!comp){
-                    layout.changestates();
-                    return;
-                }
+				//scenario where we move from loop to tab BUT before we have an active UL, ie in "gallery" mode
+				if (!comp) {
+					layout.changestates();
+					return;
+				}
 				_.each(comp.get(), function (subcomp, i) {
 					if (i) {
 						subcomp.unrender();
@@ -612,7 +610,7 @@ if (!window.gAlp) {
 				prepStageThree(i, true);
 			},
 			prepStage = function () {
-                utils.highLighter.perform();
+				utils.highLighter.perform();
 				my_head.add($body); //0
 				my_head.add(my_stage_one); //1
 				my_head.add(my_stage_two); //2
@@ -624,11 +622,10 @@ if (!window.gAlp) {
 				} else {
 					prepStageOne();
 					my_head.render();
-                    //report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
+					//report.innerHTML = document.getElementsByTagName('figure')[0].firstChild.firstChild.src;
 				}
 			};
-        prepStage();
-        
+		prepStage();
 	}(alp_len));
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], {
 	lo: 3,

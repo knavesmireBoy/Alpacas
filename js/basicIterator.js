@@ -184,3 +184,103 @@ gAlp.Composite = (function () {
 		return composite || leaf;
 	}; //ret func
 }());
+
+
+(function () {
+	"use strict";
+
+	function equals(a, b) {
+		return a === b;
+	}
+	gAlp.LoopIterator = function (group, advancer) {
+		this.group = group;
+		this.position = 0;
+		this.rev = false;
+		this.advance = advancer;
+	};
+	gAlp.Group = function () {
+		this.members = [];
+	};
+	gAlp.Group.prototype = {
+		add: function (value) {
+			if (!this.has(value)) {
+				this.members.push(value);
+			}
+		},
+		remove: function (value) {
+			this.members = _.filter(this.members, _.negate(_.partial(equals, value)));
+		},
+		has: function (value) {
+			return _.contains(this.members, value);
+		}
+	};
+	gAlp.Group.from = function (collection) {
+		var group = new gAlp.Group(),
+			i,
+			L = collection.length;
+		for (i = 0; i < L; i += 1) {
+			group.add(collection[i]);
+		}
+		return group;
+	};
+
+	gAlp.LoopIterator.from = function (coll, advancer) {
+		return new gAlp.LoopIterator(gAlp.Group.from(coll), advancer);
+	};
+   
+	gAlp.LoopIterator.onpage = null;
+	gAlp.LoopIterator.cross_page = null;
+	gAlp.LoopIterator.prototype = {
+		forward: function (flag) {
+			if (!flag && this.rev) {
+				return this.back(true);
+			}
+			this.position = this.advance(this.position);
+			var result = {
+				value: this.group.members[this.position],
+				index: this.position
+			};
+			return result;
+		},
+		back: function (flag) {
+			if (!this.rev || flag) {
+				this.group.members = this.group.members.reverse();
+				this.position = this.group.members.length - 2 - (this.position);
+				this.position = this.advance(this.position);
+				this.rev = !this.rev;
+			} 
+            return this.forward(this.rev);
+		},
+		play: function () {
+			return this.forward(true).value;
+		},
+		current: function () {
+			var result = {
+				members: this.group.members,
+                value: this.group.members[this.position],
+				index: this.position
+			};
+			return result;
+		},
+		find: function (tgt) {
+			return this.set(_.findIndex(this.group.members, _.partial(equals, tgt)));
+			//return this.set(this.group.members.findIndex(_.partial(equals, tgt)));
+		},
+		set: function (pos) {
+           if(pos >= 0){
+			this.position = pos;
+           }
+			var result = {
+				value: this.group.members[this.position],
+				index: this.position
+			};
+			return result;
+		},
+		get: function () {
+			return this.current().value;
+		},
+        visit: function(cb){
+            _.each(this.group.members, cb);
+        }
+	};
+}());
