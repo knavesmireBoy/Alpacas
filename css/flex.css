@@ -142,7 +142,6 @@
 	-webkit-box-align: start;
 	-ms-flex-align: start;
 	align-items: flex-start;
-    flex-wrap: wrap;
 }
 .flexboxlegacy #alpacas_for_sale figure {
 	-webkit-box-flex: 1;
