@@ -9,7 +9,7 @@ if (!window.gAlp) {
 }
 (function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, mapped) {
 	"use strict";
-
+ 
 	function noOp() {}
 
 	function getResult(arg) {
@@ -194,7 +194,7 @@ if (!window.gAlp) {
 			});
 		}(alpacas)),
 		utils = gAlp.Util,
-		//con = utils.con,
+		con = utils.con,
 		PTL = _.partial,
 		COMP = _.compose,
 		ALWAYS = utils.always,
@@ -263,7 +263,7 @@ if (!window.gAlp) {
             }
             Ab.prototype = {
                 exec: function(el){
-                    //el.innerHTML = el.innerHTML;
+                    con('ex ec')
                     if(!isNaN(this.split)){
                      el.innerHTML = split_space(this.text)[this.split];   
                     }
@@ -348,22 +348,44 @@ if (!window.gAlp) {
             if(utils.findByClass('extent') || !utils.findByClass('sell')){
                 return;
             }
-             var j = utils.findByClass('loop') ? 0 : 1,
+             var splitters = {
+                 2: '(max-width: 320px)',
+                 3: '(max-width: 568px)'
+             },
+                 j = utils.findByClass('loop') ? 0 : 1,
                 list = utils.$('list'),
                 tabs = list.getElementsByTagName('a'),
                 factory,
+                 split,
+                 action,
                 cb;
                 if(!mapped[0]){
-                    factory = makeAbbrv();
+                    action = Modernizr.mq(q2) ? 'exec' : 'undo';
+                    factory = makeAbbrv(alp_len);
                     cb = function(el, i){
                         return factory(el, i, j);
                     };
                     mapped = _.map(tabs, cb);
                     if(j === 0){
-                       mapped[1].split = Modernizr.mq(q3) ? 1 : undefined;
+                        /*default is to set the abbreviation to first word in loop scenario
+                        where as alpaca name is the second, maybe room for both words which is effectivley what undefined provides
+                        as it fails !NaN test and leaves innerHTML alone
+                        */
+                   // mapped[1].split = Modernizr.mq(q3) ? 1 : undefined;
+                    mapped[1].split = undefined;
+                    }
+                    else {
+                        if(splitters[alp_len]){
+                           split = Modernizr.mq(splitters[alp_len]) ? 1 :  mapped[0].split;
+                            action = Modernizr.mq(splitters[alp_len]) ? 'exec' : 'undo';
+                        }
+                        mapped = _.map(mapped, function(o){
+                            o.split = split;
+                            return o;
+                        });
                     }
                 }
-                var action = Modernizr.mq(q2) ? 'exec' : 'undo';
+                
                     _.each(mapped, function(map, i){ 
                         mapped[i][action](tabs[i]);
                 });   
@@ -515,7 +537,10 @@ if (!window.gAlp) {
                     if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
 						cb();
-                        mapped = [];
+                        if(is4()){
+                            con('sw..');
+                            mapped = [];
+                        }
 					}
                     abbreviate();
 				},
@@ -549,4 +574,4 @@ if (!window.gAlp) {
 			//utils.highLighter.perform();
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 600px)', '(max-width: 580px)', []));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 420px)', '(max-width: 319px)', []));
