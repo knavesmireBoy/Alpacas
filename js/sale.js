@@ -463,7 +463,7 @@ if (!window.gAlp) {
 				},
 				throttler = function (cb) {
 					negate(noOp);
-					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), mob4])(getResult),
+					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell')/*, mob4*/])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
 				},
