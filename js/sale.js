@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, mapped) {
 	"use strict";
 
 	function noOp() {}
@@ -257,22 +257,22 @@ if (!window.gAlp) {
         split_space = thrice(doMethod)('split')(' '),
         makeAbbrv = function () {
             var Ab = function(el, i, j){
-                utils.con(arguments)
                 this.text = el.innerHTML;
                 this.index = i;
                 this.split = j;
             }
             Ab.prototype = {
                 exec: function(el){
+                    //el.innerHTML = el.innerHTML;
+                    if(!isNaN(this.split)){
+                     el.innerHTML = split_space(this.text)[this.split];   
+                    }
                     
-                    el.innerHTML = split_space(this.text)[this.split];
-                    utils.con('exec');
                 },
                 undo: function(){
                     var byTag = utils.findByTag(this.index),
                         el = byTag('a', utils.$('list'));
                     el.innerHTML = this.text || el.innerHTML;
-                    utils.con('undo');
                 }
             };
             return function(el, i){
@@ -284,16 +284,19 @@ if (!window.gAlp) {
             utils.hide(el);
             utils.hide(utils.getPrevious(el));
         },
-		gt4 = twicedefer(gtThan)(4)(alp_len),
-		gt3 = twicedefer(gtThan)(3)(alp_len),
-		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
-		getEnvironment = (function () {
+        getEnvironment = (function () {
 			if (mq) {
 				return _.partial(Modernizr.mq, query);
 			} else {
 				return isDesktop;
 			}
 		}()),
+        
+		gt4 = twicedefer(gtThan)(4)(alp_len),
+		gt3 = twicedefer(gtThan)(3)(alp_len),
+		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+		is4 = deferEvery([_.negate(gt4), gt3])(getResult),
+
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
@@ -340,36 +343,32 @@ if (!window.gAlp) {
 			}
 		},
         
-        abbreviate = (function(mapped) {
-            return function(){
-            if(utils.findByClass('extent')){
-                utils.con(99);
+        abbreviate = function(){
+            
+            if(utils.findByClass('extent') || !utils.findByClass('sell')){
                 return;
             }
-            if(!mapped[0]){
-            var j = utils.getByClass('loop') ? 0 : 1,
+             var j = utils.findByClass('loop') ? 0 : 1,
                 list = utils.$('list'),
-                tabs = utils.getByTag('a', list),
-                factory = makeAbbrv(),
-                cb = function(el, i){
-                    return factory(el, i, j);
-                },
-                action = Modernizr.mq(q2) ? 'exec' : 'undo';
-                
-                mapped = _.map(tabs, cb);
-                    _.each(tabs, function(el, i){ 
-                        mapped[i][action](el);
-                });
-            }
-                else {
-                    action = Modernizr.mq(q2) ? 'exec' : 'undo';
-                    _.each(tabs, function(el, i){ 
-                        mapped[i][action](el);
-                });   
+                tabs = list.getElementsByTagName('a'),
+                factory,
+                cb;
+                if(!mapped[0]){
+                    factory = makeAbbrv();
+                    cb = function(el, i){
+                        return factory(el, i, j);
+                    };
+                    mapped = _.map(tabs, cb);
+                    if(j === 0){
+                       mapped[1].split = Modernizr.mq(q3) ? 1 : undefined;
+                    }
                 }
-            };
+                var action = Modernizr.mq(q2) ? 'exec' : 'undo';
+                    _.each(mapped, function(map, i){ 
+                        mapped[i][action](tabs[i]);
+                });   
+            },
                                
-        }([])),
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
@@ -513,18 +512,18 @@ if (!window.gAlp) {
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
 				negate = function (cb) {
-                    
                     if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
 						cb();
+                        mapped = [];
 					}
                     abbreviate();
 				},
 				throttler = function (cb) {
 					negate(noOp);
-					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), mob4])(getResult),
-						doCallback = PTL(utils.doWhen, pred, cb);
-					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
+					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), is4])(getResult),
+                        doCallback = PTL(utils.doWhen, pred, cb);
+                    eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
 				},
 				$displayer = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
@@ -545,19 +544,9 @@ if (!window.gAlp) {
 			}
 			throttler(reDoTabs);
 			makeToolTip().init();
-            abbreviate();
-            var say = function(){
-                return 'hi';
-            };
-            
-            say = say.wrap(function(f, arg){
-                return f()+' '+ arg;
-            });
-            
-            utils.con(say('wot'));
-            
+            //abbreviate();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 580px)'));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 600px)', '(max-width: 580px)', []));
