@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2) {
 	"use strict";
 
 	function noOp() {}
@@ -254,6 +254,32 @@ if (!window.gAlp) {
                 hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
             };
         },
+        split_space = thrice(doMethod)('split')(' '),
+        makeAbbrv = function () {
+            var Ab = function(el, i, j){
+                utils.con(arguments)
+                this.text = el.innerHTML;
+                this.index = i;
+                this.split = j;
+            }
+            Ab.prototype = {
+                exec: function(el){
+                    
+                    el.innerHTML = split_space(this.text)[this.split];
+                    utils.con('exec');
+                },
+                undo: function(){
+                    var byTag = utils.findByTag(this.index),
+                        el = byTag('a', utils.$('list'));
+                    el.innerHTML = this.text || el.innerHTML;
+                    utils.con('undo');
+                }
+            };
+            return function(el, i){
+                var j = utils.findByClass('tab') ? 1 : 0;
+                return new Ab(el, i, j);
+            };
+        },        
         hide = function (el) {
             utils.hide(el);
             utils.hide(utils.getPrevious(el));
@@ -313,6 +339,37 @@ if (!window.gAlp) {
 				}, getUL).execute();
 			}
 		},
+        
+        abbreviate = (function(mapped) {
+            return function(){
+            if(utils.findByClass('extent')){
+                utils.con(99);
+                return;
+            }
+            if(!mapped[0]){
+            var j = utils.getByClass('loop') ? 0 : 1,
+                list = utils.$('list'),
+                tabs = utils.getByTag('a', list),
+                factory = makeAbbrv(),
+                cb = function(el, i){
+                    return factory(el, i, j);
+                },
+                action = Modernizr.mq(q2) ? 'exec' : 'undo';
+                
+                mapped = _.map(tabs, cb);
+                    _.each(tabs, function(el, i){ 
+                        mapped[i][action](el);
+                });
+            }
+                else {
+                    action = Modernizr.mq(q2) ? 'exec' : 'undo';
+                    _.each(tabs, function(el, i){ 
+                        mapped[i][action](el);
+                });   
+                }
+            };
+                               
+        }([])),
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
@@ -450,16 +507,18 @@ if (!window.gAlp) {
                          ],
 				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviate, delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
 				reLoop = COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
 				negate = function (cb) {
-					if (!getEnvironment()) {
+                    
+                    if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
 						cb();
 					}
+                    abbreviate();
 				},
 				throttler = function (cb) {
 					negate(noOp);
@@ -486,8 +545,19 @@ if (!window.gAlp) {
 			}
 			throttler(reDoTabs);
 			makeToolTip().init();
+            abbreviate();
+            var say = function(){
+                return 'hi';
+            };
+            
+            say = say.wrap(function(f, arg){
+                return f()+' '+ arg;
+            });
+            
+            utils.con(say('wot'));
+            
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</]));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 580px)'));
