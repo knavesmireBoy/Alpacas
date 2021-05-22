@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function(query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, mapped) {
+(function(query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, navtabs) {
 	"use strict";
 
 	function noOp() {}
@@ -353,32 +353,32 @@ if (!window.gAlp) {
 				factory,
 				split,
 				cb;
-			if (!mapped[0]) {
-				factory = makeAbbrv(alp_len);
+			if (!navtabs[0]) {
+				factory = makeAbbrv();
 				cb = function(el, i) {
 					return factory(el, i, j);
 				};
-				mapped = _.map(tabs, cb);
+				navtabs = _.map(tabs, cb);
             }
 				if (j === 0) {
 					/*default is to set the abbreviation to first word in loop scenario
 					where as alpaca name is the second, maybe room for both words which is effectivley what undefined provides
 					as it fails !NaN test and leaves innerHTML alone
 					*/
-					// mapped[1].split = Modernizr.mq(q3) ? 1 : undefined;
-					mapped[1].split = undefined;
+					// navtabs[1].split = Modernizr.mq(q3) ? 1 : undefined;
+					navtabs[1].split = undefined;
 				} else {
 					if (splitters[alp_len]) {
 						split = Modernizr.mq(splitters[alp_len]) ? 1 : split;
 						action = Modernizr.mq(splitters[alp_len]) ? 'exec' : 'undo';
 					}
-					mapped = _.map(mapped, function(o) {
+					navtabs = _.map(navtabs, function(o) {
 						o.split = split;
 						return o;
 					});
 				}
-			_.each(mapped, function(map, i) {
-				mapped[i][action](tabs[i]);
+			_.each(navtabs, function(map, i) {
+				navtabs[i][action](tabs[i]);
 			});
 		},
 		doInc = function(n) {
@@ -529,7 +529,7 @@ if (!window.gAlp) {
 						cb();
 						if (is4()) {
 							con('sw..');
-							mapped = [];
+							navtabs = [];
 						}
 					}
 					abbreviate();
