@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function(query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, navtabs) {
+(function(query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, navtabs, ths) {
 	"use strict";
 
 	function noOp() {}
@@ -254,8 +254,9 @@ if (!window.gAlp) {
 			};
 		},
 		split_space = thrice(doMethod)('split')(' '),
-		makeAbbrv = function() {
+		makeAbbrv = function(tag, ancr, pred) {
 			var Ab = function(el, i, j) {
+				this.el = el;
 				this.text = el.innerHTML;
 				this.index = i;
 				this.split = j;
@@ -263,17 +264,18 @@ if (!window.gAlp) {
 			Ab.prototype = {
 				exec: function(el) {
 					if (!isNaN(this.split)) {
+                        el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
 					}
 				},
 				undo: function() {
 					var byTag = utils.findByTag(this.index),
-						el = byTag('a', utils.$('list'));
+						el = byTag(tag, ancr);
 					el.innerHTML = this.text || el.innerHTML;
 				}
 			};
 			return function(el, i) {
-				var j = utils.findByClass('tab') ? 1 : 0;
+				var j = pred() ? 1 : 0;
 				return new Ab(el, i, j);
 			};
 		},
@@ -337,7 +339,7 @@ if (!window.gAlp) {
 				}, getUL).execute();
 			}
 		},
-		abbreviate = function() {
+		abbreviateTabs = function() {
 			if (utils.findByClass('extent') || !utils.findByClass('sell')) {
 				return;
 			}
@@ -354,7 +356,7 @@ if (!window.gAlp) {
 				split,
 				cb;
 			if (!navtabs[0]) {
-				factory = makeAbbrv();
+				factory = makeAbbrv('a', $$('list'), PTL(utils.findByClass, 'tab'));
 				cb = function(el, i) {
 					return factory(el, i, j);
 				};
@@ -381,6 +383,26 @@ if (!window.gAlp) {
 				navtabs[i][action](tabs[i]);
 			});
 		},
+        abbreviateHeads = function(){
+            var action = Modernizr.mq(q2) ? 'exec' : 'undo';
+            if(!ths[0]){
+              ths = _.map(utils.getByTag('th'), makeAbbrv('th', document, ALWAYS(true)));  
+            }
+            
+            _.each(ths, function($el){
+                con($el)
+                $el[action]();
+            })
+            
+            /*
+            ths = _.map(ths, function($el, i){
+                if(modulo(2, i){
+                   $el.exec = function(){
+                    this.el 
+                }
+            }
+            */
+        },
 		doInc = function(n) {
 			return COMP(PTL(modulo, n), increment);
 		},
@@ -518,7 +540,7 @@ if (!window.gAlp) {
 				],
 				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviate, delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
 				reLoop = COMP(con,delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				reTab = COMP(con, addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
@@ -532,7 +554,8 @@ if (!window.gAlp) {
 							navtabs = [];
 						}
 					}
-					abbreviate();
+					abbreviateTabs();
+                    abbreviateHeads();
 				},
 				throttler = function(cb) {
 					negate(noOp);
@@ -563,4 +586,4 @@ if (!window.gAlp) {
 			//utils.highLighter.perform();
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 420px)', '(max-width: 319px)', []));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 420px)', '(max-width: 319px)', [], []));
