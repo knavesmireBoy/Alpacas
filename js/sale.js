@@ -105,8 +105,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		//return list.slice(_.random(0, end || list.length));
-		return list.slice(0, -2);
+		return list.slice(_.random(0, end || list.length));
+		//return list.slice(0, -2);
 	}
 
 	function inRange(coll, i) {
@@ -390,7 +390,6 @@ if (!window.gAlp) {
             }
             
             _.each(ths, function($el){
-                con($el)
                 $el[action]();
             })
             
@@ -531,7 +530,14 @@ if (!window.gAlp) {
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
-				restoreCaptions = COMP(addULClass, delayExecute, twice(invoke)(utils), PTL(utils.drillDown, ['eventer', 'club', 1]), delayUndo, ALWAYS($toggle), PTL(utils.removeNodeOnComplete, $$('list')), makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+				restoreCaptions = COMP(addULClass, delayExecute, twice(invoke)(utils),
+                                       
+                                       PTL(utils.drillDown, ['eventer', 'club', '1']),
+                                       
+                                       delayUndo, ALWAYS($toggle), PTL(utils.removeNodeOnComplete, $$('list')), 
+                                       
+                                       
+                                       makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
 				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
 				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
@@ -575,12 +581,15 @@ if (!window.gAlp) {
 			addULClass();
 			klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
+            throttler(reDoTabs);
+            
 			if (utils.findByClass('loop')) {
 				$displayer.execute();
 			} else {
+                //gAlp.Util.eventCache.add();
 				$toggle.execute();
 			}
-			throttler(reDoTabs);
+			
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();

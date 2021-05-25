@@ -992,6 +992,7 @@ gAlp.Util = (function() {
 		return e || window.event;
 	}
 	var getNewElement = dispatch(curry2(cloneNode)(true), _.bind(document.createElement, document), _.bind(document.createDocumentFragment, document)),
+        
 		removeNodeOnComplete = _.wrap(removeElement, function(f, node) {
             node = getResult(node);
 			if (validateRemove(node)) {
@@ -1260,11 +1261,16 @@ gAlp.Util = (function() {
                     //console.log(this);
                     //console.log('exec: ', el, fn)
 					myEventListener.add(el, type, fn);
-                    gAlp.Util.eventer.club.push(this);
+                    //gAlp.Util.eventer.club.push(this);
+                    gAlp.Util.eventCache.add(this);
 					return this;
 				},
-				undo: function() {
+				undo: function(flag) {
 					myEventListener.remove(el, type, fn);
+                    if(flag){
+                        gAlp.Util.eventCache.remove(this);
+                        removeNodeOnComplete(el);
+                    }
                    // console.log('undo: ', el, fn)
 					return this;
 				},
@@ -1275,7 +1281,9 @@ gAlp.Util = (function() {
                     fn.apply(null, arguments);
                 },
                 restore: function(i){
+                    var $e = gAlp.Util.eventCache(i);
                     gAlp.Util.eventer.club[i].execute();
+                    $e && $e.execute();
                 }
 			};
 		},
@@ -1590,3 +1598,41 @@ gAlp.Util = (function() {
 }());
 //the MOST simple implementation
 gAlp.Util.eventer.club = [];
+gAlp.Util.eventCache = (function(list){
+    
+    function splice(i, l){
+        list.splice(i, l || 1);
+    }
+    return {
+
+        add: function($tgt, i){
+            list = _.filter(list, function ($item) { return $item !== $tgt; });
+            if(!isNaN(i)){
+             // list.splice($tgt, i)  
+            }
+            list.unshift($tgt);
+        },
+        remove: function ($tgt, l) {
+            if(!isNaN($tgt)){
+                splice($tgt, l || 1);
+            }
+            var i = _.findIndex(list, function ($cur) {
+                return $cur === $tgt;
+            });
+            if (i !== -1) {
+                splice(i, l || 1);
+            }
+        },
+        
+        get: function($tgt){
+            if(!isNaN($tgt)){
+                return list[$tgt];
+            }
+           return _.find(list, function ($cur) {
+                return $cur === $tgt;
+            });            
+        }
+        
+    };
+    
+}([]));
