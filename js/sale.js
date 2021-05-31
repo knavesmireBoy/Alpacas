@@ -15,6 +15,27 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
+    
+     function Strategy(s){
+            if(s){
+                this.subject = s;
+            }
+        }
+        
+        Strategy.prototype.execute = function(){
+            return this.subject.execute();
+        }
+        
+        Strategy.prototype.undo = function(){
+            return this.subject.undo();
+        }
+        Strategy.prototype.set = function(s){
+            this.subject = s;
+        }
+        Strategy.set = function(subject){
+            return new Strategy(subject);
+        }
+        
 	//    https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
 		var Factory = constructor.bind.apply(constructor, arguments);
@@ -339,6 +360,7 @@ if (!window.gAlp) {
 				}, getUL).execute();
 			}
 		},
+        isLoop = doMethodDefer('findByClass')('loop')(utils),
 		abbreviateTabs = function() {
 			if (utils.findByClass('extent') || !utils.findByClass('sell')) {
 				return;
@@ -577,19 +599,15 @@ if (!window.gAlp) {
 						$displayer.undo();
 						$toggler.execute();
 					}
-				}, utils.$('sell'));
+				}, utils.$('sell')),
+                $strategy = Strategy.set(),
+                loader = doMethodDefer('execute')(null)($strategy);            
 			addULClass();
 			klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
             throttler(reDoTabs);
-            
-			if (utils.findByClass('loop')) {
-				$displayer.execute();
-			} else {
-                //gAlp.Util.eventCache.add();
-				$toggle.execute();
-			}
-			
+            $strategy.set(utils.getBest(isLoop, [$displayer, $toggle]));
+            eventing('load', [], loader, window).execute();
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();

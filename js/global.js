@@ -1243,6 +1243,7 @@ gAlp.Util = (function() {
 		doWhen: doWhen,
 		drillDown: drillDown,
 		//https://medium.com/@dtipson/creating-an-es6ish-compose-in-javascript-ac580b95104a
+        /*
 		eventer: function(type, actions, fn, el) {
             
 			function preventer(wrapped, e) {
@@ -1287,6 +1288,61 @@ gAlp.Util = (function() {
                 }
 			};
 		},
+        */
+		eventer: function(type, actions, fn, el) {
+
+			function preventer(wrapped, e) {
+               //invoke method allows a function to be invoked directly NOT as an event listener
+               if(e){
+				_.each(actions, function(a) {
+					myEventListener.preventers[a](e);
+				});
+               }
+				return wrapped(e);
+			}
+			fn = _.wrap(fn, preventer);
+			el = getResult(el);
+			return {
+				execute: function() {
+                   //console.log(this);
+                   //console.log('exec: ', el, fn)
+					myEventListener.add(el, type, fn);
+                   gAlp.Util.eventer.club.push(this);
+                   gAlp.Util.eventCache.add(this);
+					return this;
+				},
+				undo: function(flag) {
+					myEventListener.remove(el, type, fn);
+                   if(_.isBoolean(flag) || !isNaN(flag)){
+                       gAlp.Util.eventCache.remove(flag);  
+                       removeNodeOnComplete(el);
+                   }
+                   else if(flag === this){
+                       console.log('undo: 2', flag)
+                       removeNodeOnComplete(el);
+                   }
+                   else if(flag === null) {
+                       console.log('undo: 1', flag)
+                       gAlp.Util.eventCache.remove(this);
+                   }
+                  // console.log('undo: ', el, fn)
+					return this;
+				},
+				getEl: function() {
+					return el;
+				},
+               invoke: function(){
+                   fn.apply(null, arguments);
+               },
+               restore: function(i){
+                   var $e = gAlp.Util.eventCache(i);
+                   gAlp.Util.eventer.club[i].execute();
+                   $e && $e.execute();
+               }
+			};
+		},
+        
+        
 		fadeUp: function(element, red, green, blue) {
 			var fromFull = curry2(subtract)(255),
 				byTen = curry2(divideBy)(10),
@@ -1598,6 +1654,7 @@ gAlp.Util = (function() {
 }());
 //the MOST simple implementation
 gAlp.Util.eventer.club = [];
+/*
 gAlp.Util.eventCache = (function(list){
     
     function splice(i, l){
@@ -1635,4 +1692,58 @@ gAlp.Util.eventCache = (function(list){
         
     };
     
+}([]));
+
+*/
+gAlp.Util.eventCache = (function(list){
+
+   function splice(i, l){
+       list.splice(i, l);
+   }
+   return {
+
+       add: function($tgt){
+           list = _.filter(list, function ($item) { return $item !== $tgt; });
+           list.push($tgt);
+           return this;
+       },
+       remove: function ($tgt) {
+           var i;
+           if(!isNaN($tgt)){
+               i = $tgt;
+           }
+           if(_.isBoolean($tgt)){
+               i = $tgt ? 0 : -1;
+               //first or last
+           }
+
+           else {
+              i = _.findIndex(list, function ($cur) {
+               return $cur === $tgt;
+           });
+           if (i === -1) {
+               return;
+           }
+           }            
+           $tgt = this.get(i);
+           $tgt.undo($tgt);
+           splice(i, 1);
+           return this;
+       },
+
+       get: function($tgt){
+           if(!isNaN($tgt)){
+               return list[$tgt];
+           }
+          return _.find(list, function ($cur) {
+               return $cur === $tgt;
+           });            
+       },
+       flush: function(){
+           list = [];
+           return this;
+       }
+
+   };
+
 }([]));
