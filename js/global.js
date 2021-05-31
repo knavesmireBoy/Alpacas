@@ -1315,15 +1315,15 @@ gAlp.Util = (function() {
 					myEventListener.remove(el, type, fn);
                    if(_.isBoolean(flag) || !isNaN(flag)){
                        gAlp.Util.eventCache.remove(flag);  
-                       removeNodeOnComplete(el);
+                       //removeNodeOnComplete(el);
                    }
                    else if(flag === this){
                        console.log('undo: 2', flag)
-                       removeNodeOnComplete(el);
+                       //removeNodeOnComplete(el);
                    }
                    else if(flag === null) {
                        console.log('undo: 1', flag)
-                       gAlp.Util.eventCache.remove(this);
+                       //gAlp.Util.eventCache.remove(this);
                    }
                   // console.log('undo: ', el, fn)
 					return this;

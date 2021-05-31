@@ -546,15 +546,19 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function() {}]
 				],
+                $strategy = Strategy.set(),
+                loader = doMethodDefer('execute')(null)($strategy),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
-				restoreCaptions = COMP(addULClass, delayExecute, twice(invoke)(utils),
+				restoreCaptions = COMP(addULClass, delayExecute,/* twice(invoke)(utils),
                                        
-                                       PTL(utils.drillDown, ['eventer', 'club', '1']),
+                                       PTL(utils.drillDown, ['eventer', 'club', '1']),*/
+                                       
+                                       ALWAYS($strategy),
                                        
                                        delayUndo, ALWAYS($toggle), PTL(utils.removeNodeOnComplete, $$('list')), 
                                        
@@ -566,11 +570,11 @@ if (!window.gAlp) {
 					restoreCaptions,
 					noOp, noOp
 				],
-				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
+				nav_listener = COMP(con, invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
-				reLoop = COMP(con,delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
-				reTab = COMP(con, addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
+				reLoop = COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
+				reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
 				negate = function(cb) {
@@ -594,14 +598,13 @@ if (!window.gAlp) {
 				$displayer = eventing('click', event_actions.slice(0), function(e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
-					gAlp.Intaface.ensures($toggler, iCommand);
+					//gAlp.Intaface.ensures($toggler, iCommand);
 					if ($toggler) {
 						$displayer.undo();
 						$toggler.execute();
 					}
-				}, utils.$('sell')),
-                $strategy = Strategy.set(),
-                loader = doMethodDefer('execute')(null)($strategy);            
+				}, utils.$('sell'));
+                           
 			addULClass();
 			klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
