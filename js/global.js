@@ -79,6 +79,7 @@ gAlp.Util = (function() {
 	function noOp() {
 		return function() {};
 	}
+    
 
 	function sum(x, y) {
 		return getResult(x) + getResult(y);
@@ -1303,29 +1304,18 @@ gAlp.Util = (function() {
 			fn = _.wrap(fn, preventer);
 			el = getResult(el);
 			return {
-				execute: function() {
-                   //console.log(this);
-                   //console.log('exec: ', el, fn)
-					myEventListener.add(el, type, fn);
-                   gAlp.Util.eventer.club.push(this);
-                   gAlp.Util.eventCache.add(this);
+				execute: function(flag) {
+                    //console.log(el)
+                    myEventListener.add(el, type, fn);
+                   gAlp.Util.eventCache.add(this, flag);
 					return this;
 				},
 				undo: function(flag) {
-					myEventListener.remove(el, type, fn);
-                   if(_.isBoolean(flag) || !isNaN(flag)){
-                       gAlp.Util.eventCache.remove(flag);  
-                       //removeNodeOnComplete(el);
+                    myEventListener.remove(el, type, fn);
+                  if(flag && _.isBoolean(flag)){
+                      removeNodeOnComplete(el);
                    }
-                   else if(flag === this){
-                       console.log('undo: 2', flag)
-                       //removeNodeOnComplete(el);
-                   }
-                   else if(flag === null) {
-                       console.log('undo: 1', flag)
-                       //gAlp.Util.eventCache.remove(this);
-                   }
-                  // console.log('undo: ', el, fn)
+                    gAlp.Util.eventCache.remove(this);
 					return this;
 				},
 				getEl: function() {
@@ -1698,50 +1688,58 @@ gAlp.Util.eventCache = (function(list){
 gAlp.Util.eventCache = (function(list){
 
    function splice(i, l){
-       list.splice(i, l);
+       list.splice(i, l || 1);
    }
+    
+        function isNoNum(arg){
+        return _.isBoolean(arg) && isNaN(parseFloat(arg));
+    }
+    
+    function find(arg, m){
+        //assume arg is listener object  
+           var i = _[m](list, function ($cur) {
+               return $cur === arg;
+           });
+           if (i === -1 || typeof i === 'undefined') {         
+               i = isNoNum(arg) ? i = list.length - 1 : arg;
+           }
+        return i;
+    }
+  
    return {
 
-       add: function($tgt){
+       add: function($tgt, flag){
+           var m = flag ? 'unshift' : 'push';
            list = _.filter(list, function ($item) { return $item !== $tgt; });
-           list.push($tgt);
+           list[m]($tgt);
            return this;
        },
-       remove: function ($tgt) {
-           var i;
-           if(!isNaN($tgt)){
-               i = $tgt;
+       remove: function ($tgt) {           
+           var i = find.call(this, $tgt, 'findIndex');
+           splice(i);
+           return this.get(i);
+       },
+       
+       delete: function($tgt){
+           var i = find.call(this, $tgt, 'findIndex');
+               $tgt = this.get(i);
+           if($tgt){
+               $tgt.undo(true);
            }
-           if(_.isBoolean($tgt)){
-               i = $tgt ? 0 : -1;
-               //first or last
-           }
-
-           else {
-              i = _.findIndex(list, function ($cur) {
-               return $cur === $tgt;
-           });
-           if (i === -1) {
-               return;
-           }
-           }            
-           $tgt = this.get(i);
-           $tgt.undo($tgt);
-           splice(i, 1);
-           return this;
        },
 
        get: function($tgt){
-           if(!isNaN($tgt)){
+           if (!isNoNum($tgt)){ 
                return list[$tgt];
            }
-          return _.find(list, function ($cur) {
-               return $cur === $tgt;
-           });            
+           return find.call(this, $tgt, 'find');
        },
        flush: function(){
            list = [];
            return this;
+       },
+       getList: function(flag){
+           return flag ? list.length : list;
        }
 
    };

@@ -334,8 +334,7 @@ if (!window.gAlp) {
 				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, showtable()));
 			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), showtable, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
-		tab_cb = function(pred, $displayer, tgt, matcher) {
-			if (getResult(pred)) {
+		tab_cb = function($displayer, tgt, matcher) {
 				var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
 				gAlp.Intaface.ensures($displayer, iDisplayer);
 				$displayer.hide();
@@ -343,7 +342,6 @@ if (!window.gAlp) {
 				Looper.onpage.visit(utils.hide);
 				COMP(_.bind(Looper.onpage.set, Looper.onpage), indexFromTab(matcher))();
 				COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
-			}
 		},
 		doLI_cb = function(caption, i, arr) {
 			var li = twice(invokeArg)('li'),
@@ -351,12 +349,9 @@ if (!window.gAlp) {
 				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-			if (i && !inRange(arr, i)) {
+			if (i && !inRange(arr, i) && utils.findByClass('tab')) {
 				eventing('click', [], function(e) {
-					/*
-					tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), thrice(doMethod)('match')(new RegExp(text_from_target(e), 'i')));
-					*/
-					tab_cb(PTL(utils.findByClass, 'tab'), makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));
+					tab_cb(makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));
 				}, getUL).execute();
 			}
 		},
@@ -526,8 +521,9 @@ if (!window.gAlp) {
 		addULClass = COMP(invoke, getOne, PTL(utils.getBestOnly, COMP(invoke, getZero), outcomes)),
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		delayExecute = thrice(doMethod)('execute')(null),
-		delayUndo = thrice(doMethod)('undo')(null),
+		deleteListFromCache = thricedefer(doMethod)('delete')(false)(utils.eventCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
+        undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function() {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
@@ -546,71 +542,64 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function() {}]
 				],
-                $strategy = Strategy.set(),
-                loader = doMethodDefer('execute')(null)($strategy),
+                $div_listener = Strategy.set(),
+                loader = doMethodDefer('execute')(null)($div_listener),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
-				restoreCaptions = COMP(addULClass, delayExecute,/* twice(invoke)(utils),
-                                       
-                                       PTL(utils.drillDown, ['eventer', 'club', '1']),*/
-                                       
-                                       ALWAYS($strategy),
-                                       
-                                       delayUndo, ALWAYS($toggle), PTL(utils.removeNodeOnComplete, $$('list')), 
-                                       
-                                       
-                                       makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+                /* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
+				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
 				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
 				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
 					noOp, noOp
 				],
-				nav_listener = COMP(con, invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
+				nav_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$nav_listener = PTL(eventing, 'click', [], nav_listener, $$('list')),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, delayExecute, $nav_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
 				reLoop = COMP(delayExecute, $nav_listener, addULClass, makeLoopTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
-				negate = function(cb) {
+				$displayer = eventing('click', event_actions.slice(0), function(e) {
+					var $toggler = doDisplay(e),
+						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
+					if ($toggler) {//image was clicked
+                        gAlp.Intaface.ensures($toggler, iCommand);
+						$displayer.undo();
+						$toggler.execute();
+                        
+					}
+				}, utils.$('sell')),
+                negate = function(cb) {
 					if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
 						cb();
 						if (is4()) {
-							con('sw..');
+                            $div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
 							navtabs = [];
 						}
 					}
 					abbreviateTabs();
                     abbreviateHeads();
 				},
-				throttler = function(cb) {
-					negate(noOp);
+                throttler = function(cb) {
+					negate(noOp);//onload
 					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), is4])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
-				},
-				$displayer = eventing('click', event_actions.slice(0), function(e) {
-					var $toggler = doDisplay(e),
-						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
-					//gAlp.Intaface.ensures($toggler, iCommand);
-					if ($toggler) {
-						$displayer.undo();
-						$toggler.execute();
-					}
-				}, utils.$('sell'));
+				};
                            
 			addULClass();
 			klasAdd([nth], intro);
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
             throttler(reDoTabs);
-            $strategy.set(utils.getBest(isLoop, [$displayer, $toggle]));
-            eventing('load', [], loader, window).execute();
+            $div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
+            loader();
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
