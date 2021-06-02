@@ -1313,10 +1313,10 @@ gAlp.Util = (function() {
 				undo: function(flag) {
                     myEventListener.remove(el, type, fn);
                   if(flag && _.isBoolean(flag)){
-                      removeNodeOnComplete(el);
+                      el = removeNodeOnComplete(el);
                    }
                     gAlp.Util.eventCache.remove(this);
-					return this;
+                    return el;
 				},
 				getEl: function() {
 					return el;
@@ -1724,7 +1724,7 @@ gAlp.Util.eventCache = (function(list){
            var i = find.call(this, $tgt, 'findIndex');
                $tgt = this.get(i);
            if($tgt){
-               $tgt.undo(true);
+               return $tgt.undo(true);
            }
        },
 
