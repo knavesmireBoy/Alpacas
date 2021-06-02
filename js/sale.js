@@ -126,8 +126,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		//return list.slice(_.random(0, end || list.length));
-		return list.slice(0, -2);
+		return list.slice(_.random(0, end || list.length));
+		//return list.slice(0, -2);
 	}
 
 	function inRange(coll, i) {
@@ -172,7 +172,7 @@ if (!window.gAlp) {
 			],
 			[
 				["Granary Juanita", "Price on Application"],
-				["D.O.B.", "29.072006"],
+				["D.O.B.", "29.07.2006"],
 				["Type", "Huacaya"],
 				["Sex", "Female"],
 				["Colour", "Solid Dark Brown"],
@@ -227,6 +227,7 @@ if (!window.gAlp) {
 		alp_len = alpacas_select.length,
 		/*bit lazy but ensures each extent (one alpaca, two alpaca, more.. has some class to add, defaults to intro which it already has, saves an ugly class of undefined*/
 		lookup = {
+			0: 'intro',
 			1: 'intro',
 			2: 'intro',
 			3: 'intro',
@@ -335,7 +336,7 @@ if (!window.gAlp) {
 			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), showtable, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
 		tab_cb = function($displayer, tgt, matcher) {
-            if(utils.findByClass('tab')){
+           // if(utils.findByClass('tab')){
 				var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
 				gAlp.Intaface.ensures($displayer, iDisplayer);
 				$displayer.hide();
@@ -343,7 +344,7 @@ if (!window.gAlp) {
 				Looper.onpage.visit(utils.hide);
 				COMP(_.bind(Looper.onpage.set, Looper.onpage), indexFromTab(matcher))();
 				COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
-            }
+           // }
 		},
 		doLI_cb = function(caption, i, arr) {
 			var li = twice(invokeArg)('li'),
@@ -351,7 +352,7 @@ if (!window.gAlp) {
 				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-			if (i && !inRange(arr, i)) {
+			if (i && !inRange(arr, i) && utils.findByClass('tab')) {
 				eventing('click', [], function(e) {
 					tab_cb(makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));
 				}, getUL).execute();
@@ -524,7 +525,6 @@ if (!window.gAlp) {
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		delayExecute = thrice(doMethod)('execute')(null),
 		deleteListFromCache = thricedefer(doMethod)('delete')(false)(utils.eventCache),
-		//deleteListFromCache1 = thricedefer(doMethod)('delete')(0)(utils.eventCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
         undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function() {
@@ -564,10 +564,10 @@ if (!window.gAlp) {
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, delayExecute, $loop_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
-				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, con, utils.removeNodeOnComplete, $$('list')),
+				//reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, con, utils.removeNodeOnComplete, $$('list')),
                 reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
-				reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
-				reTab = COMP(addULClass, makeTabs, makeUL, con, deleteListFromCache),
+				//reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
+				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
 				$displayer = eventing('click', event_actions.slice(0), function(e) {
@@ -580,23 +580,21 @@ if (!window.gAlp) {
                         
 					}
 				}, utils.$('sell')),
-                negate = function(cb) {
+                negate = function(cb, flag) {
 					if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
-						cb();
-                                    //console.log(utils.eventCache.getList(), utils.eventCache.getList()[0].getEl())
-
-                        //utils.getList();
 						if (is4()) {
                             $div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
 							navtabs = [];
 						}
 					}
+                    if(!flag){
 					abbreviateTabs();
                     abbreviateHeads();
+                    }
 				},
                 throttler = function(cb) {
-					negate(noOp);//onload
+					negate(noOp, true);//onload
 					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), is4])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
@@ -604,10 +602,10 @@ if (!window.gAlp) {
                            
 			addULClass();
 			klasAdd([nth], intro);
-            throttler(reDoTabs);
+            throttler(reDoTabs);//resize listener
             $div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));            
-            loader();
-            utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();
+            loader();//div listener
+            utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();//nav listener LAST!
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
