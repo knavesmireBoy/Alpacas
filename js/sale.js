@@ -15,27 +15,24 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-    
-     function Strategy(s){
-            if(s){
-                this.subject = s;
-            }
-        }
-        
-        Strategy.prototype.execute = function(){
-            return this.subject.execute();
-        }
-        
-        Strategy.prototype.undo = function(){
-            return this.subject.undo();
-        }
-        Strategy.prototype.set = function(s){
-            this.subject = s;
-        }
-        Strategy.set = function(subject){
-            return new Strategy(subject);
-        }
-        
+
+	function Strategy(s) {
+		if (s) {
+			this.subject = s;
+		}
+	}
+	Strategy.prototype.execute = function() {
+		return this.subject.execute();
+	}
+	Strategy.prototype.undo = function() {
+		return this.subject.undo();
+	}
+	Strategy.prototype.set = function(s) {
+		this.subject = s;
+	}
+	Strategy.set = function(subject) {
+		return new Strategy(subject);
+	}
 	//    https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
 		var Factory = constructor.bind.apply(constructor, arguments);
@@ -286,7 +283,7 @@ if (!window.gAlp) {
 			Ab.prototype = {
 				exec: function(el) {
 					if (!isNaN(this.split)) {
-                        el = el || this.el;
+						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
 					}
 				},
@@ -336,15 +333,15 @@ if (!window.gAlp) {
 			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), showtable, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
 		tab_cb = function($displayer, tgt, matcher) {
-           // if(utils.findByClass('tab')){
-				var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
-				gAlp.Intaface.ensures($displayer, iDisplayer);
-				$displayer.hide();
-				$displayer.show(tgt);
-				Looper.onpage.visit(utils.hide);
-				COMP(_.bind(Looper.onpage.set, Looper.onpage), indexFromTab(matcher))();
-				COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
-           // }
+			// if(utils.findByClass('tab')){
+			var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
+			gAlp.Intaface.ensures($displayer, iDisplayer);
+			$displayer.hide();
+			$displayer.show(tgt);
+			Looper.onpage.visit(utils.hide);
+			COMP(_.bind(Looper.onpage.set, Looper.onpage), indexFromTab(matcher))();
+			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
+			// }
 		},
 		doLI_cb = function(caption, i, arr) {
 			var li = twice(invokeArg)('li'),
@@ -358,9 +355,9 @@ if (!window.gAlp) {
 				}, getUL).execute();
 			}
 		},
-        isLoop = doMethodDefer('findByClass')('loop')(utils),
+		isLoop = doMethodDefer('findByClass')('loop')(utils),
 		abbreviateTabs = function() {
-			if (utils.findByClass('extent') || !utils.findByClass('sell')) {
+			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
 			}
 			var splitters = {
@@ -381,47 +378,45 @@ if (!window.gAlp) {
 					return factory(el, i, j);
 				};
 				navtabs = _.map(tabs, cb);
-            }
-				if (j === 0) {
-					/*default is to set the abbreviation to first word in loop scenario
-					where as alpaca name is the second, maybe room for both words which is effectivley what undefined provides
-					as it fails !NaN test and leaves innerHTML alone
-					*/
-					// navtabs[1].split = Modernizr.mq(q3) ? 1 : undefined;
-					navtabs[1].split = undefined;
-				} else {
-					if (splitters[alp_len]) {
-						split = Modernizr.mq(splitters[alp_len]) ? 1 : split;
-						action = Modernizr.mq(splitters[alp_len]) ? 'exec' : 'undo';
-					}
-					navtabs = _.map(navtabs, function(o) {
-						o.split = split;
-						return o;
-					});
+			}
+			if (j === 0) {
+				/*default is to set the abbreviation to first word in loop scenario
+				where as alpaca name is the second, maybe room for both words which is effectivley what undefined provides
+				as it fails !NaN test and leaves innerHTML alone
+				*/
+				// navtabs[1].split = Modernizr.mq(q3) ? 1 : undefined;
+				navtabs[1].split = undefined;
+			} else {
+				if (splitters[alp_len]) {
+					split = Modernizr.mq(splitters[alp_len]) ? 1 : split;
+					action = Modernizr.mq(splitters[alp_len]) ? 'exec' : 'undo';
 				}
+				navtabs = _.map(navtabs, function(o) {
+					o.split = split;
+					return o;
+				});
+			}
 			_.each(navtabs, function(map, i) {
 				navtabs[i][action](tabs[i]);
 			});
 		},
-        abbreviateHeads = function(){
-            var action = Modernizr.mq(q2) ? 'exec' : 'undo';
-            if(!ths[0]){
-              ths = _.map(utils.getByTag('th'), makeAbbrv('th', document, ALWAYS(true)));  
-            }
-            
-            _.each(ths, function($el){
-                $el[action]();
-            })
-            
-            /*
-            ths = _.map(ths, function($el, i){
-                if(modulo(2, i){
-                   $el.exec = function(){
-                    this.el 
-                }
-            }
-            */
-        },
+		abbreviateHeads = function() {
+			var action = Modernizr.mq(q2) ? 'exec' : 'undo';
+			if (!ths[0]) {
+				ths = _.map(utils.getByTag('th'), makeAbbrv('th', document, ALWAYS(true)));
+			}
+			_.each(ths, function($el) {
+				$el[action]();
+			})
+			/*
+			ths = _.map(ths, function($el, i){
+			    if(modulo(2, i){
+			       $el.exec = function(){
+			        this.el 
+			    }
+			}
+			*/
+		},
 		doInc = function(n) {
 			return COMP(PTL(modulo, n), increment);
 		},
@@ -526,7 +521,7 @@ if (!window.gAlp) {
 		delayExecute = thrice(doMethod)('execute')(null),
 		deleteListFromCache = thricedefer(doMethod)('delete')(false)(utils.eventCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
-        undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
+		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function() {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
@@ -545,15 +540,15 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function() {}]
 				],
-                $div_listener = Strategy.set(),
-                loader = doMethodDefer('execute')(null)($div_listener),
+				$div_listener = Strategy.set(),
+				loader = doMethodDefer('execute')(null)($div_listener),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
 				doFind = _.bind(Looper.onpage.find, Looper.onpage),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
-                /* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
+				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
 				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
 				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
@@ -565,48 +560,46 @@ if (!window.gAlp) {
 				$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, delayExecute, $loop_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
 				//reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, con, utils.removeNodeOnComplete, $$('list')),
-                reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
+				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
 				//reTab = COMP(addULClass, makeTabs, makeUL, utils.removeNodeOnComplete, $$('list')),
-				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
+				reTab = COMP(makeTabs, addULClass, makeUL, con, deleteListFromCache),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
 				$displayer = eventing('click', event_actions.slice(0), function(e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
-					if ($toggler) {//image was clicked
-                        gAlp.Intaface.ensures($toggler, iCommand);
+					if ($toggler) { //image was clicked
+						gAlp.Intaface.ensures($toggler, iCommand);
 						$displayer.undo();
-						$toggler.execute();
-                        
+						$toggler.execute(true); //unshift to maintain nav as LAST listener
 					}
 				}, utils.$('sell')),
-                negate = function(cb, flag) {
+				negate = function(cb) {
 					if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
+						cb();
 						if (is4()) {
-                            $div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
+							$div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
 							navtabs = [];
 						}
 					}
-                    if(!flag){
 					abbreviateTabs();
-                    abbreviateHeads();
-                    }
+					abbreviateHeads();
 				},
-                throttler = function(cb) {
-					negate(noOp, true);//onload
+				throttler = function(cb) {
+					negate(noOp); //onload
 					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), is4])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
-					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute();
+					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute(true);
 				};
-                           
 			addULClass();
 			klasAdd([nth], intro);
-            throttler(reDoTabs);//resize listener
-            $div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));            
-            loader();//div listener
-            utils.getBest(COMP(invoke, getZero), captionsORtabs)[1]();//nav listener LAST!
+			$div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
+			loader(); //div listener            
+			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
+			throttler(reDoTabs); //resize listener
 			makeToolTip().init();
+			con(utils.eventCache.getList()[1].getEl())
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
 		};
