@@ -8,10 +8,11 @@ article.intro {
 	*height: 1%;
 }
 .extent figure {
-	margin: .3em;
-	padding: 1em 1em 0;
+	margin: .3em 1%;
+	padding: 0;
 	vertical-align: bottom;
     box-sizing: border-box;
+    background: red;
 }
 ul.tab {
 	transform: translateX(-1000px);
@@ -39,28 +40,35 @@ ul.loop li a::after, ul.loop li a::before {
 	height: 0;
 	margin-top: -2em;
 }
-.no-flexboxlegacy .extent {
+.extent {
+    /*
 	display: table;
+    */
 	border-spacing: 1em;
 }
 /*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
 
-.no-flexboxlegacy .extent figure {
+.extent figure {
 	display: inline;
 	display: inline-block;
 }
-.no-flexboxlegacy .extent>figure {
-	display: table-cell;
+.extent>figure {
+    width: 23%;
 }
-.four .extent figure {
-	width: 18%
+
+
+#sell.extent figure > * {
+    border: 10px solid white;
 }
-.five .extent figure {
-	width: 13%
+
+#sell.extent figure a {
+    border-width: 10px 10px 0;
 }
-.six .extent figure {
-	width: 26%
+
+#sell.extent figure figcaption {
+    border-width: 5px 0 0;
 }
+
 .sell .tog a {
 	margin-left: 0;
 }
@@ -135,7 +143,6 @@ ul#list li, ul#list li a {
 #sell.extent {
 	left: 0;
 	margin: 0 auto;
-	padding: 1.5%;
 	height: 1%;
 	*padding: .6em .3em;
 	*height: 1%;

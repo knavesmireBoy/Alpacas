@@ -163,6 +163,10 @@ ul.tab li.current a:hover {
 	border: solid 1px black;
 	box-shadow: 0px 0px 2px black;
 }
+
+#sell figure a img{
+	border: solid 1px black;
+}
 #sell table td, #sell table table td {
 	border-width: 1px 0 0;
 	padding: .5em;
