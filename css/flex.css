@@ -41,15 +41,12 @@
 	}
 	#sell.extent {
 		display: flex;
-		justify-content: space-around;
-		padding: 3% 1.5%;
 	}
+   
 	.js #sell.extent figure {
-		width: auto;
-		flex: 1 1 25%;
-		margin: 1.5%;
-		margin: .75em;
-	}
+		flex: 1 1 1%;
+        width: auto;
+    }
 }
 /*@supports (display: grid){ }*/
 
@@ -111,11 +108,59 @@
 		width: auto;
 	}
 }
+
+@media only screen and (max-width: 1024px) {
+      @supports(column-gap: 20px) {
+     .six #sell.extent{
+		display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: auto;
+        grid-gap: .5em; 
+         margin: 0;
+	}
+}
 @media only screen and (max-width: 767px) {
 	ul#thumbnails.gallery {
 		grid-template-columns: repeat(5, 1fr) .75fr;
 	}
+   
 }
+
+@media only screen and (max-width: 667px) {
+
+    @supports(column-gap: 20px) {
+     .intro #sell.extent{
+		display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: auto;
+        grid-gap: .5em; 
+         margin: 0;
+	}
+    
+    .five #sell.extent {
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(3, 1fr)
+    }
+    
+    .five #sell.extent figure:nth-child(even){
+        grid-column: 1 / 7;
+    }
+    
+     .five #sell.extent figure:nth-child(odd){
+        grid-column: 7 / 13;
+    }
+     .five #sell.extent figure:last-child{
+        grid-column: 4 / 10;
+    }
+    
+    #sell.extent figure {
+         margin: 0;
+	}
+}
+}
+
+
+  
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
 	.flexboxlegacy figure a {
 		-webkit-box-shadow: none;
@@ -128,37 +173,4 @@
 		}
 	}
 }
-.flexboxlegacy #alpacas_for_sale .extent {
-	display: -webkit-box;
-	/* OLD - iOS 6-, Safari 3.1-6 */
-	display: -moz-box;
-	/* OLD - Firefox 19- (buggy but mostly works) */
-	display: -ms-flexbox;
-	/* TWEENER - IE 10 */
-	display: -webkit-flex;
-	/* NEW - Chrome */
-	display: flex;
-	/* NEW, Spec - Opera 12.1, Firefox 20+ */
-	-webkit-box-align: start;
-	-ms-flex-align: start;
-	align-items: flex-start;
-}
-.flexboxlegacy #alpacas_for_sale figure {
-	-webkit-box-flex: 1;
-	/* OLD - iOS 6-, Safari 3.1-6 */
-	-moz-box-flex: 1;
-	/* OLD - Firefox 19- */
-	/* For old syntax, otherwise collapses. */
-	-webkit-flex: 1;
-	/* Chrome */
-	-ms-flex: 1;
-	/* IE 10 */
-	flex: 1;
-	-ms-flex-positive: 1;
-	flex-grow: 1;
-	-ms-flex-negative: 1;
-	flex-shrink: 1;
-	-ms-flex-preferred-size: 10%;
-	-webkit-flex-basis: 10%;
-	flex-basis: 10%;
-}
+
