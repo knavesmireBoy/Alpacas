@@ -218,7 +218,7 @@ if (!window.gAlp) {
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
-		allow = !touchevents ? 2 : 0,
+		allow = !touchevents ? 2 : 1,
 		validator = utils.validator,
 		alpacas_select = sliceArray(alpacas),
 		alp_len = alpacas_select.length,
