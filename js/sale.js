@@ -404,7 +404,7 @@ if (!window.gAlp) {
 				*/
 				navtabs[0].split = Modernizr.mq(q3) ? 0 : undefined;
 				navtabs[1].split = undefined;
-				navtabs[2].split = Modernizr.mq(q3) ? 0 : undefined;
+				navtabs[2].split = Modernizr.mq(q2) ? 0 : undefined;
 			} else {
 				if (splitters[alp_len]) {
 					split = Modernizr.mq(splitters[alp_len]) ? 1 : split;
