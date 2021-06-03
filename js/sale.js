@@ -232,6 +232,7 @@ if (!window.gAlp) {
 			5: 'five',
 			6: 'six'
 		},
+        count = 0,
 		nth = utils.getter(lookup, alp_len),
 		curryFactory = utils.curryFactory,
 		defer_once = curryFactory(1, true),
@@ -287,7 +288,6 @@ if (!window.gAlp) {
                     el.innerHTML = this.text || el.innerHTML;
                     },
                 exec = function (el) {
-                    console.log(999)
 					if (!isNaN(this.split)) {
 						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
@@ -295,18 +295,16 @@ if (!window.gAlp) {
                 };
             
             if(_.isFunction(pred)){
-                console.log(pred)
 			Ab.prototype = {
 				exec: exec,
                 undo: undo
 			};
             }
             else {
-                console.log('oops')
                 Ab.prototype = {
-                    exec: function(){
-                        console.log(888)
-                        this.el.innerHTML = this.text.abbreviate();
+                    exec: function(el){
+                        el = el || this.el;
+                        el.innerHTML = this.text.abbreviate();
                     },
                     undo: undo
             };
@@ -398,13 +396,15 @@ if (!window.gAlp) {
 				};
 				navtabs = _.map(tabs, cb);
 			}
+
 			if (j === 0) {
-				/*default is to set the abbreviation to first word in loop scenario
-				where as alpaca name is the second, maybe room for both words which is effectivley what undefined provides
-				as it fails !NaN test and leaves innerHTML alone
+				/*default is to set the abbreviation to first word (j === 0) in loop scenario
+				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
+                and we'll elect to go with this as otherwise we would need to run abbreviateTabs everytime which means setting the array of Ab instances each time and setting split preferences. As it stands only on load and resize do we need to abbreviate
 				*/
-				// navtabs[1].split = Modernizr.mq(q3) ? 1 : undefined;
+				navtabs[0].split = Modernizr.mq(q3) ? 0 : undefined;
 				navtabs[1].split = undefined;
+				navtabs[2].split = Modernizr.mq(q3) ? 0 : undefined;
 			} else {
 				if (splitters[alp_len]) {
 					split = Modernizr.mq(splitters[alp_len]) ? 1 : split;
@@ -423,12 +423,7 @@ if (!window.gAlp) {
 			var action = Modernizr.mq(q2) ? 'exec' : 'undo';
 			if (!ths[0]) {
                 ths = _.map(utils.getByTag('th'), function(el, i){
-                    var cb = ALWAYS(true),
-                        odd = i % 2;
-                    if(odd){
-                        cb = null;
-                    }
-                    return makeAbbrv('th', document, cb)(el, i);
+                    return makeAbbrv('th', document, i % 2 ? null : ALWAYS(true))(el, i);
                 });                
 			}
 			_.each(ths, function ($el, i) {
@@ -574,7 +569,7 @@ if (!window.gAlp) {
 				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
 				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
-				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
+				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))),  utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
 					noOp, noOp
                          ],
@@ -604,7 +599,7 @@ if (!window.gAlp) {
 						}
 					}
 					abbreviateTabs();
-					abbreviateHeads();
+					//abbreviateHeads();
 				},
 				throttler = function (cb) {
 					negate(noOp); //onload
@@ -624,7 +619,7 @@ if (!window.gAlp) {
 			//utils.highLighter.perform();
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 374px)', '(max-width: 319px)', [], []));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
 */

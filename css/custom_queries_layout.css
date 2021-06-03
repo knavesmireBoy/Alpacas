@@ -160,6 +160,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	html body {
 		font-size: .66em;
 	}
+    h2 {
+        font-size: 2.7em;
+    }
 	figure a {
 		box-shadow: none;
 	}

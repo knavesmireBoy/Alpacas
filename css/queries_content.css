@@ -7,10 +7,10 @@ http://cssmediaqueries.com/overview.html*/
 /* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
 @media only screen {
     
-     h2 {
-	font: italic 3.2em "Handwritten", Georgia, cursive;
+    h2 {
+        font: italic 3.2em "Handwritten", Georgia, cursive;
     }
-    
+        
     nav a:hover, nav a:active {
 		-webkit-transform: scale(1.01);
 		-ms-transform: scale(1.01);
@@ -67,6 +67,10 @@ http://cssmediaqueries.com/overview.html*/
 		text-indent: 0px;
 		padding-bottom: .1em;
 	}
+        h2 {
+        font-size: -webkit-calc(28px + (42 - 28) * (100vw - 320px) / (768 - 320));
+
+    }
 	nav a, nav a:link, nav a:visited {
 		background-image: none;
 		padding: 0em .8em;
