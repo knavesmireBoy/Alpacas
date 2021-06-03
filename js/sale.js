@@ -272,30 +272,51 @@ if (!window.gAlp) {
 				hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
 			};
 		},
-		split_space = thrice(doMethod)('split')(' '),
 		makeAbbrv = function (tag, ancr, pred) {
-			var Ab = function (el, i, j) {
+
+            var split_space = thrice(doMethod)('split')(' '),
+                Ab = function (el, i, j) {
 				this.el = el;
 				this.text = el.innerHTML;
 				this.index = i;
 				this.split = j;
-			};
-			Ab.prototype = {
-				exec: function (el) {
+			},
+                undo = function(){
+                    var byTag = utils.findByTag(this.index),
+                        el = byTag(tag, ancr);
+                    el.innerHTML = this.text || el.innerHTML;
+                    },
+                exec = function (el) {
+                    console.log(999)
 					if (!isNaN(this.split)) {
 						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
 					}
-				},
-				undo: function () {
-					var byTag = utils.findByTag(this.index),
-						el = byTag(tag, ancr);
-					el.innerHTML = this.text || el.innerHTML;
-				}
+                };
+            
+            if(_.isFunction(pred)){
+                console.log(pred)
+			Ab.prototype = {
+				exec: exec,
+                undo: undo
 			};
+            }
+            else {
+                console.log('oops')
+                Ab.prototype = {
+                    exec: function(){
+                        console.log(888)
+                        this.el.innerHTML = this.text.abbreviate();
+                    },
+                    undo: undo
+            };
+            }
 			return function (el, i) {
-				var j = pred() ? 1 : 0;
-				return new Ab(el, i, j);
+                var j;
+               if(_.isFunction(pred)){
+                   j = pred() ? 1 : 0; 
+               }
+                return new Ab(el, i, j);
 			};
 		},
 		hide = function (el) {
@@ -401,19 +422,22 @@ if (!window.gAlp) {
 		abbreviateHeads = function () {
 			var action = Modernizr.mq(q2) ? 'exec' : 'undo';
 			if (!ths[0]) {
-				ths = _.map(utils.getByTag('th'), makeAbbrv('th', document, ALWAYS(true)));
+                ths = _.map(utils.getByTag('th'), function(el, i){
+                    var cb = ALWAYS(true),
+                        odd = i % 2;
+                    if(odd){
+                        cb = null;
+                    }
+                    return makeAbbrv('th', document, cb)(el, i);
+                });                
 			}
-			_.each(ths, function ($el) {
-				$el[action]();
+			_.each(ths, function ($el, i) {
+                    if(i % 2){
+                        action = Modernizr.mq(q3) ? 'exec' : 'undo';
+                    }
+
+                $el[action]();
 			});
-			/*
-			ths = _.map(ths, function ($el, i){
-			    if(modulo(2, i){
-			       $el.exec = function (){
-			        this.el 
-			    }
-			}
-			*/
 		},
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
@@ -600,7 +624,7 @@ if (!window.gAlp) {
 			//utils.highLighter.perform();
 		};
 	factory();
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 420px)', '(max-width: 319px)', [], []));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /sale$/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 374px)', '(max-width: 319px)', [], []));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
 */
