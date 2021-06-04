@@ -1244,52 +1244,6 @@ gAlp.Util = (function() {
 		doWhen: doWhen,
 		drillDown: drillDown,
 		//https://medium.com/@dtipson/creating-an-es6ish-compose-in-javascript-ac580b95104a
-        /*
-		eventer: function(type, actions, fn, el) {
-            
-			function preventer(wrapped, e) {
-                //invoke method allows a function to be invoked directly NOT as an event listener
-                if(e){
-				_.each(actions, function(a) {
-					myEventListener.preventers[a](e);
-				});
-                }
-				return wrapped(e);
-			}
-			fn = _.wrap(fn, preventer);
-			el = getResult(el);
-			return {
-				execute: function() {
-                    //console.log(this);
-                    //console.log('exec: ', el, fn)
-					myEventListener.add(el, type, fn);
-                    //gAlp.Util.eventer.club.push(this);
-                    gAlp.Util.eventCache.add(this);
-					return this;
-				},
-				undo: function(flag) {
-					myEventListener.remove(el, type, fn);
-                    if(flag){
-                        gAlp.Util.eventCache.remove(this);
-                        removeNodeOnComplete(el);
-                    }
-                   // console.log('undo: ', el, fn)
-					return this;
-				},
-				getEl: function() {
-					return el;
-				},
-                invoke: function(){
-                    fn.apply(null, arguments);
-                },
-                restore: function(i){
-                    var $e = gAlp.Util.eventCache(i);
-                    gAlp.Util.eventer.club[i].execute();
-                    $e && $e.execute();
-                }
-			};
-		},
-        */
 		eventer: function(type, actions, fn, el) {
 
 			function preventer(wrapped, e) {
@@ -1303,11 +1257,11 @@ gAlp.Util = (function() {
 			}
 			fn = _.wrap(fn, preventer);
 			el = getResult(el);
+            
 			return {
 				execute: function(flag) {
-                    //console.log(el)
                     myEventListener.add(el, type, fn);
-                   gAlp.Util.eventCache.add(this, flag);
+                    gAlp.Util.eventCache.add(this, flag);
 					return this;
 				},
 				undo: function(flag) {
@@ -1331,7 +1285,6 @@ gAlp.Util = (function() {
                }
 			};
 		},
-        
         
 		fadeUp: function(element, red, green, blue) {
 			var fromFull = curry2(subtract)(255),
@@ -1642,49 +1595,6 @@ gAlp.Util = (function() {
 		dog: 'bolt'
 	}; //end
 }());
-//the MOST simple implementation
-gAlp.Util.eventer.club = [];
-/*
-gAlp.Util.eventCache = (function(list){
-    
-    function splice(i, l){
-        list.splice(i, l || 1);
-    }
-    return {
-
-        add: function($tgt, i){
-            list = _.filter(list, function ($item) { return $item !== $tgt; });
-            if(!isNaN(i)){
-             // list.splice($tgt, i)  
-            }
-            list.unshift($tgt);
-        },
-        remove: function ($tgt, l) {
-            if(!isNaN($tgt)){
-                splice($tgt, l || 1);
-            }
-            var i = _.findIndex(list, function ($cur) {
-                return $cur === $tgt;
-            });
-            if (i !== -1) {
-                splice(i, l || 1);
-            }
-        },
-        
-        get: function($tgt){
-            if(!isNaN($tgt)){
-                return list[$tgt];
-            }
-           return _.find(list, function ($cur) {
-                return $cur === $tgt;
-            });            
-        }
-        
-    };
-    
-}([]));
-
-*/
 gAlp.Util.eventCache = (function(list){
 
    function splice(i, l){

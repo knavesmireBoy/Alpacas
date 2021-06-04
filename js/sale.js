@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, navtabs, ths) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, navtabs) {
 	"use strict";
 
 	function noOp() {}
@@ -17,20 +17,19 @@ if (!window.gAlp) {
 	}
 
 	function Context($command) {
-        var iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
+		var iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 		if ($command) {
-            gAlp.Intaface.ensures($command, iCommand);
+			gAlp.Intaface.ensures($command, iCommand);
 			this.command = $command;
 		}
 	}
 	Context.prototype.execute = function () {
-        if (this.command) {
+		if (this.command) {
 			return this.command.execute();
 		}
-		
 	};
 	Context.prototype.undo = function () {
-        if (this.command) {
+		if (this.command) {
 			return this.command.undo();
 		}
 	};
@@ -108,10 +107,6 @@ if (!window.gAlp) {
 
 	function doCallbacks(cb, coll, p) {
 		return _[p](getResult(coll), cb);
-	}
-
-	function precomp(f1, f2) {
-		return _.compose(f2, f1);
 	}
 
 	function doMethod(o, v, p) {
@@ -241,7 +236,6 @@ if (!window.gAlp) {
 			5: 'five',
 			6: 'six'
 		},
-        count = 0,
 		nth = utils.getter(lookup, alp_len),
 		curryFactory = utils.curryFactory,
 		defer_once = curryFactory(1, true),
@@ -283,47 +277,44 @@ if (!window.gAlp) {
 			};
 		},
 		makeAbbrv = function (tag, ancr, pred) {
-
-            var split_space = thrice(doMethod)('split')(' '),
-                Ab = function (el, i, j) {
-				this.el = el;
-				this.text = el.innerHTML;
-				this.index = i;
-				this.split = j;
-			},
-                undo = function(){
-                    var byTag = utils.findByTag(this.index),
-                        el = byTag(tag, ancr);
-                    el.innerHTML = this.text || el.innerHTML;
-                    },
-                exec = function (el) {
+			var split_space = thrice(doMethod)('split')(' '),
+				Ab = function (el, i, j) {
+					this.el = el;
+					this.text = el.innerHTML;
+					this.index = i;
+					this.split = j;
+				},
+				undo = function () {
+					var byTag = utils.findByTag(this.index),
+						el = byTag(tag, ancr);
+					el.innerHTML = this.text || el.innerHTML;
+				},
+				exec = function (el) {
 					if (!isNaN(this.split)) {
 						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
 					}
-                };
-            
-            if(_.isFunction(pred)){
-			Ab.prototype = {
-				exec: exec,
-                undo: undo
-			};
-            }
-            else {
-                Ab.prototype = {
-                    exec: function(el){
-                        el = el || this.el;
-                        el.innerHTML = this.text.abbreviate();
-                    },
-                    undo: undo
-            };
-            }
+				};
+			if (_.isFunction(pred)) {
+				Ab.prototype = {
+					exec: exec,
+					undo: undo
+				};
+			} else {
+				Ab.prototype = {
+					exec: function (el) {
+						el = el || this.el;
+						el.innerHTML = this.text.abbreviate();
+					},
+					undo: undo
+				};
+			}
 			return function (el, i) {
-                var j;
-               if(_.isFunction(pred)){
-                   j = pred() ? 1 : 0; 
-               }
-                return new Ab(el, i, j);
+				var j;
+				if (_.isFunction(pred)) {
+					j = pred() ? 1 : 0;
+				}
+				return new Ab(el, i, j);
 			};
 		},
 		hide = function (el) {
@@ -365,9 +356,9 @@ if (!window.gAlp) {
 			gAlp.Intaface.ensures($displayer, iDisplayer);
 			$displayer.hide();
 			$displayer.show(tgt);
-			Looper.onpage.visit(utils.hide);
-			COMP(_.bind(Looper.onpage.set, Looper.onpage), indexFromTab(matcher))();
-			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.onpage.current, Looper.onpage))();
+			Looper.tabs.visit(utils.hide);
+			COMP(_.bind(Looper.tabs.set, Looper.tabs), indexFromTab(matcher))();
+			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.tabs.current, Looper.tabs))();
 		},
 		doLI_cb = function (caption, i, arr) {
 			var li = twice(invokeArg)('li'),
@@ -405,14 +396,13 @@ if (!window.gAlp) {
 				};
 				navtabs = _.map(tabs, cb);
 			}
-
 			if (j === 0) {
 				/*default is to set the abbreviation to first word (j === 0) in loop scenario
 				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
-                and we'll elect to go with this as otherwise we would need to run abbreviateTabs everytime which means setting the array of Ab instances each time and setting split preferences. As it stands only on load and resize do we need to abbreviate
+                and we'll elect to go with this on the Alpaca name as otherwise we would need to run abbreviateTabs every time we advance which means setting a fresh array of Ab instances each time and setting split preferences. As it stands we only abbreviate on load or resize
 				*/
 				navtabs[0].split = Modernizr.mq(q3) ? 0 : undefined;
-				navtabs[1].split = undefined;
+				navtabs[1].split = undefined; //ie isNaN so no splitting
 				navtabs[2].split = Modernizr.mq(q2) ? 0 : undefined;
 			} else {
 				if (splitters[alp_len]) {
@@ -428,10 +418,11 @@ if (!window.gAlp) {
 				navtabs[i][action](tabs[i]);
 			});
 		},
+		/*
 		abbreviateHeads = function () {
 			var action = Modernizr.mq(q2) ? 'exec' : 'undo';
 			if (!ths[0]) {
-                ths = _.map(utils.getByTag('th'), function(el, i){
+                ths = _.map(utils.getByTag('th'), function (el, i){
                     return makeAbbrv('th', document, i % 2 ? null : ALWAYS(true))(el, i);
                 });                
 			}
@@ -443,11 +434,18 @@ if (!window.gAlp) {
                 $el[action]();
 			});
 		},
+        */
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
 		doLoop = function (coll) {
-			Looper.onpage = Looper.from(coll, doInc(doGet('length')(coll)));
+			/*
+			var ret = _.map(coll, function (el){
+			    return Looper.from([el, el.previousSibling], doInc(2));
+			});
+			Looper.tab = Looper.from(ret, doInc(doGet('length')(coll)));
+			*/
+			Looper.tabs = Looper.from(coll, doInc(doGet('length')(coll)));
 		},
 		makeTabs = deferEach(true_captions)(doLI_cb),
 		selldiv = COMP(PTL(setAttrs, {
@@ -551,15 +549,15 @@ if (!window.gAlp) {
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
-			Looper.onpage.visit = function (cb) {
+			Looper.tabs.visit = function (cb) {
 				_.each(this.group.members, cb);
 				_.each(_.map(this.group.members, utils.getPrevious), cb);
 			};
-			var members = Looper.onpage.current().members,
+			var members = Looper.tabs.current().members,
 				deferMembers = deferEach(members),
 				deferAlt = defer_once(doAlt),
 				makeCaptions = deferMembers(doCaption_cb),
-				bindCurrent = _.bind(Looper.onpage.current, Looper.onpage),
+				bindCurrent = _.bind(Looper.tabs.current, Looper.tabs),
 				captionsORtabs = [
 					[gt4, makeCaptions],
 					[mob4, makeCaptions],
@@ -569,20 +567,20 @@ if (!window.gAlp) {
 				$div_listener = Context.set(),
 				loader = doMethodDefer('execute')(null)($div_listener),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
-				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
+				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
-				doFind = _.bind(Looper.onpage.find, Looper.onpage),
+				doFind = _.bind(Looper.tabs.find, Looper.tabs),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
 				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
 				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
-                getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
+				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
 				events = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
-                          restoreCaptions,
-                          noOp,
-                          noOp
+					restoreCaptions,
+					noOp,
+					noOp
                          ],
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
@@ -620,7 +618,7 @@ if (!window.gAlp) {
 				};
 			addULClass();
 			klasAdd([nth], intro);
-            //$div_listener persists and DELEGATES to current $listener(displayer, $toggle)
+			//$div_listener persists and DELEGATES to current $listener(displayer, $toggle)
 			$div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
 			loader(); //div listener            
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
