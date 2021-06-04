@@ -114,15 +114,15 @@ gAlp.Composite = (function () {
 			},
             comp_get = function (i) {
                 //console.log('recent', i)
-                if(_.isNull(i) && !isNaN(k)){
+                if(_.isNull(i) && !isNaN(parseFloat(k))){
                     return included[k];
                 }
                 if(_.isNull(i)){
                     return included;
                 }
-				var j = isTrue(i) ? 0 : isFalse(i) ? included.length - 1 : !isNaN(i) ? i : undefined,
-                    ret =  !isNaN(j) ? included[j] : included;
-                k = !isNaN(j) ? j : k;//store current
+				var j = isTrue(i) ? 0 : isFalse(i) ? included.length - 1 : !isNaN(parseFloat(i)) ? i : undefined,
+                    ret =  !isNaN(parseFloat(j)) ? included[j] : included;
+                k = !isNaN(parseFloat(j)) ? j : k;//store current
                 return ret;
 			},
             comp_find  = function (m, e){
