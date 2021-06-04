@@ -578,9 +578,11 @@ if (!window.gAlp) {
 				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
 				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
-				events = [COMP(invoke, PTL(precomp, PTL(utils.findByTag(1), 'a', $$('list'))),  utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
-					restoreCaptions,
-					noOp, noOp
+                getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
+				events = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
+                          restoreCaptions,
+                          noOp,
+                          noOp
                          ],
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
 				$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
