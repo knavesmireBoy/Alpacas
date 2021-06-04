@@ -16,22 +16,31 @@ if (!window.gAlp) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
 
-	function Strategy(s) {
-		if (s) {
-			this.subject = s;
+	function Context($command) {
+        var iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
+		if ($command) {
+            gAlp.Intaface.ensures($command, iCommand);
+			this.command = $command;
 		}
 	}
-	Strategy.prototype.execute = function () {
-		return this.subject.execute();
+	Context.prototype.execute = function () {
+        if (this.command) {
+			return this.command.execute();
+		}
+		
 	};
-	Strategy.prototype.undo = function () {
-		return this.subject.undo();
+	Context.prototype.undo = function () {
+        if (this.command) {
+			return this.command.undo();
+		}
 	};
-	Strategy.prototype.set = function (s) {
-		this.subject = s;
+	Context.prototype.set = function ($command) {
+		if ($command) {
+			this.command = $command;
+		}
 	};
-	Strategy.set = function (subject) {
-		return new Strategy(subject);
+	Context.set = function ($command) {
+		return new Context($command);
 	};
 	//    https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
@@ -557,7 +566,7 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function () {}]
 				],
-				$div_listener = Strategy.set(),
+				$div_listener = Context.set(),
 				loader = doMethodDefer('execute')(null)($div_listener),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.onpage.forward, Looper.onpage)),
