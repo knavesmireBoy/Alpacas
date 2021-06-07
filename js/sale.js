@@ -520,7 +520,7 @@ if (!window.gAlp) {
 		addULClass = COMP(invoke, getOne, PTL(utils.getBestOnly, COMP(invoke, getZero), outcomes)),
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		delayExecute = thrice(doMethod)('execute')(null),
-		deleteListFromCache = thricedefer(doMethod)('delete')(false)(utils.eventCache),
+		deleteListFromCache = thricedefer(doMethod)('erase')(false)(utils.eventCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function () {
