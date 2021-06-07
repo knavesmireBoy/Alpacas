@@ -437,8 +437,13 @@
 				controller = function () {
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
+                        try {
 						$controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
 						doMakePause(getPausePath());
+                        }
+                        catch(e){
+                            utils.report(e);
+                        }
 					}
 				},
 				COR = function (predicate, action) {
