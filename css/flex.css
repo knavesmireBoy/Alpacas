@@ -69,12 +69,17 @@
 	}
 }/*supports*/
 
-article.intro, .sell #sell, ul#list {
+.flexbox article.intro, .sell #sell, ul#list {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: -webkit-flex;
 		display: flex;
+    border: solid 2px blue;
 	}
+
+html.flexbox body {
+    background: blue;
+}
 
 	#sell>* {
 		-webkit-box-flex: 1;
