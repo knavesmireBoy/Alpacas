@@ -69,22 +69,13 @@
 	}
 }/*supports*/
 
-article.intro:not(.five) .sell #sell, ul#list {
+article.intro, .sell #sell, ul#list {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: -webkit-flex;
 		display: flex;
 	}
-	#controls {
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: -webkit-flex;
-		display: flex;
-		-webkit-box-pack: center;
-		-webkit-justify-content: center;
-		    -ms-flex-pack: center;
-		        justify-content: center;
-	}
+
 	#sell>* {
 		-webkit-box-flex: 1;
 		-ms-flex: 1 1;
@@ -94,12 +85,7 @@ article.intro:not(.five) .sell #sell, ul#list {
 		-webkit-align-self: flex-start;
 		        align-self: flex-start;
 	}
-	#controls button {
-		-webkit-box-flex: 0;
-		-ms-flex: 0 0 auto;
-		-webkit-flex: 0 0 auto;
-		        flex: 0 0 auto;
-	}
+
 	#sell table {
 		table-layout: fixed;
 	}

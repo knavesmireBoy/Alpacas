@@ -441,7 +441,7 @@
 					if (!$('slide')) {
                         try {
 						$controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
-						//doMakePause(getPausePath());
+						doMakePause(getPausePath());
                         }
                         catch(e){
                             utils.report(e);
