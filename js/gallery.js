@@ -187,17 +187,9 @@
 			return onBase(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakeSlide = function (source, target) {
-			var img = addElements(),
-                x;
-            
-            try {
-                x = doParse(getBaseSrc());
-            }
-                 catch(e){
-                            utils.report(e+'!');
-                        }
+			var img = addElements();
 			doMap(img.parentNode, [
-				['href', x]
+				['href', doParse(getBaseSrc())]
 			]);
 			doMap(img.parentNode.parentNode, [
 				['id', target]
