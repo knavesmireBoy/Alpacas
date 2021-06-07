@@ -177,24 +177,26 @@
 		},
 		getPausePath = ptL(utils.getBest, doComp(ptL(utils.hasClass, 'portrait'), getThumbs), [pausepath + 'pause_long.png', pausepath + 'pause.png']),
 		doMakeBase = function (source, target) {
-			var img = addElements();
+			var img = addElements(),
+                src = img.parentNode.getAttribute('href');
 			doMap(img.parentNode, [
 				['href', doParse(source)]
 			]);
 			doMap(img.parentNode.parentNode, [
 				['id', target]
 			]);
-			return onBase(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
+			return onBase(img, doParse(src), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakeSlide = function (source, target) {
-			var img = addElements();
+			var img = addElements(),
+                src = img.parentNode.getAttribute('href');
 			doMap(img.parentNode, [
 				['href', doParse(getBaseSrc())]
 			]);
 			doMap(img.parentNode.parentNode, [
 				['id', target]
 			]);
-			return onLoad(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
+			return onLoad(img, doParse(src), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakePause = function (path) {
 			var img = addElements();
