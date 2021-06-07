@@ -276,8 +276,9 @@ gAlp.Composite = (function () {
 			};
 			return result;
 		},
-		get: function () {
-			return this.current().value;
+		get: function (m) {
+            m = m || 'value';
+			return this.current()[m];
 		},
         visit: function(cb){
             _.each(this.group.members, cb);
