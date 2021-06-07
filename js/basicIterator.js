@@ -6,7 +6,7 @@ if (!window.gAlp) {
 	window.gAlp = {};
 }
 gAlp.Iterator = function (rev) {
-    "use strict";
+	"use strict";
 	return function (index, coll, validate, doAdvance) {
 		var loop = function (bool) {
 				if (!bool) {
@@ -64,29 +64,30 @@ gAlp.Iterator = function (rev) {
 	};
 };
 gAlp.Composite = (function () {
-    "use strict";
+	"use strict";
+
 	function noOp() {}
-    function isFalse(i){
-        return !i && _.isBoolean(i);
-    }
-    
-    function isTrue(i){
-        return i && _.isBoolean(i);
-    }
-    
-    
+
+	function isFalse(i) {
+		return !i && _.isBoolean(i);
+	}
+
+	function isTrue(i) {
+		return i && _.isBoolean(i);
+	}
 	return function (included) {
-		var intafaces = _.rest(arguments), /*, intafaces..*/
-            j,
-            k,
+		var intafaces = _.rest(arguments),
+			/*, intafaces..*/
+			j,
+			k,
 			comp_intaface = gAlp.Intaface('Composite', ['add', 'remove', 'get', 'find']),
 			leaf = {
 				add: noOp,
 				remove: noOp,
 				get: noOp,
 				find: noOp,
-                render: noOp,
-                unrender: noOp
+				render: noOp,
+				unrender: noOp
 			},
 			composite,
 			tmp,
@@ -98,11 +99,11 @@ gAlp.Composite = (function () {
 			},
 			comp_remove = function (comp) {
 				if (!comp) {
-                    _.each(included, function(comp){
-                        comp.remove();
-                    });
+					_.each(included, function (comp) {
+						comp.remove();
+					});
 					included = [];
-                    return this;
+					return this;
 				} else {
 					included = _.filter(included, function (n_comp) {
 						if (n_comp !== comp) {
@@ -112,25 +113,24 @@ gAlp.Composite = (function () {
 					return comp;
 				}
 			},
-            comp_get = function (i) {
-                //console.log('recent', i)
-                if(_.isNull(i) && !isNaN(parseFloat(k))){
-                    return included[k];
-                }
-                if(_.isNull(i)){
-                    return included;
-                }
+			comp_get = function (i) {
+				//console.log('recent', i)
+				if (_.isNull(i) && !isNaN(parseFloat(k))) {
+					return included[k];
+				}
+				if (_.isNull(i)) {
+					return included;
+				}
 				var j = isTrue(i) ? 0 : isFalse(i) ? included.length - 1 : !isNaN(parseFloat(i)) ? i : undefined,
-                    ret =  !isNaN(parseFloat(j)) ? included[j] : included;
-                k = !isNaN(parseFloat(j)) ? j : k;//store current
-                return ret;
+					ret = !isNaN(parseFloat(j)) ? included[j] : included;
+				k = !isNaN(parseFloat(j)) ? j : k; //store current
+				return ret;
 			},
-            comp_find  = function (m, e){
+			comp_find = function (m, e) {
 				return _[m](included, function (member) {
 					return member.find && member.find(e);
 				});
-            },
-            
+			},
 			doAdd = function (comp) {
 				try {
 					comp_add.call(composite, comp);
@@ -138,21 +138,25 @@ gAlp.Composite = (function () {
 					try {
 						comp_add(_.extend(leaf, comp));
 					} catch (error) {
-                        noOp();
-                    }
+						noOp();
+					}
 				}
-                return comp;
+				return comp;
 			},
 			render = function () {
 				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-                    member.render && member.render.apply(member, args.concat(_.rest(arguments)));
+                    if (member.render) {
+                        member.render.apply(member, args.concat(_.rest(arguments)));
+                    }
 				});
 			},
 			unrender = function () {
 				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-					member.unrender && member.unrender.apply(member, args.concat(_.rest(arguments)));
+                    if (member.unrender) {
+                        member.unrender.apply(member, args.concat(_.rest(arguments)));
+                    }
 				});
 			};
 		intafaces.unshift(comp_intaface);
@@ -168,9 +172,9 @@ gAlp.Composite = (function () {
 				included: included,
 				render: render,
 				unrender: unrender,
-                current: function(){
-                return included[j] || included;
-            }
+				current: function () {
+					return included[j] || included;
+				}
 			};
 			if (included.length) {
 				//copy and empty included; establish contents conform to interface
@@ -184,8 +188,6 @@ gAlp.Composite = (function () {
 		return composite || leaf;
 	}; //ret func
 }());
-
-
 (function () {
 	"use strict";
 
@@ -223,11 +225,9 @@ gAlp.Composite = (function () {
 		}
 		return group;
 	};
-
 	gAlp.LoopIterator.from = function (coll, advancer) {
 		return new gAlp.LoopIterator(gAlp.Group.from(coll), advancer);
 	};
-   
 	gAlp.LoopIterator.onpage = null;
 	gAlp.LoopIterator.cross_page = null;
 	gAlp.LoopIterator.prototype = {
@@ -248,8 +248,8 @@ gAlp.Composite = (function () {
 				this.position = this.group.members.length - 2 - (this.position);
 				this.position = this.advance(this.position);
 				this.rev = !this.rev;
-			} 
-            return this.forward(this.rev);
+			}
+			return this.forward(this.rev);
 		},
 		play: function () {
 			return this.forward(true).value;
@@ -257,7 +257,7 @@ gAlp.Composite = (function () {
 		current: function () {
 			var result = {
 				members: this.group.members,
-                value: this.group.members[this.position],
+				value: this.group.members[this.position],
 				index: this.position
 			};
 			return result;
@@ -267,9 +267,9 @@ gAlp.Composite = (function () {
 			//return this.set(this.group.members.findIndex(_.partial(equals, tgt)));
 		},
 		set: function (pos) {
-           if(pos >= 0){
-			this.position = pos;
-           }
+			if (pos >= 0) {
+				this.position = pos;
+			}
 			var result = {
 				value: this.group.members[this.position],
 				index: this.position
@@ -277,11 +277,11 @@ gAlp.Composite = (function () {
 			return result;
 		},
 		get: function (m) {
-            m = m || 'value';
+			m = m || 'value';
 			return this.current()[m];
 		},
-        visit: function(cb){
-            _.each(this.group.members, cb);
-        }
+		visit: function (cb) {
+			_.each(this.group.members, cb);
+		}
 	};
 }());

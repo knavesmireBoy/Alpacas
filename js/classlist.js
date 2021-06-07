@@ -1,7 +1,6 @@
 /*jslint nomen: true */
 /*global window: false */
 /*global gAlp: false */
-/*global document: false */
 /*global _: false */
 if (!window.gAlp) {
 	window.gAlp = {};
@@ -70,7 +69,6 @@ gAlp.ClassList = (function () {
 		f.message = message;
 		return f;
 	}
-    
 	var constr = function (node) {
 		var set = _.partial(setter, node, 'className'),
 			superset = _.partial(setterplus, node, 'className'),
@@ -88,7 +86,7 @@ gAlp.ClassList = (function () {
 				var pattern = new RegExp('(^| )' + klas + '( |$)');
 				set(node.className.replace(pattern, '$1').replace(/ $/, ''));
 			},
-            outcomes = [add, remove],
+			outcomes = [add, remove],
 			toggle = function (klas, bool) {
 				if (_.isBoolean(bool)) {
 					best(always(bool), outcomes)(klas);
