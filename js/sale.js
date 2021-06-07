@@ -418,33 +418,10 @@ if (!window.gAlp) {
 				navtabs[i][action](tabs[i]);
 			});
 		},
-		/*
-		abbreviateHeads = function () {
-			var action = Modernizr.mq(q2) ? 'exec' : 'undo';
-			if (!ths[0]) {
-                ths = _.map(utils.getByTag('th'), function (el, i){
-                    return makeAbbrv('th', document, i % 2 ? null : ALWAYS(true))(el, i);
-                });                
-			}
-			_.each(ths, function ($el, i) {
-                    if(i % 2){
-                        action = Modernizr.mq(q3) ? 'exec' : 'undo';
-                    }
-
-                $el[action]();
-			});
-		},
-        */
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
 		doLoop = function (coll) {
-			/*
-			var ret = _.map(coll, function (el){
-			    return Looper.from([el, el.previousSibling], doInc(2));
-			});
-			Looper.tab = Looper.from(ret, doInc(doGet('length')(coll)));
-			*/
 			Looper.tabs = Looper.from(coll, doInc(doGet('length')(coll)));
 		},
 		makeTabs = deferEach(true_captions)(doLI_cb),
