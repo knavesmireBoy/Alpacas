@@ -5,12 +5,12 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-gAlp.Splitter = (function(gang) {
+gAlp.Splitter = (function (gang) {
 	"use strict";
-	var getFont = function(size, face, n) {
+	var getFont = function (size, face, n) {
 			return (size * n) + 'px ' + face;
 		},
-		getElement = function(arg) {
+		getElement = function (arg) {
 			if (arg && arg.parentNode) {
 				return arg;
 			}
@@ -19,61 +19,61 @@ gAlp.Splitter = (function(gang) {
 			}
 			return null;
 		},
-		getTextWidthBridge = function(textMetrics, fn) {
+		getTextWidthBridge = function (textMetrics, fn) {
 			//https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
 			fn = fn || 'ceil';
 			var sum = Math.abs(textMetrics.actualBoundingBoxLeft) + Math.abs(textMetrics.actualBoundingBoxRight);
 			//sum = textMetrics.width;
 			return Math[fn](sum);
 		},
-		getTargetWidth = function(arg, fn) {
+		getTargetWidth = function (arg, fn) {
 			var el = getElement(arg),
 				copy = el.clientWidth || window.innerWidth;
 			fn = fn || 'ceil';
 			return Math[fn](copy);
 		},
-		getBreakPoint = function(str, limit) {
+		getBreakPoint = function (str, limit) {
 			var end = str.slice(0, limit);
 			return Math.max(end.lastIndexOf('.'), end.lastIndexOf(' '));
 		},
-		orphanFactory = function(char, reg) {
+		orphanFactory = function (char, reg) {
 			return {
 				char: char,
 				reg: reg,
-				isOrphaned: function(str) {
+				isOrphaned: function (str) {
 					var i = str.indexOf(this.char);
 					return i > -1 && (i === str.lastIndexOf(this.char));
 				},
-				lineEnd: function(str) {
-					return str += this.char;
+				lineEnd: function (str) {
+					return str + this.char;
 				},
-				lineStart: function(str) {
+				lineStart: function (str) {
 					return this.char + str;
 				}
-			}
+			};
 		},
-		constr = function() {
+		constr = function () {
 			var pipe = orphanFactory('|'),
 				hyper = orphanFactory('[', /\[\S+$/),
-                getCharPerLine = function(l, w, remChar) {
+                getCharPerLine = function (l, w, remChar) {
 					var charWidth = l / remChar;
 					if (w < l) {
 						return Math.floor(w / charWidth);
 					}
 					return Math.floor(remChar);
 				};
-			hyper.isOrphaned = function(str) {
+			hyper.isOrphaned = function (str) {
 				return str.search(this.reg) !== -1;
 			};
-			hyper.lineEnd = function(str) {
+			hyper.lineEnd = function (str) {
 				return str.replace(this.reg, '');
 			};
-			hyper.lineStart = function(orphan, str) {
+			hyper.lineStart = function (orphan, str) {
 				return orphan.match(this.reg)[0] + str;
 			};
                 
 			return {
-				init: function(element, face, size) {
+				init: function (element, face, size) {
 					gang = [];
 					this.remaining_text = element.innerText;
 					//https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/
@@ -85,13 +85,13 @@ gAlp.Splitter = (function(gang) {
 					this.process(char_per_line);
 					return this;
 				},
-				output: function(tag) {
+				output: function (tag) {
 					var open = '<' + tag + '>',
 						close = '</' + tag + '>';
 					return open + gang.join(close + open) + close;
 				},
 				
-				process: function(char_per_line) {
+				process: function (char_per_line) {
 					var end = getBreakPoint(this.remaining_text.slice(0, char_per_line)),
                         saved_text;
 					if (this.remaining_text.length <= char_per_line) {
@@ -114,7 +114,7 @@ gAlp.Splitter = (function(gang) {
 						this.process(char_per_line);
 					}
 				},
-				getGang: function() {
+				getGang: function () {
 					return gang;
 				}
 			};

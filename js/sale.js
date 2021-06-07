@@ -439,12 +439,6 @@ if (!window.gAlp) {
 			return COMP(PTL(modulo, n), increment);
 		},
 		doLoop = function (coll) {
-			/*
-			var ret = _.map(coll, function (el){
-			    return Looper.from([el, el.previousSibling], doInc(2));
-			});
-			Looper.tab = Looper.from(ret, doInc(doGet('length')(coll)));
-			*/
 			Looper.tabs = Looper.from(coll, doInc(doGet('length')(coll)));
 		},
 		makeTabs = deferEach(true_captions)(doLI_cb),
@@ -628,6 +622,27 @@ if (!window.gAlp) {
 			//utils.highLighter.perform();
 		};
 	factory();
+    
+    var coll = [[0,2], [1,3], [4,6], [5,7], [8, 10], [9,11]],
+    g_coll = coll.map(function(sub){
+        return Looper.from(sub, increment);
+    }),
+        eq = PTL(equals, coll[0]);
+    
+    
+    
+    
+    /*
+    coll = Looper.from(g_coll, increment);    
+    coll.find = function(tgt){
+       this.set(_.findIndex(this.group.members, function(iterator){
+           return iterator.group.members.find(PTL(equals, tgt));
+       }));
+    };
+    */
+    
+    utils.con(_.find(coll, eq));
+    
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
