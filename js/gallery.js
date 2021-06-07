@@ -467,8 +467,7 @@
 				mynext = COR(ptL(invokeArgs, equals, 'forwardbutton'), next_driver),
 				myprev = COR(ptL(invokeArgs, equals, 'backbutton'), prev_driver),
 				myplayer = COR(function () {
-                    utils.report('bolt');
-					//controller();
+					controller();
 					return true;
 				}, invoke_player);
 			myplayer.validate = function () {
