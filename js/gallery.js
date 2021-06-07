@@ -177,26 +177,32 @@
 		},
 		getPausePath = ptL(utils.getBest, doComp(ptL(utils.hasClass, 'portrait'), getThumbs), [pausepath + 'pause_long.png', pausepath + 'pause.png']),
 		doMakeBase = function (source, target) {
-			var img = addElements(),
-                src = img.parentNode.getAttribute('href');
+			var img = addElements();
 			doMap(img.parentNode, [
 				['href', doParse(source)]
 			]);
 			doMap(img.parentNode.parentNode, [
 				['id', target]
 			]);
-			return onBase(img, doParse(src), new utils.FauxPromise(_.rest(arguments, 2)));
+			return onBase(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakeSlide = function (source, target) {
 			var img = addElements(),
-                src = img.parentNode.getAttribute('href');
+                x;
+            
+            try {
+                x = doParse(getBaseSrc());
+            }
+                 catch(e){
+                            utils.report(e+'!');
+                        }
 			doMap(img.parentNode, [
-				['href', doParse(getBaseSrc())]
+				['href', x]
 			]);
 			doMap(img.parentNode.parentNode, [
 				['id', target]
 			]);
-			return onLoad(img, doParse(src), new utils.FauxPromise(_.rest(arguments, 2)));
+			return onLoad(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakePause = function (path) {
 			var img = addElements();
@@ -439,13 +445,8 @@
 				controller = function () {
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
-                        try {
 						$controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
 						doMakePause(getPausePath());
-                        }
-                        catch(e){
-                            utils.report(e);
-                        }
 					}
 				},
 				COR = function (predicate, action) {
