@@ -96,3 +96,7 @@ html.js #sell.extent figure{
      flex: 1 1 3em;
     background: teal;
 }
+
+_:-ms-fullscreen, :root .extent figure {
+  background: pink;
+}
