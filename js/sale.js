@@ -603,6 +603,7 @@ if (!window.gAlp) {
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
+            utils.report();
 		};
 	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
