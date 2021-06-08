@@ -86,12 +86,11 @@ html.cssgrid body#gallery {
 
 
 html.js #sell.extent {
-    display: flex;
+    display: table;
     background: orange;
 }
 
 html.js #sell.extent figure{
-     ms-flex: 1 1 3em;
-     flex: 1 1 3em;
+    display: table-cell;
     background: lime;
 }
