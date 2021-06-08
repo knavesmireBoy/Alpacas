@@ -88,15 +88,16 @@ html.cssgrid body#gallery {
 html.js #sell.extent {
     display: ms-flexbox;
     display: flex;
-    background: lime;
 }
 
 html.js #sell.extent figure{
      ms-flex: 0 0 3em;
      flex: 1 1 3em;
-    background: teal;
 }
 
-_:-ms-fullscreen, :root .extent figure {
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    _:-ms-fullscreen, :root .extent figure {
   background: pink;
 }
+}
+
