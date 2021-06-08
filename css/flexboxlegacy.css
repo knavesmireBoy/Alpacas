@@ -87,7 +87,7 @@ html.cssgrid body#gallery {
 
 html.js #sell.extent {
     display: -ms-flexbox;
-    display: flex;
+    display: box;
 }
 
  .js #sell.extent figure {
@@ -110,4 +110,7 @@ html.js #sell.extent {
         background: pink;
     }
 }
+
+
+*::-ms-backdrop, :root #sell.extent figure { background: pink; }
 
