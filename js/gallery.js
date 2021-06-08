@@ -201,11 +201,13 @@
 			doMap(img.parentNode.parentNode, [
 				['id', 'paused']
 			]);
+            /*
 			doMap(img.parentNode.parentNode, [
 				[
 					[cssopacity.getKey(), cssopacity.getValue(0.5)]
 				]
 			]);
+            */
 			return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
