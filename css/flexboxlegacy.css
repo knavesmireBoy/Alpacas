@@ -107,7 +107,7 @@ html.js #sell.extent {
         background: purple;
     }
 
-@media all and (-ms-high-contrast: none) {
+@media all and (-ms-high-contrast: active) {
 :root #sell.extent figure {
         background: pink;
     }
