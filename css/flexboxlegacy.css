@@ -5,6 +5,11 @@ html.js body#alpacas_for_sale {
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 
+html.js body#gallery {
+	background-color: deeppink;
+}
+
+
 html.flexboxlegacy body#gallery {
 	background-color: gold;
 }
@@ -23,9 +28,6 @@ html.flexbox body#gallery {
 
 html.cssgrid body#gallery {
 	background-color: turquoise;
-}
-html.js body#gallery {
-	background-color: deeppink;
 }
 
 
@@ -80,4 +82,10 @@ html.js body#gallery {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     padding: 0;
+}
+
+
+.js #sell.extent figure {
+    flex: 1;
+    background: red;
 }
