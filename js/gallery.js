@@ -378,7 +378,7 @@
 						},
 						inc: function () {
 							recur.i -= 1;
-                            console.log(recur.i)
+                            console.log(recur.i);
 						},
 						reset: function () {
 							recur.i = 150;
@@ -399,13 +399,13 @@
 				execute: function () {
 					if (!recur.t) {
 						get_play_iterator(true);
+                        utils.report('go');
 					}
 					if (player.validate()) {
 						player.reset();
 					} else {
 						doOpacity();
 						doRecur();
-                        utils.report('go');
 					}
 				},
 				undo: function (flag) {

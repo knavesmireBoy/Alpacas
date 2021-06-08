@@ -85,7 +85,7 @@ html.cssgrid body#gallery {
 }
 
 
-html.js #sell.extent figure {
+html.js #sell.extent {
     display: ms-flex;
     background: orange;
 }
