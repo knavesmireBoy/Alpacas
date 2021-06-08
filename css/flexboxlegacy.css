@@ -93,6 +93,8 @@ html.js #sell.extent {
  #sell.extent figure{
      ms-flex: 1 1 0%;
      flex: 1 1 0%;
+     ms-flex-preferred-size: 4em;
+     flex-basis: 4em;
      background: blue;
 }
 
