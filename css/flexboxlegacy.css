@@ -90,7 +90,7 @@ html.js #sell.extent {
     display: flex;
 }
 
- #sell.extent figure {
+ .js #sell.extent figure {
         -ms-flex-positive: 1;
             flex-grow: 1;
     -ms-flex-negative: 1;
@@ -105,7 +105,7 @@ html.js #sell.extent {
         background: purple;
     }
 
-@media screen and (-ms-high-contrast: active) {
+@media all and (-ms-high-contrast: none) {
 :root #sell.extent figure {
         background: pink;
     }
