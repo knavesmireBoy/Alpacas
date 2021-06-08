@@ -99,15 +99,16 @@ html.js #sell.extent {
         flex-shrink: 1;
     -ms-flex-preferred-size: 4em;
         flex-basis: 4em;
+     width: 4em;
      background-color: linen;
 }
 
 
-:root #sell.extent figure {
+_:-ms-fullscreen, :root #sell.extent figure {
         background: purple;
     }
 
-@media all and (-ms-high-contrast: active) {
+@media screen and (-ms-high-contrast: active) {
 :root #sell.extent figure {
         background: pink;
     }
