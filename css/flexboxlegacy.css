@@ -90,7 +90,7 @@ html.js #sell.extent {
     display: flex;
 }
 
- #sell.extent figure{
+ #sell.extent figure {
      ms-flex: 1 1 0%;
      flex: 1 1 0%;
      ms-flex-preferred-size: 4em;
@@ -99,7 +99,7 @@ html.js #sell.extent {
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    _:-ms-fullscreen, :root #sell.extent figure {
+:root #sell.extent figure {
         background: pink;
     }
 }
