@@ -102,3 +102,7 @@ html.js #sell.extent {
     }
 }
 
+ _:-ms-fullscreen, :root #sell.extent figure {
+        background: purple;
+    }
+
