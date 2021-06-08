@@ -1194,7 +1194,7 @@ gAlp.Util = (function () {
 		curryFactory: curryFactory,
 		doAlternate: doAlternate,
 		doMap: function doMap(el, v) {
-			if (Array.isArray(v[0][0])) {
+			if (_.isArray(v[0][0])) {
 				_.each(v[0], function (sub) {
 					return attrMap(getResult(el), _.object([
 						[sub[0], sub[1]]
