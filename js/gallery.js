@@ -405,6 +405,7 @@
 					} else {
 						doOpacity();
 						doRecur();
+                        utils.report('go');
 					}
 				},
 				undo: function (flag) {
