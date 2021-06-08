@@ -220,7 +220,8 @@ function getNativeOpacity(bool) {
 			},
 			getValue: function (val) {
 				var value = val || v;
-				return bool ? 'alpha(opacity=' + value + ')' : value / 100;
+                return bool ? 'alpha(opacity=' + value * 100 + ')' : value;
+				//return bool ? 'alpha(opacity=' + value/100 + ')' : value / 100;
 			}
 		};
 	};
