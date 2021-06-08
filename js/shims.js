@@ -221,8 +221,8 @@ function getNativeOpacity(bool) {
 			getValue: function (val) {
 				var value = val || v;
                 document.getElementsByTagName('h2')[0].innerHTML = val;
-                return bool ? 'alpha(opacity=' + value * 100 + ')' : value;
-				//return bool ? 'alpha(opacity=' + value/100 + ')' : value / 100;
+                //return bool ? 'alpha(opacity=' + value * 100 + ')' : value;
+				return bool ? 'alpha(opacity=' + value + ')' : value / 100;
 			}
 		};
 	};

@@ -354,6 +354,7 @@
 						},
 						inc: function () {
 							recur.i -= 1;
+                            utils.report(recur.i);
 						},
 						reset: function () {
 							doSlide();
@@ -378,13 +379,14 @@
 						},
 						inc: function () {
 							recur.i -= 1;
+                            //console.log(recur.i)
 						},
 						reset: function () {
 							recur.i = 150;
 							doSlide();
 							doOpacity();
 							doBase();
-                            utils.report($('base').src);
+                            //utils.report($('base').src);
 							undostatic();
 						}
 					},
