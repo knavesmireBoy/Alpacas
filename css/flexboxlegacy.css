@@ -24,6 +24,10 @@ html.flexbox body#gallery {
 html.cssgrid body#gallery {
 	background-color: turquoise;
 }
+html.js body#gallery {
+	background-color: deeppink;
+}
+
 
 .flexboxlegacy .sell #sell {
 	display: -webkit-box;
