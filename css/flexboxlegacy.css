@@ -95,7 +95,7 @@ html.js #sell.extent {
      flex: 1 1 0%;
      ms-flex-preferred-size: 4em;
      flex-basis: 4em;
-     background: blue;
+     background-color: linen;
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -104,7 +104,7 @@ html.js #sell.extent {
     }
 }
 
- _:-ms-fullscreen, :root #sell.extent figure {
+:root #sell.extent figure {
         background: purple;
     }
 
