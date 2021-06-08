@@ -85,7 +85,7 @@ html.cssgrid body#gallery {
 }
 
 
-html.flexbox #sell.extent figure {
-    flex: 1 1 5em;
-    background: pink;
+html.js #sell.extent figure {
+    ms-flex: 1 1 5em;
+    background: violet;
 }
