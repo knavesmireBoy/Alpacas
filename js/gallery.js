@@ -384,6 +384,7 @@
 							doSlide();
 							doOpacity();
 							doBase();
+                            utils.report($('base').src);
 							undostatic();
 						}
 					},
