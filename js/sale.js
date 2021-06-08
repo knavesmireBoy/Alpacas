@@ -342,7 +342,7 @@ if (!window.gAlp) {
 				caption = twice(invokeArg)('figcaption'),
 				append = thrice(doMethod)('appendChild')(a),
 				cap = utils.getter(captions.slice(-alp_len), i);
-			_.compose(PTL(klasAdd, 'extent'), PTL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
+			_.compose(PTL(klasRem, 'tog'), PTL(klasAdd, 'extent'), PTL(utils.climbDom, 2), utils.setText(cap), caption, anCr, doGet('parentNode'), append, fig, anCr, $$('sell'), utils.hide)(a);
 		},
 		undoCaption_cb = function (a, i) {
 			var sell = utils.$('sell'),
