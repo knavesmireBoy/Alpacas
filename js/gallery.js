@@ -329,6 +329,7 @@
 				if (slide) {
 					val = flag ? 1 : recur.i / 100;
 					val = cssopacity.getValue(val);
+                    utils.report(val);
 					doMap(slide, [
 						[
 							[cssopacity.getKey(), val]
@@ -399,7 +400,6 @@
 				execute: function () {
 					if (!recur.t) {
 						get_play_iterator(true);
-                        utils.report('go');
 					}
 					if (player.validate()) {
 						player.reset();
