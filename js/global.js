@@ -1226,7 +1226,9 @@ gAlp.Util = (function () {
 				//invoke method allows a function to be invoked directly NOT as an event listener
 				if (e) {
 					_.each(actions, function (a) {
-						myEventListener.preventers[a](e);
+                        if(myEventListener.preventers[a]){
+                            myEventListener.preventers[a](e);
+                        }
 					});
 				}
 				return wrapped(e);
