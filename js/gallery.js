@@ -440,15 +440,11 @@
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
                         $controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
-                         doMakePause(getPausePath());
-                        utils.report(utils.getByTag('li', getThumbs).length);
-                        /*
                         try {
                            doMakePause(getPausePath()); 
                         } catch (e) {
                             utils.report(e);
                         }
-                        */
                         
                     }
 				},
