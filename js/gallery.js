@@ -354,7 +354,6 @@
 						},
 						inc: function () {
 							recur.i -= 1;
-                            utils.report(recur.i);
 						},
 						reset: function () {
 							doSlide();
@@ -379,7 +378,7 @@
 						},
 						inc: function () {
 							recur.i -= 1;
-                            //console.log(recur.i)
+                            console.log(recur.i)
 						},
 						reset: function () {
 							recur.i = 150;
