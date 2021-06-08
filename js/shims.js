@@ -93,31 +93,33 @@ if (!Array.prototype.pop) {
 	};
 }
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (f) {
-    "use strict";
-    //document.getElementsByTagName('h2')[0].innerHTML = f;
+	"use strict";
 	return setTimeout(f, 1000 / 60);
 }; // simulate calling code 60 
 window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || function (requestID) {
-    "use strict";
+	"use strict";
 	clearTimeout(requestID);
 }; //fall back
 window.dispatchEvent = window.dispatchEvent || window.fireEvent;
-
 if (!String.prototype.trim) {
 	String.prototype.trim = function () {
-		return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+        "use strict";
+        return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 	};
 }
 String.prototype.sansNumber = function () {
+	"use strict";
 	var str = '',
-        n = parseFloat(this),
+		n = parseFloat(this),
 		i = !isNaN(n) ? str + n : 0;
 	return this.substring(i.length);
 };
 String.prototype.isUpper = function () {
+	"use strict";
 	return this.toString() === this.toUpperCase();
 };
 String.prototype.bloated = function () {
+	"use strict";
 	var str = this.toString();
 	return Number(str.length - str.trim().length);
 };
@@ -132,22 +134,20 @@ String.prototype.abbreviate = function (token) {
 	}
 	return res;
 };
-
-	String.prototype.honor = function () {
-        "use strict";
-		var str;
-		if (this.constructor.prototype.saved) {
-			str = this.constructor.prototype.saved.join(' ');
-			this.constructor.prototype.saved = null;
-		} else {
-			this.constructor.prototype.saved = this.split(' ');
-			str = this.constructor.prototype.saved[1];
-		}
-		return str;
-	};
-
-
+String.prototype.honor = function () {
+	"use strict";
+	var str;
+	if (this.constructor.prototype.saved) {
+		str = this.constructor.prototype.saved.join(' ');
+		this.constructor.prototype.saved = null;
+	} else {
+		this.constructor.prototype.saved = this.split(' ');
+		str = this.constructor.prototype.saved[1];
+	}
+	return str;
+};
 String.prototype.toCamelCase = function (char) {
+    "use strict";
 	var reg = new RegExp(char + "([a-z])", 'g');
 	return this.replace(reg, function (match, captured) {
 		return captured.toUpperCase();
@@ -178,6 +178,7 @@ if (typeof Function.prototype.bind === 'undefined') {
 if (typeof Function.prototype.wrap === 'undefined') {
 	//WORKHORSE
 	Function.prototype.wrap = function (wrapper, options) {
+        "use strict";
 		var method = this;
 		return function () {
 			var args = [],
@@ -201,13 +202,17 @@ if (typeof Function.prototype.wrap === 'undefined') {
 	};
 }
 
+/*
 function ieOpacity(v) {
+    "use strict";
 	this['-ms-filter'] = 'progid:DXImageTransform.Microsoft.Alpha=' + (v * 100) + ')';
 	this.filter = 'alpha(opacity=' + (v * 100) + ')';
 	return this;
 }
+*/
 
 function getNativeOpacity(bool) {
+    "use strict";
 	return function (v) {
 		return {
 			getKey: function () {

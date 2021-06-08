@@ -70,57 +70,6 @@
 	}
 }/*supports*/
 
-.flexbox article.intro, .sell #sell, ul#list {
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: -webkit-flex;
-		display: flex;
-	}
-
-html.flexbox body {
-    background: blue;
-}
-
-	#sell>* {
-		-webkit-box-flex: 1;
-		-ms-flex: 1 1;
-		-webkit-flex: 1 1 40%;
-		        flex: 1 1 40%;
-		-ms-flex-item-align: start;
-		-webkit-align-self: flex-start;
-		        align-self: flex-start;
-	}
-
-	#sell table {
-		table-layout: fixed;
-	}
-	div#sell>a {
-		/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
-		padding: .825em;
-	}
-	#sell.extent>a {
-		/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
-		padding: 0em;
-	}
-	#sell.tog {
-		padding: 3%;
-	}
-	#sell.tog a {
-		margin: 0%;
-	}
-	#sell.extent {
-		display: -webkit-box;
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-	}
-	.js #sell.extent figure {
-		-webkit-box-flex: 1;
-		-webkit-flex: 1 1 1%;
-		    -ms-flex: 1 1 1%;
-		        flex: 1 1 1%;
-		width: auto;
-	}
 /*@supports (display: grid){ }*/
 
 /* https://www.smashingmagazine.com/2019/02/css-browser-support/ */
