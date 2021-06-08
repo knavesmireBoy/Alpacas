@@ -91,20 +91,25 @@ html.js #sell.extent {
 }
 
  #sell.extent figure {
-     ms-flex: 1 1 0%;
-     flex: 1 1 0%;
-     ms-flex-preferred-size: 4em;
-     flex-basis: 4em;
+         ms-flex: 1;
+    flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -ms-flex-negative: 1;
+        flex-shrink: 1;
+    -ms-flex-preferred-size: 4em;
+        flex-basis: 4em;
      background-color: linen;
 }
+
+
+:root #sell.extent figure {
+        background: purple;
+    }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 :root #sell.extent figure {
         background: pink;
     }
 }
-
-:root #sell.extent figure {
-        background: purple;
-    }
 
