@@ -447,7 +447,7 @@
                         try {
                            doMakePause(getPausePath()); 
                         } catch (e) {
-                            utils.report(e);
+                            utils.report(e.number);
                         }
                         
                     }
