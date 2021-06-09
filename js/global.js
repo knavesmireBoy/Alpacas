@@ -720,8 +720,8 @@ gAlp.Util = (function () {
 			return target;
 		};
 	}
-/*
-	function setFromArray1(validate, method, classArray, target) {
+
+	function setFromArray(validate, method, classArray, target) {
 		//target may be a function returning a target element
 		if (!target) {
 			return null;
@@ -740,9 +740,9 @@ gAlp.Util = (function () {
 		_.each(_.flatten([classArray]), fn);
 		return target;
 	}
-    */
+    
 	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
-	function setFromArray(validate, method, classArray, target) {
+	function setFromArray2(validate, method, classArray, target) {
 		//console.log(arguments)
 		//gAlp.Util.report(target.classList);
 		//target may be a function returning a target element
