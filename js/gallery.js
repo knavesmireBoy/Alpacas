@@ -208,7 +208,7 @@
 				]
 			]);
             
-			return onLoad(img, path);
+			//return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
 			var img = getDomTargetImg($(id));
@@ -446,7 +446,7 @@
                         try {
                             doMakePause(getPausePath()); 
                         } catch (e) {
-                            utils.report(e+': '+ getPausePath());
+                            utils.report(e);
                         }
                          
                         
