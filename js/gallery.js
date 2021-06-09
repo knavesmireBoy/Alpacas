@@ -202,11 +202,17 @@
 				['id', 'paused']
 			]);
             
-			doMap(img.parentNode.parentNode, [
+            //utils.report(img.parentNode.parentNode);
+                        try {
+                            doMap(img.parentNode.parentNode, [
 				[
 					[cssopacity.getKey(), cssopacity.getValue(0.5)]
 				]
 			]);
+                        } catch (e) {
+                            utils.report(e);
+                        }
+			
             
 			return onLoad(img, path);
 		},
@@ -443,14 +449,6 @@
 					if (!$('slide')) {
                         $controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
                         doMakePause(getPausePath()); 
-                        /*
-                        try {
-                            doMakePause(getPausePath()); 
-                        } catch (e) {
-                            utils.report(e);
-                        }
-                         
-                        */
                     }
 				},
 				COR = function (predicate, action) {
