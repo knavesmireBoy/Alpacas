@@ -201,13 +201,13 @@
 			doMap(img.parentNode.parentNode, [
 				['id', 'paused']
 			]);
-            /*
+            
 			doMap(img.parentNode.parentNode, [
 				[
 					[cssopacity.getKey(), cssopacity.getValue(0.5)]
 				]
 			]);
-            */
+            
 			return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
@@ -444,12 +444,11 @@
 					if (!$('slide')) {
                         $controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
                         try {
-                            var p = getPausePath();
-                          
+                            doMakePause(getPausePath()); 
                         } catch (e) {
-                            utils.report(e);
+                            utils.report(e+': '+ getPausePath());
                         }
-                         doMakePause(p); 
+                         
                         
                     }
 				},
