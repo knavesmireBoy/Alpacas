@@ -87,7 +87,8 @@ html.cssgrid body#gallery {
 
 html.js #sell.extent {
     display: -ms-flexbox;
-    display: box;
+    display: flexbox;
+    display: flex;
 }
 
  .js #sell.extent figure {
@@ -97,6 +98,7 @@ html.js #sell.extent {
         flex-shrink: 1;
     -ms-flex-preferred-size: 4em;
         flex-basis: 4em;
+     min-width: 0;
      background-color: navajowhite;
 }
 
