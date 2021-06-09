@@ -13,6 +13,7 @@
 				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
 			},
 			getValue: function (val) {
+                utils.report(val+':: '+ bool);
 				return bool ? 'alpha(opacity=' + val * 100 + ')' : val;
 			}
 		};
