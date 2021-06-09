@@ -93,9 +93,9 @@ html.js #sell.extent {
 
  .js #sell.extent figure {
       min-width: 0;
-     -ms-flex: 1 1 100%;
+     -ms-flex: 1 1 60px;
 
-     background-color: pink;
+     background-color: firebrick;
 }
 
 	@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
