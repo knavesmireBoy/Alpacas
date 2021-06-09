@@ -94,11 +94,12 @@ if (!Array.prototype.pop) {
 }
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (f) {
 	"use strict";
-	return setTimeout(f, 1000 / 60);
+	//return window.setTimeout(f, (1000 / 60));
+	return window.setTimeout(f, 16.666);
 }; // simulate calling code 60 
 window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || function (requestID) {
 	"use strict";
-	clearTimeout(requestID);
+	window.clearTimeout(requestID);
 }; //fall back
 window.dispatchEvent = window.dispatchEvent || window.fireEvent;
 if (!String.prototype.trim) {

@@ -93,7 +93,7 @@ html.js #sell.extent {
 
  .js #sell.extent figure {
       min-width: 0;
-     width: 100px;
+     width: 120px;
         -ms-flex-positive: 1;
             flex-grow: 1;
     -ms-flex-negative: 1;
