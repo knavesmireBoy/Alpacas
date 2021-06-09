@@ -114,5 +114,5 @@ html.js #sell.extent {
 }
 
 
-*::-ms-backdrop, :root #sell.extent figure { background: pink; }
+:root #sell.extent figure { background: pink; }
 

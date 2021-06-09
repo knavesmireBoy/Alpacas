@@ -10,7 +10,6 @@
 	function getNativeOpacity(bool) {
 		return {
 			getKey: function () {
-                utils.report(Modernizr.prefixedCSS('opacity'));
 				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
 			},
 			getValue: function (val) {
@@ -321,6 +320,7 @@
 
 			function doRecur() {
 				player.inc();
+                utils.report(recur.i);
 				recur.t = window.requestAnimationFrame(recur.execute);
 			}
 
@@ -330,7 +330,6 @@
 				if (slide) {
 					val = flag ? 1 : recur.i / 100;
 					val = cssopacity.getValue(val);
-                    utils.report(val);
 					doMap(slide, [
 						[
 							[cssopacity.getKey(), val]
