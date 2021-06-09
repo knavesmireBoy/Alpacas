@@ -10,6 +10,7 @@
 	function getNativeOpacity(bool) {
 		return {
 			getKey: function () {
+                utils.report(Modernizr.prefixedCSS('opacity'));
 				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
 			},
 			getValue: function (val) {
@@ -201,13 +202,13 @@
 			doMap(img.parentNode.parentNode, [
 				['id', 'paused']
 			]);
-            /*
+            
 			doMap(img.parentNode.parentNode, [
 				[
 					[cssopacity.getKey(), cssopacity.getValue(0.5)]
 				]
 			]);
-            */
+            
 			return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
@@ -379,7 +380,7 @@
 						},
 						inc: function () {
 							recur.i -= 1;
-                            console.log(recur.i);
+                            //console.log(recur.i);
 						},
 						reset: function () {
 							recur.i = 150;
@@ -485,7 +486,7 @@
 			};
 			mynext.setSuccessor(myprev);
 			myprev.setSuccessor(myplayer);
-			recur.i = 50; //slide is clone of base initially, so fade can start quickly
+			recur.i = 47; //slide is clone of base initially, so fade can start quickly
 			return mynext;
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),

@@ -813,6 +813,7 @@ gAlp.Util = (function () {
 					continue;
 				}
 				if (style) {
+                    gAlp.Util.report(k+': '+map[k]);
 					el.style.setProperty(k, map[k]);
 				} else {
 					//el.setAttribute(k, map[k]);
