@@ -208,7 +208,7 @@
 				]
 			]);
             
-			//return onLoad(img, path);
+			return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
 			var img = getDomTargetImg($(id));
