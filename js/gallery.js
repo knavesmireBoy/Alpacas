@@ -10,7 +10,8 @@
 	function getNativeOpacity(bool) {
 		return {
 			getKey: function () {
-				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
+				//return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
+				return 'opacity';
 			},
 			getValue: function (val) {
 				return bool ? 'alpha(opacity=' + val * 100 + ')' : val;
@@ -206,7 +207,7 @@
                         try {
                             doMap(img.parentNode.parentNode, [
 				[
-					['opacity', cssopacity.getValue("0.5")]
+					[cssopacity.getKey(), cssopacity.getValue("0.5")]
 				]
 			]);
                         } catch (e) {
