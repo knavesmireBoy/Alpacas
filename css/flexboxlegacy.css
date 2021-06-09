@@ -93,14 +93,20 @@ html.js #sell.extent {
 
  .js #sell.extent figure {
       min-width: 0;
-     width: 120px;
+     width: 12px;
         -ms-flex-positive: 1;
             flex-grow: 1;
     -ms-flex-negative: 1;
         flex-shrink: 1;
-    -ms-flex-preferred-size: 50px;
-        flex-basis: 50px;
+    -ms-flex-preferred-size: 80px;
+        flex-basis: 80px;
     
      background-color: pink;
 }
 
+	@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
+		.flexboxlegacy figure a {
+			-webkit-box-shadow: none;
+			box-shadow: none;
+		}
+	}

@@ -432,7 +432,7 @@
 				doPlaying = defer([notplaying, playing]),
 				doDisplay = defer([function () {}, playtime]),
 				unlocate = thricedefer(doMethod)('undo')(null)(locate),
-				invoke_player = deferEach([doSlide, doPlaying, doDisplay])(getResult),
+				invoke_player = deferEach([doSlide/*, doPlaying, doDisplay*/])(getResult),
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
@@ -446,7 +446,7 @@
                         try {
                            doMakePause(getPausePath()); 
                         } catch (e) {
-                            utils.report(e.number);
+                            utils.report(e);
                         }
                         
                     }

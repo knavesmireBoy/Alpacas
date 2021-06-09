@@ -145,11 +145,13 @@
 	}
 }
 	@media only screen and (max-width: 767px) {
+        @supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
 		ul#thumbnails.gallery {
 			-ms-grid-columns: (1fr)[5] .75fr;
 			grid-template-columns: repeat(5, 1fr) .75fr;
 		}
 	}
+}
 	@media only screen and (max-width: 667px) {
 		@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
 			.intro #sell.extent {
@@ -332,10 +334,6 @@
 		}
 	}
 	@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
-		.flexboxlegacy figure a {
-			-webkit-box-shadow: none;
-			box-shadow: none;
-		}
 		@supports ((display: -ms-grid) or (display: grid)) {
 			ul#thumbnails.gallery li {
 				width: auto;
