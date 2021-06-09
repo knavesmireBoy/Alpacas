@@ -212,7 +212,7 @@ ul.tab li.current a:hover {
 	color: hsla(0, 100%, 30%, 1);
 }
 #sell figure:hover {
-    background: linear-gradient(150deg, #FFF, rgb(227, 233, 200), #FFF, rgb(222, 233, 200)));
+    background: linear-gradient(150deg, #FFF, rgb(227, 233, 200), #FFF, rgb(222, 233, 200));
 	color: #6e2900;
 	border-color: black;
 }
@@ -369,7 +369,7 @@ ul#thumbnails li a:hover, ul#thumbnails li a:active {
 #controls button#playbutton {
 	background-position: 50% 29%;
 }
-#controls.playing button#playbutton {
+.playing #controls button#playbutton {
 	background-position: 50% 44%;
 	opacity: 0.9;
 }
