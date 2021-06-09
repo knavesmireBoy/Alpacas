@@ -93,14 +93,8 @@ html.js #sell.extent {
 
  .js #sell.extent figure {
       min-width: 0;
-     width: 12px;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -ms-flex-negative: 1;
-        flex-shrink: 1;
-    -ms-flex-preferred-size: 80px;
-        flex-basis: 80px;
-    
+     -ms-flex: 1 1 100%;
+
      background-color: pink;
 }
 
