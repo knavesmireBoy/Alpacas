@@ -206,11 +206,12 @@
                         try {
                             doMap(img.parentNode.parentNode, [
 				[
-					[cssopacity.getKey(), cssopacity.getValue(0.5)]
+					[cssopacity.getKey(), cssopacity.getValue(.5)]
 				]
 			]);
                         } catch (e) {
                             utils.report(e);
+                            utils.report(img.parentNode.parentNode);
                         }
 			
             
