@@ -210,8 +210,8 @@
 				]
 			]);
                         } catch (e) {
-                            utils.report(e);
-                            utils.report(img.parentNode.parentNode);
+                            //utils.report(e);
+                            utils.report(cssopacity.getKey());
                         }
 			
             
