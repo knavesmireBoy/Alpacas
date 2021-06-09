@@ -92,14 +92,15 @@ html.js #sell.extent {
 }
 
  .js #sell.extent figure {
+      min-width: 0;
+     width: auto;
         -ms-flex-positive: 1;
             flex-grow: 1;
     -ms-flex-negative: 1;
         flex-shrink: 1;
-    -ms-flex-preferred-size: auto;
-        flex-basis: auto;
-     min-width: 0;
-     width: 0;
-     background-color: navajowhite;
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+    
+     background-color: blue;
 }
 
