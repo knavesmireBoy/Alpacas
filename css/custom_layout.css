@@ -12,7 +12,6 @@ article.intro {
 	padding: 0;
 	vertical-align: bottom;
     box-sizing: border-box;
-    background: red;
 }
 ul.tab {
 	transform: translateX(-1000px);
@@ -52,35 +51,40 @@ ul.loop li a::after, ul.loop li a::before {
 	display: inline;
 	display: inline-block;
 }
-.extent>figure {
+.extent figure {
     width: 23%;
 }
 
+.five figure {
+    width: 18%;
+}
 
-#sell.extent figure > * {
+.six figure {
+    width: 14.6%;
+}
+.extent figure > * {
     border: 10px solid white;
 }
 
-#sell.extent figure a {
-    border-width: 10px 10px 0;
+.extent figure a {
+    border-width: 0 10px;
 }
 
-#sell.extent figure figcaption {
-    border-width: 5px 0 0;
+.extent figure a {
+    padding: 10px 0;
+}
+
+
+.extent figure figcaption {
+    border-width: 5px;
 }
 
 .sell .tog a {
 	margin-left: 0;
 }
 
-#sell {
-	display: none;
-	overflow: hidden;
-}
-#sell a {
-	display: none;
-}
-#sell a, ul#thumbnails, ul#list {
+
+#sell, #sell > a, ul#thumbnails, ul#list {
 	overflow: hidden;
 }
 ul#list li, ul#list li a {
@@ -99,17 +103,17 @@ ul#list li, ul#list li a {
 	z-index: 0;
 	margin-bottom: 1em;
 }
-#sell a {
+#sell > a {
 	padding: 1.6%;
 	*height: 1%;
 }
-#sell table {
+table {
 	width: 46.5%;
 	min-width: 18em;
 	margin-right: 2.5%;
 	float: left;
 }
-#sell table table {
+table table {
 	margin-right: 0%;
 	width: 100%;
 }
@@ -140,17 +144,17 @@ ul#list li, ul#list li a {
 .loop+#sell {
 	margin-top: 0px;
 }
-#sell.extent {
+.extent {
 	left: 0;
 	margin: 0 auto;
 	height: 1%;
 	*padding: .6em .3em;
 	*height: 1%;
 }
-#sell.extent {
+.extent {
 	*padding: 2% 1%;
 }
-#sell.extent a {
+.extent a {
 	padding: 0;
 }
 #alpacas_for_sale article.intro {
@@ -160,15 +164,15 @@ ul#list li, ul#list li a {
 #alpacas_for_sale .sell aside, .touch {
 	left: -9999px;
 }
-
-.sell aside, #sell table,  #sell.tog table.show, #sell.extent table.show {
+#sell a {
+	display: block;
+}
+.sell aside, table,  #sell a, .tog table.show, .extent table.show {
 	position: absolute;
 	left: -9999px;
 }
-#sell a.show, #sell.extent a {
-	display: block;
-}
-#sell table.show {
+
+table.show, #sell a.show, #sell.extent a {
 	position: static;
 	left: 0px;
 }
@@ -177,10 +181,11 @@ ul#list li, ul#list li a {
 .no-js div#sell a {
 	margin: 0 0 2% 2%;
 }
-html.js #sell a, html.js #sell table {
+html.js #sell a, html.js table {
 	*display: none;
+
 }
-html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
+html.js #sell a.show, html.js .extent a, html.js table.show {
 	*display: block;
 }
 .no-js div#sell a:last-child {
@@ -204,7 +209,6 @@ body {}
 #gallery #yag > img {
 	color: white;
 }
-
 
 ul#thumbnails {
 	margin: 6% auto 0;

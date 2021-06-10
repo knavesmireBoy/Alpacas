@@ -22,7 +22,7 @@ tr:nth-child(7) td {
 	text-transform: uppercase;
 	color: #900;
 }
-ul.tab li a, #sell, #sell a, #sell figure {
+ul.tab li a, #sell, figure, figure a {
 	border: solid 1px black;
 }
 ul.loop li a {
@@ -137,12 +137,12 @@ ul.tab li.current a:hover {
 	box-shadow: 2px 2px 5px #FFF;
 	opacity: 1;
 }
-#sell figure {
+figure {
 	border-color: #556B2F;
 	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
 	background: #FFF;
 }
-#sell table {
+table {
 	padding: 0px;
 }
 #sell>table {
@@ -155,29 +155,30 @@ ul.tab li.current a:hover {
 	color: #944;
 	color: hsla(0, 100%, 30%, .3);
 }
-#sell table table {
+table table {
 	font-size: 1em;
 	border-width: 0;
 }
-#sell figure a {
+figure a {
 	border: solid 1px black;
 	box-shadow: 0px 0px 2px black;
 }
 
-#sell figure a img{
+figure a img{
 	border: solid 1px black;
+    box-shadow: 0 0 3px black;
 }
-#sell table td, #sell table table td {
+table td, table table td {
 	border-width: 1px 0 0;
 	padding: .5em;
 }
 /**/
 
-#sell table tbody {
+table tbody {
 	border: 0px;
 	min-width: 100%;
 }
-#sell, #sell a, #sell table, #sell table td {
+#sell, #sell > a, table, table td {
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
 }
@@ -211,8 +212,7 @@ ul.tab li.current a:hover {
 	color: #900;
 	color: hsla(0, 100%, 30%, 1);
 }
-#sell figure:hover {
-    background: linear-gradient(150deg, #FFF, rgb(227, 233, 200), #FFF, rgb(222, 233, 200));
+figure:hover {
 	color: #6e2900;
 	border-color: black;
 }
@@ -227,42 +227,42 @@ ul.tab li.current a:hover {
 	background: #FFF;
 	padding: 3px;
 }
-#sell figure:hover a {
+figure:hover a {
 	border: solid 1px #FFF;
 }
-#sell table td.nested {
+table td.nested {
 	padding: 0;
 	border-width: 0;
 }
-#sell table td.description {
+table td.description {
 	font-weight: bold;
 	font-size: 1.1em;
 	color: #900;
 	text-transform: uppercase;
 	border-width: 1px 0 0;
 }
-#sell table th.odd {
+table th.odd {
 	border-right: solid 1px #FFF;
 }
-#sell table tr>th.odd {
+table tr>th.odd {
 	border-right: solid 0px #FFF;
 }
-#sell table tr td.odd {
+table tr td.odd {
 	border-width: 1px 1px 0 0;
 }
-#sell table tr>td.odd {
+table tr>td.odd {
 	border-width: 1px 0 0 0;
 }
-#sell table tr>th.odd+th {
+table tr>th.odd+th {
 	border-left: solid 1px #FFF;
 }
-#sell table tr>td.odd+td {
+table tr>td.odd+td {
 	border-width: 1px 0 0 1px;
 }
-#sell table td:first-child+td {
+table td:first-child+td {
 	border-width: 1px 0 0 1px;
 }
-#sell table tr:last-child td {
+table tr:last-child td {
 	border-width: 1px 0 0;
 }
 .sell #tooltip.tip {
@@ -283,27 +283,27 @@ ul.tab li.current a:hover {
 .sell #tooltip div:first-child {
 	text-shadow: 1px 1px 1px black;
 }
-#sell table tr:nth-of-type(even) {
+table tr:nth-of-type(even) {
 	background-color: rgba(255, 255, 255, .5);
 }
-#sell table th {
+table th {
 	vertical-align: middle;
 	text-transform: uppercase;
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	border-width: 0;
 }
-#sell table th:first-child {
+table th:first-child {
 	border: solid 1px #FFF;
 	border: solid 1px rgba(255, 255, 255, .5);
 	border-width: 0 1px 0 0;
 }
-#sell table tr:last-child {
+table tr:last-child {
 	font-size: 1em;
 }
-#sell table table tr:last-child {
+table table tr:last-child {
 	font-size: 1em;
 }
-html.no-nthchild #sell table tr.odd td {
+html.no-nthchild table tr.odd td {
 	background: #F2F1DE;
 }
 #tooltip #triangle {

@@ -14,7 +14,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 
 @media only screen {
 	figcaption {
-		font: normal 1.4em "Handwritten", Georgia, Palatino, serif;
+		font: normal 1.4em/1 "Handwritten", Georgia, Palatino, serif;
 	}
 	#controls button {
 		background-image: url(../assets/buttons_sprite.png);
