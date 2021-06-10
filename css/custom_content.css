@@ -106,7 +106,7 @@ ul.loop a {
 	color: #FFF;
 }
 
-ul.tab a {
+ul.tab li a {
 	border-color: #7F9933;
 	border-color: hsla(75, 50%, 40%, 1);
 	border-top-left-radius: 4px;
@@ -187,7 +187,7 @@ th, ul.loop a, .sell #tooltip div:first-child {
 	background: hsla(75, 50%, 40%, 1);
 }
 
-ul.tab a, figure, figure a, #sell {
+ul.tab a, figure, figure a, .sell #sell {
 	border: solid 1px black;
 }
 
@@ -231,7 +231,7 @@ ul.tab a, figure, figure a, #sell {
 	color: hsla(0, 100%, 30%, .3);
 }
 
-#sell, #sell > a, table, table td {
+.sell #sell, #sell > a, table, table td {
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
 }
