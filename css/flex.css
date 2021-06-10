@@ -25,8 +25,8 @@
 	#sell>* {
 		-webkit-box-flex: 1;
 		-ms-flex: 1 1;
-		-webkit-flex: 1 1 40%;
-		        flex: 1 1 40%;
+		-webkit-flex: 1 1 1%;
+		        flex: 1 1 1%;
 		-ms-flex-item-align: start;
 		-webkit-align-self: flex-start;
 		        align-self: flex-start;
