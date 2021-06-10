@@ -19,7 +19,7 @@
 }
 
 .flexwrap #alpacas_for_sale {
-	background-color: chartreuse;
+	background-color: firebrick;
 }
 
 .cssgrid body#alpacas_for_sale {
@@ -38,6 +38,9 @@
 	/* NEW - Chrome */
 	display: flex;
 	/* NEW, Spec - Opera 12.1, Firefox 20+ */
+    	-webkit-box-align: start;
+	-ms-flex-align: start;
+	align-items: flex-start;
 
 }
 
