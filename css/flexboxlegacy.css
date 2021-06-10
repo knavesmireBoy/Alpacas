@@ -74,7 +74,7 @@
         -ms-flex: 1 1 1%;
             flex: 1 1 1%;
     flex-basis: 1px;
-    border-color: red;
+    border-color:gold;
     
 }
 #sell.extent figure:first-of-type {
