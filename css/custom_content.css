@@ -3,14 +3,92 @@ figcaption {
 	padding: .3em 0;
 	font: normal 1em "Handwritten", Georgia, Palatino, serif;
 }
-body.sell {
+figure {
+	border-color: #556B2F;
+	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
+	background: #FFF;
+}
+table {
+	padding: 0px;
+}
+
+table table {
+	font-size: 1em;
+	border-width: 0;
+}
+figure a {
+	border: solid 1px black;
+	box-shadow: 0px 0px 2px black;
+}
+
+figure img{
+	border: solid 1px black;
+    box-shadow: 0 0 3px black;
+}
+table td, table table td {
+	border-width: 1px 0 0;
+	padding: .5em;
+}
+/**/
+
+table tbody {
+	border: 0px;
+	min-width: 100%;
+}
+
+.sell {
 	font: bold 0.85em Georgia, Palatino, serif;
 }
+
+figure:hover {
+	color: #6e2900;
+	border-color: black;
+}
+
 td:last-child {
 	border-right-width: 0px solid black;
 }
 th:nth-child(odd) {
 	border-right-color: rgba(255, 255, 255, .2);
+}
+
+figure:hover a {
+	border: solid 1px #FFF;
+}
+td.nested {
+	padding: 0;
+	border-width: 0;
+}
+td.description {
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #900;
+	text-transform: uppercase;
+	border-width: 1px 0 0;
+}
+th.odd {
+	border-right: solid 1px #FFF;
+}
+tr>th.odd {
+	border-right: solid 0px #FFF;
+}
+tr td.odd {
+	border-width: 1px 1px 0 0;
+}
+tr>td.odd {
+	border-width: 1px 0 0 0;
+}
+tr>th.odd+th {
+	border-left: solid 1px #FFF;
+}
+tr>td.odd+td {
+	border-width: 1px 0 0 1px;
+}
+td:first-child+td {
+	border-width: 1px 0 0 1px;
+}
+tr:last-child td {
+	border-width: 1px 0 0;
 }
 ul.tab a {
 	color: #7F9933;
@@ -22,21 +100,14 @@ tr:nth-child(7) td {
 	text-transform: uppercase;
 	color: #900;
 }
-ul.tab li a, #sell, figure, figure a {
-	border: solid 1px black;
-}
-ul.loop li a {
+
+ul.loop a {
 	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
 	padding: 0.7em .5em 0.7em 2em;
 	color: #FFF;
 }
-th, ul.loop a, .sell #tooltip div:first-child {
-	color: #FFF;
-	font-weight: bold;
-	background: #7F9933;
-	background: hsla(75, 50%, 40%, 1);
-}
-ul.tab li a {
+
+ul.tab a {
 	border-color: #7F9933;
 	border-color: hsla(75, 50%, 40%, 1);
 	border-top-left-radius: 4px;
@@ -48,7 +119,7 @@ ul.tab li a {
 	transition: background 1.5s;
 	text-shadow: 2px 2px 2px #FFF;
 }
-ul.loop li a::before {
+ul.loop a::before {
 	content: "";
 	margin-left: 1px;
 	border: 2em solid transparent;
@@ -56,7 +127,7 @@ ul.loop li a::before {
 	border-left-color: #FFF;
 	border-right-width: 0;
 }
-ul.loop li a::after {
+ul.loop a::after {
 	content: " ";
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */
@@ -67,10 +138,10 @@ ul.loop li a::after {
 ul.loop li:first-child a {
 	padding-left: 0.7em;
 }
-.no-nthchild ul.loop li a {
+.no-nthchild ul.loop a {
 	border-right: solid 1px #FFF;
 }
-ul.loop li a:hover {
+ul.loop a:hover {
 	color: #EBF2D8;
 	color: hsla(75, 50%, 90%, 1);
 }
@@ -78,10 +149,10 @@ ul.tab li.current a {
 	background: #EBF2D8;
 	border-bottom-color: #EBF2D8;
 }
-ul.tab li a:hover {
+ul.tab a:hover {
 	color: hsla(75, 50%, 30%, 1);
 }
-.no-nthchild ul.loop li a {
+.no-nthchild ul.loop a {
 	padding: .7em 1.2em;
 }
 ul.loop li:nth-child(2) a {
@@ -100,7 +171,7 @@ ul.loop li:nth-child(3) a::after {
 	border-left-color: #B2CC65;
 	border-left-color: hsla(75, 50%, 60%, 1);
 }
-article.intro ul li a:hover {
+article.intro ul a:hover {
 	text-decoration: none;
 }
 .nthchild ul.loop li:first-child a {
@@ -109,6 +180,18 @@ article.intro ul li a:hover {
 ul.tab li.current a:hover {
 	color: hsla(75, 50%, 40%, 1);
 }
+
+th, ul.loop a, .sell #tooltip div:first-child {
+	color: #FFF;
+	font-weight: bold;
+	background: #7F9933;
+	background: hsla(75, 50%, 40%, 1);
+}
+
+ul.tab a, figure, figure a, #sell {
+	border: solid 1px black;
+}
+
 #sell {
 	background: #EBF2D8;
 }
@@ -137,14 +220,7 @@ ul.tab li.current a:hover {
 	box-shadow: 2px 2px 5px #FFF;
 	opacity: 1;
 }
-figure {
-	border-color: #556B2F;
-	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
-	background: #FFF;
-}
-table {
-	padding: 0px;
-}
+
 #sell>table {
 	box-shadow: 0px 0px 20px rgba(255, 255, 255, .8);
 	opacity: .9;
@@ -155,29 +231,7 @@ table {
 	color: #944;
 	color: hsla(0, 100%, 30%, .3);
 }
-table table {
-	font-size: 1em;
-	border-width: 0;
-}
-figure a {
-	border: solid 1px black;
-	box-shadow: 0px 0px 2px black;
-}
 
-figure a img{
-	border: solid 1px black;
-    box-shadow: 0 0 3px black;
-}
-table td, table table td {
-	border-width: 1px 0 0;
-	padding: .5em;
-}
-/**/
-
-table tbody {
-	border: 0px;
-	min-width: 100%;
-}
 #sell, #sell > a, table, table td {
 	border-color: hsla(75, 50%, 40%, 1);
 	border-color: #7F9933;
@@ -212,10 +266,6 @@ table tbody {
 	color: #900;
 	color: hsla(0, 100%, 30%, 1);
 }
-figure:hover {
-	color: #6e2900;
-	border-color: black;
-}
 
 #sell > a:hover, #sell>table:hover {
 	opacity: .9;
@@ -227,44 +277,7 @@ figure:hover {
 	background: #FFF;
 	padding: 3px;
 }
-figure:hover a {
-	border: solid 1px #FFF;
-}
-table td.nested {
-	padding: 0;
-	border-width: 0;
-}
-table td.description {
-	font-weight: bold;
-	font-size: 1.1em;
-	color: #900;
-	text-transform: uppercase;
-	border-width: 1px 0 0;
-}
-table th.odd {
-	border-right: solid 1px #FFF;
-}
-table tr>th.odd {
-	border-right: solid 0px #FFF;
-}
-table tr td.odd {
-	border-width: 1px 1px 0 0;
-}
-table tr>td.odd {
-	border-width: 1px 0 0 0;
-}
-table tr>th.odd+th {
-	border-left: solid 1px #FFF;
-}
-table tr>td.odd+td {
-	border-width: 1px 0 0 1px;
-}
-table td:first-child+td {
-	border-width: 1px 0 0 1px;
-}
-table tr:last-child td {
-	border-width: 1px 0 0;
-}
+
 .sell #tooltip.tip {
 	-webkit-transform: translate(10em, 0em);
 	-ms-transform: translate(10em, 0em);
@@ -322,7 +335,7 @@ html.no-nthchild table tr.odd td {
 }
 /*"gallery"*/
 
-#thumbnails, ul#thumbnails li a {
+#thumbnails, ul#thumbnails a {
 	border: 1px solid;
 }
 #controls button {
@@ -357,19 +370,19 @@ ul#thumbnails {
 	color: black;
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, .75);
 }
-ul#thumbnails li a:link, ul#thumbnails li a:visited {
+ul#thumbnails a:link, ul#thumbnails a:visited {
 	border-color: black;
 }
-ul#thumbnails li a:hover, ul#thumbnails li a:active {
+ul#thumbnails a:hover, ul#thumbnails a:active {
 	border-color: #900;
 }
-#controls button#backbutton {
+#backbutton {
 	background-position: 50% 14.5%;
 }
-#controls button#playbutton {
+#playbutton {
 	background-position: 50% 29%;
 }
-.playing #controls button#playbutton {
+.playing #playbutton {
 	background-position: 50% 44%;
 	opacity: 0.9;
 }
