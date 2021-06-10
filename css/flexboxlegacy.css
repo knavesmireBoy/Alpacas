@@ -69,17 +69,31 @@
     */
 }
 #sell.extent figure {
+    /*
     -webkit-box-flex: 1;
     -webkit-flex: 1 1 20px;
         -ms-flex: 1 1 20px;
             flex: 1 1 20px;
+    */
     border-color: red;
+    
+       -ms-flex: 1;
+    flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -ms-flex-negative: 1;
+        flex-shrink: 1;
+    -ms-flex-preferred-size: 30px;
+        flex-basis: 30px;
+    
 }
 #sell.extent figure:first-of-type {
+    /*
     -webkit-box-flex: 2;
     -webkit-flex: 2 1 20px;
         -ms-flex: 2 1 20px;
             flex: 2 1 20px;
+    */
     
      border-color: navy;
 }
