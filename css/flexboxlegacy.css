@@ -1,8 +1,9 @@
+/*
 .js #alpacas_for_sale {
 	background-color: ivory;
-	/*display: flex;
+	display: flex;
 	flex-direction: column;
-	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
+	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css 
 }
 
 
@@ -25,7 +26,7 @@
 .cssgrid body#alpacas_for_sale {
 	background-color: fuchsia;
 }
-
+*/
 
 #sell {
 	display: -webkit-box;
@@ -38,10 +39,6 @@
 	/* NEW - Chrome */
 	display: flex;
 	/* NEW, Spec - Opera 12.1, Firefox 20+ */
-    	-webkit-box-align: start;
-	-ms-flex-align: start;
-	align-items: flex-start;
-
 }
 
 .extent figure {
