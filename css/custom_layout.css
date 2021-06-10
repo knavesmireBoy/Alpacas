@@ -196,6 +196,16 @@ body {}
 	margin-top: 4%;
 	border-width: 0px;
 }
+
+#gallery #yag img {
+	color: red;
+}
+
+#gallery #yag > img {
+	color: white;
+}
+
+
 ul#thumbnails {
 	margin: 6% auto 0;
 	/*clear

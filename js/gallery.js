@@ -10,10 +10,10 @@
 	function getNativeOpacity(bool) {
 		return {
 			getKey: function () {
-				//return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
-				return 'opacity';
+				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
 			},
 			getValue: function (val) {
+                /* IE requires val MUST be a string, took me FOUR days to find this solution*/
 				return bool ? 'alpha(opacity=' + val * 100 + ')' : val.toString();
 			}
 		};
@@ -185,6 +185,7 @@
 			doMap(img.parentNode.parentNode, [
 				['id', target]
 			]);
+             
 			return onBase(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakeSlide = function (source, target) {
@@ -202,20 +203,11 @@
 			doMap(img.parentNode.parentNode, [
 				['id', 'paused']
 			]);
-            
-            //utils.report(img.parentNode.parentNode);
-                        try {
-                            doMap(img.parentNode.parentNode, [
+            doMap(img.parentNode.parentNode, [
 				[
-					[cssopacity.getKey(), cssopacity.getValue("0.5")]
+					[cssopacity.getKey(), cssopacity.getValue(0.5)]
 				]
 			]);
-                        } catch (e) {
-                            utils.report(e);
-                            //utils.report(cssopacity.getKey());
-                        }
-			
-            
 			return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
@@ -443,7 +435,7 @@
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
-				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, /*doExitShow,*/ doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
+				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, doExitShow, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
 				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loader)('base')(nextcaller)].concat(farewell))(getResult),
 				prev_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loader)('base')(prevcaller)].concat(farewell))(getResult),
 				controller = function () {
@@ -527,7 +519,15 @@
 			_.each(_.zip(dombuttons, buttons), invokeBridge);
 			_.each([controls, exit, locate, controls_undostat, controls_dostat], go_execute);
 			$setup.undo();
+            
+           
+            
 		};
 	$setup = eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main);
 	$setup.execute();
+     var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
+         ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
+    utils.report(ie6);
+
+    
 }(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../assets/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));

@@ -691,7 +691,7 @@ gAlp.Util = (function () {
 			return ret;
 		};
 	}
-
+//bool could be !window.addEventListener, OR could be another test for even older browsers
 	function setFromFactory(bool) {
 		function doEachFactory(config, bound, target, bool) {
 			//ie 6 & 7 have issues with setAttribute, set props instead
@@ -1567,7 +1567,8 @@ gAlp.Util = (function () {
 			};
 		},
 		report: function (arg) {
-			document.getElementsByTagName('h2')[0].innerHTML = arg || document.documentElement.className;
+            var txt = existy(arg) ? arg : document.documentElement.className;
+			document.getElementsByTagName('h2')[0].innerHTML = txt; 
 		},
 		dog: 'bolt'
 	}; //end

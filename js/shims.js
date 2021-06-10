@@ -220,10 +220,18 @@ function getNativeOpacity(bool) {
 				return bool ? 'filter' : Modernizr.prefixedCSS('opacity');
 			},
 			getValue: function (val) {
-				var value = val || v;
-                document.getElementsByTagName('h2')[0].innerHTML = val;
-                //return bool ? 'alpha(opacity=' + value * 100 + ')' : value;
-				return bool ? 'alpha(opacity=' + value + ')' : value / 100;
+				var IE6,
+                    value = val || v;
+				//return bool ? 'alpha(opacity=' + value + ')' : (value / 100)+'';
+                return bool ? 'alpha(opacity=' + val * 100 + ')' : val.toString();
+                /*
+                try {
+                    IE6=@cc_on @_jscript_version <= 5.7 && @_jscript_build < 10000;
+                } catch(e){
+                   IE6=false;
+                }
+                */
+
 			}
 		};
 	};
