@@ -14,7 +14,7 @@
 				return 'opacity';
 			},
 			getValue: function (val) {
-				return bool ? 'alpha(opacity=' + val * 100 + ')' : val;
+				return bool ? 'alpha(opacity=' + val * 100 + ')' : val.toString();
 			}
 		};
 	}
