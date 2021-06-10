@@ -69,12 +69,14 @@
     */
 }
 #sell.extent figure {
+    -ms-flex: 1 1 1%;
     flex: 1 1 1%;
     border-color: red;
 }
 #sell.extent figure:first-of-type {
+    -ms-flex: 2 1 1%;
     flex: 2 1 1%;
-     border-color: blue;
+     border-color: green;
 }
 
 
