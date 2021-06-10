@@ -525,9 +525,11 @@
 		};
 	$setup = eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main);
 	$setup.execute();
+    /*
      var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
          ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
-    utils.report(ie6);
+         */
+    utils.report();
 
     
 }(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../assets/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));
