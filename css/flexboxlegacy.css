@@ -1,33 +1,29 @@
 html.js body#alpacas_for_sale {
-	background-color: yellow;
+	background-color: ivory;
 	/*display: flex;
 	flex-direction: column;
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 
-html.js body#gallery {
-	background-color: deeppink;
+
+html.flexboxlegacy body#alpacas_for_sale {
+	background-color: yellow;
 }
 
-
-html.flexboxlegacy body#gallery {
+html.flexboxtweener body#alpacas_for_sale {
 	background-color: gold;
 }
 
-html.flexboxtweener body#gallery {
-	background-color: honeydew;
+html.flexbox body#alpacas_for_sale {
+	background-color: darkgoldenrod;
 }
 
-html.flexwrap body#gallery {
-	background-color: azure;
+html.flexwrap body#alpacas_for_sale {
+	background-color: orange;
 }
 
-html.flexbox body#gallery {
-	background-color: royalblue;
-}
-
-html.cssgrid body#gallery {
-	background-color: aqua;
+html.cssgrid body#alpacas_for_sale {
+	background-color: fuchsia;
 }
 
 
@@ -94,7 +90,7 @@ html.js #sell.extent {
  .js #sell.extent figure {
       min-width: 0;
      -ms-flex: 1 1 60px;
-
+     flex: 1 1 60px;
      background-color: firebrick;
 }
 
