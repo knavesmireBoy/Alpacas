@@ -19,7 +19,7 @@
 }
 
 .flexwrap #alpacas_for_sale {
-	background-color: rebeccapurple;
+	background-color: gainsboro;
 }
 
 .cssgrid body#alpacas_for_sale {
@@ -68,9 +68,13 @@
         flex-basis: 44%;
     */
 }
-
-#sell.extent figure:first-of-type{
+#sell.extent figure {
+    flex: 1 1 1%;
+    border-color: red;
+}
+#sell.extent figure:first-of-type {
     flex: 2 1 1%;
+     border-color: blue;
 }
 
 
