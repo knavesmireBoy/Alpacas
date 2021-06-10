@@ -1,4 +1,4 @@
-html.js body#alpacas_for_sale {
+.js #alpacas_for_sale {
 	background-color: ivory;
 	/*display: flex;
 	flex-direction: column;
@@ -6,23 +6,23 @@ html.js body#alpacas_for_sale {
 }
 
 
-html.flexboxlegacy body#alpacas_for_sale {
+.flexboxlegacy #alpacas_for_sale {
 	background-color: yellow;
 }
 
-html.flexboxtweener body#alpacas_for_sale {
+.flexboxtweener #alpacas_for_sale {
 	background-color: gold;
 }
 
-html.flexbox body#alpacas_for_sale {
+.flexbox #alpacas_for_sale {
 	background-color: darkgoldenrod;
 }
 
-html.flexwrap body#alpacas_for_sale {
+.flexwrap #alpacas_for_sale {
 	background-color: orange;
 }
 
-html.cssgrid body#alpacas_for_sale {
+.cssgrid body#alpacas_for_sale {
 	background-color: fuchsia;
 }
 
