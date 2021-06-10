@@ -1,6 +1,6 @@
 /*!
  * modernizr v3.5.0
- * Build https://modernizr.com/download?-borderradius-cssremunit-cssvhunit-cssvmaxunit-cssvminunit-cssvwunit-bgpositionshorthand-boxshadow-hsla-rgba-textshadow-backgroundsize-cssanimations-cssgrid_cssgridlegacy-cssmask-devicemotion_deviceorientation-flexbox-flexboxlegacy-flexboxtweener-flexwrap-nthchild-opacity-requestanimationframe-svgasimg-svgfilters-addtest-atrule-domprefixes-hasevent-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-printshiv-setclasses-testallprops-testprop-teststyles-dontmin
+ * Build https://modernizr.com/download?-documentfragment-bgpositionshorthand-boxshadow-hsla-rgba-textshadow-backgroundsize-cssanimations-cssgrid_cssgridlegacy-cssmask-flexbox-flexboxlegacy-flexboxtweener-flexwrap-nthchild-opacity-requestanimationframe-svgasimg-svgfilters-addtest-atrule-domprefixes-hasevent-mq-prefixed-prefixedcss-prefixedcssvalue-prefixes-printshiv-setclasses-testallprops-testprop-teststyles-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -85,120 +85,34 @@
   // Leak modernizr globally when you `require` it rather than force it here.
   // Overwrite name so constructor name is nicer :D
   Modernizr = new Modernizr();
-    
-    /*!
-{
-  "name": "Orientation and Motion Events",
-  "property": ["devicemotion", "deviceorientation"],
-  "caniuse": "deviceorientation",
-  "notes": [{
-    "name": "W3C Editor's Draft",
-    "href": "http://w3c.github.io/deviceorientation/spec-source-orientation.html"
-  },{
-    "name": "Implementation by iOS Safari (Orientation)",
-    "href": "http://goo.gl/fhce3"
-  },{
-    "name": "Implementation by iOS Safari (Motion)",
-    "href": "http://goo.gl/rLKz8"
-  }],
-  "authors": ["Shi Chuan"],
-  "tags": ["event"],
-  "builderAliases": ["event_deviceorientation_motion"]
-}
-!*/
-/* DOC
-Part of Device Access aspect of HTML5, same category as geolocation.
-
-`devicemotion` tests for Device Motion Event support, returns boolean value true/false.
-
-`deviceorientation` tests for Device Orientation Event support, returns boolean value true/false
-*/
-
-  Modernizr.addTest('devicemotion', 'DeviceMotionEvent' in window);
-  Modernizr.addTest('deviceorientation', 'DeviceOrientationEvent' in window);
 
   /*!
 {
-  "name": "SVG",
-  "property": "svg",
-  "caniuse": "svg",
-  "tags": ["svg"],
-  "authors": ["Erik Dahlstrom"],
-  "polyfills": [
-    "svgweb",
-    "raphael",
-    "amplesdk",
-    "canvg",
-    "svg-boilerplate",
-    "sie",
-    "dojogfx",
-    "fabricjs"
-  ]
-}
-!*/
-/* DOC
-Detects support for SVG in `<embed>` or `<object>` elements.
-*/
-
-  Modernizr.addTest('svg', !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
-    
-    
-/*!
-{
-  "name": "SVG as an <img> tag source",
-  "property": "svgasimg",
-  "caniuse" : "svg-img",
-  "tags": ["svg"],
-  "aliases": ["svgincss"],
-  "authors": ["Chris Coyier"],
+  "name": "Document Fragment",
+  "property": "documentfragment",
   "notes": [{
-    "name": "HTML5 Spec",
-    "href": "http://www.w3.org/TR/html5/embedded-content-0.html#the-img-element"
-  }]
-}
-!*/
-
-
-  // Original Async test by Stu Cox
-  // https://gist.github.com/chriscoyier/8774501
-
-  // Now a Sync test based on good results here
-  // http://codepen.io/chriscoyier/pen/bADFx
-
-  // Note http://www.w3.org/TR/SVG11/feature#Image is *supposed* to represent
-  // support for the `<image>` tag in SVG, not an SVG file linked from an `<img>`
-  // tag in HTML – but it’s a heuristic which works
-  Modernizr.addTest('svgasimg', document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1')); 
-
-    /*!
-{
-  "name": "Inline SVG",
-  "property": "inlinesvg",
-  "caniuse": "svg-html5",
-  "tags": ["svg"],
-  "notes": [{
-    "name": "Test page",
-    "href": "https://paulirish.com/demo/inline-svg"
+    "name": "W3C DOM Level 1 Reference",
+    "href": "https://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html#ID-B63ED1A3"
   }, {
-    "name": "Test page and results",
-    "href": "https://codepen.io/eltonmesquita/full/GgXbvo/"
+    "name": "SitePoint Reference",
+    "href": "http://reference.sitepoint.com/javascript/DocumentFragment"
+  }, {
+    "name": "QuirksMode Compatibility Tables",
+    "href": "http://www.quirksmode.org/m/w3c_core.html#t112"
   }],
-  "polyfills": ["inline-svg-polyfill"],
-  "knownBugs": ["False negative on some Chromia browsers."]
+  "authors": ["Ron Waldon (@jokeyrhyme)"],
+  "knownBugs": ["false-positive on Blackberry 9500, see QuirksMode note"],
+  "tags": []
 }
 !*/
 /* DOC
-Detects support for inline SVG in HTML (not within XHTML).
+Append multiple elements to the DOM within a single insertion.
 */
 
-  Modernizr.addTest('inlinesvg', function() {
-    var div = createElement('div');
-    div.innerHTML = '<svg/>';
-    return (typeof SVGRect != 'undefined' && div.firstChild && div.firstChild.namespaceURI) == 'http://www.w3.org/2000/svg';
+  Modernizr.addTest('documentfragment', function() {
+    return 'createDocumentFragment' in document &&
+      'appendChild' in docElement;
   });
-
-    
-
 /*!
 {
   "name": "SVG filters",
@@ -1767,23 +1681,6 @@ Detects support for inline SVG in HTML (not within XHTML).
    */
 
   var testStyles = ModernizrProto.testStyles = injectElementWithStyles;
-    
-    /*!
-{
-  "name": "classList",
-  "caniuse": "classlist",
-  "property": "classlist",
-  "tags": ["dom"],
-  "builderAliases": ["dataview_api"],
-  "notes": [{
-    "name": "MDN Docs",
-    "href": "https://developer.mozilla.org/en/DOM/element.classList"
-  }]
-}
-!*/
-
-  Modernizr.addTest('classlist', 'classList' in docElement);
-
   
 /*!
 {
@@ -1926,21 +1823,6 @@ Detects support for the ':nth-child()' CSS pseudo-selector.
   });
 
   
-      /**
-   * roundedEquals takes two integers and checks if the first is within 1 of the second
-   *
-   * @access private
-   * @function roundedEquals
-   * @param {number} a
-   * @param {number} b
-   * @returns {boolean}
-   */
-
-  function roundedEquals(a, b) {
-    return a - 1 === b || a === b || a + 1 === b;
-  }
-
-  ;
 
 
   /**
@@ -2778,178 +2660,6 @@ eg `background-position: right 10px bottom 10px`
   Modernizr.addTest('textshadow', testProp('textShadow', '1px 1px'));
 
 
-/*!
-{
-  "name": "CSS vh unit",
-  "property": "cssvhunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vhunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "Similar JSFiddle",
-    "href": "https://jsfiddle.net/FWeinb/etnYC/"
-  }]
-}
-!*/
-
-  testStyles('#modernizr { height: 50vh; }', function(elem) {
-    var height = parseInt(window.innerHeight / 2, 10);
-    var compStyle = parseInt(computedStyle(elem, null, 'height'), 10);
-
-    Modernizr.addTest('cssvhunit', roundedEquals(compStyle, height));
-  });
-
-/*!
-{
-  "name": "CSS vmax unit",
-  "property": "cssvmaxunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vmaxunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "JSFiddle Example",
-    "href": "https://jsfiddle.net/glsee/JDsWQ/4/"
-  }]
-}
-!*/
-
-  testStyles('#modernizr1{width: 50vmax}#modernizr2{width:50px;height:50px;overflow:scroll}#modernizr3{position:fixed;top:0;left:0;bottom:0;right:0}', function(node) {
-    var elem = node.childNodes[2];
-    var scroller = node.childNodes[1];
-    var fullSizeElem = node.childNodes[0];
-    var scrollbarWidth = parseInt((scroller.offsetWidth - scroller.clientWidth) / 2, 10);
-
-    var one_vw = fullSizeElem.clientWidth / 100;
-    var one_vh = fullSizeElem.clientHeight / 100;
-    var expectedWidth = parseInt(Math.max(one_vw, one_vh) * 50, 10);
-    var compWidth = parseInt(computedStyle(elem, null, 'width'), 10);
-
-    Modernizr.addTest('cssvmaxunit', roundedEquals(expectedWidth, compWidth) || roundedEquals(expectedWidth, compWidth - scrollbarWidth));
-  }, 3);
-
-/*!
-{
-  "name": "CSS vmin unit",
-  "property": "cssvminunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vminunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "JSFiddle Example",
-    "href": "https://jsfiddle.net/glsee/JRmdq/8/"
-  }]
-}
-!*/
-
-  testStyles('#modernizr1{width: 50vm;width:50vmin}#modernizr2{width:50px;height:50px;overflow:scroll}#modernizr3{position:fixed;top:0;left:0;bottom:0;right:0}', function(node) {
-    var elem = node.childNodes[2];
-    var scroller = node.childNodes[1];
-    var fullSizeElem = node.childNodes[0];
-    var scrollbarWidth = parseInt((scroller.offsetWidth - scroller.clientWidth) / 2, 10);
-
-    var one_vw = fullSizeElem.clientWidth / 100;
-    var one_vh = fullSizeElem.clientHeight / 100;
-    var expectedWidth = parseInt(Math.min(one_vw, one_vh) * 50, 10);
-    var compWidth = parseInt(computedStyle(elem, null, 'width'), 10);
-
-    Modernizr.addTest('cssvminunit', roundedEquals(expectedWidth, compWidth) || roundedEquals(expectedWidth, compWidth - scrollbarWidth));
-  }, 3);
-    
-    /*!
-{
-  "name": "Border Radius",
-  "property": "borderradius",
-  "caniuse": "border-radius",
-  "polyfills": ["css3pie"],
-  "tags": ["css"],
-  "notes": [{
-    "name": "Comprehensive Compat Chart",
-    "href": "https://muddledramblings.com/table-of-css3-border-radius-compliance"
-  }]
-}
-!*/
-
-  Modernizr.addTest('borderradius', testAllProps('borderRadius', '0px', true));
-
-/*!
-{
-  "name": "CSS vw unit",
-  "property": "cssvwunit",
-  "caniuse": "viewport-units",
-  "tags": ["css"],
-  "builderAliases": ["css_vwunit"],
-  "notes": [{
-    "name": "Related Modernizr Issue",
-    "href": "https://github.com/Modernizr/Modernizr/issues/572"
-  },{
-    "name": "JSFiddle Example",
-    "href": "https://jsfiddle.net/FWeinb/etnYC/"
-  }]
-}
-!*/
-
-  testStyles('#modernizr { width: 50vw; }', function(elem) {
-    var width = parseInt(window.innerWidth / 2, 10);
-    var compStyle = parseInt(computedStyle(elem, null, 'width'), 10);
-
-    Modernizr.addTest('cssvwunit', roundedEquals(compStyle, width));
-  });
-    
-    /*!
-{
-  "name": "CSS Calc",
-  "property": "csscalc",
-  "caniuse": "calc",
-  "tags": ["css"],
-  "builderAliases": ["css_calc"],
-  "authors": ["@calvein"]
-}
-!*/
-/* DOC
-Method of allowing calculated values for length units. For example:
-
-```css
-//lem {
-  width: calc(100% - 3em);
-}
-```
-*/
-
-  Modernizr.addTest('csscalc', function() {
-    var prop = 'width:';
-    var value = 'calc(10px);';
-    var el = createElement('a');
-
-    el.style.cssText = prop + prefixes.join(value + prop);
-
-    return !!el.style.length;
-  });
-    
-      
-/*!
-{
-  "name": "CSS Object Fit",
-  "caniuse": "object-fit",
-  "property": "objectfit",
-  "tags": ["css"],
-  "builderAliases": ["css_objectfit"],
-  "notes": [{
-    "name": "Opera Article on Object Fit",
-    "href": "https://dev.opera.com/articles/css3-object-fit-object-position/"
-  }]
-}
-!*/
-
-  Modernizr.addTest('objectfit', !!prefixed('objectFit'), {aliases: ['object-fit']});
 
 
 
