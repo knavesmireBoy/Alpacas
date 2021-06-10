@@ -55,7 +55,7 @@ ul.loop li a::after, ul.loop li a::before {
 .extent figure {
     width: 23%;
 }
-
+/*
 .five figure {
     width: 18%;
 }
@@ -63,7 +63,7 @@ ul.loop li a::after, ul.loop li a::before {
 .six figure {
     width: 14.6%;
 }
-
+*/
 .extent figure > * {
     border: 10px solid white;
 }
