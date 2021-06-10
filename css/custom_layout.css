@@ -51,6 +51,7 @@ ul.loop li a::after, ul.loop li a::before {
 	display: inline;
 	display: inline-block;
 }
+/*
 .extent figure {
     width: 23%;
 }
@@ -62,6 +63,7 @@ ul.loop li a::after, ul.loop li a::before {
 .six figure {
     width: 14.6%;
 }
+*/
 .extent figure > * {
     border: 10px solid white;
 }

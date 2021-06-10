@@ -73,7 +73,7 @@
     -webkit-flex: 1 1 20px;
         -ms-flex: 1 1 20px;
             flex: 1 1 20px;
-    border-color: orange;
+    border-color: red;
 }
 #sell.extent figure:first-of-type {
     -webkit-box-flex: 2;
