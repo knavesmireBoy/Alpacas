@@ -70,16 +70,16 @@
 }
 #sell.extent figure {
     -webkit-box-flex: 1;
-    -webkit-flex: 1 1 auto;
-        -ms-flex: 1 1 auto;
-            flex: 1 1 auto;
-    border-color: blueviolet;
+    -webkit-flex: 1 1 20px;
+        -ms-flex: 1 1 20px;
+            flex: 1 1 20px;
+    border-color: orange;
 }
 #sell.extent figure:first-of-type {
     -webkit-box-flex: 2;
-    -webkit-flex: 2 1 auto;
-        -ms-flex: 2 1 auto;
-            flex: 2 1 auto;
+    -webkit-flex: 2 1 20px;
+        -ms-flex: 2 1 20px;
+            flex: 2 1 20px;
     
      border-color: navy;
 }
