@@ -136,8 +136,11 @@ table table {
 #alpacas_for_sale aside img {
 	float: none;
 }
-.sell #sell {
+#sell {
 	display: block;
+}
+
+.sell #sell {
 	padding: 2%;
 	height: 1%;
 	/* ie prefers this to margin-bottom -1px on ul#list */
