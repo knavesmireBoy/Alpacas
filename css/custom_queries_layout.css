@@ -64,7 +64,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 
     .five figcaption {
         border-width: .5em .7em 1em;
-        border-color: honeydew;
 }
 }
 @media only screen and (max-width: 900px) {
@@ -73,7 +72,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
     .four figcaption {
         border-width: .5em .7em 1em;
-        border-color: yellowgreen;
 }
 }
 @media only screen and (max-width: 768px) {
@@ -116,7 +114,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     
     .extent figcaption {
         border-width: .5em .7em 1em;
-        border-color: pink;
 }
     
     .extent figure:nth-of-type(2) figcaption{
@@ -165,7 +162,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     
        .extent figcaption {
         border-width: .5em 0 1em;
-        border-color: dodgerblue;
 }
 }
 @media only screen and (max-width: 667px) and (orientation: portrait) {
