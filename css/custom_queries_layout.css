@@ -14,7 +14,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 
 @media only screen {
 	figcaption {
-		font: normal 1.4em "Handwritten", Georgia, Palatino, serif;
+		font: normal 1.4em/1 "Handwritten", Georgia, Palatino, serif;
 	}
 	#controls button {
 		background-image: url(../assets/buttons_sprite.png);
@@ -59,10 +59,20 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		color: hsla(75, 50%, 40%, 1);
 	}
 }
+
+@media only screen and (max-width: 1100px) {
+
+    .five figcaption {
+        border-width: .5em .7em 1em;
+}
+}
 @media only screen and (max-width: 900px) {
 	#links main aside {
 		right: -30%;
 	}
+    .four figcaption {
+        border-width: .5em .7em 1em;
+}
 }
 @media only screen and (max-width: 768px) {
 	#sell a {
@@ -91,7 +101,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		animation: enter 1s 1 ease-out;
 	}
 	
-	
 	#alpacas_for_sale.sell main>aside {
 		position: absolute;
 	}
@@ -102,7 +111,18 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		margin: 0;
 		display: block;
 	}
+    
+    .extent figcaption {
+        border-width: .5em .7em 1em;
 }
+    
+    .extent figure:nth-of-type(2) figcaption{
+        border-width: .5em 0 1em;
+    }
+
+
+}
+
 @media only screen and (max-width: 667px) {
 	ul.loop li a {
 		font-size: 1em;
@@ -139,6 +159,10 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		position: static;
 		left: 0;
 	}
+    
+       .extent figcaption {
+        border-width: .5em 0 1em;
+}
 }
 @media only screen and (max-width: 667px) and (orientation: portrait) {
 	#controls {
@@ -179,4 +203,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#alpacas_for_sale #tooltip {
 		bottom: 23em;
 	}
+}
+@media only screen and (min-width: 1100px) {
+.six figure:nth-of-type(5) figcaption{
+    border-width: .5em .2em 1em;
+}
 }

@@ -4,32 +4,77 @@
 	margin: 0;
 	padding: 0;
 }
-article.intro {
+table {
+	width: 46.5%;
+	min-width: 18em;
+	margin-right: 2.5%;
+	float: left;
+}
+table table {
+	margin-right: 0%;
+	width: 100%;
+}
+.extent {
+	left: 0;
+	margin: 0 auto;
+	height: 1%;
+	*padding: .6em .3em;
+	*padding: 2% 1%;
 	*height: 1%;
 }
+.extent a {
+	padding: 0;
+}
 .extent figure {
+	display: inline;
+	display: inline-block;
 	margin: .3em 1%;
 	padding: 0;
 	vertical-align: bottom;
-    box-sizing: border-box;
-    background: red;
+	box-sizing: border-box;
+	width: 23%;
 }
-ul.tab {
+.five figure {
+	width: 18%;
+}
+.six figure {
+	width: 14.6%;
+}
+.extent figure > * {
+	border: 1em solid white;
+}
+
+.extent figcaption {
+	border-width: .5em 0 1em;
+}
+
+article.intro {
+	*height: 1%;
+}
+.tab {
 	transform: translateX(-1000px);
 	-webkit-transition: left 1s;
 	-o-transition: left 1s;
 	transition: all 1s;
 }
-ul.loop, ul.tab {
+.loop, .tab {
 	transform: translateX(0px);
 }
-ul.tab li {
+.tab li {
 	margin-right: .1em;
 }
-ul.tab a {
+.tab a {
 	padding: 0.7em 1.3em;
 }
-ul.loop li a::after, ul.loop li a::before {
+.extent figure a {
+	border-width: 0 1em;
+	padding: 1em 0 0;
+}
+.extent figure img {
+	width: 100%;
+}
+
+.loop a::after, .loop a::before {
 	/*border arrows */
 	display: block;
 	position: absolute;
@@ -40,50 +85,22 @@ ul.loop li a::after, ul.loop li a::before {
 	height: 0;
 	margin-top: -2em;
 }
-.extent {
-    /*
-	display: table;
-    */
-	border-spacing: 1em;
-}
 /*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
-
-.extent figure {
-	display: inline;
-	display: inline-block;
-}
-.extent>figure {
-    width: 23%;
-}
-
-
-#sell.extent figure > * {
-    border: 10px solid white;
-}
-
-#sell.extent figure a {
-    border-width: 10px 10px 0;
-}
-
-#sell.extent figure figcaption {
-    border-width: 5px 0 0;
-}
 
 .sell .tog a {
 	margin-left: 0;
 }
-
-#sell {
-	display: none;
+#sell, #sell>a, ul#thumbnails, ul#list {
 	overflow: hidden;
 }
 #sell a {
-	display: none;
+	display: block;
 }
-#sell a, ul#thumbnails, ul#list {
-	overflow: hidden;
+#sell>a {
+	padding: 1.6%;
+	*height: 1%;
 }
-ul#list li, ul#list li a {
+#list li, #list li a {
 	float: left;
 	zoom: 1;
 }
@@ -98,20 +115,6 @@ ul#list li, ul#list li a {
 #alpacas_for_sale header {
 	z-index: 0;
 	margin-bottom: 1em;
-}
-#sell a {
-	padding: 1.6%;
-	*height: 1%;
-}
-#sell table {
-	width: 46.5%;
-	min-width: 18em;
-	margin-right: 2.5%;
-	float: left;
-}
-#sell table table {
-	margin-right: 0%;
-	width: 100%;
 }
 
 /* early ie requires ul#list, ul#list li to pull content above #sell div */
@@ -130,7 +133,6 @@ ul#list li, ul#list li a {
 	float: none;
 }
 .sell #sell {
-	display: block;
 	padding: 2%;
 	height: 1%;
 	/* ie prefers this to margin-bottom -1px on ul#list */
@@ -140,35 +142,15 @@ ul#list li, ul#list li a {
 .loop+#sell {
 	margin-top: 0px;
 }
-#sell.extent {
-	left: 0;
-	margin: 0 auto;
-	height: 1%;
-	*padding: .6em .3em;
-	*height: 1%;
-}
-#sell.extent {
-	*padding: 2% 1%;
-}
-#sell.extent a {
-	padding: 0;
-}
 #alpacas_for_sale article.intro {
 	position: relative;
 	width: 100%;
 }
-#alpacas_for_sale .sell aside, .touch {
-	left: -9999px;
-}
-
-.sell aside, #sell table,  #sell.tog table.show, #sell.extent table.show {
+.touch, .sell aside, table, .tog table.show, .extent table.show, #sell a {
 	position: absolute;
 	left: -9999px;
 }
-#sell a.show, #sell.extent a {
-	display: block;
-}
-#sell table.show {
+table.show, #sell a.show, #sell.extent a {
 	position: static;
 	left: 0px;
 }
@@ -177,10 +159,10 @@ ul#list li, ul#list li a {
 .no-js div#sell a {
 	margin: 0 0 2% 2%;
 }
-html.js #sell a, html.js #sell table {
+html.js #sell a, html.js table {
 	*display: none;
 }
-html.js #sell a.show, html.js #sell.extent a, html.js #sell table.show {
+html.js #sell a.show, html.js .extent a, html.js table.show {
 	*display: block;
 }
 .no-js div#sell a:last-child {
@@ -196,16 +178,12 @@ body {}
 	margin-top: 4%;
 	border-width: 0px;
 }
-
 #gallery #yag img {
 	color: red;
 }
-
-#gallery #yag > img {
+#gallery #yag>img {
 	color: white;
 }
-
-
 ul#thumbnails {
 	margin: 6% auto 0;
 	/*clear
@@ -364,6 +342,7 @@ li#slide, li#paused {
 }
 /*.touchevents replaces media queries (hover: hover) || (pointer: fine) where support is doubtful
 logic dictates that we only get to this point courtesy of javascript so modernizr supplies the className .(no-)touchevents */
+
 .js #exit:hover, .js #exit:focus {
 	background-position: 50% 106%;
 }
@@ -392,7 +371,6 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
 .touchevents #gallery.showtime #innerwrap {
 	padding-bottom: 6em;
 }
-
 @media only screen {
 	#exit:hover, #exit:focus {
 		-webkit-transform: rotate(360deg);
