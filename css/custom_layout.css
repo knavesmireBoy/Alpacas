@@ -40,15 +40,12 @@ table table {
 .six figure {
 	width: 14.6%;
 }
-.extent figure>* {
+.extent figure > * {
 	border: 1em solid white;
 }
 
-    .four figure:nth-of-type(2) figcaption{
-        border-width: 1em .65em;
-}
-        .four figure:nth-of-type(3) figcaption{
-        border-width: 1em 1.1em;
+.extent figcaption {
+	border-width: .5em 0 1em;
 }
 
 article.intro {

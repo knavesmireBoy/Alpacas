@@ -35,7 +35,7 @@
 }
 */
 
-#sell {
+.extent {
 	display: -webkit-box;
 	/* OLD - iOS 6-, Safari 3.1-6 */
 	display: -moz-box;
@@ -74,7 +74,7 @@
     */
 }
 @supports ((display: -moz-flex) or (display: flex)) {
-	/*article.intro:not(.five)*/ .sell #sell, ul#list {
+	/*article.intro:not(.five)*/ .extent, ul#list {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: -webkit-flex;
@@ -204,6 +204,7 @@
 		width: auto;
 	}
 }
+/*
 @media only screen and (max-width: 1024px) {
 	@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
 		.six .extent {
@@ -225,6 +226,7 @@
 		}
 	}
 }
+
 @media only screen and (max-width: 667px) {
 	@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
 		.intro .extent {
@@ -406,6 +408,7 @@
 		}
 	}
 }
+*/
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
 	@supports ((display: -ms-grid) or (display: grid)) {
 		ul#thumbnails.gallery li {
