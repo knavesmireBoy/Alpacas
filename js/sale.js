@@ -127,8 +127,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		return list.slice(_.random(0, end || list.length));
-		return list.slice(0);
+		//return list.slice(_.random(0, end || list.length));
+		return list.slice(0, -1);
 	}
 
 	function inRange(coll, i) {

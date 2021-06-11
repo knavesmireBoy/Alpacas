@@ -1,3 +1,6 @@
+
+/* https://www.smashingmagazine.com/2019/02/css-browser-support/ */
+
 /*
 * Prefixed by https://autoprefixer.github.io
 * PostCSS: v7.0.29,
@@ -47,6 +50,10 @@
 	display: flex;
 	/* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
+
+.extent {
+        flex-wrap: wrap;
+    }
 .extent figure {
 	/*just use defaults*/
 	/*-webkit-box-flex: 1;*/
@@ -59,12 +66,13 @@
 	/*-ms-flex: 1;*/
 	/* IE 10 */
 	/*flex: 1;*/
-	/* longhand
-   -webkit-box-flex: 1 1 1%;
-    -moz-box-flex: 1 1 1%;
-    webkit-flex: 1 1 1%;
-    ms-flex: 1 1 1%;
-    flex: 1 1 1%;
+	
+   -webkit-box-flex: 1 1 48%;
+    -moz-box-flex: 1 1 48%;
+    webkit-flex: 1 1 48%;
+    ms-flex: 1 1 48%;
+    flex: 1 1 48%;
+    /* longhand
     -ms-flex-positive: 1;
     flex-grow: 1;
     -ms-flex-negative: 1;
@@ -73,8 +81,15 @@
     flex-basis: 44%;
     */
 }
+.five figure {
+    -webkit-box-flex: 1 1 30%;
+    -moz-box-flex: 1 1 30%;
+    webkit-flex: 1 1 30%;
+    ms-flex: 1 1 30%;
+    flex: 1 1 30%;
+}
 @supports ((display: -moz-flex) or (display: flex)) {
-	/*article.intro:not(.five)*/ .extent, ul#list {
+	ul#list {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: -webkit-flex;
@@ -90,17 +105,7 @@
 		-ms-flex-pack: center;
 		justify-content: center;
 	}
-    /*
-	#sell>* {
-		-webkit-box-flex: 1;
-		-ms-flex: 1 1;
-		-webkit-flex: 1 1 1%;
-		flex: 1 1 1%;
-		-ms-flex-item-align: start;
-		-webkit-align-self: flex-start;
-		align-self: flex-start;
-	}
-    */
+
 	#controls button {
 		-webkit-box-flex: 0;
 		-ms-flex: 0 0 auto;
@@ -125,27 +130,11 @@
 	#sell.tog a {
 		margin: 0%;
 	}
-    /*
-	.extent {
-		display: -webkit-box;
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-	}
-	.js .extent figure {
-		-webkit-box-flex: 1;
-		-webkit-flex: 1 1 1%;
-		-ms-flex: 1 1 auto;
-		flex: 1 1 auto;
-		width: auto;
-	}
-    */
 }
 /*supports*/
 
 /*@supports (display: grid){ }*/
 
-/* https://www.smashingmagazine.com/2019/02/css-browser-support/ */
 
 @supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
 	ul#thumbnails.gallery {
@@ -204,7 +193,7 @@
 		width: auto;
 	}
 }
-/*
+
 @media only screen and (max-width: 1024px) {
 	@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
 		.six .extent {
@@ -229,6 +218,11 @@
 
 @media only screen and (max-width: 667px) {
 	@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
+        
+        /*reset to override inline-block scenario*/
+        #sell figure {
+            width: auto;
+        }
 		.intro .extent {
 			display: -ms-grid;
 			display: grid;
@@ -408,7 +402,6 @@
 		}
 	}
 }
-*/
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
 	@supports ((display: -ms-grid) or (display: grid)) {
 		ul#thumbnails.gallery li {
