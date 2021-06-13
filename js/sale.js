@@ -131,18 +131,14 @@ if (!window.gAlp) {
 		return i + 1;
 	}
 
-	function sliceArray(list, end) {
-		//return list.slice(_.random(0, end || list.length));
-		return list.slice(0, -1);
-	}
-
-	function inRange(coll, i) {
-		return coll[i + 1];
-	}
     
     function isLast(coll, i){
         return _.last(coll) === coll[i];
     }
+    	function sliceArray(list, end) {
+		//return list.slice(_.random(0, end || list.length));
+		return list.slice(0, -3);
+	}
 	var alpacas = [
 			[
 				["Granary Grace", "Price on Application"],
@@ -276,7 +272,7 @@ if (!window.gAlp) {
 		isIMG = PTL(equals, 'IMG'),
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
 		text_from_target = utils.drillDown([mytarget, 'innerHTML']),
-		from_target = PTL(utils.getByTag, 'a', $$('list')),
+		hasTab = PTL(utils.findByClass, 'tab'),
 		number_reg = new RegExp('[^\\d]+(\\d+)[^\\d]+'),
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
@@ -345,9 +341,12 @@ if (!window.gAlp) {
 		}()),
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
-		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
-		is4 = deferEvery([_.negate(gt4), gt3])(getResult),
-        true4 = PTL(_.negate, deferEvery([is4, isDesktop, PTL(utils.findByClass, 'loop')])(getResult)),
+        is4 = deferEvery([_.negate(gt4), gt3])(getResult),
+		//mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
+		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
+		
+        //true4 = PTL(_.negate, deferEvery([is4, isDesktop, PTL(utils.findByClass, 'loop')])(getResult)),
+        true4 = deferEvery([is4, isDesktop])(getResult),
 
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
@@ -377,16 +376,13 @@ if (!window.gAlp) {
 			Looper.tabs.visit(utils.hide);
 			COMP(_.bind(Looper.tabs.set, Looper.tabs), getTabIndex(tgt))();
 			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.tabs.current, Looper.tabs))();
-		},
-		doLI_cb = function (caption, i, arr) {
+		},        
+        tab_cb_bridge = PTL(COMP(delayExecute, delayNavListener), COMP(tab_cb, getTarget)),
+		doLI_cb = function (caption, i) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
 				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
-			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
-			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-            if (i && !inRange(arr, i) && utils.findByClass('tab')) {
-                COMP(delayExecute, delayNavListener)(COMP(tab_cb, getTarget));
-			}
+            COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
 		abbreviateTabs = function () {
@@ -549,7 +545,7 @@ if (!window.gAlp) {
 				deferAlt = defer_once(doAlt),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.tabs.current, Looper.tabs),
-                makeTabs = deferEach(true_captions)(doLI_cb),
+                makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(doLI_cb)),
                 doFind = _.bind(Looper.tabs.find, Looper.tabs),
                 goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
@@ -581,9 +577,9 @@ if (!window.gAlp) {
                 find_onclick = COMP(goGetValue, doFind, getParent, getTarget),
                 //find_onresize = COMP(goGetValue, _.bind(Looper.tabs.set, Looper.tabs), ALWAYS(0)),
                 remove_extent = COMP(PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show),
+                
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(loopevents), navoutcomes, twice(invoke), text_from_target),
                                 
-				//$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
 				$loop_listener = deferNavListener(loop_listener),
                 
                 prep_loop_listener = COMP($loop_listener, makeLoopTabs),
@@ -592,6 +588,8 @@ if (!window.gAlp) {
                 
                 
 				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
+				//reLoop = COMP(delayExecute, prep_loop_listener, makeUL, deleteListFromCache),
+                
 				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
 				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
 				reDoTabs = deferAlt(tabCBS),
