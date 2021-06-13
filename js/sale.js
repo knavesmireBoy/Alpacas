@@ -282,7 +282,8 @@ if (!window.gAlp) {
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
 		true_captions = doMethodDefer('slice')(-alp_len)(captions),
 		indexFromTab = deferIndex(true_captions()),
-        deferNavListener = twice(PTL(eventing, 'click', []))($$('list')),
+        delayNavListener = twice(PTL(eventing, 'click', []))($$('list')),
+        deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
         getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
 		makeDisplayer = function (klas) {
 			return {
@@ -384,7 +385,7 @@ if (!window.gAlp) {
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
 			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
             if (i && !inRange(arr, i) && utils.findByClass('tab')) {
-                COMP(delayExecute, deferNavListener)(COMP(tab_cb, getTarget));
+                COMP(delayExecute, delayNavListener)(COMP(tab_cb, getTarget));
 			}
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
@@ -582,8 +583,8 @@ if (!window.gAlp) {
                 remove_extent = COMP(PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show),
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(loopevents), navoutcomes, twice(invoke), text_from_target),
                                 
-				$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
-				//$loop_listener = deferNavListener(loop_listener),
+				//$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
+				$loop_listener = deferNavListener(loop_listener),
                 
                 prep_loop_listener = COMP($loop_listener, makeLoopTabs),
                 
