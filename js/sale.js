@@ -549,7 +549,12 @@ if (!window.gAlp) {
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.tabs.current, Looper.tabs),
                 makeTabs = deferEach(true_captions)(doLI_cb),
-                prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'),  thrice(lazyVal)('concat')(['Alpacas For Sale']), getterBridge, utils.con, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
+                doFind = _.bind(Looper.tabs.find, Looper.tabs),
+                goGetValue = COMP(doGet('value'), bindCurrent),
+				goGetIndex = COMP(doGet('index'), bindCurrent),
+                
+                prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'),  thrice(lazyVal)('concat')(['Alpacas For Sale']), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
+                                
                 makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),                
 				captionsORtabs = [
 					[gt4, makeCaptions],
@@ -562,9 +567,8 @@ if (!window.gAlp) {
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
-				doFind = _.bind(Looper.tabs.find, Looper.tabs),
-				goGetValue = COMP(doGet('value'), bindCurrent),
-				goGetIndex = COMP(doGet('index'), bindCurrent),
+				
+				
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
 				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
                 getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
@@ -583,7 +587,7 @@ if (!window.gAlp) {
                 
                 prep_loop_listener = COMP($loop_listener, makeLoopTabs),
                 
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle),  utils.con, prep_loop_listener, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs,  delayExecute, prep_loop_listener, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 
                 
 				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
