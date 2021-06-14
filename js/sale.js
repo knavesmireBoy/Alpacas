@@ -16,6 +16,20 @@ if (!window.gAlp) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
     
+    
+    function Alternator(actions){
+       this.action = utils.doAlternate()(actions);
+    }
+    
+    Alternator.prototype.exec = function(){
+        this.action.apply(this, arguments);
+    };
+    
+    function makeAlternator(actions){
+        return new Alternator(actions);
+    }
+    
+    
      function doReg(str){
          return COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(str);
                     }
@@ -138,7 +152,7 @@ if (!window.gAlp) {
 		return i + 1;
 	}
     function sliceArray(list, end) {
-		return list.slice(_.random(0, end || list.length));
+		//return list.slice(_.random(0, end || list.length));
 		return list.slice(0, -2);
 	}
 	var alpacas = [
@@ -267,6 +281,7 @@ if (!window.gAlp) {
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
+		klasReset = PTL(utils.replaceClass, 'loop', 'tab'),
 		setAttrs = utils.setAttributes,
 		$$ = thricedefer(lazyVal)('getElementById')(document),
 		intro = utils.findByClass('intro'),
@@ -522,11 +537,13 @@ if (!window.gAlp) {
 			return true;
 		},
 		addLoopClass = PTL(klasAdd, 'loop', makeUL),
+		remLoopClass = PTL(klasRem, 'loop', makeUL),
 		addTabClass = PTL(klasAdd, 'tab', makeUL),
+		remTabClass = PTL(klasRem, 'tab', makeUL),
 		outcomes = [
-			[gt4, addLoopClass],
-			[mob4, addLoopClass],
-			[ALWAYS(alp_len), addTabClass],
+			[gt4, COMP(remTabClass, addLoopClass)],
+			[mob4, COMP(remTabClass, addLoopClass)],
+			[ALWAYS(alp_len), COMP(remLoopClass, addTabClass)],
 			[ALWAYS(true), function () {}]
 		],
 		addULClass = COMP(invoke, getOne, PTL(utils.getBestOnly, COMP(invoke, getZero), outcomes)),
@@ -545,8 +562,7 @@ if (!window.gAlp) {
 				deferMembers = deferEach(members),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.tabs.current, Looper.tabs),
-                getULClassLIst = COMP(PTL(utils.getClassList, $$('list'))), 
-                makeTabs = COMP(addTabClass, tab_cb_bridge, deferEach(true_captions)(navBuilder)),
+                makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(navBuilder)),
                 doFind = _.bind(Looper.tabs.find, Looper.tabs),
                 goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
@@ -576,26 +592,30 @@ if (!window.gAlp) {
                 find_onclick = COMP(goGetValue, doFind, getParent, getTarget),
                 //find_onresize = COMP(goGetValue, _.bind(Looper.tabs.set, Looper.tabs), ALWAYS(0)),
                 remove_extent = COMP(PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show),
-                
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(loopevents), navoutcomes, twice(invoke), text_from_target),
                                 
 				$loop_listener = deferNavListener(loop_listener),
-                prep_loop_listener = COMP(delayExecute, $loop_listener, makeLoopTabs),
+                prep_loop_listener = COMP(delayExecute, $loop_listener, addLoopClass, makeLoopTabs),
+                                
+                reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
+				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
+                                
+                //tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
+                tabCBS = getEnvironment() ?  [reLoop, reTab] : [reTab, reLoop],
+				//reDoTabs = deferAlt(tabCBS),
+				reDoTabs = utils.doAlternate()(tabCBS),
                 
-                prepTabs = PTL(utils.getBest, desk4, [COMP(utils.con, makeTabs), prep_loop_listener]),
+                prepTabs = PTL(utils.getBest, desk4, [COMP(addTabClass, makeTabs), prep_loop_listener]),
                 
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 
-				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
-				//reLoop = COMP(delayExecute, prep_loop_listener, makeUL, deleteListFromCache),
-				reTab = COMP(utils.con, makeTabs, addULClass, makeUL, deleteListFromCache),
-				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
-				reDoTabs = deferAlt(tabCBS),
+				
+                
+				
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 					if ($toggler) { //image was clicked
-                        utils.con(desk4());
 						gAlp.Intaface.ensures($toggler, iCommand);
 						$selector.undo();
 						$toggler.execute(true); //unshift to maintain nav as LAST listener

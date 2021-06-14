@@ -1456,6 +1456,7 @@ gAlp.Util = (function () {
 		removeClass: _.partial(setFromArray, always(true), 'remove'),
 		removeNodeOnComplete: removeNodeOnComplete,
 		render: render,
+        replaceClass: _.partial(setFromArray, always(true), 'replace'),
 		reverse: reverseArray,
 		//https://gomakethings.com/how-to-serialize-form-data-into-an-object-with-vanilla-js
 		serializeObject: function (form) {
