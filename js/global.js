@@ -458,6 +458,7 @@ gAlp.Util = (function () {
 	}
 
 	function getClassList(el) {
+        el = getResult(el);
 		if (el) {
 			if (typeof el.classList === 'undefined') {
 				return gAlp.ClassList(el);
