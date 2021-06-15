@@ -18,13 +18,11 @@ if (!window.gAlp) {
     
     
     function Alternator(actions){
-        console.log(actions, 99)
         this.action = utils.doAlternate()(actions);
         return this;
     }
     
     Alternator.prototype.execute = function(){
-        console.log('exec...')
         return this.action.apply(this, arguments);
     };
     
@@ -575,9 +573,7 @@ if (!window.gAlp) {
                 doFind = _.bind(Looper.tabs.find, Looper.tabs),
                 goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
-                
                 prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'),  thrice(lazyVal)('concat')(['Alpacas For Sale']), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
-                                
                 makeLoopTabs = deferEach(prepLoopTabs)(navBuilder),                
 				captionsORtabs = [
 					[gt4, makeCaptions],
@@ -585,13 +581,13 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function () {}]
 				],
-				$div_listener = Context.set(),
-				loader = doMethodDefer('execute')(null)($div_listener),
+				$divcontext = Context.set(),
+				loader = doMethodDefer('execute')(null)($divcontext),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),				
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
-				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
                 getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
 				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
@@ -602,29 +598,22 @@ if (!window.gAlp) {
                 //find_onresize = COMP(goGetValue, _.bind(Looper.tabs.set, Looper.tabs), ALWAYS(0)),
                 remove_extent = COMP(PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show),
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(loopevents), navoutcomes, twice(invoke), text_from_target),
-                                
 				$loop_listener = deferNavListener(loop_listener),
                 prep_loop_listener = COMP(delayExecute, $loop_listener, addLoopClass, makeLoopTabs),
-                                
                 reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
 				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
                 tabFirst = [reTab, reLoop],
                 loopFirst = [reLoop, reTab],
                 tabCBS = getEnvironment() ?  loopFirst : tabFirst,
-                //tabSYNC = [tabFirst, loopFirst],
                 performAlternator = PTL(makeAlternator, tabFirst),
-				//reDoTabs = deferAlt(tabCBS),
-				//reDoTabs = utils.doAlternate()(tabCBS),
                 $tabcontext = Context.set(makeAlternator(tabCBS)),
                 lazyTabber = thrice(lazyVal)('set')($tabcontext),
-                //prepTabs = PTL(utils.getBest, desk4, [COMP(addTabClass, makeTabs), prep_loop_listener]),
                 prepTabs = PTL(utils.getBest, desk4, [COMP(delayExecute, lazyTabber, performAlternator), prep_loop_listener]),
-                
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), /*abbreviateTabs*/ invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
-                
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 $selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
+                    
 					if ($toggler) { //image was clicked
 						gAlp.Intaface.ensures($toggler, iCommand);
 						$selector.undo();
@@ -636,7 +625,7 @@ if (!window.gAlp) {
 						getEnvironment = _.negate(getEnvironment);						
 						if (is4()) {
                             cb();//will only run in sell AND NOT extent mode
-							$div_listener.set(utils.getBest(isLoop, [$selector, $toggle]));
+							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 							navtabs = [];
 						}
 					}
@@ -651,11 +640,10 @@ if (!window.gAlp) {
 				};
 			addULClass();
 			klasAdd([nth], intro);
-			//$div_listener persists and DELEGATES to current $listener($selector, $toggle)
-			$div_listener.set(utils.getBest(isLoop, [$selector, $toggle]));
+			//$divcontext persists and DELEGATES to current $listener($selector, $toggle)
+			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 			loader(); //div listener            
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
-			//throttler(reDoTabs); //resize listener unshift to front of eventcache list
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
 			//makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');

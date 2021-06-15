@@ -240,9 +240,7 @@ gAlp.Util = (function () {
 		return function (actions) {
 			var f = _.partial(thunk, alternate(0, 2));
 			return function () {
-                var ret = gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
-                console.log(ret, 9);
-                return ret;
+                return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
 			};
 		};
 	}
