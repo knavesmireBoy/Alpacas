@@ -44,7 +44,6 @@ if (!window.gAlp) {
 		}
 	}
 	Context.prototype.execute = function () {
-        con('exec')
 		if (this.$command) {
 			return this.$command.execute();
 		}
@@ -556,6 +555,8 @@ if (!window.gAlp) {
 		addULClass = COMP(invoke, getOne, PTL(utils.getBestOnly, COMP(invoke, getZero), outcomes)),
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		deleteListFromCache = thricedefer(doMethod)('erase')(false)(utils.eventCache),
+        getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
+		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function () {
@@ -601,7 +602,7 @@ if (!window.gAlp) {
 				$loop_listener = deferNavListener(loop_listener),
                 prep_loop_listener = COMP(delayExecute, $loop_listener, addLoopClass, makeLoopTabs),
                 reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
-				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
+				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
                 tabFirst = [reTab, reLoop],
                 loopFirst = [reLoop, reTab],
                 tabCBS = getEnvironment() ?  loopFirst : tabFirst,
@@ -625,6 +626,7 @@ if (!window.gAlp) {
 						getEnvironment = _.negate(getEnvironment);						
 						if (is4()) {
                             cb();//will only run in sell AND NOT extent mode
+                            console.log(isLoop(), 9);
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 							navtabs = [];
 						}
