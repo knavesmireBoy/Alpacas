@@ -588,7 +588,7 @@ if (!window.gAlp) {
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),				
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
-				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+				restoreCaptions = COMP(/*addULClass, */delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
                 getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
 				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
@@ -626,7 +626,7 @@ if (!window.gAlp) {
 						getEnvironment = _.negate(getEnvironment);						
 						if (is4()) {
                             cb();//will only run in sell AND NOT extent mode
-                            console.log(isLoop(), 9);
+                            //set when going from desktop to mobile, so that if exiting into gallery mode, listner will restore
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 							navtabs = [];
 						}

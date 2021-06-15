@@ -139,9 +139,11 @@ article.intro {
 	margin-top: -1px;
 	*clear: left;
 }
-.loop+#sell {
-	margin-top: 0px;
+
+#sell.extent, .loop+#sell {
+	margin-top: 0;
 }
+
 #alpacas_for_sale article.intro {
 	position: relative;
 	width: 100%;
