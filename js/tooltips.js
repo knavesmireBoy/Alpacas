@@ -1,27 +1,23 @@
-/*jslint browser: true*/
 /*jslint nomen: true */
+/*jslint browser: true*/
 /*global window: false */
-/*global poloAF: false */
-/*global Modernizr: false */
 /*global document: false */
+/*global Modernizr: false */
 /*global _: false */
-/*global poloAF: false */
-if (!window.poloAF) {
-	window.poloAF = {};
+/*global gAlp: false */
+if (!window.gAlp) {
+	window.gAlp = {};
 }
-window.poloAF.Tooltip = function (anchor, instr, count, remove) {
+window.gAlp.Tooltip = function (anchor, instr, count) {
 	"use strict";
 	var $ = function (str) {
 			return document.getElementById(str);
 		},
-		getResult = function (arg) {
-			return _.isFunction(arg) ? arg() : arg;
-		},
-		utils = poloAF.Util,
+		utils = gAlp.Util,
 		setText = utils.setText,
 		setAttrs = utils.setAttributes,
 		anCr = utils.append(),
-		doElement = _.compose(anCr(getResult(anchor)), utils.always('div')),
+		doElement = _.compose(anCr(anchor), utils.always('div')),
 		doAttrs = _.partial(setAttrs, {
 			id: 'tooltip'
 		}),
@@ -58,36 +54,18 @@ window.poloAF.Tooltip = function (anchor, instr, count, remove) {
 			gang.push(_.partial(timeout, d, 6500));
 			return gang;
 		},
-		exit = function (delay) {
-			var that = this;
-			window.setTimeout(function () {
-				that.cancel();
-			}, delay);
-		},
 		init = function () {
-			var tip,
-				doDiv,
-				doAttr;
+			//console.log('tool: '+count)
 			if (isPos(count--)) {
-				tip = utils.machElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).render().getElement();
-				doDiv = _.compose(anCr(tip), utils.always('div'));
-				doAttr = _.partial(setAttrs, {
-					id: 'triangle'
-				});
+				var tip = utils.machElement(_.partial(_.bind(timer.run, timer), prep()), doAttrs, doElement).render().getElement(),
+					doDiv = _.compose(anCr(tip), utils.always('div')),
+					doAttr = _.partial(setAttrs, {
+						id: 'triangle'
+					});
 				utils.machElement(setText(instr[0]), doDiv).render();
 				utils.machElement(doAttr, doDiv).render();
 			}
-			if (remove) {
-				exit.call(this, 10000);
-			}
 			return this;
-		},
-		run = function (gang, el) {
-			var invoke = function (partial) {
-				return partial(el);
-			};
-			this.ids = _.map(gang, invoke, this);
-			return el;
 		},
 		dummytimer = {
 			init: function () {},
@@ -98,10 +76,11 @@ window.poloAF.Tooltip = function (anchor, instr, count, remove) {
 		timer = {
 			init: init,
 			run: function (gang, el) {
-				if (utils.findByClass('tip')) {
-					return el;
-				}
-				return run.bind(this, gang, el)();
+				var invoke = function (partial) {
+					return partial(el);
+				};
+				this.ids = _.map(gang, invoke, this);
+				return el;
 			},
 			ids: [],
 			cancel: function () {
