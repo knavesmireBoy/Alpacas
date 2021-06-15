@@ -18,47 +18,54 @@ if (!window.gAlp) {
     
     
     function Alternator(actions){
-       this.action = utils.doAlternate()(actions);
+        console.log(actions, 99)
+        this.action = utils.doAlternate()(actions);
+        return this;
     }
     
-    Alternator.prototype.exec = function(){
-        this.action.apply(this, arguments);
+    Alternator.prototype.execute = function(){
+        console.log('exec...')
+        return this.action.apply(this, arguments);
     };
+    
+    Alternator.prototype.undo = noOp;
     
     function makeAlternator(actions){
         return new Alternator(actions);
     }
     
-    
      function doReg(str){
          return COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(str);
-                    }
+     }
 
 	function Context($command) {
 		var iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 		if ($command) {
 			gAlp.Intaface.ensures($command, iCommand);
-			this.command = $command;
+			this.$command = $command;
 		}
 	}
 	Context.prototype.execute = function () {
-		if (this.command) {
-			return this.command.execute();
+        con('exec')
+		if (this.$command) {
+			return this.$command.execute();
 		}
 	};
 	Context.prototype.undo = function () {
-		if (this.command) {
-			return this.command.undo();
+		if (this.$command) {
+			return this.$command.undo();
 		}
 	};
 	Context.prototype.set = function ($command) {
 		if ($command) {
-			this.command = $command;
+			this.$command = $command;
 		}
+        return this;
 	};
 	Context.set = function ($command) {
 		return new Context($command);
 	};
+    
 	//    https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
 		var Factory = constructor.bind.apply(constructor, arguments);
@@ -235,7 +242,7 @@ if (!window.gAlp) {
 			});
 		}(alpacas)),
 		utils = gAlp.Util,
-		//con = utils.con,
+		con = utils.con,
 		PTL = _.partial,
 		COMP = _.compose,
 		ALWAYS = utils.always,
@@ -273,7 +280,9 @@ if (!window.gAlp) {
 		deferEvery = thricedefer(doCallbacks)('every'),
 		deferSome = thricedefer(doCallbacks)('some'),
         delayExecute = thrice(doMethod)('execute')(null),
+        deferExecute = thricedefer(doMethod)('execute')(null),
 		doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
+        doReverse = thricedefer(doMethod)('reverse')(null),
         deferAlt = defer_once(doAlt),
 		doGet = twice(utils.getter),
 		getZero = doGet(0),
@@ -455,7 +464,7 @@ if (!window.gAlp) {
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
 		}), PTL(anCr(intro), 'div')),
-		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow),
+		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow, true),
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
@@ -582,7 +591,7 @@ if (!window.gAlp) {
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),				
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
-				restoreCaptions = COMP(/*addULClass, */delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
                 getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
 				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
@@ -599,20 +608,21 @@ if (!window.gAlp) {
                                 
                 reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
 				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
-                                
-                //tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
-                tabCBS = getEnvironment() ?  [reLoop, reTab] : [reTab, reLoop],
+                tabFirst = [reTab, reLoop],
+                loopFirst = [reLoop, reTab],
+                tabCBS = getEnvironment() ?  loopFirst : tabFirst,
+                //tabSYNC = [tabFirst, loopFirst],
+                performAlternator = PTL(makeAlternator, tabFirst),
 				//reDoTabs = deferAlt(tabCBS),
-				reDoTabs = utils.doAlternate()(tabCBS),
+				//reDoTabs = utils.doAlternate()(tabCBS),
+                $tabcontext = Context.set(makeAlternator(tabCBS)),
+                lazyTabber = thrice(lazyVal)('set')($tabcontext),
+                //prepTabs = PTL(utils.getBest, desk4, [COMP(addTabClass, makeTabs), prep_loop_listener]),
+                prepTabs = PTL(utils.getBest, desk4, [COMP(delayExecute, lazyTabber, performAlternator), prep_loop_listener]),
                 
-                prepTabs = PTL(utils.getBest, desk4, [COMP(addTabClass, makeTabs), prep_loop_listener]),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), /*abbreviateTabs*/ invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
-                
-				
-                
-				
-				$selector = eventing('click', event_actions.slice(0), function (e) {
+                $selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 					if ($toggler) { //image was clicked
@@ -645,8 +655,9 @@ if (!window.gAlp) {
 			$div_listener.set(utils.getBest(isLoop, [$selector, $toggle]));
 			loader(); //div listener            
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
-			throttler(reDoTabs); //resize listener unshift to front of eventcache list
-			makeToolTip().init();
+			//throttler(reDoTabs); //resize listener unshift to front of eventcache list
+			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
+			//makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
             //utils.report();

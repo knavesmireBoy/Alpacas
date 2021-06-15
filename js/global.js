@@ -229,17 +229,20 @@ gAlp.Util = (function () {
 	}
 
 	function doAlternate() {
+        
 		function alternate(i, n) {
 			return function () {
 				i = (i += 1) % n;
+                //console.log('andI'+i);
 				return i;
 			};
 		}
 		return function (actions) {
 			var f = _.partial(thunk, alternate(0, 2));
 			return function () {
-				//return gAlp.Util.getBest(f, [_.partial(actions[0], arg), _.partial(actions[1], arg)])();
-				return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
+                var ret = gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
+                console.log(ret, 9);
+                return ret;
 			};
 		};
 	}
