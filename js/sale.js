@@ -16,32 +16,46 @@ if (!window.gAlp) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
 
+	function Alternator(actions) {
+		this.action = gAlp.Util.doAlternate()(actions);
+		return this;
+	}
+	Alternator.prototype.execute = function () {
+		return this.action.apply(this, arguments);
+	};
+	Alternator.prototype.undo = noOp;
+
+	function makeAlternator(actions) {
+		return new Alternator(actions);
+	}
+
 	function Context($command) {
 		var iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 		if ($command) {
 			gAlp.Intaface.ensures($command, iCommand);
-			this.command = $command;
+			this.$command = $command;
 		}
 	}
 	Context.prototype.execute = function () {
-		if (this.command) {
-			return this.command.execute();
+		if (this.$command) {
+			return this.$command.execute();
 		}
 	};
 	Context.prototype.undo = function () {
-		if (this.command) {
-			return this.command.undo();
+		if (this.$command) {
+			return this.$command.undo();
 		}
 	};
 	Context.prototype.set = function ($command) {
 		if ($command) {
-			this.command = $command;
+			this.$command = $command;
 		}
+		return this;
 	};
 	Context.set = function ($command) {
 		return new Context($command);
 	};
-	//    https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
+	/*   https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
 		var Factory = constructor.bind.apply(constructor, arguments);
 		return new Factory();
@@ -50,7 +64,11 @@ if (!window.gAlp) {
 	function partialize() {
 		return _.partial.apply(null, _.rest(arguments));
 	}
-
+    
+    function doReg(str) {
+		return COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(str);
+	}
+*/
 	function equals(a, b) {
 		return getResult(a) === getResult(b);
 	}
@@ -106,11 +124,11 @@ if (!window.gAlp) {
 	}
 
 	function doCallbacks(cb, coll, p) {
+		//console.log(getResult(cb));
 		return _[p](getResult(coll), cb);
 	}
 
 	function doMethod(o, v, p) {
-		//console.log(arguments);
 		return o[p] && o[p](v);
 	}
 
@@ -128,11 +146,7 @@ if (!window.gAlp) {
 
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
-		//return list.slice(0, -1);
-	}
-
-	function inRange(coll, i) {
-		return coll[i + 1];
+		//return list.slice(0, -2);
 	}
 	var alpacas = [
 			[
@@ -208,7 +222,6 @@ if (!window.gAlp) {
 				["src", "../images/sale/rico.jpg"]
 			]
 		],
-		loop_captions = ['Alpacas For Sale'],
 		captions = (function (coll) {
 			return _.map(coll, function (sub) {
 				return sub[0][0];
@@ -238,11 +251,10 @@ if (!window.gAlp) {
 		},
 		nth = utils.getter(lookup, alp_len),
 		curryFactory = utils.curryFactory,
-		defer_once = curryFactory(1, true),
 		twice = curryFactory(2),
 		twicedefer = curryFactory(2, true),
 		thrice = curryFactory(3),
-		thriceplus = curryFactory(4),
+		curryfour = curryFactory(4),
 		thricedefer = curryFactory(3, true),
 		doMethodDefer = thricedefer(doMethod),
 		delayMap = thrice(doCallbacks)('map'),
@@ -250,7 +262,7 @@ if (!window.gAlp) {
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferIndex = thricedefer(doCallbacks)('findIndex'),
 		deferEvery = thricedefer(doCallbacks)('every'),
-		doAlt = COMP(twice(invoke)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
+		delayExecute = thrice(doMethod)('execute')(null),
 		doGet = twice(utils.getter),
 		getZero = doGet(0),
 		getOne = doGet(1),
@@ -269,7 +281,9 @@ if (!window.gAlp) {
 		threshold = Number(query.match(number_reg)[1]),
 		isDesktop = _.partial(gtThan, window.viewportSize.getWidth, threshold),
 		true_captions = doMethodDefer('slice')(-alp_len)(captions),
-		indexFromTab = deferIndex(true_captions()),
+		delayNavListener = twice(PTL(eventing, 'click', []))($$('list')),
+		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
+		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
 		makeDisplayer = function (klas) {
 			return {
 				show: _.partial(klasAdd, klas),
@@ -330,8 +344,9 @@ if (!window.gAlp) {
 		}()),
 		gt4 = twicedefer(gtThan)(4)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
-		mob4 = deferEvery([_.negate(gt4), gt3, _.negate(isDesktop)])(getResult),
 		is4 = deferEvery([_.negate(gt4), gt3])(getResult),
+		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
+		desk4 = deferEvery([is4, isDesktop])(getResult),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
@@ -351,26 +366,23 @@ if (!window.gAlp) {
 				when = PTL(utils.doWhen, utils.hasClass('show', a), PTL(utils.show, showtable()));
 			_.compose(when, utils.getPrevious, PTL(utils.insertAfter, a), showtable, utils.removeNodeOnComplete, goFig, PTL(klasRem, 'extent'), getParent, twice(invokeArg)(sell), thrice(doMethod)('appendChild'), _.identity)(a);
 		},
-		tab_cb = function ($displayer, tgt, matcher) {
-			var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']);
+		tab_cb = function (tgt) {
+			var iDisplayer = gAlp.Intaface('Display', ['hide', 'show']),
+				$displayer = makeDisplayer('current');
 			gAlp.Intaface.ensures($displayer, iDisplayer);
 			$displayer.hide();
-			$displayer.show(tgt);
+			$displayer.show(getParent(tgt));
 			Looper.tabs.visit(utils.hide);
-			COMP(_.bind(Looper.tabs.set, Looper.tabs), indexFromTab(matcher))();
+			COMP(_.bind(Looper.tabs.set, Looper.tabs), getTabIndex(tgt))();
 			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.tabs.current, Looper.tabs))();
 		},
-		doLI_cb = function (caption, i, arr) {
+		tab_cb_bridge = PTL(COMP(delayExecute, delayNavListener), COMP(tab_cb, getTarget)),
+		navBuilder = function (caption, i) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
 				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
-			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, getUL)();
-			/*don't add listener if only one tab, if in loop layout and only add it once so wait until last item as this is called in a loop */
-			if (i && !inRange(arr, i) && utils.findByClass('tab')) {
-				eventing('click', [], function (e) {
-					tab_cb(makeDisplayer('current'), COMP(getParent, getTarget)(e), COMP(thrice(doMethod)('match'), twice(invoke)('i'), PTL(partialize, create, RegExp))(text_from_target(e)));
-				}, getUL).execute();
-			}
+			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, makeUL)();
+			return getUL();
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
 		abbreviateTabs = function () {
@@ -424,11 +436,10 @@ if (!window.gAlp) {
 		doLoop = function (coll) {
 			Looper.tabs = Looper.from(coll, doInc(doGet('length')(coll)));
 		},
-		makeTabs = deferEach(true_captions)(doLI_cb),
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
 		}), PTL(anCr(intro), 'div')),
-		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow),
+		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow, true),
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
@@ -438,7 +449,7 @@ if (!window.gAlp) {
 				var table = getAnchor(), //<table></table
 					render = anCr(table),
 					tbody = COMP(render, PTL(_.identity))('tbody'),
-					c = thriceplus(caller)('match')(/^other/i)(utils.drillDown(['innerHTML'])),
+					c = curryfour(caller)('match')(/^other/i)(utils.drillDown(['innerHTML'])),
 					addspan,
 					doRow = COMP(anCr(tbody)),
 					tableconfig = {
@@ -510,17 +521,20 @@ if (!window.gAlp) {
 			return true;
 		},
 		addLoopClass = PTL(klasAdd, 'loop', makeUL),
+		remLoopClass = PTL(klasRem, 'loop', makeUL),
 		addTabClass = PTL(klasAdd, 'tab', makeUL),
+		remTabClass = PTL(klasRem, 'tab', makeUL),
 		outcomes = [
-			[gt4, addLoopClass],
-			[mob4, addLoopClass],
-			[ALWAYS(alp_len), addTabClass],
+			[gt4, COMP(remTabClass, addLoopClass)],
+			[mob4, COMP(remTabClass, addLoopClass)],
+			[ALWAYS(alp_len), COMP(remLoopClass, addTabClass)],
 			[ALWAYS(true), function () {}]
 		],
 		addULClass = COMP(invoke, getOne, PTL(utils.getBestOnly, COMP(invoke, getZero), outcomes)),
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
-		delayExecute = thrice(doMethod)('execute')(null),
 		deleteListFromCache = thricedefer(doMethod)('erase')(false)(utils.eventCache),
+		getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
+		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function () {
@@ -532,55 +546,68 @@ if (!window.gAlp) {
 			};
 			var members = Looper.tabs.current().members,
 				deferMembers = deferEach(members),
-				deferAlt = defer_once(doAlt),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind(Looper.tabs.current, Looper.tabs),
+				makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(navBuilder)),
+				doFind = _.bind(Looper.tabs.find, Looper.tabs),
+				goGetValue = COMP(doGet('value'), bindCurrent),
+				goGetIndex = COMP(doGet('index'), bindCurrent),
+				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(['Alpacas For Sale']), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
+				makeLoopTabs = deferEach(prepLoopTabs)(navBuilder),
 				captionsORtabs = [
 					[gt4, makeCaptions],
 					[mob4, makeCaptions],
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function () {}]
 				],
-				$div_listener = Context.set(),
-				loader = doMethodDefer('execute')(null)($div_listener),
+				$divcontext = Context.set(),
+				loader = doMethodDefer('execute')(null)($divcontext),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
-				doFind = _.bind(Looper.tabs.find, Looper.tabs),
-				goGetValue = COMP(doGet('value'), bindCurrent),
-				goGetIndex = COMP(doGet('index'), bindCurrent),
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
-				restoreCaptions = COMP(addULClass, delayExecute, ALWAYS($div_listener), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
-				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(loop_captions), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
-				makeLoopTabs = deferEach(prepLoopTabs)(doLI_cb),
+				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
-				events = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
+				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
 					noOp,
 					noOp
-                         ],
-				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(events), navoutcomes, twice(invoke), text_from_target),
-				$loop_listener = PTL(eventing, 'click', [], loop_listener, $$('list')),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, delayExecute, $loop_listener, makeLoopTabs, deferMembers(undoCaption_cb), PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show, goGetValue, doFind, getParent, getTarget)),
+                             ],
+				find_onclick = COMP(goGetValue, doFind, getParent, getTarget),
+				remove_extent = COMP(PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show),
+				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(loopevents), navoutcomes, twice(invoke), text_from_target),
+				$loop_listener = deferNavListener(loop_listener),
+				prep_loop_listener = COMP(delayExecute, $loop_listener, addLoopClass, makeLoopTabs),
+				/*
+				When resizing between mobile and desktop environments we need to produce the correct navigation tabs when the number of Alpacas is four (<4 tab, >4 loop, 4 alternate)
+				and so it's a great case for alternating between two tab builders. IF resize takes place when in gallery mode
+				the alternating strategies will be out of sync, so we must create anew. $tabcontext delegates the alternating behaviour to a class of Alternator whose execute method delegates to a a two member array of strategies
+				*/
 				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
-				reTab = COMP(makeTabs, addULClass, makeUL, deleteListFromCache),
-				tabCBS = getEnvironment() ? [reTab, reLoop] : [reLoop, reTab],
-				reDoTabs = deferAlt(tabCBS),
-				$displayer = eventing('click', event_actions.slice(0), function (e) {
+				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
+				tabFirst = [reTab, reLoop],
+				tabCBS = getEnvironment() ? [reLoop, reTab] : tabFirst,
+				performAlternator = PTL(makeAlternator, tabFirst),
+				$tabcontext = Context.set(makeAlternator(tabCBS)),
+				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
+				prepTabs = PTL(utils.getBest, desk4, [COMP(delayExecute, setTabStrategy, performAlternator), prep_loop_listener]),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 					if ($toggler) { //image was clicked
 						gAlp.Intaface.ensures($toggler, iCommand);
-						$displayer.undo();
+						$selector.undo();
 						$toggler.execute(true); //unshift to maintain nav as LAST listener
 					}
 				}, utils.$('sell')),
 				negate = function (cb) {
 					if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
-						cb();
 						if (is4()) {
-							$div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
+							cb(); //will only run in sell AND NOT extent mode
+							//set when going from desktop to mobile, so that if exiting into gallery mode, correct listener will be restored
+							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 							navtabs = [];
 						}
 					}
@@ -589,21 +616,21 @@ if (!window.gAlp) {
 				},
 				throttler = function (cb) {
 					negate(noOp); //onload
-					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell'), is4])(getResult),
+					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell')])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute(true);
 				};
 			addULClass();
 			klasAdd([nth], intro);
-			//$div_listener persists and DELEGATES to current $listener(displayer, $toggle)
-			$div_listener.set(utils.getBest(isLoop, [$displayer, $toggle]));
+			//$divcontext persists and DELEGATES to current $listener($selector, $toggle)
+			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 			loader(); //div listener            
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
-			throttler(reDoTabs); //resize listener unshift to front of eventcache list
+			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			//utils.highLighter.perform();
-            //utils.report();
+			//utils.report();
 		};
 	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));

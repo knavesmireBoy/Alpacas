@@ -229,17 +229,18 @@ gAlp.Util = (function () {
 	}
 
 	function doAlternate() {
+        
 		function alternate(i, n) {
 			return function () {
 				i = (i += 1) % n;
+                //console.log('andI'+i);
 				return i;
 			};
 		}
 		return function (actions) {
 			var f = _.partial(thunk, alternate(0, 2));
 			return function () {
-				//return gAlp.Util.getBest(f, [_.partial(actions[0], arg), _.partial(actions[1], arg)])();
-				return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
+                return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
 			};
 		};
 	}
@@ -458,6 +459,7 @@ gAlp.Util = (function () {
 	}
 
 	function getClassList(el) {
+        el = getResult(el);
 		if (el) {
 			if (typeof el.classList === 'undefined') {
 				return gAlp.ClassList(el);
@@ -1455,6 +1457,7 @@ gAlp.Util = (function () {
 		removeClass: _.partial(setFromArray, always(true), 'remove'),
 		removeNodeOnComplete: removeNodeOnComplete,
 		render: render,
+        replaceClass: _.partial(setFromArray, always(true), 'replace'),
 		reverse: reverseArray,
 		//https://gomakethings.com/how-to-serialize-form-data-into-an-object-with-vanilla-js
 		serializeObject: function (form) {

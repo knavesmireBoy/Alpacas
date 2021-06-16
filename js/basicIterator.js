@@ -267,7 +267,7 @@ gAlp.Composite = (function () {
 			//return this.set(this.group.members.findIndex(_.partial(equals, tgt)));
 		},
 		set: function (pos) {
-			if (pos >= 0) {
+			if (!isNaN(parseFloat(pos)) && pos >= 0) {
 				this.position = pos;
 			}
 			var result = {
