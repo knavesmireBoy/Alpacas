@@ -20,8 +20,8 @@
 	bottom: 12%;
 }
 
-#about_alpacas.verbose article.intro p{
-    margin: 0 35% 0 0;
+#about_alpacas.verbose article.intro p {
+    margin: 0 35% .5em 0;
     }
 #upkeep main aside {
 	width: 119%;
