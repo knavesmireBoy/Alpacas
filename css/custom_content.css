@@ -390,7 +390,7 @@ ul#thumbnails a:hover, ul#thumbnails a:active {
 #backbutton {
 	background-position: 50% 14.5%;
 }
-#playbutton {
+button#playbutton {
 	background-position: 50% 29%;
 }
 .playing #playbutton {
