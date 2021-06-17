@@ -561,7 +561,6 @@ if (!window.gAlp) {
 					[ALWAYS(true), function () {}]
 				],
 				$divcontext = Context.set(),
-				loader = doMethodDefer('execute')(null)($divcontext),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
@@ -623,8 +622,7 @@ if (!window.gAlp) {
 			addULClass();
 			klasAdd([nth], intro);
 			//$divcontext persists and DELEGATES to current $listener($selector, $toggle)
-			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
-			loader(); //div listener            
+			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle])).execute();
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
 			makeToolTip().init();
