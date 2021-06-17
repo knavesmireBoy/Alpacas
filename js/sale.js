@@ -151,7 +151,6 @@ if (!window.gAlp) {
 
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
-		//return list.slice(0, -2);
 	}
 	var alpacas = [
 			[
@@ -539,6 +538,7 @@ if (!window.gAlp) {
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		deleteListFromCache = thricedefer(doMethod)('erase')(false)(utils.eventCache),
 		getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
+        //may need a more robust version than this as a state test
 		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
@@ -591,16 +591,10 @@ if (!window.gAlp) {
 				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
 				tabFirst = [reTab, reLoop],
 				tabCBS = getEnvironment() ? [reLoop, reTab] : tabFirst,
-                
-                
 				$tabcontext = Context.set(makeAlternator(tabCBS)),
-                
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
-                
-                resetTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
-                
-				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(resetTabContext, tabFirst), prep_loop_listener]),
-                
+                setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
+				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
