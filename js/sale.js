@@ -21,9 +21,14 @@ if (!window.gAlp) {
 		return this;
 	}
 	Alternator.prototype.execute = function () {
-		return this.action.apply(this, arguments);
+		this.$command = this.action.apply(this, arguments);
 	};
-	Alternator.prototype.undo = noOp;
+    
+	Alternator.prototype.undo = function () {
+		if (this.$command) {
+			return this.$command.undo();
+		}
+	};
 
 	function makeAlternator(actions) {
 		return new Alternator(actions);
@@ -346,7 +351,7 @@ if (!window.gAlp) {
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		is4 = deferEvery([_.negate(gt4), gt3])(getResult),
 		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
-		desk4 = deferEvery([is4, isDesktop])(getResult),
+		reSyncCheck = deferEvery([is4, isDesktop])(getResult),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
@@ -586,10 +591,16 @@ if (!window.gAlp) {
 				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
 				tabFirst = [reTab, reLoop],
 				tabCBS = getEnvironment() ? [reLoop, reTab] : tabFirst,
-				performAlternator = PTL(makeAlternator, tabFirst),
+                
+                
 				$tabcontext = Context.set(makeAlternator(tabCBS)),
+                
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
-				prepTabs = PTL(utils.getBest, desk4, [COMP(delayExecute, setTabStrategy, performAlternator), prep_loop_listener]),
+                
+                resetTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
+                
+				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(resetTabContext, tabFirst), prep_loop_listener]),
+                
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
