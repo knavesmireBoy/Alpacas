@@ -228,17 +228,17 @@ gAlp.Util = (function () {
 		return str.charAt(0) === p ? str : p + str;
 	}
 
-	function doAlternate() {
+	function doAlternate(j) {
         
 		function alternate(i, n) {
 			return function () {
 				i = (i += 1) % n;
-                //console.log('andI'+i);
 				return i;
 			};
 		}
 		return function (actions) {
-			var f = _.partial(thunk, alternate(0, 2));
+            j = j || 2;
+			var f = _.partial(thunk, alternate(0, j));
 			return function () {
                 return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
 			};

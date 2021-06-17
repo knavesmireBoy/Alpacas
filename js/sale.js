@@ -21,9 +21,14 @@ if (!window.gAlp) {
 		return this;
 	}
 	Alternator.prototype.execute = function () {
-		return this.action.apply(this, arguments);
+		this.$command = this.action.apply(this, arguments);
 	};
-	Alternator.prototype.undo = noOp;
+    
+	Alternator.prototype.undo = function () {
+		if (this.$command) {
+			return this.$command.undo();
+		}
+	};
 
 	function makeAlternator(actions) {
 		return new Alternator(actions);
@@ -146,7 +151,6 @@ if (!window.gAlp) {
 
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
-		//return list.slice(0, -2);
 	}
 	var alpacas = [
 			[
@@ -346,7 +350,7 @@ if (!window.gAlp) {
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		is4 = deferEvery([_.negate(gt4), gt3])(getResult),
 		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
-		desk4 = deferEvery([is4, isDesktop])(getResult),
+		reSyncCheck = deferEvery([is4, isDesktop])(getResult),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
@@ -534,6 +538,7 @@ if (!window.gAlp) {
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		deleteListFromCache = thricedefer(doMethod)('erase')(false)(utils.eventCache),
 		getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
+        //may need a more robust version than this as a state test
 		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
@@ -561,7 +566,6 @@ if (!window.gAlp) {
 					[ALWAYS(true), function () {}]
 				],
 				$divcontext = Context.set(),
-				loader = doMethodDefer('execute')(null)($divcontext),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
@@ -587,10 +591,10 @@ if (!window.gAlp) {
 				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
 				tabFirst = [reTab, reLoop],
 				tabCBS = getEnvironment() ? [reLoop, reTab] : tabFirst,
-				performAlternator = PTL(makeAlternator, tabFirst),
 				$tabcontext = Context.set(makeAlternator(tabCBS)),
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
-				prepTabs = PTL(utils.getBest, desk4, [COMP(delayExecute, setTabStrategy, performAlternator), prep_loop_listener]),
+                setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
+				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
@@ -623,8 +627,7 @@ if (!window.gAlp) {
 			addULClass();
 			klasAdd([nth], intro);
 			//$divcontext persists and DELEGATES to current $listener($selector, $toggle)
-			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
-			loader(); //div listener            
+			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle])).execute();
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
 			makeToolTip().init();
