@@ -1239,7 +1239,7 @@ gAlp.Util = (function() {
 			return {
 				execute: function(flag) {
 					myEventListener.add(el, type, fn);
-					gAlp.Util.eventCache.add(this, flag);
+					//gAlp.Util.eventCache.add(this, flag);
 					return this;
 				},
 				undo: function(flag) {
@@ -1247,7 +1247,7 @@ gAlp.Util = (function() {
 					if (flag && _.isBoolean(flag)) {
 						el = removeNodeOnComplete(el);
 					}
-					gAlp.Util.eventCache.remove(this);
+					//gAlp.Util.eventCache.remove(this);
 					return el;
 				},
 				getEl: function() {
@@ -1258,7 +1258,6 @@ gAlp.Util = (function() {
 				},
 				restore: function(i) {
 					var $e = gAlp.Util.eventCache(i);
-					gAlp.Util.eventer.club[i].execute();
 					if ($e) {
 						$e.execute();
 					}

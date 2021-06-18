@@ -211,12 +211,16 @@
 			return onLoad(img, path);
 		},
 		loadImage = function (getnexturl, id, promise) {
-			var img = getDomTargetImg($(id));
+			var img = getDomTargetImg($(id)),
+                next;
 			if (img) {
 				img.onload = function (e) {
 					promise.then(e.target);
 				};
-				img.src = doParse(getnexturl());
+                next = getnexturl();
+                console.log(next)
+                if(!next) { return; }
+				img.src = doParse(next);
 				img.parentNode.href = doParse(img.src);
 			}
 		},
@@ -416,7 +420,10 @@
 		}({})),
 		clear = _.bind(recur.undo, recur),
 		doplay = _.bind(recur.execute, recur),
+        $mycontroller = utils.makeContext(),
 		go_execute = thrice(doMethod)('execute')(null),
+		go_execute_defer = thricedefer(doMethod)('execute')(null)($mycontroller),
+		go_set = thrice(lazyVal)('set')($mycontroller),
 		go_undo = thrice(doMethod)('undo')(null),
 		$controller = makeDummy(),
 		pages = {
@@ -435,13 +442,14 @@
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
-				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, doExitShow, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
+				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($mycontroller)), doReLocate, doExitShow, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
 				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loader)('base')(nextcaller)].concat(farewell))(getResult),
 				prev_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loader)('base')(prevcaller)].concat(farewell))(getResult),
 				controller = function () {
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
-                        $controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
+                        //$controller = doMakeSlide('base', 'slide', go_execute, do_invoke_player, unlocate);
+                        doMakeSlide('base', 'slide', go_execute_defer, go_set, do_invoke_player, unlocate);
                         doMakePause(getPausePath()); 
                     }
 				},
@@ -485,6 +493,7 @@
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		$setup = {},
 		setup = function (e) {
+            console.log(node_from_target(e));
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
@@ -507,6 +516,7 @@
 				controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
 				exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
+                        console.log('exit');
 						chain = chain.validate('play');
 						doExitShow();
 						_.each([$('exit'), $('tooltip'), $('controls'), $('paused'), $('base'), $('slide')], utils.removeNodeOnComplete);
@@ -519,10 +529,7 @@
 			_.each(_.zip(dombuttons, buttons), invokeBridge);
 			_.each([controls, exit, locate, controls_undostat, controls_dostat], go_execute);
 			$setup.undo();
-            
-           
-            
-		};
+        };
 	$setup = eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main);
 	$setup.execute();
     /*
