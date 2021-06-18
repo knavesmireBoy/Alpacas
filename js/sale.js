@@ -15,51 +15,21 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-
-	function Alternator(actions) {
-		this.action = gAlp.Util.doAlternate()(actions);
-		return this;
-	}
-	Alternator.prototype.execute = function () {
-		this.$command = this.action.apply(this, arguments);
-	};
     
-	Alternator.prototype.undo = function () {
-		if (this.$command) {
-			return this.$command.undo();
-		}
-	};
-
-	function makeAlternator(actions) {
-		return new Alternator(actions);
+	function makeAlternator(alts) {
+        
+        function Alternator(actions) {
+            this.actions = gAlp.Util.doAlternate()(actions);
+            return this;
+        }
+        Alternator.prototype = utils.makeContext();
+        Alternator.prototype.execute  = function () {
+            this.$command = this.actions.apply(this, arguments);
+        };
+        
+		return new Alternator(alts);
 	}
-
-	function Context($command) {
-		var iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
-		if ($command) {
-			gAlp.Intaface.ensures($command, iCommand);
-			this.$command = $command;
-		}
-	}
-	Context.prototype.execute = function () {
-		if (this.$command) {
-			return this.$command.execute();
-		}
-	};
-	Context.prototype.undo = function () {
-		if (this.$command) {
-			return this.$command.undo();
-		}
-	};
-	Context.prototype.set = function ($command) {
-		if ($command) {
-			this.$command = $command;
-		}
-		return this;
-	};
-	Context.set = function ($command) {
-		return new Context($command);
-	};
+    
 	/*   https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
 		var Factory = constructor.bind.apply(constructor, arguments);
@@ -565,7 +535,7 @@ if (!window.gAlp) {
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function () {}]
 				],
-				$divcontext = Context.set(),
+				$divcontext = utils.makeContext().init(),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
@@ -591,7 +561,7 @@ if (!window.gAlp) {
 				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
 				tabFirst = [reTab, reLoop],
 				tabCBS = getEnvironment() ? [reLoop, reTab] : tabFirst,
-				$tabcontext = Context.set(makeAlternator(tabCBS)),
+				$tabcontext = utils.makeContext().init(makeAlternator(tabCBS)),
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
                 setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),

@@ -229,7 +229,7 @@
 		getValue = doComp(doVal, ptL(doubleGet, Looper, 'onpage')),
 		showtime = doComp(ptL(klasRem, ['gallery'], getThumbs), ptL(klasAdd, ['showtime'], utils.getBody())),
 		playtime = ptL(klasAdd, 'inplay', $('wrap')),
-		playing = doComp(ptL(utils.doWhen, once(2), function (){}/*ptL(makeToolTip, true)*/), ptL(klasAdd, 'playing', main)),
+		playing = doComp(ptL(utils.doWhen, once(2), /*function (){}*/ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
 		notplaying = ptL(klasRem, 'playing', main),
 		exit_inplay = ptL(klasRem, 'inplay', $('wrap')),
 		exitswap = ptL(klasRem, 'swap', utils.getBody()),
