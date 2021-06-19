@@ -492,8 +492,10 @@
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		$setup = {},
+		$mysetup = utils.makeContext(),
 		setup = function (e) {
-            console.log(node_from_target(e));
+            console.log('setup');
+            Looper.onpage = null;
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
@@ -516,22 +518,23 @@
 				controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
 				exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
-                        console.log('exit');
 						chain = chain.validate('play');
 						doExitShow();
 						_.each([$('exit'), $('tooltip'), $('controls'), $('paused'), $('base'), $('slide')], utils.removeNodeOnComplete);
 						exitshow();
 						locate.undo();
-						$setup.execute();
+						$mysetup.execute();
 					}
 				}, close_cb);
 			//listeners...
 			_.each(_.zip(dombuttons, buttons), invokeBridge);
 			_.each([controls, exit, locate, controls_undostat, controls_dostat], go_execute);
-			$setup.undo();
+			$mysetup.undo();
         };
-	$setup = eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main);
-	$setup.execute();
+	$mysetup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
+	//$setup = eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main);
+	//$setup.execute();
+	$mysetup.execute();
     /*
     var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
          ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;

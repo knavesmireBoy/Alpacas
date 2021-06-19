@@ -204,7 +204,8 @@ gAlp.Composite = (function () {
 		this.members = [];
 	};
 	gAlp.Group.prototype = {
-		add: function (value) {
+		constructor: gAlp.Group,
+        add: function (value) {
 			if (!this.has(value)) {
 				this.members.push(value);
 			}
@@ -214,6 +215,9 @@ gAlp.Composite = (function () {
 		},
 		has: function (value) {
 			return _.contains(this.members, value);
+		},
+        visit: function (cb) {
+			_.each(this.members, cb);
 		}
 	};
 	gAlp.Group.from = function (collection) {
@@ -231,16 +235,16 @@ gAlp.Composite = (function () {
 	gAlp.LoopIterator.onpage = null;
 	gAlp.LoopIterator.cross_page = null;
 	gAlp.LoopIterator.prototype = {
-		forward: function (flag) {
+		constructor: gAlp.LoopIterator,
+        forward: function (flag) {
 			if (!flag && this.rev) {
 				return this.back(true);
 			}
 			this.position = this.advance(this.position);
-			var result = {
+			return {
 				value: this.group.members[this.position],
 				index: this.position
 			};
-			return result;
 		},
 		back: function (flag) {
 			if (!this.rev || flag) {
@@ -255,12 +259,11 @@ gAlp.Composite = (function () {
 			return this.forward(true).value;
 		},
 		current: function () {
-			var result = {
+			return {
 				members: this.group.members,
 				value: this.group.members[this.position],
 				index: this.position
 			};
-			return result;
 		},
 		find: function (tgt) {
 			return this.set(_.findIndex(this.group.members, _.partial(equals, tgt)));
@@ -270,18 +273,17 @@ gAlp.Composite = (function () {
 			if (!isNaN(parseFloat(pos)) && pos >= 0) {
 				this.position = pos;
 			}
-			var result = {
+			return {
 				value: this.group.members[this.position],
 				index: this.position
 			};
-			return result;
 		},
 		get: function (m) {
 			m = m || 'value';
 			return this.current()[m];
 		},
 		visit: function (cb) {
-			_.each(this.group.members, cb);
+			_.each(this.group.visit, cb);
 		}
 	};
 }());
