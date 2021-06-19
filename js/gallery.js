@@ -24,13 +24,6 @@
 			arr = _.reject(coll, pred1);
 		return arr.concat(tmp);
 	}
-    
-	function makeDummy() {
-		return {
-			execute: function () {},
-			undo: function () {}
-		};
-	}
 
 	function doubleGet(o, sub, v, p) {
 		return o[sub][p](v);
@@ -218,7 +211,6 @@
 					promise.then(e.target);
 				};
                 next = getnexturl();
-                console.log(next)
                 if(!next) { return; }
 				img.src = doParse(next);
 				img.parentNode.href = doParse(img.src);
@@ -239,60 +231,21 @@
 		exitswap = ptL(klasRem, 'swap', utils.getBody()),
 		exitshow = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay),
 		undostatic = ptL(klasRem, 'static', $$('controls')),
-		slide_player = {
-			execute: function (coll) {
-				Looper.onpage = Looper.from(_.map(coll, function (img) {
-					return img.src;
-				}), doInc(getLength(coll)));
-			},
-			undo: function (coll) {
-                //console.log(coll, getBaseSrc())
-                if(coll){
-				Looper.onpage = Looper.from(_.map(coll, function (img) {
-					return img.src;
-				}), doInc(getLength(coll)));
-                }
-                
-				Looper.onpage.find(getBaseSrc());
-			}
-		},
-		in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
-		do_page_iterator = function () {
+        in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
+        nextcaller = twicedefer(getValue)('forward')(),
+		prevcaller = twicedefer(getValue)('back')(),
+        do_page_iterator = function () {
 			Looper.onpage = Looper.from(_.map(getAllPics(), function (img) {
 				return img.src;
 			}), doInc(getLength(getAllPics())));
 		},
-		get_play_iterator = function (flag) {
-			var coll,
-				status = Looper.onpage.current(),
-				outcomes = [_.negate(queryOrientation), queryOrientation],
-				tmp = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
-					return !li.id;
-				}), getDomTargetImg),
-				i = outcomes[0](tmp[status.index]) ? 0 : 1,
-				m = 'undo';
-			if (flag) {
-				m = 'execute';
-                //re-order
-				coll = utils.shuffleArray(tmp)(status.index);
-                //split and join again
-				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
-			} else {
-                //sends original dom-ordered collection when exiting slideshow
-				coll = tmp;
-			}
-            console.log(m)
-			slide_player[m](coll);
-		},
-		setindex = function (arg) {
+        setindex = function (arg) {
 			if (!Looper.onpage) {
 				do_page_iterator();
 			}
 			return Looper.onpage.find(arg);
 		},
-		nextcaller = twicedefer(getValue)('forward')(),
-		prevcaller = twicedefer(getValue)('back')(),
-		locator = function (forward, back) {
+        locator = function (forward, back) {
 			var getLoc = function (e) {
 				var box = e.target.getBoundingClientRect();
 				return e.clientX - box.left > box.width / 2;
@@ -309,7 +262,8 @@
 		locate = eventing('click', event_actions.slice(0), function (e) {
 			locator(twicedefer(loader)('base')(nextcaller), twicedefer(loader)('base')(prevcaller))(e)[1]();
 			doOrient(e.target);
-		}, getThumbs()),
+		}, getThumbs()),		
+		
 		///slideshow...
 		recur = (function (player) {
 			function test() {
@@ -423,6 +377,46 @@
 				}
 			};
 		}({})),
+        	slide_player = {
+            /*remember because images are a mix of landscape and portrait we re-order collection when in slideshow
+            so landscapes follow portraits or vice-versa, this requires undoing when reverting to manual navigation */
+			execute: function (coll) {
+				Looper.onpage = Looper.from(_.map(coll, function (img) {
+					return img.src;
+				}), doInc(getLength(coll)));
+			},
+			undo: function (coll) {
+                
+                //gets called directly or as an image onload callback with no collection CHECK
+                if(coll){
+				Looper.onpage = Looper.from(_.map(coll, function (img) {
+					return img.src;
+				}), doInc(getLength(coll)));
+                }
+				Looper.onpage.find(getBaseSrc());
+			}
+		},
+		get_play_iterator = function (flag) {
+			var coll,
+				status = Looper.onpage.current(),
+				outcomes = [_.negate(queryOrientation), queryOrientation],
+				tmp = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
+					return !li.id;
+				}), getDomTargetImg),
+				i = outcomes[0](tmp[status.index]) ? 0 : 1,
+				m = 'undo';
+			if (flag) {
+				m = 'execute';
+                //re-order
+				coll = utils.shuffleArray(tmp)(status.index);
+                //split and join again
+				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
+			} else {
+                //sends original dom-ordered collection when exiting slideshow
+				coll = tmp;
+			}
+			slide_player[m](coll);
+		},
 		clear = _.bind(recur.undo, recur),
 		doplay = _.bind(recur.execute, recur),
         $mycontroller = utils.makeContext(),
@@ -430,11 +424,10 @@
 		go_execute_defer = thricedefer(doMethod)('execute')(null)($mycontroller),
 		go_set = thrice(lazyVal)('set')($mycontroller),
 		go_undo = thrice(doMethod)('undo')(null),
-		$controller = makeDummy(),
 		pages = {
 			findIndex: function () {}
 		},
-		doExitShow = doComp(thrice(lazyVal)('undo')(slide_player), thricedefer(lazyVal)('findIndex')(pages)(getBaseSrc)),
+		doExitShow = doComp(thrice(lazyVal)('undo')(slide_player)/*, thricedefer(lazyVal)('findIndex')(pages)(getBaseSrc)*/),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
@@ -496,10 +489,8 @@
 			return mynext;
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
-		$setup = {},
 		$mysetup = utils.makeContext(),
 		setup = function (e) {
-            console.log('setup');
             Looper.onpage = null;
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
