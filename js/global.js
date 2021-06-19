@@ -1443,12 +1443,12 @@ gAlp.Util = (function() {
 				},
 				execute: function() {
 					if (this.$command) {
-						return this.$command.execute();
+						return this.$command.execute.apply(this, arguments);
 					}
 				},
 				undo: function() {
 					if (this.$command) {
-						return this.$command.undo();
+						return this.$command.undo.apply(this, arguments);
 					}
 				},
 				set: function($command) {

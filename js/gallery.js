@@ -133,6 +133,7 @@
 		getBaseSrc = doComp(utils.drillDown(['src']), getBaseChild),
 		queryOrientation = thrice(greaterBridge)('clientWidth')('clientHeight'),
 		getLI = utils.getDomParent(utils.getNodeByTag('li')),
+		getSRC = twice(utils.getter)('src'),
 		getDomTargetImg = utils.getDomChild(utils.getNodeByTag('img')),
 		addElements = function () {
 			return doComp(twice(invoke)('img'), anCr, twice(invoke)('a'), anCr, anCr(getThumbs))('li');
@@ -235,9 +236,7 @@
         nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
         do_page_iterator = function () {
-			Looper.onpage = Looper.from(_.map(getAllPics(), function (img) {
-				return img.src;
-			}), doInc(getLength(getAllPics())));
+			Looper.onpage = Looper.from(_.map(getAllPics(), getSRC), doInc(getLength(getAllPics())));
 		},
         setindex = function (arg) {
 			if (!Looper.onpage) {
@@ -377,25 +376,23 @@
 				}
 			};
 		}({})),
-        	slide_player = {
-            /*remember because images are a mix of landscape and portrait we re-order collection when in slideshow
-            so landscapes follow portraits or vice-versa, this requires undoing when reverting to manual navigation */
-			execute: function (coll) {
-				Looper.onpage = Looper.from(_.map(coll, function (img) {
-					return img.src;
-				}), doInc(getLength(coll)));
-			},
-			undo: function (coll) {
-                
-                //gets called directly or as an image onload callback with no collection CHECK
-                if(coll){
-				Looper.onpage = Looper.from(_.map(coll, function (img) {
-					return img.src;
-				}), doInc(getLength(coll)));
-                }
-				Looper.onpage.find(getBaseSrc());
-			}
-		},
+         $slide_player = utils.makeContext(),
+        slide_player_factory = function() {
+
+            function F(coll){
+                Looper.onpage = Looper.from(_.map(coll, getSRC), doInc(getLength(coll)));
+            }                   
+            
+            return {
+                /*remember because images are a mix of landscape and portrait we re-order collection when in slideshow
+                so landscapes follow portraits or vice-versa, this requires undoing when reverting to manual navigation */
+			execute: F,
+			undo: _.once(_.wrap(F, function(orig, coll){
+                orig(coll);
+                Looper.onpage.find(getBaseSrc());
+            }))
+                };
+            },
 		get_play_iterator = function (flag) {
 			var coll,
 				status = Looper.onpage.current(),
@@ -411,12 +408,14 @@
 				coll = utils.shuffleArray(tmp)(status.index);
                 //split and join again
 				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
+                $slide_player.set(slide_player_factory());
 			} else {
                 //sends original dom-ordered collection when exiting slideshow
 				coll = tmp;
-			}
-			slide_player[m](coll);
+			}            
+            $slide_player[m](coll);
 		},
+       
 		clear = _.bind(recur.undo, recur),
 		doplay = _.bind(recur.execute, recur),
         $mycontroller = utils.makeContext(),
@@ -427,7 +426,7 @@
 		pages = {
 			findIndex: function () {}
 		},
-		doExitShow = doComp(thrice(lazyVal)('undo')(slide_player)/*, thricedefer(lazyVal)('findIndex')(pages)(getBaseSrc)*/),
+		doExitShow = doComp(thrice(lazyVal)('undo')($slide_player)/*, thricedefer(lazyVal)('findIndex')(pages)(getBaseSrc)*/),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
