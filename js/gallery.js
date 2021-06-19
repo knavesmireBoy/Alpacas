@@ -246,9 +246,13 @@
 				}), doInc(getLength(coll)));
 			},
 			undo: function (coll) {
+                //console.log(coll, getBaseSrc())
+                if(coll){
 				Looper.onpage = Looper.from(_.map(coll, function (img) {
 					return img.src;
 				}), doInc(getLength(coll)));
+                }
+                
 				Looper.onpage.find(getBaseSrc());
 			}
 		},
@@ -277,6 +281,7 @@
                 //sends original dom-ordered collection when exiting slideshow
 				coll = tmp;
 			}
+            console.log(m)
 			slide_player[m](coll);
 		},
 		setindex = function (arg) {
