@@ -246,7 +246,7 @@
 		incrementer = doComp(doInc, getLength),
 		do_page_iterator = function (coll) {
             Looper.onpage = null;
-            if(_.isArray(coll)){
+            if(coll && coll.length){
                 Looper.onpage = Looper.from(_.map(coll, getSRC), incrementer(coll));
             }
 			
