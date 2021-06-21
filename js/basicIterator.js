@@ -5,6 +5,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
+
 gAlp.Iterator = function (rev) {
 	"use strict";
 	return function (index, coll, validate, doAdvance) {

@@ -1164,6 +1164,35 @@ gAlp.Util = (function() {
 			};
 		},
 		construct: construct,
+        contextFactory: function (delegatee, subject, config) {
+            
+            function includer(arr, prop) {
+                return arr.indexOf(prop) !== -1;
+            }
+            
+            function excluder(arr, prop) {
+                return arr.indexOf(prop) === -1;
+            }
+            
+            config = config || {};
+            var p, delegator = {},
+                factory = function(method) {
+                    return function() {
+                        return this[subject] && this[subject][method].apply(this[subject], arguments);
+                    };
+                },
+                arr = config.exclude || config.include,
+                func = arr && config.exclude ? excluder : arr && config.include ? includer : function() {
+                    return true;
+                };
+            for (p in delegatee) {
+                if (func(arr, p)) {
+                    delegator[p] = factory(p);
+                }
+            }
+            delegator[subject] = delegatee;
+            return delegator;
+        },
 		COR: function(predicate, action) {
 			return {
 				setSuccessor: function(s) {

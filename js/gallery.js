@@ -122,6 +122,7 @@
 		parser = thrice(doMethod)('match')(/gal\/big\/\w+\.jpe?g$/),
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
+		doGetDefer = twicedefer(utils.getter),
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
 		doAlt = doComp(twice(applyArg)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
@@ -230,6 +231,7 @@
 		},
 		makeToolTip = doComp(thrice(doMethod)('init')(null), ptL(gAlp.Tooltip, getThumbs, tooltip_msg, touchevents ? 0 : 2)),
 		getValue = doComp(doVal, ptL(doubleGet, Looper, 'onpage')),
+		//getValue = doComp(doVal, doMethod(), doGetDefer('onpage')(Looper)),
 		showtime = doComp(ptL(klasRem, ['gallery'], getThumbs), ptL(klasAdd, ['showtime'], utils.getBody())),
 		playtime = ptL(klasAdd, 'inplay', $('wrap')),
 		playing = doComp(ptL(utils.doWhen, once(2), /*function (){}*/ ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
@@ -243,11 +245,9 @@
 		prevcaller = twicedefer(getValue)('back')(),
 		incrementer = doComp(doInc, getLength),
 		do_page_iterator = function (coll) {
+            Looper.onpage = null;
             if(_.isArray(coll)){
                 Looper.onpage = Looper.from(_.map(coll, getSRC), incrementer(coll));
-            }
-            else {
-                Looper.onpage = null;
             }
 			
 		},
