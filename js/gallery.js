@@ -92,6 +92,7 @@
         */
 		ptL = _.partial,
 		doComp = _.compose,
+        $looper = gAlp.Looper(),
 		Looper = gAlp.LoopIterator,
 		curryFactory = utils.curryFactory,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
@@ -225,7 +226,8 @@
 			loadImage.apply(null, _.first(arguments, 2).concat(new utils.FauxPromise(args)));
 		},
 		makeToolTip = doComp(thrice(doMethod)('init')(null), ptL(gAlp.Tooltip, getThumbs, tooltip_msg, touchevents ? 0 : 2)),
-		getValue = doComp(doVal, ptL(doubleGet, Looper, 'onpage')),
+		//getValue = doComp(doVal, ptL(doubleGet, Looper, 'onpage')),
+		getValue = doComp(doVal, ptL(doMethod, $looper)),
 		//getValue = doComp(doVal, doMethod(), doGetDefer('onpage')(Looper)),
 		showtime = doComp(ptL(klasRem, ['gallery'], getThumbs), ptL(klasAdd, ['showtime'], utils.getBody())),
 		playtime = ptL(klasAdd, 'inplay', $('wrap')),
@@ -240,17 +242,20 @@
 		prevcaller = twicedefer(getValue)('back')(),
 		incrementer = doComp(doInc, getLength),
 		do_page_iterator = function (coll) {
-			Looper.onpage = null;
+			//Looper.onpage = null;
 			if (coll && typeof coll.length !== 'undefined') {
-				Looper.onpage = Looper.from(_.map(coll, getSRC), incrementer(coll));
+                $looper.set(Looper.from(_.map(coll, getSRC), incrementer(coll)));
+				//Looper.onpage = Looper.from(_.map(coll, getSRC), incrementer(coll));
 				//return Looper.from(_.map(coll, getSRC), incrementer(coll));
 			}
 		},
 		setindex = function (arg) {
-			if (!Looper.onpage) {
+            console.log('setINdex')
+			//if (!Looper.onpage) {
 				do_page_iterator(getAllPics());
-			}
-			return Looper.onpage.find(arg);
+			//}
+			return $looper.find(arg);
+			//return Looper.onpage.find(arg);
 		},
 		locator = function (forward, back) {
 			var getLoc = function (e) {
@@ -277,14 +282,16 @@
 				execute: do_page_iterator,
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					orig(coll);
-					Looper.onpage.find(getBaseSrc());
+					//Looper.onpage.find(getBaseSrc());
+					$looper.find(getBaseSrc());
 				}))
 			};
 		},
 		///slideshow...
 		get_play_iterator = function (flag) {
 			var coll,
-				index = Looper.onpage.get('index'),
+				//index = Looper.onpage.get('index'),
+				index = $looper.get('index'),
 				outcomes = [_.negate(queryOrientation), queryOrientation],
 				tmp = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
 					return !li.id;
@@ -348,7 +355,8 @@
 						recur.execute();
 					},
 					doBase = function () {
-						return loadImageBridge(_.bind(Looper.onpage.play, Looper.onpage), 'base', setPlayer, doSwap);
+						//return loadImageBridge(_.bind(Looper.onpage.play, Looper.onpage), 'base', setPlayer, doSwap);
+						return loadImageBridge($looper.play, 'base', setPlayer, doSwap);
 					},
 					fadeOut = {
 						validate: function () {
@@ -482,7 +490,7 @@
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		setup = function (e) {
-			do_page_iterator();
+			do_page_iterator([]);
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
@@ -520,6 +528,8 @@
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
 	$setup.execute();
+    
+    console.log();
 	/*
 	var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
 	     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;

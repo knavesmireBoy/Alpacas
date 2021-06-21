@@ -189,7 +189,7 @@ gAlp.Composite = (function () {
 		return composite || leaf;
 	}; //ret func
 }());
-(function () {
+gAlp.Looper = function () {
 	"use strict";
 
 	function equals(a, b) {
@@ -210,6 +210,12 @@ gAlp.Composite = (function () {
     
     function makeSubject(src, tgt, methods) {
         
+        tgt.setSubject = function(s){
+            this.$subject = s;
+        }
+        
+        tgt.setSubject(src);
+        
 		function mapper(method) {
 			if (src[method] && _.isFunction(src[method])) {
 				tgt[method] = function () {
@@ -219,9 +225,7 @@ gAlp.Composite = (function () {
 		}
 		_.each(methods, mapper);
         
-        tgt.setSubject = function(s){
-            this.$subject = s;
-        }
+        
 		return tgt;
 	}
     
@@ -321,9 +325,12 @@ gAlp.Composite = (function () {
 		},
 		visit: function (cb) {
 			_.each(this.group.visit, cb);
-		}
+		},
+        validate: function(){
+            return !_.isEmpty(this.group.members);
+        }
 	};
     
-    return makeSubject(gAlp.LoopIterator.from([], incrementer), {}, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'visit']);
+    return makeSubject(gAlp.LoopIterator.from([], incrementer), {}, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'validate','visit']);
     
-}());
+};
