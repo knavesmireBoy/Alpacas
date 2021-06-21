@@ -195,6 +195,43 @@ gAlp.Composite = (function () {
 	function equals(a, b) {
 		return a === b;
 	}
+    
+    function modulo(n, i) {
+		return i % n;
+	}
+
+	function increment(i) {
+		return i + 1;
+	}
+    
+    function doInc(n) {
+        return _.compose(_.partial(modulo, n), increment);
+    }
+    
+    function makeSubject(src, tgt, methods) {
+        
+		function mapper(method) {
+			if (src[method] && _.isFunction(src[method])) {
+				tgt[method] = function () {
+					return this.$subject[method].apply(this.$subject, arguments);
+				};
+			}
+		}
+		_.each(methods, mapper);
+        
+        tgt.setSubject = function(s){
+            this.$subject = s;
+        }
+		return tgt;
+	}
+    
+    
+    var twice = gAlp.Util.curryFactory(2),
+        doGet = twice(gAlp.Util.getter),
+        getLength = doGet('length'),
+        incrementer = _.compose(doInc, getLength);
+
+    
 	gAlp.LoopIterator = function (group, advancer) {
 		this.group = group;
 		this.position = 0;
@@ -284,12 +321,9 @@ gAlp.Composite = (function () {
 		},
 		visit: function (cb) {
 			_.each(this.group.visit, cb);
-		},
-        validate: function(coll, advancer){
-            if(coll && coll.length){
-               return gAlp.LoopIterator.from(coll, advancer); 
-            }
-            return this;
-        }
+		}
 	};
+    
+    return makeSubject(gAlp.LoopIterator.from([], incrementer), {}, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'visit']);
+    
 }());

@@ -18,21 +18,6 @@
 			}
 		};
 	}
-    
-    /*
-
-	function makeSubject(src, tgt, coll) {
-		function mapper(method) {
-			if (src[method] && _.isFunction(src[method])) {
-				tgt[method] = function () {
-					return src[method].apply(src, arguments);
-				};
-			}
-		}
-		_.each(coll, mapper);
-		return tgt;
-	}
-    */
 
 	function filter(coll, pred1) {
 		var tmp = _.filter(coll, pred1),
