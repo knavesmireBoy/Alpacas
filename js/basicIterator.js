@@ -268,7 +268,6 @@ gAlp.Composite = (function () {
 		},
 		find: function (tgt) {
 			return this.set(_.findIndex(this.group.members, _.partial(equals, tgt)));
-			//return this.set(this.group.members.findIndex(_.partial(equals, tgt)));
 		},
 		set: function (pos) {
 			if (!isNaN(parseFloat(pos)) && pos >= 0) {
@@ -285,6 +284,12 @@ gAlp.Composite = (function () {
 		},
 		visit: function (cb) {
 			_.each(this.group.visit, cb);
-		}
+		},
+        validate: function(coll, advancer){
+            if(coll && coll.length){
+               return gAlp.LoopIterator.from(coll, advancer); 
+            }
+            return this;
+        }
 	};
 }());

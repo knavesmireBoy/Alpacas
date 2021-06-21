@@ -18,6 +18,21 @@
 			}
 		};
 	}
+    
+    /*
+
+	function makeSubject(src, tgt, coll) {
+		function mapper(method) {
+			if (src[method] && _.isFunction(src[method])) {
+				tgt[method] = function () {
+					return src[method].apply(src, arguments);
+				};
+			}
+		}
+		_.each(coll, mapper);
+		return tgt;
+	}
+    */
 
 	function filter(coll, pred1) {
 		var tmp = _.filter(coll, pred1),
@@ -63,16 +78,12 @@
 	}
 
 	function invokeBridge(arr) {
-		return invoke(arr[0], arr[1]);
+		return applyArg(arr[0], arr[1]);
 	}
 
 	function invokeArgs(f) {
 		var args = _.rest(arguments);
 		return f.apply(null, _.map(args, getResult));
-	}
-    
-    function invoke(f) {
-		return f.apply(null, _.rest(arguments));
 	}
 
 	function doMethod(o, v, p) {
@@ -122,7 +133,6 @@
 		parser = thrice(doMethod)('match')(/gal\/big\/\w+\.jpe?g$/),
 		doMap = utils.doMap,
 		doGet = twice(utils.getter),
-		doGetDefer = twicedefer(utils.getter),
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
 		doAlt = doComp(twice(applyArg)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
@@ -139,8 +149,8 @@
 		getSRC = twice(utils.getter)('src'),
 		getDomTargetImg = utils.getDomChild(utils.getNodeByTag('img')),
 		$slide_player = utils.makeContext(),
-        $setup = utils.makeContext(),
-        $controller = utils.makeContext(),
+		$setup = utils.makeContext(),
+		$controller = utils.makeContext(),
 		addElements = function () {
 			return doComp(twice(applyArg)('img'), anCr, twice(applyArg)('a'), anCr, anCr(getThumbs))('li');
 		},
@@ -227,7 +237,7 @@
 		loadImageBridge = function () {
 			var args = _.rest(arguments, 2);
 			args = args.length ? args : [function () {}];
-            loadImage.apply(null, _.first(arguments, 2).concat(new utils.FauxPromise(args)));
+			loadImage.apply(null, _.first(arguments, 2).concat(new utils.FauxPromise(args)));
 		},
 		makeToolTip = doComp(thrice(doMethod)('init')(null), ptL(gAlp.Tooltip, getThumbs, tooltip_msg, touchevents ? 0 : 2)),
 		getValue = doComp(doVal, ptL(doubleGet, Looper, 'onpage')),
@@ -245,11 +255,11 @@
 		prevcaller = twicedefer(getValue)('back')(),
 		incrementer = doComp(doInc, getLength),
 		do_page_iterator = function (coll) {
-            Looper.onpage = null;
-            if(coll && coll.length){
-                Looper.onpage = Looper.from(_.map(coll, getSRC), incrementer(coll));
-            }
-			
+			Looper.onpage = null;
+			if (coll && typeof coll.length !== 'undefined') {
+				Looper.onpage = Looper.from(_.map(coll, getSRC), incrementer(coll));
+				//return Looper.from(_.map(coll, getSRC), incrementer(coll));
+			}
 		},
 		setindex = function (arg) {
 			if (!Looper.onpage) {
@@ -352,12 +362,10 @@
 						player = playmaker(arg);
 						recur.execute();
 					},
-                    
 					doBase = function () {
 						return loadImageBridge(_.bind(Looper.onpage.play, Looper.onpage), 'base', setPlayer, doSwap);
 					},
-                    
-                    fadeOut = {
+					fadeOut = {
 						validate: function () {
 							return recur.i <= -15.5;
 						},
@@ -489,7 +497,7 @@
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		setup = function (e) {
-            do_page_iterator();
+			do_page_iterator();
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
