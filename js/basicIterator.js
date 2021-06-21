@@ -219,15 +219,7 @@ gAlp.Looper = function () {
 		_.each(methods, mapper);
 		return tgt;
 	}
-    var target = {
-		setSubject: function (s) {
-			this.$subject = s;
-        }
-    },
-        twice = gAlp.Util.curryFactory(2),
-		doGet = twice(gAlp.Util.getter),
-		getLength = doGet('length'),
-		incrementer = _.compose(doInc, getLength);
+    
 	gAlp.LoopIterator = function (group, advancer) {
 		this.group = group;
 		this.position = 0;
@@ -322,6 +314,19 @@ gAlp.Looper = function () {
 			return !_.isEmpty(this.group.members);
 		}
 	};
+    
+    var target = {
+        setSubject: function (s) {
+			this.$subject = s;
+        },
+        build: function (coll, advancer) {
+            this.setSubject(gAlp.LoopIterator.from(coll, advancer(coll)));
+        }
+    },
+        twice = gAlp.Util.curryFactory(2),
+		doGet = twice(gAlp.Util.getter),
+		getLength = doGet('length'),
+		incrementer = _.compose(doInc, getLength);
 	
 	return makeSubject(gAlp.LoopIterator.from([], incrementer), target, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'validate', 'visit']);
 };

@@ -25,10 +25,6 @@
 		return arr.concat(tmp);
 	}
 
-	function doubleGet(o, sub, v, p) {
-		return o[sub][p](v);
-	}
-
 	function greater(a, b) {
 		return a > b;
 	}
@@ -93,7 +89,6 @@
 		ptL = _.partial,
 		doComp = _.compose,
         $looper = gAlp.Looper(),
-		Looper = gAlp.LoopIterator,
 		curryFactory = utils.curryFactory,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
 		eventing = utils.eventer,
@@ -243,11 +238,10 @@
 		incrementer = doComp(doInc, getLength),
 		do_page_iterator = function (coll) {
 			if (coll && typeof coll.length !== 'undefined') {
-                $looper.setSubject(Looper.from(_.map(coll, getSRC), incrementer(coll)));
+                $looper.build(_.map(coll, getSRC), incrementer);
 			}
 		},
 		setindex = function (arg) {
-            console.log('setIndex')
             do_page_iterator(getAllPics());
 			return $looper.find(arg);
 		},
@@ -521,7 +515,7 @@
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
 	$setup.execute();
-    	/*
+    /*
 	var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
 	     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
 	utils.report(ie6);
