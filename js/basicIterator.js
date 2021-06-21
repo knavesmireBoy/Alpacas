@@ -5,7 +5,6 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-
 gAlp.Iterator = function (rev) {
 	"use strict";
 	return function (index, coll, validate, doAdvance) {
@@ -147,17 +146,17 @@ gAlp.Composite = (function () {
 			render = function () {
 				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-                    if (member.render) {
-                        member.render.apply(member, args.concat(_.rest(arguments)));
-                    }
+					if (member.render) {
+						member.render.apply(member, args.concat(_.rest(arguments)));
+					}
 				});
 			},
 			unrender = function () {
 				var args = _.toArray(arguments);
 				_.each(included, function (member) {
-                    if (member.unrender) {
-                        member.unrender.apply(member, args.concat(_.rest(arguments)));
-                    }
+					if (member.unrender) {
+						member.unrender.apply(member, args.concat(_.rest(arguments)));
+					}
 				});
 			};
 		intafaces.unshift(comp_intaface);
@@ -195,27 +194,20 @@ gAlp.Looper = function () {
 	function equals(a, b) {
 		return a === b;
 	}
-    
-    function modulo(n, i) {
+
+	function modulo(n, i) {
 		return i % n;
 	}
 
 	function increment(i) {
 		return i + 1;
 	}
-    
-    function doInc(n) {
-        return _.compose(_.partial(modulo, n), increment);
-    }
-    
-    function makeSubject(src, tgt, methods) {
-        
-        tgt.setSubject = function(s){
-            this.$subject = s;
-        }
-        
-        tgt.setSubject(src);
-        
+
+	function doInc(n) {
+		return _.compose(_.partial(modulo, n), increment);
+	}
+
+	function makeSubject(src, tgt, methods) {
 		function mapper(method) {
 			if (src[method] && _.isFunction(src[method])) {
 				tgt[method] = function () {
@@ -223,19 +215,19 @@ gAlp.Looper = function () {
 				};
 			}
 		}
+		tgt.setSubject(src);
 		_.each(methods, mapper);
-        
-        
 		return tgt;
 	}
-    
-    
-    var twice = gAlp.Util.curryFactory(2),
-        doGet = twice(gAlp.Util.getter),
-        getLength = doGet('length'),
-        incrementer = _.compose(doInc, getLength);
-
-    
+    var target = {
+		setSubject: function (s) {
+			this.$subject = s;
+        }
+    },
+        twice = gAlp.Util.curryFactory(2),
+		doGet = twice(gAlp.Util.getter),
+		getLength = doGet('length'),
+		incrementer = _.compose(doInc, getLength);
 	gAlp.LoopIterator = function (group, advancer) {
 		this.group = group;
 		this.position = 0;
@@ -247,7 +239,7 @@ gAlp.Looper = function () {
 	};
 	gAlp.Group.prototype = {
 		constructor: gAlp.Group,
-        add: function (value) {
+		add: function (value) {
 			if (!this.has(value)) {
 				this.members.push(value);
 			}
@@ -258,7 +250,7 @@ gAlp.Looper = function () {
 		has: function (value) {
 			return _.contains(this.members, value);
 		},
-        visit: function (cb) {
+		visit: function (cb) {
 			_.each(this.members, cb);
 		}
 	};
@@ -278,7 +270,7 @@ gAlp.Looper = function () {
 	gAlp.LoopIterator.cross_page = null;
 	gAlp.LoopIterator.prototype = {
 		constructor: gAlp.LoopIterator,
-        forward: function (flag) {
+		forward: function (flag) {
 			if (!flag && this.rev) {
 				return this.back(true);
 			}
@@ -326,11 +318,10 @@ gAlp.Looper = function () {
 		visit: function (cb) {
 			_.each(this.group.visit, cb);
 		},
-        validate: function(){
-            return !_.isEmpty(this.group.members);
-        }
+		validate: function () {
+			return !_.isEmpty(this.group.members);
+		}
 	};
-    
-    return makeSubject(gAlp.LoopIterator.from([], incrementer), {}, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'validate','visit']);
-    
+	
+	return makeSubject(gAlp.LoopIterator.from([], incrementer), target, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'validate', 'visit']);
 };
