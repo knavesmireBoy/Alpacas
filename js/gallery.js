@@ -235,7 +235,7 @@
 		notplaying = ptL(klasRem, 'playing', main),
 		exit_inplay = ptL(klasRem, 'inplay', $('wrap')),
 		exitswap = ptL(klasRem, 'swap', utils.getBody()),
-		exitshow = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay),
+		exitshow = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay, notplaying),
 		in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
 		nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
@@ -273,10 +273,17 @@
 				/*remember because images are a mix of landscape and portrait we re-order collection for the slideshow
 				so landscapes follow portraits or vice-versa (depending what is the leading pic), this requires undoing when reverting to manual navigation, and undo only needs to run once and a fresh slideplayer is created on entering slideshow */
 				execute: do_page_iterator,
+                undo: function(coll){
+                    utils.con('unod slide')
+                    do_page_iterator(coll);
+                    $looper.find(getBaseSrc())
+                }
+                /*
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					orig(coll);
+                    utils.con(99);
 					$looper.find(getBaseSrc());
-				}))
+				}))*/
 			};
 		},
         do_static_factory = function () {
@@ -297,6 +304,7 @@
 				}), getDomTargetImg),
 				i = outcomes[0](tmp[index]) ? 0 : 1,
 				m = 'undo';
+            console.log(flag, 77);
 			if (flag) {
 				m = 'execute';
 				//re-order
@@ -412,6 +420,7 @@
 					}
 				},
 				undo: function (flag) {
+                    utils.con('actual undo')
 					doOpacity(flag);
 					window.cancelAnimationFrame(recur.t);
                     $static.set(do_static_factory());
@@ -425,7 +434,7 @@
 		go_execute_defer = thricedefer(doMethod)('execute')(null)($controller),
 		go_set = thrice(lazyVal)('set')($controller),
 		go_undo = thrice(doMethod)('undo')(null),
-		doExitShow = doComp(utils.con, thrice(lazyVal)('undo')($slide_player)),
+		doExitShow = thrice(lazyVal)('undo')($slide_player),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
@@ -487,8 +496,8 @@
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		setup = function (e) {
-            utils.con(e);
-			do_page_iterator([]);
+            utils.con('setup');
+			//do_page_iterator([]);
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
@@ -511,10 +520,12 @@
 				$controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
 				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
+                        utils.con('exx')
 						chain = chain.validate('play');
 						doExitShow();
+                        exitshow();
 						_.each([$('exit'), $('tooltip'), $('controls'), $('paused'), $('base'), $('slide')], utils.removeNodeOnComplete);
-						exitshow();
+						
 						$locate.undo();
 						$setup.execute();
 					}
