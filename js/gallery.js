@@ -231,11 +231,11 @@
 		getValue = doComp(doVal, ptL(doMethod, $looper)),
 		showtime = doComp(ptL(klasRem, ['gallery'], getThumbs), ptL(klasAdd, ['showtime'], utils.getBody())),
 		playtime = ptL(klasAdd, 'inplay', $('wrap')),
-		playing = doComp(ptL(utils.doWhen, once(2), /*function (){}*/ ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
+		playing = doComp(ptL(utils.doWhen, once(2), ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
 		notplaying = ptL(klasRem, 'playing', main),
 		exit_inplay = ptL(klasRem, 'inplay', $('wrap')),
 		exitswap = ptL(klasRem, 'swap', utils.getBody()),
-		exitshow = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay, notplaying),
+		exitshowtime = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay, notplaying),
 		in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
 		nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
@@ -246,7 +246,6 @@
 			}
 		},
 		setindex = function (arg) {
-        utils.con(arg)
             do_page_iterator(getAllPics());
 			return $looper.find(arg);
 		},
@@ -422,11 +421,9 @@
 		clear = _.bind(recur.undo, recur),
 		doplay = _.bind(recur.execute, recur),
 		go_execute = thrice(doMethod)('execute')(null),
-		go_execute_defer = thricedefer(doMethod)('execute')(null)($controller),
 		go_set = thrice(lazyVal)('set')($controller),
-		go_undo = thrice(doMethod)('undo')(null),
-		go_undo_defer = thricedefer(doMethod)('undo')(null)($controller),
-		doExitShow = doComp(go_undo_defer, clear, thrice(lazyVal)('undo')($slide_player)),
+		undo_controller = thricedefer(doMethod)('undo')(null)($controller),
+		fastExit = doComp(undo_controller, clear, thrice(lazyVal)('undo')($slide_player)),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
@@ -439,13 +436,13 @@
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, $locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
-				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, doExitShow, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
+				farewell = [notplaying, exit_inplay, exitswap, undo_controller, doReLocate, fastExit, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
 				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(nextcaller)].concat(farewell))(getResult),
 				prev_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(prevcaller)].concat(farewell))(getResult),
 				controller = function () {
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
-						doMakeSlide('base', 'slide', go_execute_defer, go_set, do_invoke_player, unlocate);
+						doMakeSlide('base', 'slide', thricedefer(doMethod)('execute')(null)($controller), go_set, do_invoke_player, unlocate);
 						doMakePause(getPausePath());
 					}
 				},
@@ -512,12 +509,10 @@
 				$controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
 				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
-                        utils.con('exx')
 						chain = chain.validate('play');
-						doExitShow();
-                        exitshow();
+						fastExit();
+                        exitshowtime();
 						_.each([$('exit'), $('tooltip'), $('controls'), $('paused'), $('base'), $('slide')], utils.removeNodeOnComplete);
-						
 						$locate.undo();
 						$setup.execute();
 					}
