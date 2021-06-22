@@ -196,8 +196,9 @@
 			return onLoad(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakePause = function (path) {
-			var img = addElements();
-			doMap(img.parentNode.parentNode, [
+            if(path){
+            var img = addElements();
+            doMap(img.parentNode.parentNode, [
 				['id', 'paused']
 			]);
 			doMap(img.parentNode.parentNode, [
@@ -205,7 +206,9 @@
 					[cssopacity.getKey(), cssopacity.getValue(0.5)]
 				]
 			]);
-			return onLoad(img, path);
+			return onLoad(img, path);   
+            }
+            return onLoad(getDomTargetImg($('paused')), getPausePath());
 		},
 		loadImage = function (getnexturl, id, promise) {
 			var img = getDomTargetImg($(id)),
@@ -271,7 +274,7 @@
 			return {
 				/*remember because images are a mix of landscape and portrait we re-order collection for the slideshow
 				so landscapes follow portraits or vice-versa (depending what is the leading pic), this requires undoing when reverting to manual navigation, and undo only needs to run once and a fresh slideplayer is created on entering slideshow */
-				execute: do_page_iterator,
+				execute: _.once(do_page_iterator),
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					orig(coll);
 					$looper.find(getBaseSrc());
@@ -302,6 +305,7 @@
 				coll = utils.shuffleArray(tmp)(index);
 				//split and join again
 				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
+                
 				$slide_player.set(slide_player_factory());
 			} else {
 				//sends original dom-ordered collection when exiting slideshow
@@ -443,8 +447,11 @@
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
 						doMakeSlide('base', 'slide', thricedefer(doMethod)('execute')(null)($controller), go_set, do_invoke_player, unlocate);
-						doMakePause(getPausePath());
+                        doMakePause(getPausePath());
 					}
+                    else {
+                        doMakePause();
+                    }
 				},
 				COR = function (predicate, action) {
 					var test = _.negate(ptL(equals, 'playbutton'));
