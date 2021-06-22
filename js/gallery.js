@@ -66,6 +66,10 @@
 		var args = _.rest(arguments);
 		return f.apply(null, _.map(args, getResult));
 	}
+    
+    function invoke(f) {
+		return f.apply(null, _.rest(arguments));
+	}
 
 	function doMethod(o, v, p) {
 		//console.log(arguments);
@@ -88,6 +92,7 @@
         */
 		ptL = _.partial,
 		doComp = _.compose,
+        //creates an object that wraps an iterator, allows setting new instance of iterator ($looper.build) and forwards all requests
         $looper = gAlp.Looper(),
 		curryFactory = utils.curryFactory,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
@@ -119,6 +124,7 @@
 		doAlt = doComp(twice(applyArg)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
 		unsetPortrait = ptL(klasRem, 'portrait', getThumbs),
 		setPortrait = ptL(klasAdd, 'portrait', getThumbs),
+        undostatic = ptL(klasRem, 'static', $$('controls')),
 		getLength = doGet('length'),
 		text_from_target = doComp(doGet('id'), getTarget),
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
@@ -132,6 +138,7 @@
 		$slide_player = utils.makeContext(),
 		$setup = utils.makeContext(),
 		$controller = utils.makeContext(),
+		$static = utils.makeContext(),
 		addElements = function () {
 			return doComp(twice(applyArg)('img'), anCr, twice(applyArg)('a'), anCr, anCr(getThumbs))('li');
 		},
@@ -221,9 +228,7 @@
 			loadImage.apply(null, _.first(arguments, 2).concat(new utils.FauxPromise(args)));
 		},
 		makeToolTip = doComp(thrice(doMethod)('init')(null), ptL(gAlp.Tooltip, getThumbs, tooltip_msg, touchevents ? 0 : 2)),
-		//getValue = doComp(doVal, ptL(doubleGet, Looper, 'onpage')),
 		getValue = doComp(doVal, ptL(doMethod, $looper)),
-		//getValue = doComp(doVal, doMethod(), doGetDefer('onpage')(Looper)),
 		showtime = doComp(ptL(klasRem, ['gallery'], getThumbs), ptL(klasAdd, ['showtime'], utils.getBody())),
 		playtime = ptL(klasAdd, 'inplay', $('wrap')),
 		playing = doComp(ptL(utils.doWhen, once(2), /*function (){}*/ ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
@@ -231,7 +236,6 @@
 		exit_inplay = ptL(klasRem, 'inplay', $('wrap')),
 		exitswap = ptL(klasRem, 'swap', utils.getBody()),
 		exitshow = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay),
-		undostatic = ptL(klasRem, 'static', $$('controls')),
 		in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
 		nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
@@ -270,11 +274,18 @@
 				execute: do_page_iterator,
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					orig(coll);
-					//Looper.onpage.find(getBaseSrc());
 					$looper.find(getBaseSrc());
 				}))
 			};
 		},
+        do_static_factory = function(){
+            return {
+                /*static class should be removed on entering slideshow and should only run once
+                so we need to initiate a fresh instance on exiting slideshow
+                */
+                execute: _.once(undostatic)
+            }
+        },
 		///slideshow...
 		get_play_iterator = function (flag) {
 			var coll,
@@ -300,6 +311,7 @@
 			$slide_player[m](coll);
 		},
 		recur = (function (player) {
+            
 			function test() {
 				return _.map([getBaseChild(), getSlideChild()], function (img) {
 					return img && img.width > img.height;
@@ -334,17 +346,13 @@
 				}
 			}
 
-			function doSlide() {
-				return loadImageBridge(doComp(utils.drillDown(['src']), utils.getChild, utils.getChild, $$('base')), 'slide', doOrient);
-			}
 			var playmaker = (function () {
 				var setPlayer = function (arg) {
 						player = playmaker(arg);
 						recur.execute();
 					},
-					doBase = function () {
-						return loadImageBridge(_.bind($looper.play, $looper), 'base', setPlayer, doSwap);
-					},
+                    doBase = ptL(invoke, loadImageBridge, _.bind($looper.play, $looper), 'base', setPlayer, doSwap),
+                    doSlide = ptL(invoke, loadImageBridge, doComp(utils.drillDown(['src']), utils.getChild, utils.getChild, $$('base')), 'slide', doOrient),
 					fadeOut = {
 						validate: function () {
 							return recur.i <= -15.5;
@@ -374,14 +382,14 @@
 							return recur.i <= -1;
 						},
 						inc: function () {
-							recur.i -= 1;
+							recur.i -= 2;
 						},
 						reset: function () {
-							recur.i = 150;
+							recur.i = 300;
 							doSlide();
 							doOpacity();
 							doBase();
-							undostatic();
+                            $static.execute();
 						}
 					},
 					actions = [fadeIn, fadeOut];
@@ -394,6 +402,7 @@
 				execute: function () {
 					if (!recur.t) {
 						get_play_iterator(true);
+                        $static.set(do_static_factory());
 					}
 					if (player.validate()) {
 						player.reset();
@@ -405,6 +414,7 @@
 				undo: function (flag) {
 					doOpacity(flag);
 					window.cancelAnimationFrame(recur.t);
+                    $static.set(do_static_factory());
 					recur.t = null;
 				}
 			};

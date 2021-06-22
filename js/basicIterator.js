@@ -207,7 +207,7 @@ gAlp.Looper = function () {
 		return _.compose(_.partial(modulo, n), increment);
 	}
 
-	function makeSubject(src, tgt, methods) {
+	function makeProxyIterator(src, tgt, methods) {
 		function mapper(method) {
 			if (src[method] && _.isFunction(src[method])) {
 				tgt[method] = function () {
@@ -309,9 +309,6 @@ gAlp.Looper = function () {
 		},
 		visit: function (cb) {
 			_.each(this.group.visit, cb);
-		},
-		validate: function () {
-			return !_.isEmpty(this.group.members);
 		}
 	};
     
@@ -328,5 +325,5 @@ gAlp.Looper = function () {
 		getLength = doGet('length'),
 		incrementer = _.compose(doInc, getLength);
 	
-	return makeSubject(gAlp.LoopIterator.from([], incrementer), target, ['back', 'current', 'find', 'forward', 'get', 'play', 'set', 'validate', 'visit']);
+	return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'current', 'find', 'forward', 'get', 'play', 'set',  'visit']);
 };
