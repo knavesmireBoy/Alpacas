@@ -185,7 +185,7 @@
 			]);
 			return onBase(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
-		doMakeSlide = function (source, target) {
+        doMakeSlide = function (source, target) {
 			var img = addElements();
 			doMap(img.parentNode, [
 				['href', doParse(getBaseSrc())]
@@ -273,17 +273,10 @@
 				/*remember because images are a mix of landscape and portrait we re-order collection for the slideshow
 				so landscapes follow portraits or vice-versa (depending what is the leading pic), this requires undoing when reverting to manual navigation, and undo only needs to run once and a fresh slideplayer is created on entering slideshow */
 				execute: do_page_iterator,
-                undo: function(coll){
-                    utils.con('unod slide')
-                    do_page_iterator(coll);
-                    $looper.find(getBaseSrc())
-                }
-                /*
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					orig(coll);
-                    utils.con(99);
 					$looper.find(getBaseSrc());
-				}))*/
+				}))
 			};
 		},
         do_static_factory = function () {
@@ -304,7 +297,6 @@
 				}), getDomTargetImg),
 				i = outcomes[0](tmp[index]) ? 0 : 1,
 				m = 'undo';
-            console.log(flag, 77);
 			if (flag) {
 				m = 'execute';
 				//re-order
@@ -420,7 +412,6 @@
 					}
 				},
 				undo: function (flag) {
-                    utils.con('actual undo')
 					doOpacity(flag);
 					window.cancelAnimationFrame(recur.t);
                     $static.set(do_static_factory());
@@ -434,7 +425,8 @@
 		go_execute_defer = thricedefer(doMethod)('execute')(null)($controller),
 		go_set = thrice(lazyVal)('set')($controller),
 		go_undo = thrice(doMethod)('undo')(null),
-		doExitShow = thrice(lazyVal)('undo')($slide_player),
+		go_undo_defer = thricedefer(doMethod)('undo')(null)($controller),
+		doExitShow = doComp(go_undo_defer, clear, thrice(lazyVal)('undo')($slide_player)),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
