@@ -246,6 +246,7 @@
 			}
 		},
 		setindex = function (arg) {
+        utils.con(arg)
             do_page_iterator(getAllPics());
 			return $looper.find(arg);
 		},
@@ -263,7 +264,7 @@
 				]);
 			};
 		},
-		locate = eventing('click', event_actions.slice(0), function (e) {
+		$locate = eventing('click', event_actions.slice(0), function (e) {
 			locator(twicedefer(loadImageBridge)('base')(nextcaller), twicedefer(loadImageBridge)('base')(prevcaller))(e)[1]();
 			doOrient(e.target);
 		}, getThumbs()),
@@ -278,13 +279,12 @@
 				}))
 			};
 		},
-        do_static_factory = function(){
+        do_static_factory = function () {
             return {
-                /*static class should be removed on entering slideshow and should only run once
-                so we need to initiate a fresh instance on exiting slideshow
-                */
-                execute: _.once(undostatic)
-            }
+                /* the class of static should be removed from #control on entering slideshow but should run only once PER slideshow session a fresh instance is set up on exiting slideshow */
+                execute: _.once(undostatic),
+                undo: function () {}
+            };
         },
 		///slideshow...
 		get_play_iterator = function (flag) {
@@ -425,7 +425,7 @@
 		go_execute_defer = thricedefer(doMethod)('execute')(null)($controller),
 		go_set = thrice(lazyVal)('set')($controller),
 		go_undo = thrice(doMethod)('undo')(null),
-		doExitShow = doComp(thrice(lazyVal)('undo')($slide_player)),
+		doExitShow = doComp(utils.con, thrice(lazyVal)('undo')($slide_player)),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
@@ -433,10 +433,10 @@
 				doSlide = defer([clear, doplay]),
 				doPlaying = defer([notplaying, playing]),
 				doDisplay = defer([function () {}, playtime]),
-				unlocate = thricedefer(doMethod)('undo')(null)(locate),
+				unlocate = thricedefer(doMethod)('undo')(null)($locate),
 				invoke_player = deferEach([doSlide, doPlaying, doDisplay])(getResult),
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
-				relocate = ptL(lazyVal, null, locate, 'execute'),
+				relocate = ptL(lazyVal, null, $locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
 				farewell = [notplaying, exit_inplay, exitswap, doComp(go_undo, utils.always($controller)), doReLocate, doExitShow, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
 				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(nextcaller)].concat(farewell))(getResult),
@@ -487,6 +487,7 @@
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		setup = function (e) {
+            utils.con(e);
 			do_page_iterator([]);
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
@@ -497,7 +498,7 @@
 				dombuttons = _.map(buttons, doComp(thrice(doMapLateVal)('id'), aButton, thrice(doMethod)('slice')(-6))),
 				dostatic = ptL(klasAdd, 'static', $$('controls')),
 				chain = factory(),
-				controls = eventing('click', event_actions.slice(0, 1), function (e) {
+				$controls = eventing('click', event_actions.slice(0, 1), function (e) {
 					var str = text_from_target(e),
 						node = node_from_target(e);
 					if (node.match(/button/i)) {
@@ -506,21 +507,21 @@
 						chain.handle(str);
 					}
 				}, $('controls')),
-				controls_undostat = eventing('mouseover', [], undostatic, utils.getByTag('footer', document)[0]),
-				controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
-				exit = eventing('click', event_actions.slice(0, 1), function (e) {
+				$controls_undostat = eventing('mouseover', [], undostatic, utils.getByTag('footer', document)[0]),
+				$controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
+				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
 						chain = chain.validate('play');
 						doExitShow();
 						_.each([$('exit'), $('tooltip'), $('controls'), $('paused'), $('base'), $('slide')], utils.removeNodeOnComplete);
 						exitshow();
-						locate.undo();
+						$locate.undo();
 						$setup.execute();
 					}
 				}, close_cb);
 			//listeners...
 			_.each(_.zip(dombuttons, buttons), invokeBridge);
-			_.each([controls, exit, locate, controls_undostat, controls_dostat], go_execute);
+			_.each([$controls, $exit, $locate, $controls_undostat, $controls_dostat], go_execute);
 			$setup.undo();
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
