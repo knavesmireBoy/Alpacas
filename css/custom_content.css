@@ -387,7 +387,7 @@ ul#thumbnails a:link, ul#thumbnails a:visited {
 ul#thumbnails a:hover, ul#thumbnails a:active {
 	border-color: #900;
 }
-#backbutton {
+button#backbutton {
 	background-position: 50% 14.5%;
 }
 button#playbutton {
