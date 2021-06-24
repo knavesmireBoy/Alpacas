@@ -84,12 +84,7 @@
 		return _[p](getResult(coll), cb);
 	}
 	var utils = gAlp.Util,
-		/*
-		con = function (arg) {
-			window.console.log(arg);
-			return arg;
-		},
-        */
+		con = utils.con,
 		ptL = _.partial,
 		doComp = _.compose,
         //creates an object that wraps an iterator, allows setting new instance of iterator ($looper.build) and forwards all requests
@@ -137,7 +132,7 @@
 		getDomTargetImg = utils.getDomChild(utils.getNodeByTag('img')),
 		$slide_swapper = utils.makeContext(),
 		$setup = utils.makeContext(),
-		$player_pauser = utils.makeContext(),
+		$toggler = utils.makeContext(),
 		$controlbar = utils.makeContext(),
 		addElements = function () {
 			return doComp(twice(applyArg)('img'), anCr, twice(applyArg)('a'), anCr, anCr(getThumbs))('li');
@@ -208,7 +203,9 @@
 			]);
 			return onLoad(img, path);   
             }
-            return onLoad(getDomTargetImg($('paused')), getPausePath());
+            //ensure only gets called when in in_play mode
+            return onLoad(getDomTargetImg($('paused')), getPausePath()); 
+            
 		},
 		loadImage = function (getnexturl, id, promise) {
 			var img = getDomTargetImg($(id)),
@@ -276,11 +273,12 @@
 				/*remember because images are a mix of landscape and portrait we re-order collection for the slideshow
 				so landscapes follow portraits or vice-versa (depending what is the leading pic), this requires undoing when reverting to manual navigation which is invoked by clicking forward/back button, a fresh slideplayer is created on entering slideshow */
 				execute: do_page_iterator,
-				undo: _.wrap(do_page_iterator, function (orig, coll) {
+				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
+                    /*gets called on exiting slideshow, doesn't need to run again (ie forward/back in manual slideshow) until fresh slide_player*/
 					orig(coll);
                     //fulfills the duty of clicking an image when entering showtime 
 					$looper.find(getBaseSrc());
-				})
+				}))
 			};
 		},
         do_static_factory = function () {
@@ -314,7 +312,7 @@
 			}
 			$slide_swapper[m](coll);
 		},
-		recur = (function (player) {
+		$recur = (function (player) {
             
 			function test() {
 				return _.map([getBaseChild(), getSlideChild()], function (img) {
@@ -333,14 +331,14 @@
 
 			function doRecur() {
 				player.inc();
-                recur.t = window.requestAnimationFrame(recur.execute); 
+                $recur.t = window.requestAnimationFrame($recur.execute); 
 			}
 
 			function doOpacity(flag) {
 				var slide = $('slide'),
 					val;
 				if (slide) {
-					val = flag ? 1 : recur.i / 100;
+					val = flag ? 1 : $recur.i / 100;
 					val = cssopacity.getValue(val);
 					doMap(slide, [
 						[
@@ -353,16 +351,16 @@
 			var playmaker = (function () {
 				var setPlayer = function (arg) {
 						player = playmaker(arg);
-						recur.execute();
+						$recur.execute();
 					},
                     doBase = ptL(invoke, loadImageBridge, _.bind($looper.play, $looper), 'base', setPlayer, doSwap),
                     doSlide = ptL(invoke, loadImageBridge, doComp(utils.drillDown(['src']), utils.getChild, utils.getChild, $$('base')), 'slide', doOrient),
 					fadeOut = {
 						validate: function () {
-							return recur.i <= -15.5;
+							return $recur.i <= -15.5;
 						},
 						inc: function () {
-							recur.i -= 1;
+							$recur.i -= 1;
 						},
 						reset: function () {
 							doSlide();
@@ -371,10 +369,10 @@
 					},
 					fadeIn = {
 						validate: function () {
-							return recur.i >= 134.5;
+							return $recur.i >= 134.5;
 						},
 						inc: function () {
-							recur.i += 1;
+							$recur.i += 1;
 						},
 						reset: function () {
 							doBase();
@@ -382,13 +380,13 @@
 					},
 					fade = {
 						validate: function () {
-							return recur.i <= -1;
+							return $recur.i <= -1;
 						},
 						inc: function () {
-							recur.i -= 1;
+							$recur.i -= 1;
 						},
 						reset: function () {
-							recur.i = 150;
+							$recur.i = 150;
 							doSlide();
 							doOpacity();
 							doBase();
@@ -403,7 +401,7 @@
 			player = playmaker();
 			return {
 				execute: function () {
-					if (!recur.t) {
+					if (!$recur.t) {
                         get_play_iterator(true);
                         $controlbar.set(do_static_factory());
                     }
@@ -416,20 +414,21 @@
 				},
 				undo: function (flag) {
 					doOpacity(flag);
-					window.cancelAnimationFrame(recur.t);
+					window.cancelAnimationFrame($recur.t);
                     $controlbar.set(do_static_factory());
-                    doMakePause();
+                    doMakePause();//checks path to pause pic
                     //flag sent went exiting slideshow by pressing forward/back crucial in determining state
-					recur.t = flag ? null : -1;
+					//$recur.t = flag ? null : -1;
+					$recur.t = flag;
 				}
 			};
 		}({})),
-		clear = _.bind(recur.undo, recur),
-		doplay = _.bind(recur.execute, recur),
+		clear = _.bind($recur.undo, $recur),
+		doplay = _.bind($recur.execute, $recur),
 		go_execute = thrice(doMethod)('execute')(null),
-		go_set = thrice(lazyVal)('set')($player_pauser),
-		undo_controller = thricedefer(doMethod)('undo')(null)($player_pauser),
-		fastExit = doComp(undo_controller, clear, thrice(lazyVal)('undo')($slide_swapper)),
+		go_undo = thrice(doMethod)('undo')(),
+		go_set = thrice(lazyVal)('set')($toggler),
+		undo_toggler = thricedefer(doMethod)('undo')(null)($toggler),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
@@ -438,20 +437,21 @@
 				do_slide = defer([clear, doplay]),
 				doPlaying = defer([unplayin, play_ing]),
 				doDisplay = defer([function () {}, enter_inplay]),
-                suspend_slideshow = ptL(utils.doWhen, _.negate(swapping), do_slide),
-                suspend_play = ptL(utils.doWhen, _.negate(swapping), doPlaying),				
-				//invoke_player = deferEach([do_slide, doPlaying, doDisplay])(getResult),
-				invoke_player = deferEach([suspend_slideshow, suspend_play, doDisplay])(getResult),
+                doResumeSlideshow = ptL(utils.doWhen, _.negate(swapping), do_slide),
+                doResumePlaying = ptL(utils.doWhen, _.negate(swapping), doPlaying),				
+				invoke_player = deferEach([doResumeSlideshow, doResumePlaying, doDisplay])(getResult),
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, $locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
-				farewell = [unplayin, exit_inplay, exitswap, undo_controller, /*fastExit*/ doReLocate, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
-				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(nextcaller)].concat(farewell))(getResult),
-				prev_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(prevcaller)].concat(farewell))(getResult),
-				controller = function () {
+				farewell = [unplayin, exit_inplay, exitswap, undo_toggler, doReLocate, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
+                exit_slideshow = ptL(utils.doWhen, $$('slide'), doComp(get_play_iterator, defer_once(clear)(null))),
+                
+				next_driver = deferEach([exit_slideshow, twicedefer(loadImageBridge)('base')(nextcaller)].concat(farewell))(getResult),
+				prev_driver = deferEach([exit_slideshow, twicedefer(loadImageBridge)('base')(prevcaller)].concat(farewell))(getResult),
+				toggler = function () {
 					//make BOTH slide and pause but only make pause visible on NOT playing
 					if (!$('slide')) {
-						doMakeSlide('base', 'slide', thricedefer(doMethod)('execute')(null)($player_pauser), go_set, do_invoke_player, unlocate);
+						doMakeSlide('base', 'slide', thricedefer(doMethod)('execute')(null)($toggler), go_set, do_invoke_player, unlocate);
                         doMakePause(getPausePath());
 					}
 				},
@@ -469,7 +469,8 @@
 							}
 						},
 						validate: function (str) {
-							if (in_play() && recur.t && test(str)) {
+                            console.log(isNaN($recur.t), $recur.t)
+							if (in_play() && $recur.t && test(str)) {
 								//return fresh instance on exiting slideshow IF in play mode
 								//clear();
 								return factory();
@@ -481,7 +482,7 @@
 				mynext = COR(ptL(invokeArgs, equals, 'forwardbutton'), next_driver),
 				myprev = COR(ptL(invokeArgs, equals, 'backbutton'), prev_driver),
 				myplayer = COR(function () {
-					controller();
+					toggler();
 					return true;
 				}, invoke_player);
 			myplayer.validate = function () {
@@ -489,7 +490,7 @@
 			};
 			mynext.setSuccessor(myprev);
 			myprev.setSuccessor(myplayer);
-			recur.i = 47; //slide is clone of base initially, so fade can start quickly, ie countdown from lowish figure
+			$recur.i = 47; //slide is clone of base initially, so fade can start quickly, ie countdown from lowish figure
 			return mynext;
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
@@ -518,10 +519,11 @@
 				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
 						chain = chain.validate('play');
-						fastExit();
+						//fastExit();
                         exitshowtime();
+                        unsetPortrait();
+                        _.each([$recur, $locate, $toggler], go_undo);
 						_.each([$('exit'), $('tooltip'), $('controls'), $('paused'), $('base'), $('slide')], utils.removeNodeOnComplete);
-						$locate.undo();
 						$setup.execute();
 					}
 				}, close_cb);
