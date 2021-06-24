@@ -417,7 +417,7 @@
 					window.cancelAnimationFrame($recur.t);
 					$controlbar.set(do_static_factory());
 					doMakePause(); //checks path to pause pic
-					$recur.t = flag; //either set to null(forward/back) or null(pause/exit)
+					$recur.t = flag; //either set to undefined(forward/back/exit) or null(pause)
 				}
 			};
 		}({})),
@@ -467,7 +467,7 @@
 						},
 						validate: function (str) {
 							if (in_play() && $recur.t && test(str)) {
-								//return fresh instance on exiting slideshow IF in play mode
+								//return fresh instance on exiting slideshow IF in play mode, or maybe just anyway
 								return factory();
 							}
 							return this;
