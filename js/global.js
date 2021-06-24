@@ -229,6 +229,7 @@ gAlp.Util = (function() {
 	}
 
 	function doAlternate(j) {
+        
 		function alternate(i, n) {
 			return function() {
 				i = (i += 1) % n;

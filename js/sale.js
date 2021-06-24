@@ -17,7 +17,7 @@ if (!window.gAlp) {
 	}
     
 	function makeAlternator(alts) {
-        
+                
         function Alternator(actions) {
             this.actions = gAlp.Util.doAlternate()(actions);
             return this;
@@ -120,8 +120,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		return list.slice(_.random(0, end || list.length));
-		//return list.slice(0, -1);
+		//return list.slice(_.random(0, end || list.length));
+		return list.slice(0, -2);
 	}
 	var alpacas = [
 			[
