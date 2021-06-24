@@ -243,7 +243,7 @@ gAlp.Looper = function () {
 			return _.contains(this.members, value);
 		},
 		visit: function (cb) {
-			_.each(this.members, cb);
+			_.each(this.members, cb, this);
 		}
 	};
 	gAlp.Group.from = function (collection) {
@@ -308,13 +308,16 @@ gAlp.Looper = function () {
 			return this.current()[m];
 		},
 		visit: function (cb) {
-			_.each(this.group.visit, cb);
+			this.group.visit(cb);
 		}
 	};
     
     var target = {
         setSubject: function (s) {
 			this.$subject = s;
+        },
+        getSubject: function () {
+			return this.$subject;
         },
         build: function (coll, advancer) {
             this.setSubject(gAlp.LoopIterator.from(coll, advancer(coll)));

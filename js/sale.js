@@ -22,7 +22,7 @@ if (!window.gAlp) {
             this.actions = gAlp.Util.doAlternate()(actions);
             return this;
         }
-        Alternator.prototype = utils.makeContext();
+        Alternator.prototype = gAlp.Util.makeContext();
         Alternator.prototype.execute  = function () {
             this.$command = this.actions.apply(this, arguments);
         };
@@ -121,6 +121,7 @@ if (!window.gAlp) {
 
 	function sliceArray(list, end) {
 		return list.slice(_.random(0, end || list.length));
+		//return list.slice(0, -1);
 	}
 	var alpacas = [
 			[
@@ -240,6 +241,7 @@ if (!window.gAlp) {
 		doGet = twice(utils.getter),
 		getZero = doGet(0),
 		getOne = doGet(1),
+        getLength = doGet('length'),
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
@@ -325,7 +327,8 @@ if (!window.gAlp) {
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
 			id: 'list'
 		}), PTL(utils.insert()($$('sell'), intro), 'ul'))])),
-		Looper = gAlp.LoopIterator,
+		//Looper = gAlp.LoopIterator,
+        $looper = gAlp.Looper(),
 		doCaption_cb = function (a, i) {
 			var fig = twice(invokeArg)('figure'),
 				caption = twice(invokeArg)('figcaption'),
@@ -346,9 +349,10 @@ if (!window.gAlp) {
 			gAlp.Intaface.ensures($displayer, iDisplayer);
 			$displayer.hide();
 			$displayer.show(getParent(tgt));
-			Looper.tabs.visit(utils.hide);
-			COMP(_.bind(Looper.tabs.set, Looper.tabs), getTabIndex(tgt))();
-			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind(Looper.tabs.current, Looper.tabs))();
+			//$looper.visit(COMP(utils.hide, utils.getPrevious, utils.hide));
+			$looper.visit(utils.hide);
+			COMP(_.bind($looper.set, $looper), getTabIndex(tgt))();
+			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.current, $looper))();
 		},
 		tab_cb_bridge = PTL(COMP(delayExecute, delayNavListener), COMP(tab_cb, getTarget)),
 		navBuilder = function (caption, i) {
@@ -360,6 +364,7 @@ if (!window.gAlp) {
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
 		abbreviateTabs = function () {
+            //return;
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
 			}
@@ -407,8 +412,11 @@ if (!window.gAlp) {
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
+        incrementer = _.compose(doInc, getLength),
 		doLoop = function (coll) {
-			Looper.tabs = Looper.from(coll, doInc(doGet('length')(coll)));
+            if (coll && typeof coll.length !== 'undefined') {
+				$looper.build(coll, incrementer);
+			}
 		},
 		selldiv = COMP(PTL(setAttrs, {
 			id: 'sell'
@@ -515,16 +523,12 @@ if (!window.gAlp) {
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
-			Looper.tabs.visit = function (cb) {
-				_.each(this.group.members, cb);
-				_.each(_.map(this.group.members, utils.getPrevious), cb);
-			};
-			var members = Looper.tabs.current().members,
+			var members = $looper.current().members,
 				deferMembers = deferEach(members),
 				makeCaptions = deferMembers(doCaption_cb),
-				bindCurrent = _.bind(Looper.tabs.current, Looper.tabs),
+				bindCurrent = _.bind($looper.current, $looper),
 				makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(navBuilder)),
-				doFind = _.bind(Looper.tabs.find, Looper.tabs),
+				doFind = _.bind($looper.find, $looper),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(['Alpacas For Sale']), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
@@ -537,7 +541,7 @@ if (!window.gAlp) {
 				],
 				$divcontext = utils.makeContext().init(),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
-				deferShow = COMP(showCurrent, _.bind(Looper.tabs.forward, Looper.tabs)),
+				deferShow = COMP(showCurrent, _.bind($looper.forward, $looper)),
 				deferNext = COMP(deferShow, deferMembers(hide)),
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
 				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
