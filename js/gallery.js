@@ -486,7 +486,6 @@
 			mynext.setSuccessor(myprev);
 			myprev.setSuccessor(myplayer);
 			$recur.i = 47; //slide is clone of base initially, so fade can start quickly, ie countdown from lowish figure
-			//$recur.t = null;
 			return mynext;
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
