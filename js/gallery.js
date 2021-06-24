@@ -116,7 +116,8 @@
 		doGet = twice(utils.getter),
 		doVal = doGet('value'),
 		doParse = doComp(ptL(add, '../'), doGet(0), parser),
-		doAlt = doComp(twice(applyArg)(null), utils.getZero, thrice(doMethod)('reverse')(null)),
+        //sends null to recur.undo, as opposed to undefined
+		doAlt = doComp(twice(applyArg)(null), utils.getZero, thrice(doMethod)('reverse')()),
 		unsetPortrait = ptL(klasRem, 'portrait', getThumbs),
 		setPortrait = ptL(klasAdd, 'portrait', getThumbs),
 		undostatic = ptL(klasRem, 'static', $$('controls')),
@@ -274,6 +275,7 @@
 				execute: do_page_iterator,
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					/*gets called on exiting slideshow, doesn't need to run again (ie forward/back in manual slideshow) until fresh slide_player*/
+                    console.log('UNDO')
 					orig(coll);
 					//fulfills the duty of clicking an image when entering showtime 
 					$looper.find(getBaseSrc());
@@ -399,7 +401,11 @@
 			return {
 				execute: function () {
 					if (!$recur.t) {
-						get_play_iterator(true);
+                        /*returns true if undefined, false if null which it will be as a result of pausing
+                        ensures we only get a fresh collection when initiating a slideshow*/
+                        if(isNaN($recur.t)){
+                           get_play_iterator(true);
+                        }
 						$controlbar.set(do_static_factory());
 					}
 					if (player.validate()) {
@@ -414,7 +420,7 @@
 					window.cancelAnimationFrame($recur.t);
 					$controlbar.set(do_static_factory());
 					doMakePause(); //checks path to pause pic
-					$recur.t = flag; //either set to null(forward/back) or undefined (pause/exit)
+					$recur.t = flag; //either set to null(forward/back) or null(pause/exit)
 				}
 			};
 		}({})),
@@ -423,7 +429,7 @@
 		go_execute = thrice(doMethod)('execute')(null),
 		go_undo = thrice(doMethod)('undo')(),
 		go_set = thrice(lazyVal)('set')($toggler),
-		undo_toggler = thricedefer(doMethod)('undo')(null)($toggler),
+		undo_toggler = thricedefer(doMethod)('undo')()($toggler),
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
@@ -439,7 +445,7 @@
 				relocate = ptL(lazyVal, null, $locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
 				farewell = [unplayin, exit_inplay, exitswap, undo_toggler, doReLocate, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
-				exit_slideshow = ptL(utils.doWhen, $$('slide'), doComp(get_play_iterator, defer_once(clear)(null))),
+				exit_slideshow = ptL(utils.doWhen, $$('slide'), doComp(get_play_iterator, defer_once(clear)())),
 				next_driver = deferEach([exit_slideshow, twicedefer(loadImageBridge)('base')(nextcaller)].concat(farewell))(getResult),
 				prev_driver = deferEach([exit_slideshow, twicedefer(loadImageBridge)('base')(prevcaller)].concat(farewell))(getResult),
 				toggler = function () {
@@ -483,6 +489,7 @@
 			mynext.setSuccessor(myprev);
 			myprev.setSuccessor(myplayer);
 			$recur.i = 47; //slide is clone of base initially, so fade can start quickly, ie countdown from lowish figure
+			//$recur.t = null;
 			return mynext;
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
