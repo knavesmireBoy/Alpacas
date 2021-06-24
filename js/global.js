@@ -1473,12 +1473,12 @@ gAlp.Util = (function() {
 				},
 				execute: function() {
 					if (this.$command) {
-						return this.$command.execute.apply(this, arguments);
+						return this.$command.execute.apply(this.$command, arguments);
 					}
 				},
 				undo: function() {
 					if (this.$command) {
-						return this.$command.undo.apply(this, arguments);
+						return this.$command.undo.apply(this.$command, arguments);
 					}
 				},
 				set: function($command) {

@@ -17,6 +17,8 @@ if (!window.gAlp) {
 	}
     
 	function makeAlternator(alts) {
+        
+        
                 
         function Alternator(actions) {
             this.actions = gAlp.Util.doAlternate()(actions);
@@ -24,11 +26,11 @@ if (!window.gAlp) {
         }
         Alternator.prototype = gAlp.Util.makeContext();
         Alternator.prototype.execute  = function () {
-            this.$command = this.actions.apply(this, arguments);
-        };
-        
+           this.$command = this.actions.apply(this, arguments);
+        };        
 		return new Alternator(alts);
 	}
+    
     
 	/*   https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
