@@ -465,7 +465,6 @@
 						validate: function (str) {
 							if (in_play() && $recur.t && test(str)) {
 								//return fresh instance on exiting slideshow IF in play mode
-								//clear();
 								return factory();
 							}
 							return this;
@@ -488,7 +487,6 @@
 		}, //factory
 		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
 		setup = function (e) {
-			//do_page_iterator([]);
 			doComp(setindex, utils.drillDown(['target', 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
 			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
@@ -511,8 +509,7 @@
 				$controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
 				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
 					if (e.target.id === 'exit') {
-						chain = chain.validate('play');
-						//fastExit();
+						chain = chain.validate();
 						exitshowtime();
 						unsetPortrait();
 						_.each([$recur, $locate, $toggler], go_undo);
