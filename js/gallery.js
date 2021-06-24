@@ -19,12 +19,6 @@
 		};
 	}
 
-	function filter(coll, pred1) {
-		var tmp = _.filter(coll, pred1),
-			arr = _.reject(coll, pred1);
-		return arr.concat(tmp);
-	}
-
 	function greater(a, b) {
 		return a > b;
 	}
@@ -275,7 +269,6 @@
 				execute: do_page_iterator,
 				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
 					/*gets called on exiting slideshow, doesn't need to run again (ie forward/back in manual slideshow) until fresh slide_player*/
-                    console.log('UNDO')
 					orig(coll);
 					//fulfills the duty of clicking an image when entering showtime 
 					$looper.find(getBaseSrc());
@@ -292,26 +285,30 @@
 		///slideshow..., must run to determine start index for EITHER collection
 		get_play_iterator = function (flag) {
 			var coll,
-				//index = Looper.onpage.get('index'),
+                filter = function (coll, pred1) {
+                    var tmp = _.filter(coll, pred1),
+                        arr = _.reject(coll, pred1);
+                    return arr.concat(tmp);
+                },
 				index = $looper.get('index'),
 				outcomes = [_.negate(queryOrientation), queryOrientation],
-				tmp = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
+				provisional = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
 					return !li.id;
 				}), getDomTargetImg),
-				i = outcomes[0](tmp[index]) ? 0 : 1,
+				i = outcomes[0](provisional[index]) ? 0 : 1,
 				m = 'undo';
 			if (flag) {
 				m = 'execute';
 				//re-order
-				coll = utils.shuffleArray(tmp)(index);
+				coll = utils.shuffleArray(provisional)(index);
 				//split and join again
 				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
 				$slide_swapper.set(slide_player_factory());
 			} else {
 				//sends original dom-ordered collection when exiting slideshow
-				coll = tmp;
+				coll = provisional;
 			}
-			$slide_swapper[m](coll);
+            $slide_swapper[m](coll);
 		},
 		$recur = (function (player) {
 			function test() {
@@ -403,8 +400,8 @@
 					if (!$recur.t) {
                         /*returns true if undefined, false if null which it will be as a result of pausing
                         ensures we only get a fresh collection when initiating a slideshow*/
-                        if(isNaN($recur.t)){
-                           get_play_iterator(true);
+                        if (isNaN($recur.t)) {
+                            get_play_iterator(true);
                         }
 						$controlbar.set(do_static_factory());
 					}
