@@ -15,23 +15,18 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-    
+
 	function makeAlternator(alts) {
-        
-        
-                
-        function Alternator(actions) {
-            this.actions = gAlp.Util.doAlternate()(actions);
-            return this;
-        }
-        Alternator.prototype = gAlp.Util.makeContext();
-        Alternator.prototype.execute  = function () {
-           this.$command = this.actions.apply(this, arguments);
-        };        
+		function Alternator(actions) {
+			this.actions = gAlp.Util.doAlternate()(actions);
+			return this;
+		}
+		Alternator.prototype = gAlp.Util.makeContext();
+		Alternator.prototype.execute = function () {
+			this.$command = this.actions.apply(this, arguments);
+		};
 		return new Alternator(alts);
 	}
-    
-    
 	/*   https://nullprogram.com/blog/2013/03/24/#:~:text=Generally%20to%20create%20a%20new,constructor%20function%20to%20this%20object.
 	function create(constructor) {
 		var Factory = constructor.bind.apply(constructor, arguments);
@@ -122,8 +117,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		//return list.slice(_.random(0, end || list.length));
-		return list.slice(0, -2);
+		return list.slice(_.random(0, end || list.length));
+		//return list.slice(0, -2);
 	}
 	var alpacas = [
 			[
@@ -243,7 +238,7 @@ if (!window.gAlp) {
 		doGet = twice(utils.getter),
 		getZero = doGet(0),
 		getOne = doGet(1),
-        getLength = doGet('length'),
+		getLength = doGet('length'),
 		anCr = utils.append(),
 		klasAdd = utils.addClass,
 		klasRem = utils.removeClass,
@@ -330,7 +325,7 @@ if (!window.gAlp) {
 			id: 'list'
 		}), PTL(utils.insert()($$('sell'), intro), 'ul'))])),
 		//Looper = gAlp.LoopIterator,
-        $looper = gAlp.Looper(),
+		$looper = gAlp.Looper(),
 		doCaption_cb = function (a, i) {
 			var fig = twice(invokeArg)('figure'),
 				caption = twice(invokeArg)('figcaption'),
@@ -366,7 +361,7 @@ if (!window.gAlp) {
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
 		abbreviateTabs = function () {
-            //return;
+			//return;
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
 			}
@@ -414,9 +409,9 @@ if (!window.gAlp) {
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
-        incrementer = _.compose(doInc, getLength),
+		incrementer = _.compose(doInc, getLength),
 		doLoop = function (coll) {
-            if (coll && typeof coll.length !== 'undefined') {
+			if (coll && typeof coll.length !== 'undefined') {
 				$looper.build(coll, incrementer);
 			}
 		},
@@ -518,7 +513,7 @@ if (!window.gAlp) {
 		navoutcomes = delayMap(_.map(navExes, thrice(doMethod)('match'))),
 		deleteListFromCache = thricedefer(doMethod)('erase')(false)(utils.eventCache),
 		getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
-        //may need a more robust version than this as a state test
+		//may need a more robust version than this as a state test
 		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
 		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
@@ -569,7 +564,7 @@ if (!window.gAlp) {
 				tabCBS = getEnvironment() ? [reLoop, reTab] : tabFirst,
 				$tabcontext = utils.makeContext().init(makeAlternator(tabCBS)),
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
-                setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
+				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
