@@ -196,7 +196,6 @@
 			return onLoad(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
 		doMakePause = function (path) {
-            console.log(99)
             if(path){
             var img = addElements();
             doMap(img.parentNode.parentNode, [
@@ -234,13 +233,13 @@
 		makeToolTip = doComp(thrice(doMethod)('init')(null), ptL(gAlp.Tooltip, getThumbs, tooltip_msg, touchevents ? 0 : 2)),
 		getValue = doComp(doVal, ptL(doMethod, $looper)),
 		showtime = doComp(ptL(klasRem, ['gallery'], getThumbs), ptL(klasAdd, ['showtime'], utils.getBody())),
-		playtime = ptL(klasAdd, 'inplay', $('wrap')),
-		playing = doComp(ptL(utils.doWhen, once(2), ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
-		notplaying = ptL(klasRem, 'playing', main),
+		enter_inplay = ptL(klasAdd, 'inplay', $('wrap')),
+		play_ing = doComp(ptL(utils.doWhen, once(2), ptL(makeToolTip, true)), ptL(klasAdd, 'playing', main)),
+		unplayin = ptL(klasRem, 'playing', main),
 		exit_inplay = ptL(klasRem, 'inplay', $('wrap')),
 		exitswap = ptL(klasRem, 'swap', utils.getBody()),
         swapping = ptL(utils.findByClass, 'swap'),
-		exitshowtime = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay, notplaying),
+		exitshowtime = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay, unplayin),
 		in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
 		nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
@@ -272,28 +271,14 @@
 			locator(twicedefer(loadImageBridge)('base')(nextcaller), twicedefer(loadImageBridge)('base')(prevcaller))(e)[1]();
 			doOrient(e.target);
 		}, getThumbs()),
-        /*
-		slide_player_factory = function () {
-			return {
-				remember because images are a mix of landscape and portrait we re-order collection for the slideshow
-				so landscapes follow portraits or vice-versa (depending what is the leading pic), this requires undoing when reverting to manual navigation which is invoked by clicking forward/back button, and undo only needs to run once and a fresh slideplayer is created on entering slideshow 
-				execute: _.once(do_page_iterator),
-				undo: _.once(_.wrap(do_page_iterator, function (orig, coll) {
-                    console.log('set orig coll 2')
-					orig(coll);
-					$looper.find(getBaseSrc());
-				}))
-			};
-		},*/
-        
         slide_player_factory = function () {
 			return {
 				/*remember because images are a mix of landscape and portrait we re-order collection for the slideshow
 				so landscapes follow portraits or vice-versa (depending what is the leading pic), this requires undoing when reverting to manual navigation which is invoked by clicking forward/back button, a fresh slideplayer is created on entering slideshow */
 				execute: do_page_iterator,
 				undo: _.wrap(do_page_iterator, function (orig, coll) {
-                    console.log('set orig coll 2')
 					orig(coll);
+                    //fulfills the duty of clicking an image when entering showtime 
 					$looper.find(getBaseSrc());
 				})
 			};
@@ -323,13 +308,10 @@
 				//split and join again
 				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
                 $slide_swapper.set(slide_player_factory()); 
-                console.log('new fac')
 			} else {
-                console.log('set orig coll')
 				//sends original dom-ordered collection when exiting slideshow
 				coll = tmp;
 			}
-            console.log(m)
 			$slide_swapper[m](coll);
 		},
 		recur = (function (player) {
@@ -436,6 +418,7 @@
 					doOpacity(flag);
 					window.cancelAnimationFrame(recur.t);
                     $controlbar.set(do_static_factory());
+                    doMakePause();
                     //flag sent went exiting slideshow by pressing forward/back crucial in determining state
 					recur.t = flag ? null : -1;
 				}
@@ -450,20 +433,19 @@
 		factory = function () {
 			var remPause = doComp(utils.removeNodeOnComplete, $$('paused')),
 				remSlide = doComp(utils.removeNodeOnComplete, $$('slide')),
+                unlocate = thricedefer(doMethod)('undo')(null)($locate),
 				defer = defer_once(doAlt),
-                suspend_pause = ptL(utils.doWhen, _.negate(swapping), notplaying),
-                suspend_clear = ptL(utils.doWhen, _.negate(swapping), clear),
 				do_slide = defer([clear, doplay]),
-				//doPlaying = defer([doDoPlaying, playing]),
-				doPlaying = defer([notplaying, playing]),
-				doDisplay = defer([function () {}, playtime]),
-				//doDisplay = defer([doPlayTime, doPlayTime]),
-				unlocate = thricedefer(doMethod)('undo')(null)($locate),
-				invoke_player = deferEach([do_slide, doPlaying, doDisplay])(getResult),
+				doPlaying = defer([unplayin, play_ing]),
+				doDisplay = defer([function () {}, enter_inplay]),
+                suspend_slideshow = ptL(utils.doWhen, _.negate(swapping), do_slide),
+                suspend_play = ptL(utils.doWhen, _.negate(swapping), doPlaying),				
+				//invoke_player = deferEach([do_slide, doPlaying, doDisplay])(getResult),
+				invoke_player = deferEach([suspend_slideshow, suspend_play, doDisplay])(getResult),
 				do_invoke_player = doComp(ptL(eventing, 'click', event_actions.slice(0, 2), invoke_player), getThumbs),
 				relocate = ptL(lazyVal, null, $locate, 'execute'),
 				doReLocate = ptL(utils.doWhen, $$('base'), relocate),
-				farewell = [notplaying, exit_inplay, exitswap, undo_controller, /*fastExit*/ doReLocate, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
+				farewell = [unplayin, exit_inplay, exitswap, undo_controller, /*fastExit*/ doReLocate, doComp(doOrient, $$('base')), deferEach([remPause, remSlide])(getResult)],
 				next_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(nextcaller)].concat(farewell))(getResult),
 				prev_driver = deferEach([get_play_iterator, defer_once(clear)(true), twicedefer(loadImageBridge)('base')(prevcaller)].concat(farewell))(getResult),
 				controller = function () {
@@ -472,9 +454,6 @@
 						doMakeSlide('base', 'slide', thricedefer(doMethod)('execute')(null)($player_pauser), go_set, do_invoke_player, unlocate);
                         doMakePause(getPausePath());
 					}
-                    else {
-                        doMakePause();
-                    }
 				},
 				COR = function (predicate, action) {
 					var test = _.negate(ptL(equals, 'playbutton'));
