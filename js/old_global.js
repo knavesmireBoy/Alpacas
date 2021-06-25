@@ -1225,18 +1225,20 @@ gAlp.Util = (function() {
 		curryFactory: curryFactory,
 		doAlternate: doAlternate,
 		doMap: function doMap(el, v) {
-            var tgt = v,
-                bool = false;
-            if(_.isArray(v[0][0])){
-                tgt = v[0];
-                bool = true;
-            }
-            _.each(tgt, function(sub) {
-                return attrMap(getResult(el), _.object([
-                    [sub[0], sub[1]]
-                ]), bool);
-            });
-            return el;
+			if (_.isArray(v[0][0])) {
+				_.each(v[0], function(sub) {
+					return attrMap(getResult(el), _.object([
+						[sub[0], sub[1]]
+					]), true);
+				});
+			} else {
+				_.each(v, function(sub) {
+					return attrMap(getResult(el), _.object([
+						[sub[0], sub[1]]
+					]));
+				});
+			}
+			return el;
 		},
 		/*USAGE:
         var once = doOnce(),
