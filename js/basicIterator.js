@@ -262,16 +262,6 @@ gAlp.Looper = function () {
 	gAlp.LoopIterator.cross_page = null;
 	gAlp.LoopIterator.prototype = {
 		constructor: gAlp.LoopIterator,
-		forward: function (flag) {
-			if (!flag && this.rev) {
-				return this.back(true);
-			}
-			this.position = this.advance(this.position);
-			return {
-				value: this.group.members[this.position],
-				index: this.position
-			};
-		},
 		back: function (flag) {
 			if (!this.rev || flag) {
 				this.group.members = this.group.members.reverse();
@@ -281,20 +271,22 @@ gAlp.Looper = function () {
 			}
 			return this.forward(this.rev);
 		},
-		play: function () {
-			return this.forward(true).value;
-		},
-		current: function () {
-			return {
-				members: this.group.members,
-				value: this.group.members[this.position],
-				index: this.position
-			};
-		},
+		
 		find: function (tgt) {
 			return this.set(_.findIndex(this.group.members, _.partial(equals, tgt)));
 		},
-		set: function (pos) {
+        forward: function (flag) {
+			if (!flag && this.rev) {
+				return this.back(true);
+			}
+			this.position = this.advance(this.position);
+			return this.status();
+		},
+		get: function (m) {
+			m = m || 'value';
+			return this.status()[m];
+		},
+        set: function (pos) {
 			if (!isNaN(parseFloat(pos)) && pos >= 0) {
 				this.position = pos;
 			}
@@ -303,9 +295,12 @@ gAlp.Looper = function () {
 				index: this.position
 			};
 		},
-		get: function (m) {
-			m = m || 'value';
-			return this.current()[m];
+        status: function () {
+			return {
+				members: this.group.members,
+				value: this.group.members[this.position],
+				index: this.position
+			};
 		},
 		visit: function (cb) {
 			this.group.visit(cb);
@@ -328,5 +323,5 @@ gAlp.Looper = function () {
 		getLength = doGet('length'),
 		incrementer = _.compose(doInc, getLength);
 	
-	return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'current', 'find', 'forward', 'get', 'play', 'set',  'visit']);
+	return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'status', 'find', 'forward', 'get', 'play', 'set',  'visit']);
 };

@@ -349,7 +349,7 @@ if (!window.gAlp) {
 			//$looper.visit(COMP(utils.hide, utils.getPrevious, utils.hide));
 			$looper.visit(utils.hide);
 			COMP(_.bind($looper.set, $looper), getTabIndex(tgt))();
-			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.current, $looper))();
+			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.status, $looper))();
 		},
 		tab_cb_bridge = PTL(COMP(delayExecute, delayNavListener), COMP(tab_cb, getTarget)),
 		navBuilder = function (caption, i) {
@@ -520,10 +520,9 @@ if (!window.gAlp) {
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
-			var members = $looper.current().members,
-				deferMembers = deferEach(members),
+			var deferMembers = deferEach($looper.get('members')),
 				makeCaptions = deferMembers(doCaption_cb),
-				bindCurrent = _.bind($looper.current, $looper),
+				bindCurrent = _.bind($looper.status, $looper),
 				makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(navBuilder)),
 				doFind = _.bind($looper.find, $looper),
 				goGetValue = COMP(doGet('value'), bindCurrent),
