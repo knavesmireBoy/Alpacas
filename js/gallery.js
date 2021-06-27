@@ -185,14 +185,25 @@
 			]);
 			return onLoad(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
+        /*
 		doMakePause = function (path) {
 			if (path) {
 				var img = addElements(),
                     styles = [[cssopacity.getKey(), cssopacity.getValue(0.5)]];
 				doMap(img.parentNode.parentNode, [
-					['id', 'paused'], styles ]);
+					['id', 'paused'], styles]);
 				return onLoad(img, path);
 			}
+			return onLoad(getDomTargetImg($('paused')), getPausePath());
+		},
+        */
+        doMakePause = function (path) {
+			if (path) {
+				var img = addElements(),
+                    styles = [cssopacity.getKey(), cssopacity.getValue(0.5)];
+                doMap(img.parentNode.parentNode, _.chunk(['id', 'paused', styles], 2));
+                return onLoad(img, path);
+            }
 			//ensure only gets called when in in_play mode
 			return onLoad(getDomTargetImg($('paused')), getPausePath());
 		},
@@ -522,13 +533,7 @@
 			$setup.undo();
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
-	$setup.execute();
-    
-    var arr = [[1],[2],[3]],
-        sub = arr.splice(0,1);
- console.log(arr, sub);
-    
-    
+	$setup.execute();    
     /*
     function myLength(ary) {
         if (_.isEmpty(ary))
