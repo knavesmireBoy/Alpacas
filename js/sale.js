@@ -304,7 +304,7 @@ if (!window.gAlp) {
 				return new Ab(el, i, j);
 			};
 		},
-		hide = function (el) {
+		doHide = function (el) {
 			utils.hide(el);
 			utils.hide(utils.getPrevious(el));
 		},
@@ -347,7 +347,7 @@ if (!window.gAlp) {
 			$displayer.hide();
 			$displayer.show(getParent(tgt));
 			//$looper.visit(COMP(utils.hide, utils.getPrevious, utils.hide));
-			$looper.visit(utils.hide);
+			$looper.visit(doHide);
 			COMP(_.bind($looper.set, $looper), getTabIndex(tgt))();
 			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.status, $looper))();
 		},
@@ -538,7 +538,7 @@ if (!window.gAlp) {
 				$divcontext = utils.makeContext().init(),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind($looper.forward, $looper)),
-				deferNext = COMP(deferShow, deferMembers(hide)),
+				deferNext = COMP(deferShow, deferMembers(doHide)),
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
 				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
