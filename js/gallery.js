@@ -201,6 +201,7 @@
 			if (path) {
 				var img = addElements(),
                     styles = [cssopacity.getKey(), cssopacity.getValue(0.5)];
+                    //styles = [cssopacity.getKey(), cssopacity.getValue(0.5), 'background-color', 'blue'];
                 doMap(img.parentNode.parentNode, _.chunk(['id', 'paused', styles], 2));
                 return onLoad(img, path);
             }
@@ -534,6 +535,8 @@
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
 	$setup.execute();    
+    
+    
     /*
     function myLength(ary) {
         if (_.isEmpty(ary))

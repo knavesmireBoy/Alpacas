@@ -167,7 +167,7 @@ gAlp.Util = (function() {
     }
     
     
-    function doMapRecur(el, v) {
+    function doMapRecur(el, v, flag) {
         var tgt = v.length && v.splice(0,1)[0],
             pass;
         if(!tgt){
@@ -175,7 +175,13 @@ gAlp.Util = (function() {
         }
         pass =  _.isArray(tgt[0]);
         tgt = pass ? tgt[0] : tgt;
-        el = attrMap(getResult(el), toObject(tgt), pass);
+        
+        if(pass){
+            //[[k,v,k,v]] ... [[k,v], [k,v]]
+            //return doMapRecur(el, _.chunk(tgt), true);
+        }
+        console.log(tgt, _.chunk(tgt,2))
+        el = attrMap(getResult(el), toObject(tgt), pass || flag);
         return doMapRecur(el, v, pass);
     }
 
