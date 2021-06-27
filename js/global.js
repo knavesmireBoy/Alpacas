@@ -159,6 +159,25 @@ gAlp.Util = (function() {
 	function nested(f1, f2, item) {
 		return f2(f1(item));
 	}
+    
+    function toObject(arr){
+         return _.object([
+            [arr[0], arr[1]
+        ]]);
+    }
+    
+    
+    function doMapRecur(el, v) {
+        var tgt = v.length && v.splice(0,1)[0],
+            pass;
+        if(!tgt){
+            return el;
+        }
+        pass =  _.isArray(tgt[0]);
+        tgt = pass ? tgt[0] : tgt;
+        el = attrMap(getResult(el), toObject(tgt), pass);
+        return doMapRecur(el, v, pass);
+    }
 
 	function setter(o, k, v) {
 		o = getResult(o);
@@ -805,7 +824,7 @@ gAlp.Util = (function() {
 		return nested(pre(klas));
 	}
 
-	function attrMap(el, map, style) {
+	function attrMap1(el, map, style) {
 		var k,
 			o;
 		for (k in map) {
@@ -818,6 +837,34 @@ gAlp.Util = (function() {
 					el.style.setProperty(k, map[k]);
 				} else {
 					//el.setAttribute(k, map[k]);
+					o = {};
+					o[k] = map[k]; //to support ie 6,7
+					gAlp.Util.setAttributes(o, el);
+				}
+			}
+		}
+		return el;
+	}
+    
+    function attrMap(el, map, style) {
+		var k,
+			o;
+		for (k in map) {
+			if (map.hasOwnProperty(k)) {
+				if (k.match(/^te?xt$/)) {
+					el.innerHTML = map[k];
+					continue;
+				}
+               if (style) {
+                   if(gAlp.slice_shim){
+                       gAlp.Util.report(toCamelCase(k));
+                       el.style[toCamelCase(k)] = map[k];
+                   }
+                   else {
+                        el.style.setProperty(k, map[k]);
+                   }
+				}
+               else {
 					o = {};
 					o[k] = map[k]; //to support ie 6,7
 					gAlp.Util.setAttributes(o, el);
@@ -1224,20 +1271,38 @@ gAlp.Util = (function() {
 		},
 		curryFactory: curryFactory,
 		doAlternate: doAlternate,
-		doMap: function doMap(el, v) {
-            var tgt = v,
-                bool = false;
-            if(_.isArray(v[0][0])){
-                tgt = v[0];
-                bool = true;
-            }
-            _.each(tgt, function(sub) {
-                return attrMap(getResult(el), _.object([
-                    [sub[0], sub[1]]
-                ]), bool);
-            });
-            return el;
+        doMap: function doMap(el, v, flag) {
+            /*second arguments should be an array of arrays [[p,v], [p,v], [[p,v]]]
+            with style properties wrapped in an extra array and sent last
+            eg [id, 'fred'], [title, 'our fred'], [txt, 'freddie'], [[opacity: '0.5'], [background-color: 'blue']]*/
+           var tgt = v,
+               bool = false,
+               arr = _.last(v),
+               single = _.first(v) === _.last(v),
+               pass = arr && arr[0] && _.isArray(arr[0]);
+           //if attrs AND styles
+           if(pass && !single){
+              tgt = v.slice(0, -1);
+           }
+           //if styles only
+           else if(pass && single){
+               tgt = arr;
+               bool = true;
+               pass = false;
+           }
+           //else just attrs
+           _.each(tgt, function(sub) {
+               return attrMap(getResult(el), toObject(sub), bool || flag);
+           });
+            
+            if(pass){
+               //process styles on second pass
+              return doMap(el, v.slice(-1)[0], true);
+           }
+           return el;
 		},
+        doMap: doMapRecur,
+        
 		/*USAGE:
         var once = doOnce(),
         actions = [func1, func2, ...];

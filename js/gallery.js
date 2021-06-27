@@ -187,15 +187,10 @@
 		},
 		doMakePause = function (path) {
 			if (path) {
-				var img = addElements();
+				var img = addElements(),
+                    styles = [[cssopacity.getKey(), cssopacity.getValue(0.5)]];
 				doMap(img.parentNode.parentNode, [
-					['id', 'paused']
-				]);
-				doMap(img.parentNode.parentNode, [
-					[
-						[cssopacity.getKey(), cssopacity.getValue(0.5)]
-					]
-				]);
+					['id', 'paused'], styles ]);
 				return onLoad(img, path);
 			}
 			//ensure only gets called when in in_play mode
@@ -528,7 +523,21 @@
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
 	$setup.execute();
-	/*
+    
+    var arr = [[1],[2],[3]],
+        sub = arr.splice(0,1);
+ console.log(arr, sub);
+    
+    
+    /*
+    function myLength(ary) {
+        if (_.isEmpty(ary))
+            return 0;
+        else
+            return 1 + myLength(_.rest(ary));
+    }
+    console.log(myLength([3,1,5]));
+
 	var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
 	     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
 	utils.report(ie6);
