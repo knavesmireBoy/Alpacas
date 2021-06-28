@@ -826,28 +826,6 @@ gAlp.Util = (function() {
 		return nested(pre(klas));
 	}
 
-	function attrMap1(el, map, style) {
-		var k,
-			o;
-		for (k in map) {
-			if (map.hasOwnProperty(k)) {
-				if (k.match(/^te?xt$/)) {
-					el.innerHTML = map[k];
-					continue;
-				}
-				if (style) {
-					el.style.setProperty(k, map[k]);
-				} else {
-					//el.setAttribute(k, map[k]);
-					o = {};
-					o[k] = map[k]; //to support ie 6,7
-					gAlp.Util.setAttributes(o, el);
-				}
-			}
-		}
-		return el;
-	}
-    
     function attrMap(el, map, style) {
 		var k,
 			o;

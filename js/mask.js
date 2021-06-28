@@ -106,13 +106,17 @@ if (!window.gAlp) {
 		kid = getKid(),
 		//https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet
 		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
-		ie7 = utils.getComputedStyle(kid, 'color') === 'blue' ? true : false,
 		factory = function (cond) {
 			var activate = function () {
+                
 					utils.makeElement(prepSetStyles({
 						display: "block"
 					}), always(mask_target)).add();
+                
+                
+                //utils.doMap(mask_target, [['display', 'block']]);
 				},
+                
 				standard = function () {
 					var orig = utils.getDomChild(utils.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
@@ -121,12 +125,16 @@ if (!window.gAlp) {
 							src: utils.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path)
 						},
 						exec = function () {
-							var setAttrs = utils.setAttrsFix(ie6 || ie7),
+							var setAttrs = utils.setAttrsFix(ie6),
 								//margin = ie6 ? "-" + mask_target.currentStyle.width : "-100%";
 								margin = "-100%";
+                            
 							utils.makeElement(prepSetStyles({
 								"margin-right": margin
 							}), ptL(setAttrs, always(true), 'setAttribute', config), anCr(mask_target), always(kid)).add();
+                            
+                           // utils.doMap(mask_target, [[["margin-right", "-100%"]]]);
+                            
 							setTimeout(activate, 500);
 						};
 					/*
