@@ -185,29 +185,16 @@
 			]);
 			return onLoad(img, doParse(img.parentNode.href), new utils.FauxPromise(_.rest(arguments, 2)));
 		},
-        /*
-		doMakePause = function (path) {
-			if (path) {
-				var img = addElements(),
-                    styles = [[cssopacity.getKey(), cssopacity.getValue(0.5)]];
-				doMap(img.parentNode.parentNode, [
-					['id', 'paused'], styles]);
-				return onLoad(img, path);
-			}
-			return onLoad(getDomTargetImg($('paused')), getPausePath());
-		},
-        */
         doMakePause = function (path) {
 			if (path) {
-				var img = addElements(),
-                    styles = [cssopacity.getKey(), cssopacity.getValue(0.5)];
-                    //styles = [cssopacity.getKey(), cssopacity.getValue(0.5), 'background-color', 'blue'];
-                doMap(img.parentNode.parentNode, _.chunk(['id', 'paused', styles], 2));
+                var img = addElements(),
+                    styles = [[cssopacity.getKey(), cssopacity.getValue(0.5)]];
+                doMap(img.parentNode.parentNode, [['id', 'paused'], styles]);
                 return onLoad(img, path);
             }
 			//ensure only gets called when in in_play mode
-			return onLoad(getDomTargetImg($('paused')), getPausePath());
-		},
+            return onLoad(getDomTargetImg($('paused')), getPausePath());
+        },
 		loadImage = function (getnexturl, id, promise) {
 			var img = getDomTargetImg($(id)),
 				next;
@@ -534,20 +521,10 @@
 			$setup.undo();
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
-	$setup.execute();    
-    
-    
+    $setup.execute();
     /*
-    function myLength(ary) {
-        if (_.isEmpty(ary))
-            return 0;
-        else
-            return 1 + myLength(_.rest(ary));
-    }
-    console.log(myLength([3,1,5]));
-
-	var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
-	     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
-	utils.report(ie6);
+    var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
+    ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
+    utils.report(ie6);
 	*/
 }(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../assets/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));
