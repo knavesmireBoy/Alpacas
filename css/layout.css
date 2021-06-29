@@ -57,7 +57,7 @@ header h2 {
 }
 header a {
 	position: absolute;
-	width: 28%;
+	width: 29%;
 	top: 0px;
 	left: 0px;
 }
@@ -108,6 +108,7 @@ header a img {
 }
 header a h1 img {
 	margin: .5em 0 0;
+	margin: 1em 0 0;
 }
 
 nav a, nav a:link, nav a:visited {

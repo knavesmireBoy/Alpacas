@@ -168,6 +168,11 @@ gAlp.Util = (function() {
     
     
     function doMapRecur(el, v) {
+        /*second argument (v) should be an array of arrays [[p,v], [p,v], [[p,v]]]
+            with style properties wrapped in an extra array and sent last
+            eg [id, 'fred'], [title, 'our fred'], [txt, 'freddie'], [[opacity: '0.5'], [background-color: 'blue']]*/
+    
+        
         var tgt = v.length && v.splice(0,1)[0],
             pass;
         
@@ -837,7 +842,6 @@ gAlp.Util = (function() {
 				}
                if (style) {
                    if(gAlp.slice_shim){
-                       gAlp.Util.report(toCamelCase(k));
                        el.style[toCamelCase(k)] = map[k];
                    }
                    else {
@@ -1251,45 +1255,7 @@ gAlp.Util = (function() {
 		},
 		curryFactory: curryFactory,
 		doAlternate: doAlternate,
-        doMap: function doMap(el, v, flag) {
-            /*second arguments should be an array of arrays [[p,v], [p,v], [[p,v]]]
-            with style properties wrapped in an extra array and sent last
-            eg [id, 'fred'], [title, 'our fred'], [txt, 'freddie'], [[opacity: '0.5'], [background-color: 'blue']]*/
-           var tgt = v,
-               bool = false,
-               arr = _.last(v),
-               single = _.first(v) === _.last(v),
-               pass = arr && arr[0] && _.isArray(arr[0]);
-           //if attrs AND styles
-           if(pass && !single){
-              tgt = v.slice(0, -1);
-           }
-           //if styles only
-           else if(pass && single){
-               tgt = arr;
-               bool = true;
-               pass = false;
-           }
-           //else just attrs
-           _.each(tgt, function(sub) {
-               return attrMap(getResult(el), toObject(sub), bool || flag);
-           });
-            
-            if(pass){
-               //process styles on second pass
-              return doMap(el, v.slice(-1)[0], true);
-           }
-           return el;
-		},
         doMap: doMapRecur,
-        
-		/*USAGE:
-        var once = doOnce(),
-        actions = [func1, func2, ...];
-        function (flag) {
-        var f = ptL(thunk, once(1));
-        return best(f, actions)();
-				}; */
 		doMethod: doMethod,
 		doOnce: doOnce,
 		doWhen: doWhen,
@@ -1396,9 +1362,11 @@ gAlp.Util = (function() {
 			}
 			if (computedStyle) {
 				try {
-					return computedStyle[styleProperty] || computedStyle[toCamelCase(styleProperty)];
+					//return /*computedStyle[styleProperty] || */computedStyle[toCamelCase(styleProperty)];
+					return computedStyle.getPropertyValue(styleProperty) || computedStyle.getPropertyValue(toCamelCase(styleProperty));
+                    
 				} catch (e) {
-					return computedStyle[styleProperty];
+					return computedStyle[styleProperty] || computedStyle[toCamelCase(styleProperty)];
 				}
 			}
 		},

@@ -411,15 +411,17 @@
 					doOpacity(flag);
 					window.cancelAnimationFrame($recur.t);
 					$controlbar.set(do_static_factory());
-					doMakePause(); //checks path to pause pic
 					$recur.t = flag; //either set to undefined(forward/back/exit) or null(pause)
+                    if(!isNaN(flag)){//is null
+                       doMakePause(); //checks path to pause pic
+                    }
+
 				}
 			};
 		}({})),
 		clear = _.bind($recur.undo, $recur),
 		doplay = _.bind($recur.execute, $recur),
 		go_execute = thrice(doMethod)('execute')(null),
-		go_undo = thrice(doMethod)('undo')(),
 		go_set = thrice(lazyVal)('set')($toggler),
 		undo_toggler = thricedefer(doMethod)('undo')()($toggler),
 		factory = function () {
@@ -506,6 +508,8 @@
 				$controls_undostat = eventing('mouseover', [], undostatic, utils.getByTag('footer', document)[0]),
 				$controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
 				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
+                    var go_undo = thrice(doMethod)('undo')();
+
 					if (e.target.id === 'exit') {
 						chain = chain.validate();
 						exitshowtime();
@@ -522,9 +526,12 @@
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
     $setup.execute();
+    utils.highLighter.perform();
     /*
     var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
+    
     utils.report(ie6);
 	*/
+    //utils.report(utils.getComputedStyle(getThumbs(), 'width'));
 }(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../assets/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));

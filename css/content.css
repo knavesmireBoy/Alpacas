@@ -122,4 +122,3 @@ _NOT BE: progid: DXImageTransform
 *html #welcome footer, *html #welcome footer ul {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/grass_960.png", sizingMethod="crop");
 }
-/**/

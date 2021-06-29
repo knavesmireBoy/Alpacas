@@ -117,8 +117,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		return list.slice(_.random(0, end || list.length));
-		//return list.slice(0, -2);
+		//return list.slice(_.random(0, end || list.length));
+		return list.slice(0, -1);
 	}
 	var alpacas = [
 			[
@@ -602,8 +602,9 @@ if (!window.gAlp) {
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
-			//utils.highLighter.perform();
-			//utils.report();
+			utils.highLighter.perform();
+            //utils.report(utils.$('sell'));
+			//utils.report(utils.getComputedStyle(utils.$('sell'), 'width'));
 		};
 	factory();
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));

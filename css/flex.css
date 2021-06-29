@@ -13,23 +13,23 @@ https://github.com/philipwalton/flexbugs
 
 
 .flexboxlegacy #alpacas_for_sale {
-	background-color: yellow;
+	background-color: cornsilk;
 }
 
 .flexboxtweener #alpacas_for_sale {
-	background-color: gold;
+	background-color: papayawhip;
 }
 
 .flexbox #alpacas_for_sale {
-	background-color: darkgoldenrod;
+	background-color: peachpuff;
 }
 
 .flexwrap #alpacas_for_sale {
-	background-color: firebrick;
+	background-color: orange;
 }
 
 .cssgrid body#alpacas_for_sale {
-	background-color: fuchsia;
+	background-color: pink;
 }
 
 
@@ -39,6 +39,7 @@ ul#list {
 	display: -webkit-flex;
 	display: flex;
 }
+
 #controls {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -87,7 +88,9 @@ ul#list {
     flex-shrink: 1;
     -ms-flex-preferred-size: 44%;
     flex-basis: 44%;
+    border: solid 1px red;
     */
+    
 }
 .five figure {
 	-webkit-box-flex: 1 1 30%;
@@ -102,8 +105,8 @@ ul#list {
 /*supports*/
 
 /*@supports (display: grid){ }*/
-
-@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
+/* false positive (-moz-column-gap: 20px) (-webkit-column-gap: 20px) or */
+@supports(column-gap: 20px) {
 	ul#thumbnails.gallery {
 		padding: .6em;
 		display: -ms-grid;
@@ -158,7 +161,7 @@ ul#list {
 }
 
 @media only screen and (max-width: 767px) {
-	@supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
+	@supports(column-gap: 20px) {
 		ul#thumbnails.gallery {
 			-ms-grid-columns: (1fr)[5] .75fr;
 			grid-template-columns: repeat(5, 1fr) .75fr;
@@ -166,7 +169,7 @@ ul#list {
 	}
 }
 @media only screen and (max-width: 667px) {
-	@supports ((display: -moz-flex) or (display: flex)) {
+	@supports ((display: -webkit-flex) or (display: -moz-flex) or (display: flex)) {
 		.extent {
 			display: -webkit-box;
 			/* OLD - iOS 6-, Safari 3.1-6 */
@@ -197,7 +200,7 @@ ul#list {
 		}
     }
     
-    @supports((-webkit-column-gap: 20px) or (-moz-column-gap: 20px) or (column-gap: 20px)) {
+    @supports(column-gap: 20px) {
 		/*reset to override inline-block scenario*/
 		#sell figure {
 			width: auto;
