@@ -747,11 +747,22 @@ gAlp.Util = (function () {
 		f.message = message;
 		return f;
 	}
+    
+    
+    function getBestFactory(i){
+                
+    function doBest(coll, fun){
+        return _.reduce(coll, function (champ, contender) {
+			return fun(champ, contender) ? champ : contender;
+		});
+    }
+    
+    function arrayCheck(fun){
+        return _.isArray(fun) ? fun[0] : fun;
+    }
 	//note a function that ignores any state of champ or contender will return the first element if true and last if false
 	function best(fun, coll, arg) {
-		if (_.isArray(fun)) {
-			fun = fun[0];
-		}
+		fun = arrayCheck(fun);
 		coll = _.toArray(coll);
 		if (arg) {
 			coll = _.map(coll, function (ptl) {
@@ -759,45 +770,34 @@ gAlp.Util = (function () {
 			});
 		}
 		fun = arg ? _.partial(fun, arg) : fun;
-		return _.reduce(coll, function (champ, contender) {
-			return fun(champ, contender) ? champ : contender;
-		});
+		return doBest(coll, fun);
 	}
 
 	function bestOnly(fun, coll) {
-		if (_.isArray(fun)) {
-			fun = fun[0];
-		}
-		return _.reduce(_.toArray(coll), function (champ, contender) {
-			return fun(champ, contender) ? champ : contender;
-		});
+        fun = arrayCheck(fun);
+		return doBest(coll, fun);
 	}
 
 	function bestPred(fun, coll, arg) {
-		if (_.isArray(fun)) {
-			fun = fun[0];
-		}
+        fun = arrayCheck(fun);
 		coll = _.toArray(coll);
 		fun = arg ? _.partial(fun, arg) : fun;
-		return _.reduce(coll, function (champ, contender) {
-			return fun(champ, contender) ? champ : contender;
-		});
+		return doBest(coll, fun);
 	}
 
 	function bestColl(fun, coll, arg) {
-		if (_.isArray(fun)) {
-			fun = fun[0];
-		}
+        fun = arrayCheck(fun);
 		coll = _.toArray(coll);
 		if (arg) {
 			coll = _.map(coll, function (ptl) {
 				return _.partial(ptl, arg);
 			});
 		}
-		return _.reduce(coll, function (champ, contender) {
-			return fun(champ, contender) ? champ : contender;
-		});
+		return doBest(coll, fun);
 	}
+                
+        return [bestOnly, bestPred, bestColl, best][i];
+    }
 
 	function getEventObject(e) {
 		return e || window.event;
@@ -1061,10 +1061,10 @@ gAlp.Util = (function () {
 		findIndex: function (collection, predicate) {
 			return _.findIndex(collection, predicate || always(true));
 		},
-		getBest: best,
-		getBestOnly: bestOnly,
-		getBestPred: bestPred,
-		getBestColl: bestColl,
+		getBestOnly: getBestFactory(0),
+		getBestPred: getBestFactory(1),
+		getBestColl: getBestFactory(2),
+        getBest: getBestFactory(3),
 		getBody: function (flag) {
 			var body = document.body || document.getElementsByTagName('body')[0];
 			if (flag) {
