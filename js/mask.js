@@ -20,6 +20,12 @@ if (!window.gAlp) {
 	function isBig(n) {
 		return window.viewportSize.getWidth() > n;
 	}
+    
+    
+    function invokeRest(m, o) {
+			return o[m].apply(o, _.rest(arguments, 2));
+		}
+    
 	var utils = gAlp.Util,
 		ptL = _.partial,
 		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
@@ -69,7 +75,7 @@ if (!window.gAlp) {
 				standard = function () {
 					var orig = utils.getDomChild(utils.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
-                        src = utils.invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path),
+                        src = invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path),
 						exec = function () {
                             _.compose(twice(utils.doMap)([['alt', ''], ['src', src], [["margin-right", "-100%"]]]), anCr(mask_target), getKid)();
 							setTimeout(activate, 500);
