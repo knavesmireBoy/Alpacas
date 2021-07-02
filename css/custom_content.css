@@ -252,6 +252,11 @@ ul.tab a, figure, figure a, .sell #sell {
 	opacity: 1;
 }
 
+#sell a {
+    background-color: #FFF;
+    border-color: #7F9933;
+}
+
 #sell>table {
 	box-shadow: 0px 0px 20px rgba(255, 255, 255, .8);
 	opacity: .9;
@@ -273,9 +278,12 @@ ul.tab a, figure, figure a, .sell #sell {
     border-color: hsla(75, 50%, 40%, 1);
 }
 
-#sell, table, table td, body.sell #sell.extent {
+.sell #sell, table, table td, body.sell #sell.extent {
 	border-color: #7F9933;
-    border-color: hsla(75, 50%, 40%, 1);
+}
+
+#sell.extent a{
+    border-color: #fff;
 }
 
 

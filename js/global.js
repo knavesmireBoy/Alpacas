@@ -34,7 +34,8 @@ gAlp.Util = (function() {
 		this.cbs = _.compose.apply(null, args);
 	}
 	FauxPromise.prototype.then = function() {
-		return this.cbs.apply(null, arguments);
+		return this.cbs.apply(null, []);
+		//return this.cbs.apply(null, arguments);
 	};
 
 	function doOnce() {
@@ -748,30 +749,11 @@ gAlp.Util = (function() {
 			return target;
 		};
 	}
-
-	function setFromArray1(validate, method, classArray, target) {
-		//target may be a function returning a target element
-		if (!target) {
-			return null;
-		}
-		var fn,
-			tgt = getClassList(getResult(target)),
-			args = _.rest(arguments, 3);
-		validate = _.partial(applyFunction, validate, args);
-		if (!tgt) {
-			return target;
-		}
-		fn = tgt && _.partial(simpleInvoke, tgt, method);
-		if (validate) {
-			fn = _.partial(invokeWhen, validate, fn);
-		}
-		_.each(_.flatten([classArray]), fn);
-		return target;
-	}
-	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
+    
+    	//ALLOW toggleClass to have boolean argument del = _.partial(utils.toggleClass, 'del'),
 	function setFromArray(validate, method, classArray, target) {
-		//console.log(arguments)
-		//gAlp.Util.report(target.classList);
+        
+        //gAlp.Util.report(method);
 		//target may be a function returning a target element
 		//safeguard if classArray is space delimited string "foo bar"
 		classArray = classArray.split ? classArray.split(' ') : classArray;
@@ -804,6 +786,28 @@ gAlp.Util = (function() {
 		_.each(_.flatten([classArray]), fn);
 		return target;
 	}
+
+	function setFromArray1(validate, method, classArray, target) {
+       
+		//target may be a function returning a target element
+		if (!target) {
+			return null;
+		}
+		var fn,
+			tgt = getClassList(getResult(target)),
+			args = _.rest(arguments, 3);
+		validate = _.partial(applyFunction, validate, args);
+		if (!tgt) {
+			return target;
+		}
+		fn = tgt && _.partial(simpleInvoke, tgt, method);
+		if (validate) {
+			fn = _.partial(invokeWhen, validate, fn);
+		}
+		_.each(_.flatten([classArray]), fn);
+		return target;
+	}
+
 
 	function filterTagsByClass(el, tag, cb) {
 		var tags = _.toArray(el.getElementsByTagName(tag));
@@ -1693,6 +1697,22 @@ gAlp.Util.eventCache = (function(list) {
 		},
 		getList: function(flag) {
 			return flag ? list.length : list;
+		},
+        ////$element.triggerEvent($element.getElement(), 'scroll');
+	 triggerEvent: function(el, type, x) {
+		var e;
+		if ('createEvent' in document) {
+       // if (document.hasOwnProperty('createEvent')) {
+			// modern browsers, IE9+
+			e = document.createEvent('HTMLEvents');
+			e.initEvent(type, false, true);
+			el.dispatchEvent(e);
+		} else {
+			// IE 8
+			e = document.createEventObject();
+			e.eventType = type;
+			el.fireEvent('on' + e.eventType, e);
 		}
+	}
 	};
 }([]));

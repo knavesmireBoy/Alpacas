@@ -113,7 +113,7 @@ article.intro {
 .sell .tog a {
 	margin-left: 0;
 }
-#sell, #sell>a, ul#thumbnails, ul#list {
+#sell, #sell > a, ul#thumbnails, ul#list {
 	overflow: hidden;
 }
 
@@ -126,6 +126,7 @@ article.intro {
 	display: block;
     _padding: 1.6%;
     *height: 1%;
+    overflow: hidden;
 }
 #list li, #list li a {
 	float: left;
@@ -229,7 +230,6 @@ ul#thumbnails {
     width: 89.7%;
     *width: 91%;
 	/*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
-    _width: 600px;
     transition: width 1s ease-in-out;
 }
 #gallery footer ul>* {
@@ -259,9 +259,7 @@ ul#thumbnails.gallery {
 }
 ul#thumbnails.gallery li {
 	border: solid 4px white;
-	width: 105px;
 	width: 8.06em;
-	display: inline;
 }
 ul#thumbnails li.go {
 	visibility: hidden;
@@ -278,21 +276,6 @@ ul#thumbnails.gallery li.portrait {
 	width: 78px;
 	width: 6em;
 }
-/* https://keithclark.co.uk/articles/moving-ie-specific-css-into-media-blocks/media-tests/ 
-
-@media screen only {
-   ul#thumbnails.gallery {}
-	ul#thumbnails.gallery li {
-		width: 79px;
-		width: 8em;
-	}
-	ul#thumbnails.gallery li.portrait {
-		width: 60px;
-		width: 4.75em;
-	}
-}
-/**/
-
 ul#thumbnails li, .playing li#paused, .swap #base {
 	position: absolute;
 	left: -9999px;
@@ -306,9 +289,7 @@ ul#thumbnails li, .playing li#paused, .swap #base {
 	/* IE8 and lower */
 	zoom: 1;
 	/* Triggers "hasLayout" in IE 7 and lower */
-	/*
 	*display: inline;
-   */
 }
 /* G A L L E R Y | S H O W T I M E */
 
@@ -350,7 +331,7 @@ li#slide, li#paused {
 	margin-left: 0;
 }
 #controls.static {
-	top: -3.5em;
+	top: -3.33em;
 	opacity: 1;
 }
 .js #exit {
@@ -366,12 +347,16 @@ li#slide, li#paused {
 	background-position: center;
 	background-image: url(../assets/close_transparent.png);
 	background-color: #7F9933;
-	color: #7F9933;
-	padding: 0;
-	font-size: 1em;
 	-webkit-transition: all 1s;
 	-o-transition: all 1s;
 	transition: all 1s;
+    box-sizing: border-box;
+}
+
+.no-csscalc #exit{
+    left: 94%;
+    /* ie < 8 text-align center trumps left*/
+    *left: 47%;
 }
 /*.touchevents replaces media queries (hover: hover) || (pointer: fine) where support is doubtful
 logic dictates that we only get to this point courtesy of javascript so modernizr supplies the className .(no-)touchevents */

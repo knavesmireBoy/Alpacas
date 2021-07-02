@@ -135,11 +135,11 @@
 		//height and width of image are compared BUT a) must invoke the comparison AFTER image loaded
 		//b) must remove load listener or will intefere with slideshow
 		onBase = function (img, path, promise) {
-			img.src = path;
-			var ev = eventing('load', event_actions.slice(0, 1), function (e) {
-				promise.then(e.target);
+            var ev = eventing('load', event_actions.slice(0, 1), function (e) {
+				promise.then(e[mytarget]);
 				ev.undo();
 			}, img).execute();
+            img.src = path;
 		},
 		doInc = function (n) {
 			return doComp(ptL(modulo, n), increment);
@@ -200,7 +200,7 @@
 				next;
 			if (img) {
 				img.onload = function (e) {
-					promise.then(e.target);
+					promise.then(e[mytarget]);
 				};
 				next = getnexturl();
 				if (!next) {
@@ -240,7 +240,7 @@
 		},
 		locator = function (forward, back) {
 			var getLoc = function (e) {
-				var box = e.target.getBoundingClientRect();
+				var box = e[mytarget].getBoundingClientRect();
 				return e.clientX - box.left > box.width / 2;
 			};
 			return function (e) {
@@ -254,7 +254,7 @@
 		},
 		$locate = eventing('click', event_actions.slice(0), function (e) {
 			locator(twicedefer(loadImageBridge)('base')(nextcaller), twicedefer(loadImageBridge)('base')(prevcaller))(e)[1]();
-			doOrient(e.target);
+			doOrient(e[mytarget]);
 		}, getThumbs()),
 		slide_player_factory = function () {
 			return {
@@ -412,8 +412,8 @@
 					window.cancelAnimationFrame($recur.t);
 					$controlbar.set(do_static_factory());
 					$recur.t = flag; //either set to undefined(forward/back/exit) or null(pause)
-                    if(!isNaN(flag)){//is null
-                       doMakePause(); //checks path to pause pic
+                    if (!isNaN(flag)) {//is null
+                        doMakePause(); //checks path to pause pic
                     }
 
 				}
@@ -485,17 +485,27 @@
 			$recur.i = 47; //slide is clone of base initially, so fade can start quickly, ie countdown from lowish figure
 			return mynext;
 		}, //factory
-		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
+        mock = {
+            target: {
+                nodeName: 'IMG',
+                src: "http://81.131.244.169/Alpacas/gal/big/Sancho.jpg"
+            }
+        },
+		//setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
+		setup_val = utils.always(mock),
 		setup = function (e) {
-			doComp(setindex, utils.drillDown(['target', 'src']))(e);
+			doComp(setindex, utils.drillDown([mytarget, 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
-			doMakeBase(e.target.src, 'base', doOrient, getBaseChild, showtime);
-			var buttons = ['backbutton', 'playbutton', 'forwardbutton'],
+			//doMakeBase(e[mytarget].src, 'base', doOrient, getBaseChild, showtime);
+			doMakeBase("../gal/big/Sancho.jpg", 'base', doOrient, getBaseChild, showtime);
+            
+            var buttons = ['backbutton', 'playbutton', 'forwardbutton'],
 				aButton = anCr($('controls')),
 				close_cb = ptL(doComp(utils.getDomParent(utils.getNodeByTag('main')), thrice(doMapBridge)('href')('.'), thrice(doMapBridge)('id')('exit'), anCrIn(getThumbs, main)), 'a'),
 				dombuttons = _.map(buttons, doComp(thrice(doMapLateVal)('id'), aButton, thrice(doMethod)('slice')(-6))),
 				dostatic = ptL(klasAdd, 'static', $$('controls')),
 				chain = factory(),
+                
 				$controls = eventing('click', event_actions.slice(0, 1), function (e) {
 					var str = text_from_target(e),
 						node = node_from_target(e);
@@ -507,10 +517,11 @@
 				}, $('controls')),
 				$controls_undostat = eventing('mouseover', [], undostatic, utils.getByTag('footer', document)[0]),
 				$controls_dostat = eventing('mouseover', [], dostatic, $('controls')),
+                
 				$exit = eventing('click', event_actions.slice(0, 1), function (e) {
                     var go_undo = thrice(doMethod)('undo')();
 
-					if (e.target.id === 'exit') {
+					if (e[mytarget].id === 'exit') {
 						chain = chain.validate();
 						exitshowtime();
 						unsetPortrait();
@@ -523,15 +534,16 @@
 			_.each(_.zip(dombuttons, buttons), invokeBridge);
 			_.each([$controls, $exit, $locate, $controls_undostat, $controls_dostat], go_execute);
 			$setup.undo();
+			
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
     $setup.execute();
     utils.highLighter.perform();
+    //utils.report(getThumbs());
+    gAlp.Util.eventCache.triggerEvent(main, 'click');
     /*
     var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;
-    
-    utils.report(ie6);
 	*/
     //utils.report(utils.getComputedStyle(getThumbs(), 'width'));
 }(Modernizr.mq('only all'), '(min-width: 668px)', Modernizr.touchevents, '../assets/', /images[a-z\/]+\d+\.jpe?g$/, new RegExp('[^\\d]+\\d(\\d+)[^\\d]+$'), ["move mouse in and out of footer...", "...to toggle the display of control buttons"]));

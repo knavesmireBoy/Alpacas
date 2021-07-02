@@ -148,9 +148,6 @@
 		-webkit-animation: alpacasBounce 3s 1 ease-out;
 		animation: alpacasBounce 3s 1 ease-out;
 	}
-	main aside {
-		position: absolute;
-	}
 	aside:after {
 		content: "";
 		display: table;

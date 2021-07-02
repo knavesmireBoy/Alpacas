@@ -117,8 +117,8 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		//return list.slice(_.random(0, end || list.length));
-		return list.slice(0, -1);
+		return list.slice(_.random(0, end || list.length));
+		//return list.slice(0, -1);
 	}
 	var alpacas = [
 			[
@@ -567,6 +567,7 @@ if (!window.gAlp) {
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
+                 
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 					if ($toggler) { //image was clicked
@@ -603,10 +604,14 @@ if (!window.gAlp) {
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			utils.highLighter.perform();
+			utils.report(alp_len+'!');
             //utils.report(utils.$('sell'));
 			//utils.report(utils.getComputedStyle(utils.$('sell'), 'width'));
+            // gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
+
 		};
 	factory();
+
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP

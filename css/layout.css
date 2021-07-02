@@ -1,3 +1,7 @@
+/*html.js devicemotion deviceorientation svg svgasimg inlinesvg svgfilters svgasimg opacity classlist nthchild requestanimationframe raf no-touchevents cssanimations backgroundsize no-cssgridlegacy no-cssgrid flexbox flexboxlegacy no-flexboxtweener flexwrap no-cssmask rgba hsla ellipsis cssgradients bgpositionshorthand boxshadow textshadow cssvhunit cssvmaxunit cssvminunit borderradius cssvwunit csscalc objectfit object-fit {
+}
+*/
+
 body {
 	margin: 2em;
 	/*display: flex;
@@ -48,14 +52,14 @@ nav li /*,nav ul */ {
 }
 
 header h1 {
-	margin: -14% 0 0;
-	text-indent: 100%;
+	margin: -8% 0 0;
+    width: 100%;
 }
 header h2 {
 	/* fix IF supporting screen sizes below width of 800px */
 	margin-left: 28%;
 }
-header a {
+header a:link, header a:visited {
 	position: absolute;
 	width: 29%;
 	top: 0px;
@@ -97,18 +101,17 @@ aside>img {
 *+html aside img {
 	color: blue;
 }
+
 header a h1 {
 	white-space: nowrap;
 	width: 100%;
 	text-indent: 200%;
+    line-height: 1;
 }
 
-header a img {
-	position: relative;
-}
 header a h1 img {
-	margin: .5em 0 0;
-	margin: 1em 0 0;
+	margin: 0;
+    position: relative;
 }
 
 nav a, nav a:link, nav a:visited {
@@ -208,7 +211,7 @@ footer, main aside,  header a, main label, main input, main .read-more-target, #
 }
 
 a#yag {
-	top: 1%;
+	top: 0;
 	left: auto;
 	width: 16.6%;
 	right: -1em;
