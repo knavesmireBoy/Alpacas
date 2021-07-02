@@ -236,6 +236,7 @@ if (!window.gAlp) {
 		deferEvery = thricedefer(doCallbacks)('every'),
 		delayExecute = thrice(doMethod)('execute')(null),
 		doGet = twice(utils.getter),
+        doMap = twice(utils.doMap),
 		getZero = doGet(0),
 		getOne = doGet(1),
 		getLength = doGet('length'),
@@ -321,10 +322,7 @@ if (!window.gAlp) {
 		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
 		reSyncCheck = deferEvery([is4, isDesktop])(getResult),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
-		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(PTL(setAttrs, {
-			id: 'list'
-		}), PTL(utils.insert()($$('sell'), intro), 'ul'))])),
-		//Looper = gAlp.LoopIterator,
+		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(doMap([['id', 'list']]), PTL(utils.insert()($$('sell'), intro), 'ul'))])),
 		$looper = gAlp.Looper(),
 		doCaption_cb = function (a, i) {
 			var fig = twice(invokeArg)('figure'),
@@ -415,9 +413,7 @@ if (!window.gAlp) {
 				$looper.build(coll, incrementer);
 			}
 		},
-		selldiv = COMP(PTL(setAttrs, {
-			id: 'sell'
-		}), PTL(anCr(intro), 'div')),
+		selldiv = COMP(doMap([['id', 'sell']]), PTL(anCr(intro), 'div')),
 		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow, true),
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
@@ -488,10 +484,11 @@ if (!window.gAlp) {
 				},
 				getId = COMP(PTL(utils.byIndex, 1), thrice(simpleInvoke)(' ')('split')),
 				doRow = onValidation(validator('is first row', PTL(utils.isEqual, 0))),
-				doColspan = PTL(setAttrs, {
+                doColspan = PTL(setAttrs, {
 					colSpan: 2 //!!!!////camelCase!!!!
 				}),
-				getPath = function (array) {
+                doMap = twice(utils.doMap),
+                getPath = function (array) {
 					return array.slice(-1)[0][1];
 				},
 				configTable_CB = iterateTable(getId, getPath, doRow, doColspan, PTL(klasAdd, 'description'), PTL(klasAdd, 'odd'));
@@ -604,7 +601,7 @@ if (!window.gAlp) {
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			utils.highLighter.perform();
-			utils.report(alp_len+'!');
+			//utils.report(alp_len+'!');
             //utils.report(utils.$('sell'));
 			//utils.report(utils.getComputedStyle(utils.$('sell'), 'width'));
             // gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');

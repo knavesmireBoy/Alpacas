@@ -1126,6 +1126,12 @@ gAlp.Util = (function () {
 				return gAlp.Util.getClassList(el).contains(str);
 			};
 		}()),
+        hasFeature: (function() {
+			var html = document.documentElement || document.getElementsByTagName('html')[0];
+			return function(str) {
+				return gAlp.Util.getClassList(html).contains(str);
+			};
+		}()),
 		hide: _.partial(setFromArray, always(true), 'remove', ['show']),
 		highLighter: {
 			perform: function () {
