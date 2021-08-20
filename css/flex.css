@@ -7,6 +7,8 @@
 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css 
 https://github.com/philipwalton/flexbugs
 */
+
+/*
 .js #alpacas_for_sale {
 	background-color: ivory;
 }
@@ -32,7 +34,7 @@ https://github.com/philipwalton/flexbugs
 	background-color: pink;
 }
 
-
+*/
 ul#list {
 	display: -webkit-box;
 	display: -ms-flexbox;

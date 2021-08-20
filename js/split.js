@@ -93,6 +93,7 @@ if (!window.gAlp) {
 				return ptL(isBig, threshold);
 			}
 		}()),
+       
 		memoFactory = function (target, copy) {
 			var hyperlinks = {},
 				ran = false,
