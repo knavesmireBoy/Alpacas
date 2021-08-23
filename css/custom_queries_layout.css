@@ -50,10 +50,11 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		width: 17.35%;
 	}
 	ul#thumbnails.gallery li, ul#thumbnails.gallery li a {
+		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
 	}
 	ul#thumbnails.gallery li.portrait {
-		width: 13.25%;
+		width: 13.725%;
 	}
 	.no-textshadow button#exit {
 		color: hsla(75, 50%, 40%, 1);
@@ -190,9 +191,17 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	figure a {
 		box-shadow: none;
 	}
-	.gallery li {
-		width: 16%;
-		margin: 1%;
+    
+    
+    ul#thumbnails.gallery {
+		width: 98%;
+	}
+     ul#thumbnails.gallery li {
+		width: 17.2%;
+	}
+	
+    ul#thumbnails.gallery li.portrait {
+		width: 14.7%;
 	}
 	ul#thumbnails {
 		padding: 1%;
@@ -203,6 +212,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	#alpacas_for_sale #tooltip {
 		bottom: 23em;
 	}
+    .no-objectfit #exit{
+    left: 90%;
+}
 }
 @media only screen and (min-width: 1100px) {
 .six figure:nth-of-type(5) figcaption{

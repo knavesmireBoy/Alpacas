@@ -1345,8 +1345,8 @@ gAlp.Util.eventCache = (function (list) {
 		////$element.triggerEvent($element.getElement(), 'scroll');
 		triggerEvent: function (el, type) {
 			var e;
-			//if ('createEvent' in document) {
-            if (document.hasOwnProperty('createEvent')) {
+			if ('createEvent' in document) {
+           // if (document.hasOwnProperty('createEvent')) {
 				// modern browsers, IE9+
 				e = document.createEvent('HTMLEvents');
 				e.initEvent(type, false, true);

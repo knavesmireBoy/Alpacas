@@ -491,13 +491,13 @@
                 src: "http://81.131.244.169/Alpacas/gal/big/Sancho.jpg"
             }
         },
-		//setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
-		setup_val = utils.always(mock),
+		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
+		//setup_val = utils.always(mock),
 		setup = function (e) {
 			doComp(setindex, utils.drillDown([mytarget, 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
-			//doMakeBase(e[mytarget].src, 'base', doOrient, getBaseChild, showtime);
-			doMakeBase("../gal/big/Sancho.jpg", 'base', doOrient, getBaseChild, showtime);
+			doMakeBase(e[mytarget].src, 'base', doOrient, getBaseChild, showtime);
+			//doMakeBase("../gal/big/Sancho.jpg", 'base', doOrient, getBaseChild, showtime);
             
             var buttons = ['backbutton', 'playbutton', 'forwardbutton'],
 				aButton = anCr($('controls')),
@@ -540,7 +540,7 @@
     $setup.execute();
     utils.highLighter.perform();
     //utils.report(getThumbs());
-    gAlp.Util.eventCache.triggerEvent(main, 'click');
+    //gAlp.Util.eventCache.triggerEvent(main, 'click');
     /*
     var tgt = utils.getDomChild(utils.getNodeByTag('img'))($('yag')),
     ie6 = utils.getComputedStyle(tgt, 'color') === 'red' ? true : false;

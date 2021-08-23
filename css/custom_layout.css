@@ -353,8 +353,8 @@ li#slide, li#paused {
     box-sizing: border-box;
 }
 
-.no-csscalc #exit{
-    left: 94%;
+.no-objectfit #exit{
+    left: 90%;
     /* ie < 8 text-align center trumps left*/
     *left: 47%;
 }
