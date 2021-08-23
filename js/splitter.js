@@ -23,7 +23,7 @@ gAlp.Splitter = (function (gang) {
 			//https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
 			fn = fn || 'ceil';
 			var sum = Math.abs(textMetrics.actualBoundingBoxLeft) + Math.abs(textMetrics.actualBoundingBoxRight);
-			//sum = textMetrics.width;
+			sum = sum || textMetrics.width;//issue with actualBoundingBoxRight ipod
 			return Math[fn](sum);
 		},
 		getTargetWidth = function (arg, fn) {
@@ -82,6 +82,7 @@ gAlp.Splitter = (function (gang) {
 					var total_width = getTextWidthBridge(this.context.measureText(this.remaining_text), 'floor'),
                         element_width = getTargetWidth(element),
                         char_per_line = getCharPerLine(total_width, element_width, this.remaining_text.length);
+                    
 					this.process(char_per_line);
 					return this;
 				},
@@ -110,6 +111,7 @@ gAlp.Splitter = (function (gang) {
 							this.remaining_text = hyper.lineStart(saved_text, this.remaining_text);
 							saved_text = hyper.lineEnd(saved_text);
 						}
+                        saved_text +='&nbsp;';
 						gang.push(saved_text);
 						this.process(char_per_line);
 					}

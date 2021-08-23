@@ -174,8 +174,8 @@ if (!window.gAlp) {
 		},
 		splitLoad = quatro(invokeEach)(_)('each')(paras.getElementsByTagName('p'))(split_handler),
 		doHandleSplit = ptL(_.every, [verbose, Modernizr.touchevents, Modernizr.cssanimations, getPredicate], getResult);
-	eventing('load', [], _.compose(ptL(utils.invokeWhen, doHandleSplit, splitLoad)), window).execute();
+       eventing('load', [], _.compose(ptL(utils.invokeWhen, doHandleSplit, splitLoad)), window).execute();
 	enableScrollHandlers();
 	/*first para is split into spans and then animated, when complete load second para*/
-	window.setTimeout(enableElip, 3333);
+	window.setTimeout(enableElip, 3333);    
 }(Modernizr.mq('only all'), '(max-width: 769px)'));

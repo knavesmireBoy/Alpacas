@@ -330,6 +330,10 @@
 		-webkit-animation: entry 6s ease-out;
 		animation: entry 6s ease-out;
 	}
+    /*override color for production*/
+    article.intro p:nth-of-type(n+1) span {
+        color: black;
+    }
 }
 /* mobile layout */
 

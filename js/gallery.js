@@ -252,7 +252,7 @@
 				]);
 			};
 		},
-		$locate = eventing('click', event_actions.slice(0), function (e) {
+		$locate = eventing('touchend', event_actions.slice(0), function (e) {
 			locator(twicedefer(loadImageBridge)('base')(nextcaller), twicedefer(loadImageBridge)('base')(prevcaller))(e)[1]();
 			doOrient(e[mytarget]);
 		}, getThumbs()),
