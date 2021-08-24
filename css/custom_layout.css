@@ -354,7 +354,7 @@ li#slide, li#paused {
 }
 
 .no-objectfit #exit{
-    left: 90%;
+    left: 94%;
     /* ie < 8 text-align center trumps left*/
     *left: 47%;
 }
