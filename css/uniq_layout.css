@@ -176,8 +176,8 @@
 		z-index: -1;
 	}
 	#welcome aside img {
-		-webkit-mask: url('../images/carlos_masking.png') 0px -1px / cover;
-		mask: url('../images/carlos_masking.png') 0px -1px / cover;
+		-webkit-mask: url('../images/carlos_masking.png') -1px -1px / cover;
+		mask: url('../images/carlos_masking.png') -1px -1px / cover;
 	}
 	.cssmask #about_us aside img {
 		-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
@@ -213,4 +213,36 @@
 	#alpacas_for_sale #innerwrap, #alpacas_for_sale footer {
 		margin-top: 0;
 	}
+    
+  
+    
+    /*
+    if JS disabled and masking is not supported a solution is to reduce the size of the pic so it sits to the right of the copy
+    BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support
+    this seems unfair so the only concession is that the header sits on top of the unmasked image and it simply means that the green bottom-border sits on top of the masked image
+    .no-js main {
+        position: relative;
+    }
+    
+    .no-js #wrap main aside {
+        right: 0;
+        bottom: 0;
+        width: 30%;
+    }
+    @supports (mask-size: cover) or (-webkit-mask-size: cover) {
+        .no-js #welcome main aside {
+            width: 126%;
+            right: -15%;
+            bottom: 13%;
+        }
+        .no-js main {
+            position: static;
+        }
+    
+    }
+    */
+      .no-js header {
+        position: relative;
+        z-index: 1;
+    }
 }

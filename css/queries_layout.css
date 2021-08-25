@@ -136,11 +136,7 @@
 	}
 }
 @media only screen {
-	header {
-		padding-top: 22%;
-		background-image: url("../assets/header.png");
-		background-size: 100%;
-	}
+	
 	nav {
 		margin-left: 1em;
 	}

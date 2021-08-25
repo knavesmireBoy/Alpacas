@@ -26,6 +26,7 @@ main {
 	width: 71%;
 	float: right;
 }
+
 /*https://css-tricks.com/all-about-floats/*/
 
 footer {
@@ -105,7 +106,7 @@ aside>img {
 header a h1 {
 	white-space: nowrap;
 	width: 100%;
-	text-indent: 200%;
+	text-indent: -999px;
     line-height: 1;
 }
 

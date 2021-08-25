@@ -6,41 +6,36 @@ http://cssmediaqueries.com/overview.html*/
 
 /* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
 @media only screen {
+
+    header {
+		padding-top: 22%;
+        background: no-repeat center/cover url("../assets/header.png");
+	}
     
     h2 {
         font: italic 3.2em "Handwritten", Georgia, cursive;
     }
-        
-    nav a:hover, nav a:active {
+    /*
+        nav a:hover, nav a:active {
 		-webkit-transform: scale(1.01);
 		-ms-transform: scale(1.01);
 		transform: scale(1.01);
 		transform-origin: left;
 	}
-    
-    nav a:hover {
-		background-position: 0% 47%;
-	}
-	
-	nav a, nav a:link, nav a:visited {
-		background-position: 0% -4%;
-		background-size: 1.75em;
-	}
-      
+    */
     /* ... including this: */
     nav a, nav a:link, nav a:visited {
 	background-image: url(../assets/links.jpg);
 	background-repeat: no-repeat;
-	background-position: 0 -4%;
+	background-position: 0 -5%;
 	color: #080;
 }
-	
-    #wrap header {
-		background-image: url("../assets/header.png");
+     nav a:hover {
+		background-position: 0% 47%;
 	}
-	
+		
 	#innerwrap nav {
-		font: 700 1em/2.4 Verdana, sans-serif;
+		font: 700 1em/2.3 Verdana, sans-serif;
 	}
 	
 	#wrap footer {

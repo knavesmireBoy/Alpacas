@@ -23,8 +23,8 @@ if (!window.gAlp) {
     
     
     function invokeRest(m, o) {
-			return o[m].apply(o, _.rest(arguments, 2));
-		}
+        return o[m].apply(o, _.rest(arguments, 2));
+    }
     
 	var utils = gAlp.Util,
 		ptL = _.partial,
@@ -37,23 +37,25 @@ if (!window.gAlp) {
 		getIndex = (function () {
 			if (mq) {
 				return function () {
-					return Number(Modernizr.mq(query));
+					return Modernizr.mq(query) ? 1 : 0;
 				};
 			}
 			return function () {
 				return isBig(threshold) ? 1 : 0;
 			};
 		}()),
+        
 		getPredicate = (function () {
 			if (mq) {
-				return ptL(Modernizr.mq, query);
+                return ptL(isBig, threshold);
+				return ptL(Modernizr.mq, query);//fails in Opera < 10
 			} else {
 				return ptL(isBig, threshold);
 			}
 		}()),
 	
 		switchAction = function (collection, bool) {
-			var i = bool ? Number(!getIndex()) : getIndex();
+			var i = bool ? 0 : 1;
 			return collection[i];
 		},
 		prepAction = function () {
@@ -78,7 +80,7 @@ if (!window.gAlp) {
                         src = invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path),
 						exec = function () {
                             _.compose(twice(utils.doMap)([['alt', ''], ['src', src], [["margin-right", "-100%"]]]), anCr(mask_target), getKid)();
-							setTimeout(activate, 500);
+							window.setTimeout(activate, 500);
 						};
 					/*
 					https://stackoverflow.com/questions/7715562/css-style-property-names-going-from-the-regular-version-to-the-js-property-ca
@@ -86,7 +88,8 @@ if (!window.gAlp) {
 					but CSSStyleDeclaration.style.setProperty accepts css/hyphen type property names without conversion
 					to camelCase*/
 					return {
-						init: function () {
+						init: function (outcomes) {
+                            
 							if (getPredicate()) {
 								return this.execute;
 							}
@@ -97,7 +100,7 @@ if (!window.gAlp) {
 							try {
 								utils.highLighter.perform();
 								exec();
-                                //report.innerHTML = mask_target.childNodes.length;
+                                //report.innerHTML = mask_target.children.length;
 							} catch (e) {
 								report.innerHTML = e.message;
 							}
@@ -131,7 +134,7 @@ if (!window.gAlp) {
 						}
 					};
 				};
-			return utils.getBest(cond, [swap, standard])();
+			return utils.getBestOnly(cond, [swap, standard])();//return command
 		};
 
 	if (!cssmask || swapimg[0]) {
@@ -145,11 +148,11 @@ if (!window.gAlp) {
 						prepAction(outcomes, true)();
 					}
 				};
+               
             eventing('resize', [], _.throttle(handler, 66), window).execute();
 			command.init(outcomes)();
 		};
         eventing('load', [], ptL(player, constr()), window).execute();
-
 	} //cssmask
-}(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), '(min-width: 769px)', Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
+}(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), "(min-width: 769px)", Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
 //document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;

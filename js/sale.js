@@ -512,7 +512,7 @@ if (!window.gAlp) {
 		getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
 		//may need a more robust version than this as a state test
 		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
-		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
+		$toggle = eventing('click', event_actions.slice(0, 2), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
@@ -563,8 +563,10 @@ if (!window.gAlp) {
 				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
-				$selector = eventing('click', event_actions.slice(0), function (e) {
-                 
+                /*
+                doDisplay = PTL(utils.invokeWhen, utils.always(true), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+                */
+				$selector = eventing('click', event_actions.slice(0, 2), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 					if ($toggler) { //image was clicked
@@ -601,11 +603,7 @@ if (!window.gAlp) {
 			makeToolTip().init();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			utils.highLighter.perform();
-			//utils.report(alp_len+'!');
-            //utils.report(utils.$('sell'));
-			//utils.report(utils.getComputedStyle(utils.$('sell'), 'width'));
-            // gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
-
+            //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 		};
 	factory();
 

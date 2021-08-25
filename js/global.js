@@ -181,7 +181,7 @@ gAlp.Util = (function () {
 					if (gAlp.slice_shim) {
 						el.style[toCamelCase(k)] = map[k];
 					} else {
-						el.style.setProperty(k, map[k]);
+						el.style.setProperty(k, map[k], '');
 					}
 				} else {
 					o = {};
