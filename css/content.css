@@ -3,6 +3,7 @@ header {
 	background-position: 50% 0;
 	background-repeat: no-repeat;
 }
+
 footer {
 	font: 700 1.25em/200% Georgia;
 	letter-spacing: -1px;
@@ -45,9 +46,7 @@ nav a, nav a:link, nav a:visited {
 	background-position: 0 -4%;
 	color: #080;
 }
-.no-js body {
-	background-color: khaki;
-}
+
 nav a:hover {
 	text-decoration: none;
 	color: #6e2900;
@@ -121,4 +120,8 @@ _NOT BE: progid: DXImageTransform
 
 *html #welcome footer, *html #welcome footer ul {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src="assets/grass_960.png", sizingMethod="crop");
+}
+
+.no-js body {
+    background-color: rgb(255, 255, 248);
 }
