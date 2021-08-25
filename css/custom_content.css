@@ -146,7 +146,7 @@ ul.tab li a {
 	transition: background 1.5s;
 	text-shadow: 2px 2px 2px #FFF;
 }
-ul.loop a::before {
+.nthchild ul.loop a::before {
 	content: "";
 	margin-left: 1px;
 	border: 2em solid transparent;
@@ -154,7 +154,7 @@ ul.loop a::before {
 	border-left-color: #FFF;
 	border-right-width: 0;
 }
-ul.loop a::after {
+.nthchild ul.loop a::after {
 	content: " ";
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */

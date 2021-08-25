@@ -363,14 +363,16 @@ if (!window.gAlp) {
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
 			}
-			var splitters = {
+			var finder = _.partial(utils.findByTag(0), 'ul', utils.findByTag(0)('main')),
+                splitters = {
 					2: '(max-width: 320px)',
 					3: '(max-width: 600px)',
 					4: '(max-width: 1060px)'
 				},
 				j = utils.findByClass('loop') ? 0 : 1,
 				action = Modernizr.mq(q2) ? 'exec' : 'undo',
-				list = utils.$('list'),
+                //TEMP(?) FIX to missing id of list on UL
+				list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
 				tabs = list.getElementsByTagName('a'),
 				factory,
 				split,
@@ -512,7 +514,7 @@ if (!window.gAlp) {
 		getListFromCache = thricedefer(doMethod)('getList')(true)(utils.eventCache),
 		//may need a more robust version than this as a state test
 		willDeleteListFromCache = PTL(utils.doWhen, PTL(equals, 3, getListFromCache), deleteListFromCache),
-		$toggle = eventing('click', event_actions.slice(0, 2), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
+		$toggle = eventing('click', event_actions.slice(0), PTL(utils.toggleClass, 'tog', utils.$('sell')), utils.$('sell')),
 		undoToggle = thricedefer(doMethod)('undo')(null)($toggle),
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
@@ -566,7 +568,7 @@ if (!window.gAlp) {
                 /*
                 doDisplay = PTL(utils.invokeWhen, utils.always(true), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 */
-				$selector = eventing('click', event_actions.slice(0, 2), function (e) {
+				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
 					if ($toggler) { //image was clicked
@@ -575,7 +577,7 @@ if (!window.gAlp) {
 						$toggler.execute(true); //unshift to maintain nav as LAST listener
 					}
 				}, utils.$('sell')),
-				negate = function (cb) {
+				negate = function (cb) {/////////////
 					if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
 						if (is4()) {
