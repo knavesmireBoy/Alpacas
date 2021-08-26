@@ -541,6 +541,22 @@
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
     $setup.execute();
     utils.highLighter.perform();
+        (function () {
+        var el = utils.findByTag(0)('header'),
+            box = el.getBoundingClientRect(),
+            w = box.width || box.right - box.left,
+            current = 'url(' + utils.getComputedStyle(el, "background-image").slice(30, -2) + ')',
+            home = 'url(assets/header_ipad.png)',
+            other = 'url(../assets/header_ipad.png)',
+            config = [[['background-image', current]]],
+            swap,
+            map = ptL(utils.doMap, el, config);
+        if (w > 960) {
+            swap = utils.$('home') ? home : other;
+            config[0][0].splice(1, 1, swap);
+        }
+        map();
+    }());
     //utils.report(getThumbs());
     //gAlp.Util.eventCache.triggerEvent(main, 'click');
     /*

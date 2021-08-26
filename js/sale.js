@@ -571,9 +571,6 @@ if (!window.gAlp) {
 				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
-                /*
-                doDisplay = PTL(    utils.invokeWhen, utils.always(true), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
-                */
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
@@ -608,14 +605,28 @@ if (!window.gAlp) {
 			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle])).execute();
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
-			//makeToolTip().init();
-            //toolTipDefer();
             doToolTip();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			utils.highLighter.perform();
             //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 		};
 	factory();
+        (function () {
+        var el = utils.findByTag(0)('header'),
+            box = el.getBoundingClientRect(),
+            w = box.width || box.right - box.left,
+            current = 'url(' + utils.getComputedStyle(el, "background-image").slice(30, -2) + ')',
+            home = 'url(assets/header_ipad.png)',
+            other = 'url(../assets/header_ipad.png)',
+            config = [[['background-image', current]]],
+            swap,
+            map = ptL(utils.doMap, el, config);
+        if (w > 960) {
+            swap = utils.$('home') ? home : other;
+            config[0][0].splice(1, 1, swap);
+        }
+        map();
+    }());
 
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
 /*
