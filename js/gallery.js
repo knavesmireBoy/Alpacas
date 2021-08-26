@@ -550,13 +550,10 @@
             home = 'url(assets/header_ipad.png)',
             other = 'url(../assets/header_ipad.png)',
             config = [[['background-image', current]]],
-            swap,
-            map = ptL(utils.doMap, el, config);
-        if (w > 960) {
             swap = utils.$('home') ? home : other;
-            config[0][0].splice(1, 1, swap);
+        if (w > 960) {
+            utils.doMap(el, [[['background-image', swap]]]);
         }
-        map();
     }());
     //utils.report(getThumbs());
     //gAlp.Util.eventCache.triggerEvent(main, 'click');

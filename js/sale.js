@@ -611,7 +611,7 @@ if (!window.gAlp) {
             //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 		};
 	factory();
-        (function () {
+           (function () {
         var el = utils.findByTag(0)('header'),
             box = el.getBoundingClientRect(),
             w = box.width || box.right - box.left,
@@ -619,15 +619,11 @@ if (!window.gAlp) {
             home = 'url(assets/header_ipad.png)',
             other = 'url(../assets/header_ipad.png)',
             config = [[['background-image', current]]],
-            swap,
-            map = _.partial(utils.doMap, el, config);
-        if (w > 960) {
             swap = utils.$('home') ? home : other;
-            config[0][0].splice(1, 1, swap);
+        if (w > 960) {
+            utils.doMap(el, [[['background-image', swap]]]);
         }
-        map();
     }());
-
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP

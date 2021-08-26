@@ -11,6 +11,9 @@ http://cssmediaqueries.com/overview.html*/
 		padding-top: 22%;
         background: no-repeat center/cover url("../assets/header.png");
 	}
+    .flexbox header[style] {
+        background: no-repeat center/cover url("../assets/header.png") !important;
+    }
     
     h2 {
         font: italic 3.2em "Handwritten", Georgia, cursive;
@@ -140,8 +143,9 @@ http://cssmediaqueries.com/overview.html*/
 		white-space: normal;
 		text-overflow: inherit;
 	}
-    #wrap header {
-		background-image: none;
+    /*https://css-tricks.com/override-inline-styles-with-css/*/
+    #wrap header, #wrap header[style] {
+		background-image: none !important;
 	}
 }
 @media only screen and (min-width: 769px) {
