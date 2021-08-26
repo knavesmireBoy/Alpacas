@@ -611,14 +611,12 @@ if (!window.gAlp) {
             //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 		};
 	factory();
-           (function () {
+        (function () {
         var el = utils.findByTag(0)('header'),
             box = el.getBoundingClientRect(),
             w = box.width || box.right - box.left,
-            current = 'url(' + utils.getComputedStyle(el, "background-image").slice(30, -2) + ')',
             home = 'url(assets/header_ipad.png)',
             other = 'url(../assets/header_ipad.png)',
-            config = [[['background-image', current]]],
             swap = utils.$('home') ? home : other;
         if (w > 960) {
             utils.doMap(el, [[['background-image', swap]]]);
