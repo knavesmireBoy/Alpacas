@@ -261,6 +261,7 @@ gAlp.Util = (function () {
 
 	function mittleInvoke(m, arg, o) {
 		o = o || document;
+        //console.log(o, getResult(o));
 		return getResult(o)[m](arg);
 	}
 

@@ -239,10 +239,12 @@
 			return $looper.find(arg);
 		},
 		locator = function (forward, back) {
-			var getLoc = function (e) {
-				var box = e[mytarget].getBoundingClientRect();
-				return e.clientX - box.left > box.width / 2;
-			};
+            var getLoc = function (e) {
+				var box = e[mytarget].getBoundingClientRect(),
+                    threshold = (box.right - box.left) / 2;
+                //default to forward
+				return e.clientX ? (e.clientX - box.left) > threshold : true;
+            };
 			return function (e) {
 				return utils.getBest(function (agg) {
 					return agg[0](e);

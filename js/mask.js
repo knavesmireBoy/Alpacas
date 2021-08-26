@@ -26,12 +26,23 @@ if (!window.gAlp) {
         return o[m].apply(o, _.rest(arguments, 2));
     }
     
+    function add(a, b) {
+		return a + b;
+	}
+
+	function doMethod(o, v, p) {
+		//console.log(arguments);
+		return o[p] && o[p](v);
+	}
+
+    
 	var utils = gAlp.Util,
 		ptL = _.partial,
 		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
 		//con = window.console.log.bind(window),
         curryFactory = utils.curryFactory,
 		twice = curryFactory(2),
+		thrice = curryFactory(3),
 		eventing = utils.eventer,
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
 		getIndex = (function () {
@@ -48,7 +59,7 @@ if (!window.gAlp) {
 		getPredicate = (function () {
 			if (mq) {
                 return ptL(isBig, threshold);
-				return ptL(Modernizr.mq, query);//fails in Opera < 10
+				//return ptL(Modernizr.mq, query);//fails in Opera < 10
 			} else {
 				return ptL(isBig, threshold);
 			}
@@ -148,11 +159,25 @@ if (!window.gAlp) {
 						prepAction(outcomes, true)();
 					}
 				};
-               
             eventing('resize', [], _.throttle(handler, 66), window).execute();
 			command.init(outcomes)();
 		};
         eventing('load', [], ptL(player, constr()), window).execute();
 	} //cssmask
+    (function () {
+        var el = utils.findByTag(0)('header'),
+            box = el.getBoundingClientRect(),
+            w = box.width || box.right - box.left,
+            current = 'url(' + utils.getComputedStyle(el, "background-image").slice(30, -2) + ')',
+            neue = 'url(assets/grass.png)',
+            config = [[['background-image', current]]],
+            map = ptL(utils.doMap, el, config);
+        if (w > 960) {
+            config[0][0].splice(1, 1, neue);
+        }
+        map();
+        utils.report(utils.getComputedStyle(utils.$('wrap'), "font-size"))
+    }());
+                
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), "(min-width: 769px)", Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
 //document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;

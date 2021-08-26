@@ -566,7 +566,7 @@ if (!window.gAlp) {
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
 				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 /*
-                doDisplay = PTL(utils.invokeWhen, utils.always(true), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+                doDisplay = PTL(    utils.invokeWhen, utils.always(true), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 */
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
