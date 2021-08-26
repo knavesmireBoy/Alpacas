@@ -247,6 +247,7 @@
             };
 			return function (e) {
 				return utils.getBest(function (agg) {
+                    console.log(agg)
 					return agg[0](e);
 				}, [
 					[getLoc, forward],
