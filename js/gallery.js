@@ -104,6 +104,7 @@
 		getThumbs = doComp(utils.getZero, ptL(utils.getByTag, 'ul', main)),
 		getAllPics = doComp(ptL(utils.getByTag, 'img'), getThumbs),
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
+		myClick = Modernizr.touchevents ? 'touchend' : 'click',
 		getTarget = utils.drillDown([mytarget]),
 		parser = thrice(doMethod)('match')(/gal\/big\/\w+\.jpe?g$/),
 		doMap = utils.doMap,
@@ -229,12 +230,12 @@
 		nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
 		incrementer = doComp(doInc, getLength),
-		do_page_iterator = function (coll) {
+        do_page_iterator = function (coll) {
 			if (coll && typeof coll.length !== 'undefined') {
 				$looper.build(_.map(coll, getSRC), incrementer);
 			}
 		},
-		setindex = function (arg) {
+        setindex = function (arg) {
 			do_page_iterator(getAllPics());
 			return $looper.find(arg);
 		},
@@ -247,7 +248,6 @@
             };
 			return function (e) {
 				return utils.getBest(function (agg) {
-                    console.log(agg)
 					return agg[0](e);
 				}, [
 					[getLoc, forward],
@@ -255,7 +255,7 @@
 				]);
 			};
 		},
-		$locate = eventing('touchend', event_actions.slice(0), function (e) {
+		$locate = eventing(myClick, event_actions.slice(0,1), function (e) {
 			locator(twicedefer(loadImageBridge)('base')(nextcaller), twicedefer(loadImageBridge)('base')(prevcaller))(e)[1]();
 			doOrient(e[mytarget]);
 		}, getThumbs()),
@@ -537,7 +537,6 @@
 			_.each(_.zip(dombuttons, buttons), invokeBridge);
 			_.each([$controls, $exit, $locate, $controls_undostat, $controls_dostat], go_execute);
 			$setup.undo();
-			
 		};
 	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
     $setup.execute();
