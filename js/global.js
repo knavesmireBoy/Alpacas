@@ -172,7 +172,6 @@ gAlp.Util = (function () {
 			o;
 		for (k in map) {
 			if (map.hasOwnProperty(k)) {
-                
 				if (k.match(/^te?xt$/)) {
 					el.innerHTML = map[k];
 					continue;
@@ -923,7 +922,7 @@ gAlp.Util = (function () {
 		},
 		con: function (arg) {
 			window.console.log(arg);
-			return arg;
+			return getResult(arg);
 		},
 		conditional: function () {
 			var validators = _.toArray(arguments);

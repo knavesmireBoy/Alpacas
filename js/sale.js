@@ -322,7 +322,9 @@ if (!window.gAlp) {
 		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
 		reSyncCheck = deferEvery([is4, isDesktop])(getResult),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
-		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(doMap([['id', 'list']]), PTL(utils.insert()($$('sell'), intro), 'ul'))])),
+        configListFail = twicedefer(utils.doMap)([['id', 'list']]),/*doMap was winding up with an empty array after returning to gallery mode NO NOT WHY*/
+        configList = COMP(PTL(klasAdd, 'loop'), PTL(setAttrs, {id: 'list'})),
+		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(configList, PTL(utils.insert()($$('sell'), intro), 'ul'))])),
 		$looper = gAlp.Looper(),
 		doCaption_cb = function (a, i) {
 			var fig = twice(invokeArg)('figure'),
@@ -372,7 +374,8 @@ if (!window.gAlp) {
 				j = utils.findByClass('loop') ? 0 : 1,
 				action = Modernizr.mq(q2) ? 'exec' : 'undo',
                 //TEMP(?) FIX to missing id of list on UL
-				list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
+				//list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
+				list = utils.$('list'),
 				tabs = list.getElementsByTagName('a'),
 				factory,
 				split,
@@ -417,6 +420,8 @@ if (!window.gAlp) {
 		},
 		selldiv = COMP(doMap([['id', 'sell']]), PTL(anCr(intro), 'div')),
 		makeToolTip = PTL(gAlp.Tooltip, article, ["click table/picture", "to toggle the display"], allow, true),
+        toolTipDefer = thricedefer(doMethod)('init')()(makeToolTip()),
+        doToolTip = PTL(utils.doWhen, PTL(utils.findByClass, 'tab'), toolTipDefer),
 		checkDataLength = validator('no alpacas for sale', ALWAYS(alp_len)),
 		checkJSenabled = validator('javascript is not enabled', checkDummy),
 		maybeLoad = utils.silent_conditional(checkDataLength, checkJSenabled),
@@ -539,7 +544,8 @@ if (!window.gAlp) {
 				deferShow = COMP(showCurrent, _.bind($looper.forward, $looper)),
 				deferNext = COMP(deferShow, deferMembers(doHide)),
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
-				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+                //UPDATE: BUT ul needs restoring on rturn to gallery mode(makeUL)
+				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), makeUL, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
 				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
@@ -554,7 +560,7 @@ if (!window.gAlp) {
 				/*
 				When resizing between mobile and desktop environments we need to produce the correct navigation tabs when the number of Alpacas is four (<4 tab, >4 loop, 4 alternate)
 				and so it's a great case for alternating between two tab builders. IF resize takes place when in gallery mode
-				the alternating strategies will be out of sync, so we must create anew. $tabcontext delegates the alternating behaviour to a class of Alternator whose execute method delegates to a a two member array of strategies
+				the alternating strategies will be out of sync, so we must create anew. $tabcontext delegates the alternating behaviour to a class of Alternator whose execute method delegates to a two member array of strategies
 				*/
 				reLoop = COMP(delayExecute, $loop_listener, addULClass, makeLoopTabs, makeUL, deleteListFromCache),
 				reTab = COMP(makeTabs, addULClass, makeUL, willDeleteListFromCache),
@@ -564,7 +570,7 @@ if (!window.gAlp) {
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
 				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 /*
                 doDisplay = PTL(    utils.invokeWhen, utils.always(true), COMP(ALWAYS($toggle), abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
                 */
@@ -602,7 +608,9 @@ if (!window.gAlp) {
 			$divcontext.set(utils.getBest(isLoop, [$selector, $toggle])).execute();
 			utils.getBest(COMP(invoke, getZero), captionsORtabs)[1](); //nav listener LAST!
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
-			makeToolTip().init();
+			//makeToolTip().init();
+            //toolTipDefer();
+            doToolTip();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			utils.highLighter.perform();
             //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
