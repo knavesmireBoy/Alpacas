@@ -44,9 +44,18 @@ if (!window.gAlp) {
 	function equals(a, b) {
 		return getResult(a) === getResult(b);
 	}
+    
+    function add(a, b) {
+        utils.report(b);
+		return a + b;
+	}
 
 	function gtThan(a, b) {
 		return getResult(a) > getResult(b);
+	}
+    
+    function lsThan(a, b) {
+		return getResult(a) < getResult(b);
 	}
 
 	function onValidation() {
@@ -81,6 +90,10 @@ if (!window.gAlp) {
 
 	function invoke(f) {
 		return f.apply(null, _.rest(arguments));
+	}
+    
+    function invokeBridge(fargs) {
+		return invoke(fargs[0], fargs[1]);
 	}
 
 	function getterBridge(arr) {
@@ -117,9 +130,10 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		return list.slice(_.random(0, end || list.length));
-		//return list.slice(0, -1);
+		//return list.slice(_.random(0, end || list.length));
+		return list.slice(0);
 	}
+    
 	var alpacas = [
 			[
 				["Granary Grace", "Price on Application"],
@@ -258,6 +272,7 @@ if (!window.gAlp) {
 		delayNavListener = twice(PTL(eventing, 'click', []))($$('list')),
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
+        reporter = PTL(utils.findByTag(0), 'h2'),
 		makeDisplayer = function (klas) {
 			return {
 				show: _.partial(klasAdd, klas),
@@ -317,6 +332,7 @@ if (!window.gAlp) {
 			}
 		}()),
 		gt4 = twicedefer(gtThan)(4)(alp_len),
+		gt5 = twicedefer(gtThan)(5)(alp_len),
 		gt3 = twicedefer(gtThan)(3)(alp_len),
 		is4 = deferEvery([_.negate(gt4), gt3])(getResult),
 		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
@@ -597,7 +613,31 @@ if (!window.gAlp) {
 					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell')])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute(true);
-				};
+				},
+                
+                goSetCaptions = function(){
+                    var captions = utils.getByTag('figcaption'),
+                        isGranary = thrice(doMethod)('match')(/^Granary|^Newland/),
+                        resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
+                        g_exec = COMP(invoke, PTL(utils.getBest, isGranary, [thrice(doMethod)('substring')(8), resetCaptions])),
+                        setCaptions = COMP(utils.setText, g_exec, doGet('innerHTML')),
+                        getSellWidth = COMP(Math.floor, parseFloat, PTL(utils.getComputedStyle, utils.$('sell'), 'width')),
+                        lsThan440 = deferEvery([COMP(twice(lsThan)(440), getSellWidth), gt5])(getResult),
+                        lsThan300 = deferEvery([COMP(twice(lsThan)(300), getSellWidth), gt4])(getResult),
+                        queryWidth = COMP(invoke, PTL(utils.getBestOnly, PTL(Modernizr.mq, '(orientation: portrait)'), [lsThan300, lsThan440]));
+                    if(queryWidth()){
+                       _.each(_.zip(_.map(captions, setCaptions), captions), invokeBridge); 
+                    }
+                    else {
+                        utils.report(55);
+                    }
+                    
+                };
+                /*
+                $figure = eventing('resize'), [], function(){
+                    utils.report(utils.getComputedStyle($('sell'), 'width'));
+                }, window).execute();
+                */
 			addULClass();
 			klasAdd([nth], intro);
 			//$divcontext persists and DELEGATES to current $listener($selector, $toggle)
@@ -606,7 +646,11 @@ if (!window.gAlp) {
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
             doToolTip();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
-			utils.highLighter.perform();
+            utils.highLighter.perform(); 
+            goSetCaptions(); 
+            
+            eventing('resize', [], goSetCaptions, window).execute();
+                        
             //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 		};
 	factory();

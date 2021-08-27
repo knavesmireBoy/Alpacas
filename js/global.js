@@ -1089,6 +1089,7 @@ gAlp.Util = (function () {
 		getClassList: getClassList,
 		getChild: _.compose(getNextElement, drillDown(['firstChild'])),
 		getComputedStyle: function (element, styleProperty) {
+            element = getResult(element);
 			if (!element || !styleProperty) {
 				return null;
 			}

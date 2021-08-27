@@ -130,6 +130,9 @@ article.intro {
     *height: 1%;
     overflow: hidden;
 }
+#sell.extent a {
+    overflow: visible;
+}
 #list li, #list li a {
 	float: left;
 	zoom: 1;
@@ -148,7 +151,6 @@ article.intro {
 }
 
 /* early ie requires ul#list, ul#list li to pull content above #sell div */
-
 #controls, #alpacas_for_sale aside, ul#list, ul#thumbnails, #gallery main, ul#list li {
 	position: relative;
 }
