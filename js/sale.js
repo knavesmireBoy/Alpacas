@@ -322,8 +322,7 @@ if (!window.gAlp) {
 		mob4 = deferEvery([is4, _.negate(isDesktop)])(getResult),
 		reSyncCheck = deferEvery([is4, isDesktop])(getResult),
 		getUL = PTL(utils.findByTag(0), 'ul', intro),
-        configListFail = twicedefer(utils.doMap)([['id', 'list']]),/*doMap was winding up with an empty array after returning to gallery mode NO NOT WHY*/
-        configList = COMP(PTL(klasAdd, 'loop'), PTL(setAttrs, {id: 'list'})),
+        configList = twice(utils.doMap)([['id', 'list']]),
 		makeUL = COMP(invoke, PTL(utils.getBest, getUL, [getUL, COMP(configList, PTL(utils.insert()($$('sell'), intro), 'ul'))])),
 		$looper = gAlp.Looper(),
 		doCaption_cb = function (a, i) {
@@ -545,7 +544,7 @@ if (!window.gAlp) {
 				deferNext = COMP(deferShow, deferMembers(doHide)),
 				/* restoreCaptions: exit loop mode removing listners from cache, directly through $toggle.undo, indirectly through utils.eventCache, removing toggle first as false is used as argument to target last listener object in list and we need to make sure the last listener object deals with the navigation ul*/
                 //UPDATE: BUT ul needs restoring on rturn to gallery mode(makeUL)
-				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), makeUL, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
+				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), addULClass, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
 				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
 					restoreCaptions,
