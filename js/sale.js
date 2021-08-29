@@ -109,7 +109,6 @@ if (!window.gAlp) {
 	}
 
 	function doCallbacks(cb, coll, p) {
-		//console.log(getResult(cb));
 		return _[p](getResult(coll), cb);
 	}
 
@@ -130,7 +129,7 @@ if (!window.gAlp) {
 	}
 
 	function sliceArray(list, end) {
-		//return list.slice(_.random(0, end || list.length));
+        //return list.slice(_.random(0, end || list.length));
 		return list.slice(0);
 	}
     
@@ -248,6 +247,7 @@ if (!window.gAlp) {
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferIndex = thricedefer(doCallbacks)('findIndex'),
 		deferEvery = thricedefer(doCallbacks)('every'),
+		delayEvery = thrice(doCallbacks)('every'),
 		delayExecute = thrice(doMethod)('execute')(null),
 		doGet = twice(utils.getter),
         doMap = twice(utils.doMap),
@@ -616,22 +616,39 @@ if (!window.gAlp) {
 				},
                 
                 goSetCaptions = function(){
-                    var captions = utils.getByTag('figcaption'),
-                        isGranary = thrice(doMethod)('match')(/^Granary|^Newland/),
-                        resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
-                        g_exec = COMP(invoke, PTL(utils.getBest, isGranary, [thrice(doMethod)('substring')(8), resetCaptions])),
-                        setCaptions = COMP(utils.setText, g_exec, doGet('innerHTML')),
-                        getSellWidth = COMP(Math.floor, parseFloat, PTL(utils.getComputedStyle, utils.$('sell'), 'width')),
-                        lsThan440 = deferEvery([COMP(twice(lsThan)(440), getSellWidth), gt5])(getResult),
-                        lsThan300 = deferEvery([COMP(twice(lsThan)(300), getSellWidth), gt4])(getResult),
-                        queryWidth = COMP(invoke, PTL(utils.getBestOnly, PTL(Modernizr.mq, '(orientation: portrait)'), [lsThan300, lsThan440]));
-                    if(queryWidth()){
-                       _.each(_.zip(_.map(captions, setCaptions), captions), invokeBridge); 
-                    }
-                    else {
-                        utils.report(55);
-                    }
                     
+                     var noOp = function(){},
+                        doBest = utils.getBest,
+                        isLess = twice(lsThan),
+                        getSellWidth = COMP(Math.floor, parseFloat, PTL(utils.getComputedStyle, utils.$('sell'), 'width')),
+                        lsThan440 = deferEvery([COMP(isLess(800), getSellWidth), gt5])(getResult),
+                        lsThan300 = deferEvery([COMP(isLess(300), getSellWidth), gt4])(getResult),
+                        queryWidth = COMP(invoke, PTL(doBest, PTL(Modernizr.mq, '(orientation: portrait)'), [lsThan300, lsThan440])),
+                        queryWidthDefer = PTL(doBest, PTL(Modernizr.mq, '(orientation: portrait)'), [lsThan300, lsThan440]),
+                        captions = utils.getByTag('figcaption'),
+                        isGranary = thrice(doMethod)('match')(/^Granary|^Newland/),
+                        isGranaryDefer = thricedefer(doMethod)('match')(/^cGranary|^cNewland/),
+                        resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
+                        nevery = deferEvery([_.negate(queryWidth), _.negate(isGranary)])(getResult),
+                        every = deferEvery(captions)(COMP(isGranary, doGet('innerHTML'))),
+                        doSubString = COMP(invoke, PTL(doBest, every, [thrice(doMethod)('substring')(8), noOp])),
+                        doResetCaptions = COMP(invoke, PTL(doBest, nevery, [resetCaptions, noOp])),
+                        g_exec = COMP(invoke, PTL(doBest, isGranary, [doSubString, doResetCaptions])),
+                        setCaptions = COMP(utils.setText, doGet('innerHTML'));
+                    
+                    if(queryWidth() && every()){
+                           var map = delayMap(captions)(COMP(thrice(doMethod)('substring')(8), doGet('innerHTML'))); 
+                        _.each(_.zip(_.map(map, utils.setText), captions), invokeBridge); 
+
+                       }
+                  
+                    //_.each(captions, doSubString);
+                        
+                    
+                    //utils.report(every());
+                    //console.log(_.every([COMP(isLess(1500), getSellWidth), gt5], getResult));
+                    
+                    //_.each(_.zip(_.map(captions, setCaptions), captions), invokeBridge); 
                 };
                 /*
                 $figure = eventing('resize'), [], function(){
@@ -646,13 +663,15 @@ if (!window.gAlp) {
 			throttler(_.bind($tabcontext.execute, $tabcontext)); //resize listener unshift to front of eventcache list
             doToolTip();
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
-            utils.highLighter.perform(); 
-            goSetCaptions(); 
+            utils.highLighter.perform();
+           
             
+            goSetCaptions(); 
             eventing('resize', [], goSetCaptions, window).execute();
+        
+        };
                         
             //gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
-		};
 	factory();
         (function () {
         var el = utils.findByTag(0)('header'),
