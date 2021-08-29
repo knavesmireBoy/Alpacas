@@ -617,8 +617,7 @@ if (!window.gAlp) {
 					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute(true);
 				},
 				goSetCaptions = function() {
-					var noOp = function() {},
-						doBest = utils.getBest,
+					var doBest = utils.getBest,
 						isLess = twice(lsThan),
 						isGranary = thrice(doMethod)('match')(/^Granary|^Newland/),
 						getSellWidth = COMP(Math.floor, parseFloat, PTL(utils.getComputedStyle, utils.$('sell'), 'width')),
@@ -639,9 +638,12 @@ if (!window.gAlp) {
 						resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
 						setCaptions = COMP(utils.setText, doGet('innerHTML')),
 						undo = deferCaptions(COMP(resetCaptions, doGet('innerHTML'))),
+                        preSubString = deferCaptions(doSubString_CB),
+                        curryMap = twice(_.map)(utils.setText),
+                        
                         prezip = twice(_.zip)(captions);
 					if (queryWidthExec()) {
-						_.each(prezip(_.map(delayCaptions(doSubString_CB), utils.setText)), invokeBridge);
+						_.each(prezip(curryMap(preSubString())), invokeBridge);
 					} else if (queryWidthUndo()) {
 						_.each(prezip(_.map(undo(), utils.setText)), invokeBridge);
 					}
