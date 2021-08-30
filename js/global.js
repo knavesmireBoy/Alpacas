@@ -993,6 +993,11 @@ gAlp.Util = (function () {
 			};
 		},
 		curryFactory: curryFactory,
+        curryLeft: function (fun) {
+				return function (last) {
+					return fun(last);
+				};
+		},
 		doAlternate: doAlternate,
 		doMap: doMapLoop,
 		doMethod: doMethod,

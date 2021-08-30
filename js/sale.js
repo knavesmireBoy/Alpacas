@@ -636,16 +636,18 @@ if (!window.gAlp) {
 						deferCaptions = deferMap(captions),
 						doSubString_CB = COMP(thrice(doMethod)('substring')(8), doGet('innerHTML')),
 						resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
-						setCaptions = COMP(utils.setText, doGet('innerHTML')),
-						undo = deferCaptions(COMP(resetCaptions, doGet('innerHTML'))),
-                        preSubString = deferCaptions(doSubString_CB),
                         curryMap = twice(_.map)(utils.setText),
-                        
-                        prezip = twice(_.zip)(captions);
+						setCaptions = COMP(utils.setText, doGet('innerHTML')),
+						undo = COMP(curryMap, deferCaptions(COMP(resetCaptions, doGet('innerHTML')))),
+                        deferSubString = COMP(twice(_.map)(utils.setText), deferCaptions(doSubString_CB)),
+                        zipSubString = COMP(twice(_.zip)(captions), deferSubString),
+                        zipcaptions = COMP(twice(_.zip)(captions));
 					if (queryWidthExec()) {
-						_.each(prezip(curryMap(preSubString())), invokeBridge);
-					} else if (queryWidthUndo()) {
-						_.each(prezip(_.map(undo(), utils.setText)), invokeBridge);
+						_.each(zipSubString(), invokeBridge);
+					} 
+                    
+                    else if (queryWidthUndo()) {
+						_.each(zipcaptions(undo()), invokeBridge);
 					}
 				};
 			/*
