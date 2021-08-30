@@ -216,7 +216,7 @@ if (!window.gAlp) {
 		COMP = _.compose,
 		ALWAYS = utils.always,
 		event_actions = ['preventDefault', 'stopPropagation', 'stopImmediatePropagation'],
-		myTouch = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? true : false,
+		myTouch = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent) ? true : false,
 		eventing = utils.eventer,
 		mytarget = !window.addEventListener ? 'srcElement' : 'target',
 		allow = !touchevents ? 2 : 1,
@@ -601,7 +601,7 @@ if (!window.gAlp) {
 					restoreCaptions,
 					noOp,
 					noOp
-				],
+                             ],
 				find_onclick = COMP(goGetValue, doFind, getParent, getTarget),
 				remove_extent = COMP(PTL(klasRem, 'extent'), PTL(utils.climbDom, 2), utils.show),
 				loop_listener = COMP(invoke, getOne, PTL(utils.getBest, COMP(_.identity, getZero)), twice(_.zip)(loopevents), navoutcomes, twice(invoke), text_from_target),
@@ -642,7 +642,6 @@ if (!window.gAlp) {
 					}
 					goSetCaptions();
 					abbreviateTabs();
-					//abbreviateHeads();
 				},
 				throttler = function (cb) {
 					negate(noOp); //onload
