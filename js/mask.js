@@ -45,10 +45,12 @@ if (!window.gAlp) {
 		thrice = curryFactory(3),
 		eventing = utils.eventer,
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
-		getIndex = (function () {
+        
+        getIndex = (function () {
 			if (mq) {
 				return function () {
-					return Modernizr.mq(query) ? 1 : 0;
+					//return Number(Modernizr.mq(query));
+                    return Modernizr.mq(query) ? 1 : 0
 				};
 			}
 			return function () {
@@ -56,7 +58,7 @@ if (!window.gAlp) {
 			};
 		}()),
         
-		getPredicate = (function () {
+        getPredicate = (function () {
 			if (mq) {
                 return ptL(isBig, threshold);
 				//return ptL(Modernizr.mq, query);//fails in Opera < 10
@@ -65,10 +67,13 @@ if (!window.gAlp) {
 			}
 		}()),
 	
+	
 		switchAction = function (collection, bool) {
-			var i = bool ? 0 : 1;
+			var i = bool ? Number(!getIndex()) : getIndex();
+            //var i = bool ? 0 : 1; //opera
 			return collection[i];
 		},
+        
 		prepAction = function () {
 			getPredicate = _.negate(getPredicate);
 			return switchAction.apply(null, arguments);
