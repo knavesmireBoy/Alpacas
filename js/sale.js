@@ -632,22 +632,21 @@ if (!window.gAlp) {
 						queryWidthExec = COMP(invoke, PTL(doBest, PTL(Modernizr.mq, '(orientation: portrait)'), [lsThan300, lsThan440])),
 						queryWidthUndo = COMP(invoke, PTL(doBest, PTL(Modernizr.mq, '(orientation: portrait)'), [gtThan300, gtThan440])),
 						captions = utils.getByTag('figcaption'),
-						delayCaptions = delayMap(captions),
 						deferCaptions = deferMap(captions),
 						doSubString_CB = COMP(thrice(doMethod)('substring')(8), doGet('innerHTML')),
 						resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
                         curryMap = twice(_.map)(utils.setText),
-						setCaptions = COMP(utils.setText, doGet('innerHTML')),
 						undo = COMP(curryMap, deferCaptions(COMP(resetCaptions, doGet('innerHTML')))),
                         deferSubString = COMP(twice(_.map)(utils.setText), deferCaptions(doSubString_CB)),
                         zipSubString = COMP(twice(_.zip)(captions), deferSubString),
-                        zipcaptions = COMP(twice(_.zip)(captions));
+                        zipUndo = COMP(twice(_.zip)(captions), undo),
+                        preInvoke = COMP(twice(_.each)(invokeBridge), invoke);
 					if (queryWidthExec()) {
-						_.each(zipSubString(), invokeBridge);
+                        preInvoke(zipSubString);
 					} 
                     
                     else if (queryWidthUndo()) {
-						_.each(zipcaptions(undo()), invokeBridge);
+                         preInvoke(zipUndo);
 					}
 				};
 			/*
