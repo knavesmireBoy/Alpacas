@@ -633,18 +633,16 @@ if (!window.gAlp) {
 						queryWidthUndo = COMP(invoke, PTL(doBest, PTL(Modernizr.mq, '(orientation: portrait)'), [gtThan300, gtThan440])),
 						captions = utils.getByTag('figcaption'),
 						deferCaptions = deferMap(captions),
-						doSubString_CB = COMP(thrice(doMethod)('substring')(8), doGet('innerHTML')),
 						resetCaptions = COMP(invoke, PTL(utils.getBest, thrice(doMethod)('match')(/ecky$/), [PTL(add, 'Newland '), PTL(add, 'Granary ')])),
-                        curryMap = twice(_.map)(utils.setText),
-						undo = COMP(curryMap, deferCaptions(COMP(resetCaptions, doGet('innerHTML')))),
-                        deferSubString = COMP(twice(_.map)(utils.setText), deferCaptions(doSubString_CB)),
-                        zipSubString = COMP(twice(_.zip)(captions), deferSubString),
-                        zipUndo = COMP(twice(_.zip)(captions), undo),
+                        curryText = twice(_.map)(utils.setText),
+                        curryZip = twice(_.zip)(captions),
+                        deferSubString = COMP(curryText, deferCaptions(COMP(thrice(doMethod)('substring')(8), doGet('innerHTML')))),
+                        zipSubString = COMP(curryZip, deferSubString),
+                        zipUndo = COMP(curryZip, COMP(curryText, deferCaptions(COMP(resetCaptions, doGet('innerHTML'))))),
                         preInvoke = COMP(twice(_.each)(invokeBridge), invoke);
 					if (queryWidthExec()) {
                         preInvoke(zipSubString);
 					} 
-                    
                     else if (queryWidthUndo()) {
                          preInvoke(zipUndo);
 					}
@@ -664,7 +662,7 @@ if (!window.gAlp) {
 			//var reg = COMP(twice(invoke)('i'), PTL(partialize, create, RegExp))('j[a-z]');
 			utils.highLighter.perform();
 			goSetCaptions();
-			eventing('resize', [], _.throttle(goSetCaptions, 1111), window).execute();
+			eventing('resize', [], _.throttle(goSetCaptions, 666), window).execute();
 		};
 	//gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 	factory();
