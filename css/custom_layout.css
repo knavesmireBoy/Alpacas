@@ -37,7 +37,7 @@ table table {
 	_width: 22%;
 }
 .five figure {
-	width: 18%;
+	width: 18.2%;
 	*width: 17.6%;
 	_width: 17.1%;
 }
@@ -85,8 +85,7 @@ article.intro {
 	padding: 0.7em 1.3em;
 }
 .extent figure a {
-	border-width: 0 1em;
-    border-color: white;
+	border-width: 0 .8em;
 	padding: 1em 0 0;
 }
 
@@ -174,6 +173,7 @@ article.intro {
 
 .sell #sell.extent{
 	margin-top: 0;
+    padding: 1%;
 }
 
 .loop+#sell {
