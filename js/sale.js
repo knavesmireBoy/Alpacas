@@ -563,6 +563,7 @@ if (!window.gAlp) {
 					deferSubString = COMP(deferTextCB, deferCaptions(COMP(thrice(doMethod)('substring')(8), doGet('innerHTML')))),
 					zipSubString = COMP(preZip, deferSubString),
 					zipUndo = COMP(preZip, COMP(deferTextCB, deferCaptions(COMP(resetCaptions, doGet('innerHTML'))))),
+                    //a string is partially applied to utils.setText, then called with an element, we zip up the partial function and the final (element) argument
 					preInvoke = COMP(twice(_.each)(invokeBridge), invoke);
 				if (queryWidthExec()) {
 					preInvoke(zipSubString);
