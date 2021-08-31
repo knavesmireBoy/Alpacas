@@ -15,6 +15,19 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
+    
+    function existy(x) {
+		return x != null;
+	}
+
+	function cat() {
+		var head = _.first(arguments);
+		if (existy(head)) {
+			return head.concat.apply(head, _.rest(arguments));
+		} else {
+			return [];
+		}
+	}
 
 	function makeAlternator(alts) {
 		function Alternator(actions) {
@@ -271,7 +284,7 @@ if (!window.gAlp) {
 		delayNavListener = twice(PTL(eventing, 'click', []))($$('list')),
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
-		reporter = PTL(utils.findByTag(0), 'h2'),
+		reporter = PTL(utils.findByTag(0), 'h2', document),
 		makeDisplayer = function (klas) {
 			return {
 				show: _.partial(klasAdd, klas),
@@ -662,6 +675,15 @@ if (!window.gAlp) {
 		};
 	//gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 	factory();
+    /*
+    var ar = [],
+        tmp = COMP(doGet('innerHTML'), reporter),
+        doCat = COMP(twice(cat), PTL(invoke, tmp)),
+        exec = COMP(thrice(lazyVal)('push')(ar), doGet(0), thrice(doMethod)('split')(' '), tmp),
+        undo = COMP(utils.con, doCat, thricedefer(doMethod)('shift')(null)(ar));
+        exec();
+        undo();
+   */
 	(function () {
 		var el = utils.findByTag(0)('header'),
 			box = el.getBoundingClientRect(),

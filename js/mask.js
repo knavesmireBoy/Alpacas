@@ -70,7 +70,7 @@ if (!window.gAlp) {
 	
 		switchAction = function (collection, bool) {
 			var i = bool ? Number(!getIndex()) : getIndex();
-            //var i = bool ? 0 : 1; //opera
+            //console.log(Number(!getIndex()));
 			return collection[i];
 		},
         
