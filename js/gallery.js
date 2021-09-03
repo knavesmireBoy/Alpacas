@@ -151,7 +151,7 @@
 				[k, v]
 			]);
 		},
-		doOrient = doComp(applyArg, ptL(utils.getBest, queryOrientation, [setPortrait, unsetPortrait])),
+		doOrient = doComp(applyArg, ptL(utils.getBestPred, queryOrientation, [setPortrait, unsetPortrait])),
 		//slide and pause 
 		onLoad = function (img, path, promise) {
 			var ret;
@@ -284,11 +284,12 @@
 		get_play_iterator = function (flag) {
 			var coll,
                 filter = function (coll, pred1) {
-                    var tmp = _.filter(coll, pred1),
-                        arr = _.reject(coll, pred1);
+                   var tmp = _.reject(coll, pred1),
+                        arr = _.filter(coll, pred1);
                     return arr.concat(tmp);
                 },
 				index = $looper.get('index'),
+                //lscp, portrait
 				outcomes = [_.negate(queryOrientation), queryOrientation],
 				provisional = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
 					return !li.id;
@@ -300,7 +301,8 @@
 				//re-order
 				coll = utils.shuffleArray(provisional)(index);
 				//split and join again
-				coll = i ? filter(coll, outcomes[0]) : filter(coll, outcomes[1]);
+				coll = i ? filter(coll, outcomes[1]) : filter(coll, outcomes[0]);
+                console.log(coll[0])
 				$slide_swapper.set(slide_player_factory());
 			} else {
 				//sends original dom-ordered collection when exiting slideshow
