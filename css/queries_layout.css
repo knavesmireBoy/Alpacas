@@ -240,7 +240,7 @@
 		min-width: 250px;
 		width: 100%;
 	}
-	a#ga_logo {
+	#ga_logo {
 		position: relative;
 		left: auto;
 		float: right;
@@ -248,10 +248,12 @@
 		right: 0;
 		width: 50%;
 		margin: -2em -8% -1em 0;
-		width: calc(220px + (360 - 220) * (100vw - 320px) / (768 - 320));
+	}
+    .objectfit #ga_logo {
+        width: calc(220px + (360 - 220) * (100vw - 320px) / (768 - 320));
 		margin-right: calc(-35px - (60 - 35) * (100vw - 320px) / (768 - 320));
 		margin-top: calc(-40px + (60 - 35) * (100vw - 320px) / (768 - 320));
-	}
+    }
 	a#yag {
 		top: auto;
 		bottom: -.1em;
@@ -394,8 +396,13 @@
 		width: 5em;
 	}
 	#ga_logo {
-		width: 70%;
-		margin: -2em -12% -1em 0;
+		width: 80%;
+		margin: -3.6em -12% -1em 0;
+	}
+}
+@media only screen and (max-width: 320px) {
+    #ga_logo {
+		
 	}
 }
 /*https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet*/
