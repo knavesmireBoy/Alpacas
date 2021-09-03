@@ -35,13 +35,13 @@ https://github.com/philipwalton/flexbugs
 }
 
 */
+
 ul#list {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: -webkit-flex;
 	display: flex;
 }
-
 #controls {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -60,8 +60,8 @@ ul#list {
 }
 .extent {
 	-webkit-flex-wrap: wrap;
-	    -ms-flex-wrap: wrap;
-	        flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
 }
 .extent figure {
 	/*just use defaults*/
@@ -81,8 +81,8 @@ ul#list {
 	ms-flex: 1 1 48%;
 	-webkit-box-flex: 1;
 	-webkit-flex: 1 1 48%;
-	    -ms-flex: 1 1 48%;
-	        flex: 1 1 48%;
+	-ms-flex: 1 1 48%;
+	flex: 1 1 48%;
 	/* longhand
     -ms-flex-positive: 1;
     flex-grow: 1;
@@ -92,7 +92,6 @@ ul#list {
     flex-basis: 44%;
     border: solid 1px red;
     */
-    
 }
 .five figure {
 	-webkit-box-flex: 1 1 30%;
@@ -101,20 +100,22 @@ ul#list {
 	ms-flex: 1 1 30%;
 	-webkit-box-flex: 1;
 	-webkit-flex: 1 1 30%;
-	    -ms-flex: 1 1 30%;
-	        flex: 1 1 30%;
+	-ms-flex: 1 1 30%;
+	flex: 1 1 30%;
 }
 /*supports*/
 
 /*@supports (display: grid){ }*/
+
 /* false positive (-moz-column-gap: 20px) (-webkit-column-gap: 20px) or */
+
 @supports(column-gap: 20px) {
 	ul#thumbnails.gallery {
 		padding: .6em;
 		display: -ms-grid;
 		display: grid;
-		-ms-grid-columns: 1fr .6em 1fr .6em 1fr .6em 1fr .6em 1fr .6em .75fr;
-		grid-template-columns: repeat(5, 1fr) .75fr;
+		-ms-grid-columns: 1fr .6em 1fr .6em 1fr .6em 1fr .6em 1fr .6em .74fr;
+		grid-template-columns: repeat(5, 1fr) .74fr;
 		grid-gap: .6em;
 	}
 	main ul#thumbnails.gallery li {
@@ -161,13 +162,15 @@ ul#list {
 		width: auto;
 	}
 }
-
 @media only screen and (max-width: 767px) {
 	@supports(column-gap: 20px) {
 		ul#thumbnails.gallery {
 			-ms-grid-columns: (1fr)[5] .75fr;
 			grid-template-columns: repeat(5, 1fr) .75fr;
 		}
+	}
+	header h2 {
+		z-index: 1;
 	}
 }
 @media only screen and (max-width: 667px) {
@@ -200,9 +203,8 @@ ul#list {
 		#sell.tog a {
 			margin: 0%;
 		}
-    }
-    
-    @supports(column-gap: 20px) {
+	}
+	@supports(column-gap: 20px) {
 		/*reset to override inline-block scenario*/
 		#sell figure {
 			width: auto;
@@ -384,24 +386,56 @@ ul#list {
 		.extent figure {
 			margin: 0;
 		}
-	
-	.six .extent {
-		display: -ms-grid;
-		display: grid;
-		-ms-grid-columns: 1fr .5em 1fr .5em 1fr;
-		grid-template-columns: repeat(3, 1fr);
-		grid-auto-rows: auto;
-		grid-gap: .5em;
-		margin: 0;
+		.six .extent {
+			display: -ms-grid;
+			display: grid;
+			-ms-grid-columns: 1fr .5em 1fr .5em 1fr;
+			grid-template-columns: repeat(3, 1fr);
+			grid-auto-rows: auto;
+			grid-gap: .5em;
+			margin: 0;
+		}
 	}
-}/*grid*/
-}/*667*/
+	/*grid*/
+}
+/*667*/
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
-	@supports ((display: -ms-grid) or (display: grid)) {
+	@supports(column-gap: 20px) {
 		ul#thumbnails.gallery li {
 			width: auto;
 			margin: 0px;
+		}
+	}
+}
+@media only screen and (min-width: 768px) {
+	@supports(column-gap: 20px) {
+		header {
+			display: grid;
+			grid-template-columns: repeat(35, 1fr);
+			grid-template-rows: repeat(9, 2.2em);
+			padding: 0;
+		}
+		header>a:link {
+			position: relative;
+			width: 100%;
+		}
+		header h2 {
+			grid-column: 11 / 36;
+			grid-row: 8 / 10;
+			margin: 0;
+		}
+		a#yag {
+			grid-column: 30 / 36;
+			grid-row: 1 / 7;
+			position: relative;
+			width: 100%;
+			margin: 0;
+		}
+		a#ga_logo {
+			grid-column: 1 / 11;
+			grid-row: 1 / 8;
+			margin: 0;
 		}
 	}
 }

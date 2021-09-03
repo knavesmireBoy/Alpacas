@@ -54,14 +54,14 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		padding: .67%;
 	}
 	ul#thumbnails.gallery li {
-		width: 17.35%;
+		width: 17.31%;
 	}
 	ul#thumbnails.gallery li, ul#thumbnails.gallery li a {
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
 	}
 	ul#thumbnails.gallery li.portrait {
-		width: 13.725%;
+		width: 13.2%;
 	}
 	.no-textshadow button#exit {
 		color: hsla(75, 50%, 40%, 1);

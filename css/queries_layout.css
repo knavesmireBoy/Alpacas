@@ -244,6 +244,7 @@
 		position: relative;
 		left: auto;
 		float: right;
+        clear: both;
 		display: block;
 		right: 0;
 		width: 50%;
