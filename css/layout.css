@@ -16,7 +16,7 @@ header {
 nav {
 	width: 23%;
 	min-width: 18%;
-	z-index: 1;
+	z-index: 2;
 	margin-left: 1.5em;
 	float: left;
 }
@@ -107,7 +107,6 @@ header a h1 {
 	white-space: nowrap;
 	width: 100%;
 	text-indent: -999px;
-    line-height: 1;
 }
 
 header a h1 img {

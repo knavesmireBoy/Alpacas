@@ -300,6 +300,7 @@ gAlp.Util = (function () {
 			var f = _.partial(thunk, alternate(0, j));
 			return function () {
 				return gAlp.Util.getBest(f, [_.partial.apply(null, construct(actions[0], arguments)), _.partial.apply(null, construct(actions[1], arguments))])();
+				//return gAlp.Util.getBest(f, [gAlp.Util.shout('alert', 9), gAlp.Util.shout('prompt', construct(actions[0], arguments))])();
 			};
 		};
 	}
@@ -839,13 +840,15 @@ gAlp.Util = (function () {
 					},
 					preventers: {
 						preventDefault: function (e) {
-							e.preventDefault();
+							e && e.preventDefault();
 						},
 						stopPropagation: function (e) {
-							e.stopPropagation();
+							e && e.stopPropagation();
 						},
 						stopImmediatePropagation: function (e) {
-							e.stopImmediatePropagation();
+                            if(e && e.stopImmediatePropagation){
+                               e.stopImmediatePropagation();
+                            }
 						}
 					}
 				};

@@ -40,7 +40,7 @@ table tbody {
 }
 
 .sell {
-	font: bold 0.85em Georgia, Palatino, serif;
+	font-family: Georgia, Palatino, serif;
 }
 
 figure:hover {

@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q2, q3, navtabs) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q411, q375, q320, navtabs) {
 	"use strict";
 
 	function noOp() {}
@@ -285,6 +285,9 @@ if (!window.gAlp) {
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
 		reporter = PTL(utils.findByTag(0), 'h2', document),
+        altWidths = [ALWAYS([[['width', '1024px']]]), ALWAYS([[['width', '600px']]])],
+        simMaxWidth = gAlp.Util.doAlternate()(altWidths),
+        doWrap = function () {},
 		makeDisplayer = function (klas) {
 			return {
 				show: _.partial(klasAdd, klas),
@@ -338,7 +341,8 @@ if (!window.gAlp) {
 		},
 		getEnvironment = (function () {
 			if (mq) {
-				return _.partial(Modernizr.mq, query);
+				//return _.partial(Modernizr.mq, query);
+				return isDesktop;
 			} else {
 				return isDesktop;
 			}
@@ -401,7 +405,16 @@ if (!window.gAlp) {
 					4: '(max-width: 1060px)'
 				},
 				j = utils.findByClass('loop') ? 0 : 1,
-				action = Modernizr.mq(q2) ? 'exec' : 'undo',
+                isLess = function (n) {
+                    return window.viewportSize.getWidth() < n;
+                },
+                getThreshold = function (query) {
+                    return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
+                },
+                doCheck = COMP(isLess, getThreshold),
+                tgt = j ? q375 : q468,
+				///action = Modernizr.mq(tgt) ? 'exec' : 'undo',
+				action = doCheck(tgt) ? 'exec' : 'undo',
 				//TEMP(?) FIX to missing id of list on UL
 				//list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
 				list = utils.$('list'),
@@ -421,13 +434,13 @@ if (!window.gAlp) {
 				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
                 and we'll elect to go with this on the Alpaca name as otherwise we would need to run abbreviateTabs every time we advance which means setting a fresh array of Ab instances each time and setting split preferences. As it stands we only abbreviate on load or resize
 				*/
-				navtabs[0].split = Modernizr.mq(q3) ? 0 : undefined;
+				navtabs[0].split = doCheck(q411) ? 0 : undefined;
 				navtabs[1].split = undefined; //ie isNaN so no splitting
-				navtabs[2].split = Modernizr.mq(q2) ? 0 : undefined;
+				navtabs[2].split = doCheck(q468) ? 0 : undefined;
 			} else {
 				if (splitters[alp_len]) {
-					split = Modernizr.mq(splitters[alp_len]) ? 1 : split;
-					action = Modernizr.mq(splitters[alp_len]) ? 'exec' : 'undo';
+					split = doCheck(splitters[alp_len]) ? 1 : split;
+					action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
 				}
 				navtabs = _.map(navtabs, function (o) {
 					o.split = split;
@@ -646,6 +659,7 @@ if (!window.gAlp) {
 				}, utils.$('sell')),
 				negate = function (cb) { /////////////
 					if (!getEnvironment()) {
+                        doWrap();
 						getEnvironment = _.negate(getEnvironment);
 						if (is4()) {
 							cb(); //will only run in sell AND NOT extent mode
@@ -690,7 +704,7 @@ if (!window.gAlp) {
 			w = box.width || box.right - box.left,
 			home = 'url(assets/header_ipad.png)',
 			other = 'url(../assets/header_ipad.png)',
-			swap = utils.$('home') ? home : other;
+			swap = utils.$('welcome') ? home : other;
 		if (w > 960) {
 			utils.doMap(el, [
 				[
@@ -699,7 +713,11 @@ if (!window.gAlp) {
 			]);
 		}
 	}());
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 375px)', '(max-width: 320px)', [], []));
+    if (alp_len && !Modernizr.inlinesvg && !Modernizr.touchevents) {
+        //doWrap = COMP(PTL(utils.doMap, utils.$('wrap')), simMaxWidth);
+        doWrap();
+    }
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)', '(max-width: 320px)', []));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
 */

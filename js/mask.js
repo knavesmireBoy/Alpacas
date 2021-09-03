@@ -18,7 +18,7 @@ if (!window.gAlp) {
 	}
 
 	function isBig(n) {
-		return window.viewportSize.getWidth() > n;
+		return window.viewportSize.getWidth() >= n;
 	}
     
     
@@ -49,8 +49,8 @@ if (!window.gAlp) {
         getIndex = (function () {
 			if (mq) {
 				return function () {
-					//return Number(Modernizr.mq(query));
-                    return Modernizr.mq(query) ? 1 : 0
+                    return isBig(threshold) ? 1 : 0;
+                    //return Modernizr.mq(query) ? 1 : 0
 				};
 			}
 			return function () {
@@ -70,7 +70,6 @@ if (!window.gAlp) {
 	
 		switchAction = function (collection, bool) {
 			var i = bool ? Number(!getIndex()) : getIndex();
-            //console.log(Number(!getIndex()));
 			return collection[i];
 		},
         
@@ -175,11 +174,12 @@ if (!window.gAlp) {
             w = box.width || box.right - box.left,
             home = 'url(assets/header_ipad.png)',
             other = 'url(../assets/header_ipad.png)',
-            swap = utils.$('home') ? home : other;
+            swap = utils.$('welcome') ? home : other;
         if (w > 960) {
             utils.doMap(el, [[['background-image', swap]]]);
         }
     }());
+    
                 
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), "(min-width: 769px)", Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
 //document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;

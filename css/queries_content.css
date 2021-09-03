@@ -11,12 +11,12 @@ http://cssmediaqueries.com/overview.html*/
 		padding-top: 22%;
         background: no-repeat center/cover url("../assets/header.png");
 	}
-    .flexbox header[style] {
+    .inlinesvg header[style] {
         background: no-repeat center/cover url("../assets/header.png") !important;
     }
     
     h2 {
-        font: italic 3.2em "Handwritten", Georgia, cursive;
+        font: italic 3.2em "Handwritten", Palatino, cursive;
     }
     /*
         nav a:hover, nav a:active {
@@ -40,16 +40,25 @@ http://cssmediaqueries.com/overview.html*/
 	#innerwrap nav {
 		font: 700 1em/2.3 Verdana, sans-serif;
 	}
-	
-	#wrap footer {
+	/*background size gives false positives in some browsers, using inlinesvg where support is slightly more recent*/
+	.inlinesvg #wrap footer {
+		background: url(../assets/grass.png) no-repeat 50% 0%;
+		background-size: 105%;
+	}
+	.inlinesvg #wrap footer ul {
+		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
+		background-size: 150%;
+	}
+    @supports (background-size: cover) {
+       #wrap footer {
 		background: url(../assets/grass.png) no-repeat 50% 0%;
 		background-size: 105%;
 	}
 	#wrap footer ul {
 		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
-		background-repeat: repeat-x;
 		background-size: 150%;
-	}
+	} 
+    }
     #innerwrap main p {
 		text-shadow: 1px 1px 2px white;
 	}

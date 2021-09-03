@@ -136,7 +136,6 @@
 	}
 }
 @media only screen {
-	
 	nav {
 		margin-left: 1em;
 	}
@@ -175,16 +174,19 @@
 		margin: 3.5%;
 	}
 	header {
-		display: table;
 		width: 100%;
-		padding-top: 14em;
+		padding-top: 0;
 		background: none;
+		overflow: hidden;
 	}
 	header>* {
-		display: table-cell;
 		vertical-align: bottom;
 		margin: 0px;
 		width: 100%;
+	}
+	header h2 {
+		float: left;
+		margin: 0;
 	}
 	main, nav {
 		width: 100%;
@@ -200,6 +202,9 @@
 		left: -999em;
 		top: 3em;
 		padding: 0;
+		display: block;
+		z-index: 3;
+		/*opera*/
 	}
 	.menu {
 		position: absolute;
@@ -207,6 +212,9 @@
 		left: 0%;
 		height: 3em;
 		width: 3em;
+		opacity: .99;
+		display: block;
+		z-index: 3;
 	}
 	.read-more-target {
 		margin-top: .7em;
@@ -232,10 +240,28 @@
 		min-width: 250px;
 		width: 100%;
 	}
+	a#ga_logo {
+		position: relative;
+		left: auto;
+		float: right;
+		display: block;
+		right: 0;
+		width: 50%;
+		margin: -2em -8% -1em 0;
+		width: calc(220px + (360 - 220) * (100vw - 320px) / (768 - 320));
+		margin-right: calc(-35px - (60 - 35) * (100vw - 320px) / (768 - 320));
+		margin-top: calc(-40px + (60 - 35) * (100vw - 320px) / (768 - 320));
+	}
 	a#yag {
 		top: auto;
 		bottom: -.1em;
 		width: 6em;
+	}
+	a#yag {
+		position: relative;
+		float: right;
+		bottom: 0;
+		margin-top: -4.75em;
 	}
 	#wrap footer {
 		padding-top: 0%;
@@ -255,15 +281,13 @@
 	.verbose #wrap p {
 		margin: 0 0 .7em;
 	}
-    .verbose #wrap footer {
+	.verbose #wrap footer {
 		margin-top: 1%;
 	}
-	
 	.verbose #wrap article.intro p {
 		margin: .7em 0;
 	}
-    
-    .js body.sell #innerwrap main aside {
+	.js body.sell #innerwrap main aside {
 		display: none;
 	}
 	article.intro p span:nth-of-type(1), #contact_us article p:nth-of-type(1) {
@@ -274,17 +298,17 @@
 	article.intro p span:nth-of-type(2), #contact_us article p:nth-of-type(2) {
 		-webkit-animation: entry 1.5s ease-out;
 		animation: entry 1.5s ease-out;
-        color: blue;
+		color: blue;
 	}
 	article.intro p span:nth-of-type(3), #contact_us article p:nth-of-type(3) {
 		-webkit-animation: entry 2.5s ease-out;
 		animation: entry 2.5s ease-out;
-        color: green;
+		color: green;
 	}
 	article.intro p span:nth-of-type(4), #contact_us article p:nth-of-type(4) {
 		-webkit-animation: entry 3s ease-in-out;
 		animation: entry 3s ease-in-out;
-        color: purple;
+		color: purple;
 	}
 	article.intro p span:nth-of-type(5), #contact_us article p:nth-of-type(5) {
 		-webkit-animation: entry 3.5s ease-in-out;
@@ -298,7 +322,7 @@
 		-webkit-animation: entry .5s ease-out;
 		animation: entry .5s ease-out;
 	}
-    /*
+	/*
 	#stud_services article p:nth-of-type(1) span:nth-of-type(2) {
 		-webkit-animation: entry 1s ease-out;
 		animation: entry 1s ease-out;
@@ -312,7 +336,7 @@
 		-webkit-animation: entry 2.5s ease-out;
 		animation: entry 2.5s ease-out;
 	}
-    /*
+	/*
 	#stud_services article p:nth-of-type(2) span:nth-of-type(2) {
 		-webkit-animation: entry 3s ease-out;
 		animation: entry 3s ease-out;
@@ -322,7 +346,7 @@
 		-webkit-animation: entry 3.5s ease-out;
 		animation: entry 3.5s ease-out;
 	}
-    /*
+	/*
 	#stud_services article p:nth-of-type(3) span:nth-of-type(2) {
 		-webkit-animation: entry 4s ease-out;
 		animation: entry 4s ease-out;
@@ -332,22 +356,30 @@
 		-webkit-animation: entry 6s ease-out;
 		animation: entry 6s ease-out;
 	}
-    /*override color for production*/
-    article.intro p:nth-of-type(n+1) span, #contact_us article p:nth-of-type(n+1) {
-        color: black;
-    }
+	/*override color for production*/
+	article.intro p:nth-of-type(n+1) span, #contact_us article p:nth-of-type(n+1) {
+		color: black;
+	}
 }
 /* mobile layout */
 
+@media only screen and (max-width: 568px) {
+	#ga_logo {
+		width: 60%;
+		margin: -2em -10% -1em 0;
+	}
+}
 @media only screen and (max-width: 480px) {
 	body {
 		font-size: 0.8em;
 	}
 	header {
 		padding-top: 11em;
+		padding-top: 0;
 	}
 	header h1 {
 		margin: -1.7em 0 0;
+		margin: 0;
 	}
 	footer li {
 		display: block;
@@ -361,7 +393,13 @@
 	a#yag {
 		width: 5em;
 	}
+	#ga_logo {
+		width: 70%;
+		margin: -2em -12% -1em 0;
+	}
 }
+/*https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet*/
+
 @media screen\0 {
 	header a {
 		top: -5%;
@@ -379,3 +417,4 @@
 .ellipsis.touchevents main .read-more-trigger {
 	display: none;
 }
+/*https://www.oliverboorman.biz/projects/css_test/*/

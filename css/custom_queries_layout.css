@@ -16,11 +16,18 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	figcaption {
 		font: normal 1.4em/1 "Handwritten", Georgia, Palatino, serif;
 	}
-	#controls button {
+	.inlinesvg #controls button {
 		background-image: url(../assets/buttons_sprite.png);
 		background-color: hsla(75, 50%, 40%, .3);
 		background-size: 128%;
 	}
+    @supports (background-size: cover) {
+        #controls button {
+		background-image: url(../assets/buttons_sprite.png);
+		background-color: hsla(75, 50%, 40%, .3);
+		background-size: 128%;
+        }
+    }
 	button#exit {
 		color: hsla(75, 50%, 40%, .5);
 		padding: .2em .25em;

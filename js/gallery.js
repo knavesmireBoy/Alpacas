@@ -548,7 +548,7 @@
             w = box.width || box.right - box.left,
             home = 'url(assets/header_ipad.png)',
             other = 'url(../assets/header_ipad.png)',
-            swap = utils.$('home') ? home : other;
+            swap = utils.$('welcome') ? home : other;
         if (w > 960) {
             utils.doMap(el, [[['background-image', swap]]]);
         }
