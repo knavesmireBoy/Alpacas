@@ -276,7 +276,8 @@ gAlp.Looper = function () {
 			return this.set(_.findIndex(this.group.members, _.partial(equals, tgt)));
 		},
         forward: function (flag) {
-			if (!flag && this.rev) {
+            /*restore on forward || shift to reverse*/
+			if ((!flag && this.rev) || (flag && !this.rev)){
 				return this.back(true);
 			}
 			this.position = this.advance(this.position);
