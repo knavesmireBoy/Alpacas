@@ -335,7 +335,7 @@ li#slide, li#paused {
 	margin-left: 0;
 }
 #controls.static {
-	top: -3.33em;
+	top: -3em;
 	opacity: 1;
 }
 .js #exit {
