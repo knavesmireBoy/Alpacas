@@ -34,8 +34,8 @@ gAlp.Util = (function () {
 		this.cbs = _.compose.apply(null, args);
 	}
 	FauxPromise.prototype.then = function () {
-		return this.cbs.apply(null, []);
-		//return this.cbs.apply(null, arguments);
+		//return this.cbs.apply(null, []);
+		return this.cbs.apply(null, arguments);
 	};
 
 	function doOnce() {

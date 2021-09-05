@@ -223,7 +223,7 @@ gAlp.Looper = function () {
 	gAlp.LoopIterator = function (group, advancer) {
 		this.group = group;
 		this.position = 0;
-		this.rev = false;
+		this.rev;
 		this.advance = advancer;
 	};
 	gAlp.Group = function () {
@@ -277,7 +277,7 @@ gAlp.Looper = function () {
 		},
         forward: function (flag) {
             /*restore on forward || shift to reverse*/
-			if ((!flag && this.rev) || (flag && !this.rev)){
+			if ((!flag && this.rev) || (flag && (this.rev === false))){
 				return this.back(true);
 			}
 			this.position = this.advance(this.position);
@@ -316,6 +316,7 @@ gAlp.Looper = function () {
 			return this.$subject;
         },
         build: function (coll, advancer) {
+            //console.log(coll);
             this.setSubject(gAlp.LoopIterator.from(coll, advancer(coll)));
         }
     },
@@ -323,6 +324,5 @@ gAlp.Looper = function () {
 		doGet = twice(gAlp.Util.getter),
 		getLength = doGet('length'),
 		incrementer = _.compose(doInc, getLength);
-	
-	return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'status', 'find', 'forward', 'get', 'play', 'set',  'visit']);
+    return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'status', 'find', 'forward', 'get', 'play', 'set',  'visit']);
 };

@@ -228,12 +228,18 @@
 		swapping = ptL(utils.findByClass, 'swap'),
 		exitshowtime = doComp(ptL(klasAdd, 'gallery', getThumbs), exitswap, ptL(klasRem, 'showtime', utils.getBody()), exit_inplay, unplayin),
 		in_play = thricedefer(doMethod)('findByClass')('inplay')(utils),
-		nextcaller = twicedefer(getValue)('forward')(),
+        nextcaller = twicedefer(getValue)('forward')(),
 		prevcaller = twicedefer(getValue)('back')(),
 		incrementer = doComp(doInc, getLength),
         do_page_iterator = function (coll) {
 			if (coll && typeof coll.length !== 'undefined') {
-				$looper.build(_.map(coll, getSRC), incrementer);
+                if(coll[0].src){
+                    $looper.build(_.pluck(coll, 'src'), incrementer);
+                }
+                else {
+                  $looper.build(coll, incrementer);  
+                }
+                
 			}
 		},
         setindex = function (arg) {
@@ -281,28 +287,41 @@
 			};
 		},
 		///slideshow..., must run to determine start index for EITHER collection
+        
+        
 		get_play_iterator = function (flag) {
 			var coll,
-                filter = function (coll, pred1) {
-                   var tmp = _.reject(coll, pred1),
-                        arr = _.filter(coll, pred1);
-                    return arr.concat(tmp);
+                map_from_static = function (coll, sources){
+                    return _.map(sources, function(source, i){
+                        return _.reduce(coll, function(champ, contender){
+                            return (contender.src === source) ? contender : champ;
+                        });
+                    });              
+                },
+                re_order = function(coll){
+                    coll = utils.shuffleArray(map_from_static(coll, $looper.get('members')))(index);
+                    coll = _.toArray(_.groupBy(coll, 'height'));
+                    coll = i ? coll[1].concat(coll[0]) : coll[0].concat(coll[1]);
                 },
 				index = $looper.get('index'),
-                //lscp, portrait
-				outcomes = [_.negate(queryOrientation), queryOrientation],
+                //obtain Dom collection
 				provisional = _.map(_.filter(_.map(getAllPics(), getLI), function (li) {
 					return !li.id;
 				}), getDomTargetImg),
-				i = outcomes[0](provisional[index]) ? 0 : 1,
+				i = queryOrientation(provisional[index]) ? 1 : 0,
 				m = 'undo';
 			if (flag) {
 				m = 'execute';
-				//re-order
-				coll = utils.shuffleArray(provisional)(index);
-				//split and join again
-				coll = i ? filter(coll, outcomes[1]) : filter(coll, outcomes[0]);
-                console.log(coll[0])
+				/*a)map current running order (reversed or standard) of collection of image sources to img objects
+                in order to determine orientation
+                b) re-order from current index
+                c) groupBy lscp/ptrt*/
+                //coll = re_order(provisional);
+                
+				coll = utils.shuffleArray(map_from_static(provisional, $looper.get('members')))(index);
+                coll = _.toArray(_.groupBy(coll, 'height'));
+				coll = i ? coll[1].concat(coll[0]) : coll[0].concat(coll[1]);
+                
 				$slide_swapper.set(slide_player_factory());
 			} else {
 				//sends original dom-ordered collection when exiting slideshow
@@ -402,12 +421,14 @@
                         /*returns true if undefined, false if null which it will be as a result of pausing
                         ensures we only get a fresh collection when initiating a slideshow*/
                         if (isNaN($recur.t)) {
+                            //console.log('init')
                             get_play_iterator(true);
                         }
 						$controlbar.set(do_static_factory());
 					}
 					if (player.validate()) {
 						player.reset();
+                        //console.log('reset')
 					} else {
 						doOpacity();
 						doRecur();
