@@ -287,21 +287,14 @@
 			};
 		},
 		///slideshow..., must run to determine start index for EITHER collection
-        
-        
 		get_play_iterator = function (flag) {
 			var coll,
                 map_from_static = function (coll, sources){
-                    return _.map(sources, function(source, i){
+                    return _.map(sources, function(source){
                         return _.reduce(coll, function(champ, contender){
                             return (contender.src === source) ? contender : champ;
                         });
                     });              
-                },
-                re_order = function(coll){
-                    coll = utils.shuffleArray(map_from_static(coll, $looper.get('members')))(index);
-                    coll = _.toArray(_.groupBy(coll, 'height'));
-                    coll = i ? coll[1].concat(coll[0]) : coll[0].concat(coll[1]);
                 },
 				index = $looper.get('index'),
                 //obtain Dom collection
@@ -317,11 +310,9 @@
                 b) re-order from current index
                 c) groupBy lscp/ptrt*/
                 //coll = re_order(provisional);
-                
 				coll = utils.shuffleArray(map_from_static(provisional, $looper.get('members')))(index);
                 coll = _.toArray(_.groupBy(coll, 'height'));
 				coll = i ? coll[1].concat(coll[0]) : coll[0].concat(coll[1]);
-                
 				$slide_swapper.set(slide_player_factory());
 			} else {
 				//sends original dom-ordered collection when exiting slideshow

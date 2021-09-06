@@ -219,11 +219,10 @@ gAlp.Looper = function () {
 		_.each(methods, mapper);
 		return tgt;
 	}
-    
 	gAlp.LoopIterator = function (group, advancer) {
 		this.group = group;
 		this.position = 0;
-		this.rev;
+		this.rev = false;
 		this.advance = advancer;
 	};
 	gAlp.Group = function () {
@@ -262,8 +261,9 @@ gAlp.Looper = function () {
 	gAlp.LoopIterator.cross_page = null;
 	gAlp.LoopIterator.prototype = {
 		constructor: gAlp.LoopIterator,
+        /*if not in reverse mode, reverse or undo reverse BEFORE forwarding*/
 		back: function (flag) {
-			if (!this.rev || flag) {
+			if (!this.rev || (flag && _.isBoolean(flag))) {
 				this.group.members = this.group.members.reverse();
 				this.position = this.group.members.length - 2 - (this.position);
 				this.position = this.advance(this.position);
@@ -271,13 +271,12 @@ gAlp.Looper = function () {
 			}
 			return this.forward(this.rev);
 		},
-		
 		find: function (tgt) {
 			return this.set(_.findIndex(this.group.members, _.partial(equals, tgt)));
 		},
-        forward: function (flag) {
-            /*restore on forward || shift to reverse*/
-			if ((!flag && this.rev) || (flag && (this.rev === false))){
+		forward: function (flag) {
+			/*PLAY button sends flag and respects current mode we dont't really want a play method in this interface*/
+			if (!flag && this.rev) {
 				return this.back(true);
 			}
 			this.position = this.advance(this.position);
@@ -287,7 +286,7 @@ gAlp.Looper = function () {
 			m = m || 'value';
 			return this.status()[m];
 		},
-        set: function (pos) {
+		set: function (pos) {
 			if (!isNaN(parseFloat(pos)) && pos >= 0) {
 				this.position = pos;
 			}
@@ -296,7 +295,7 @@ gAlp.Looper = function () {
 				index: this.position
 			};
 		},
-        status: function () {
+		status: function () {
 			return {
 				members: this.group.members,
 				value: this.group.members[this.position],
@@ -307,22 +306,21 @@ gAlp.Looper = function () {
 			this.group.visit(cb);
 		}
 	};
-    
-    var target = {
-        setSubject: function (s) {
-			this.$subject = s;
-        },
-        getSubject: function () {
-			return this.$subject;
-        },
-        build: function (coll, advancer) {
-            //console.log(coll);
-            this.setSubject(gAlp.LoopIterator.from(coll, advancer(coll)));
-        }
-    },
-        twice = gAlp.Util.curryFactory(2),
+	var target = {
+			setSubject: function (s) {
+				this.$subject = s;
+			},
+			getSubject: function () {
+				return this.$subject;
+			},
+			build: function (coll, advancer) {
+				//console.log(coll);
+				this.setSubject(gAlp.LoopIterator.from(coll, advancer(coll)));
+			}
+		},
+		twice = gAlp.Util.curryFactory(2),
 		doGet = twice(gAlp.Util.getter),
 		getLength = doGet('length'),
 		incrementer = _.compose(doInc, getLength);
-    return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'status', 'find', 'forward', 'get', 'play', 'set',  'visit']);
+	return makeProxyIterator(gAlp.LoopIterator.from([], incrementer), target, ['back', 'status', 'find', 'forward', 'get', 'play', 'set', 'visit']);
 };
