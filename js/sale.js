@@ -295,6 +295,7 @@ if (!window.gAlp) {
 			};
 		},
 		makeAbbrv = function (tag, ancr, pred) {
+            console.log(tag, ancr, _.isFunction(pred))
 			var split_space = thrice(doMethod)('split')(' '),
 				Ab = function (el, i, j) {
 					this.el = el;
@@ -381,6 +382,7 @@ if (!window.gAlp) {
 			$displayer.show(getParent(tgt));
 			//$looper.visit(COMP(utils.hide, utils.getPrevious, utils.hide));
 			$looper.visit(doHide);
+            
 			COMP(_.bind($looper.set, $looper), getTabIndex(tgt))();
 			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.status, $looper))();
 		},
@@ -388,12 +390,14 @@ if (!window.gAlp) {
 		navBuilder = function (caption, i) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
-				doCurrent = PTL(utils.getBest, _.negate(ALWAYS(i)), [PTL(klasAdd, 'current'), _.identity]);
+                eq = PTL(equals, i, $looper.get('index')),
+				doCurrent = PTL(utils.getBest, eq, [PTL(klasAdd, 'current'), _.identity]);
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, makeUL)();
 			return getUL();
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
-		abbreviateTabs = function () {
+		abbreviateTabs = function (flag) {
+            console.log(flag)
 			//return;
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
@@ -422,6 +426,7 @@ if (!window.gAlp) {
 				factory,
 				split,
 				cb;
+            console.log('abbr', j)
 			if (!navtabs[0]) {
 				factory = makeAbbrv('a', $$('list'), PTL(utils.findByClass, 'tab'));
 				cb = function (el, i) {
@@ -436,6 +441,7 @@ if (!window.gAlp) {
 				*/
 				navtabs[0].split = doCheck(q411) ? 0 : undefined;
 				navtabs[1].split = undefined; //ie isNaN so no splitting
+				//navtabs[1].split = doCheck(q468); //ie isNaN so no splitting
 				navtabs[2].split = doCheck(q468) ? 0 : undefined;
 			} else {
 				if (splitters[alp_len]) {
@@ -647,7 +653,7 @@ if (!window.gAlp) {
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
 				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, /*abbreviateTabs, */invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
@@ -667,15 +673,17 @@ if (!window.gAlp) {
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 							navtabs = [];
 						}
+                      
 					}
+                    abbreviateTabs(true);
 					goSetCaptions();
-					abbreviateTabs();
+					
 				},
 				throttler = function (cb) {
 					negate(noOp); //onload
 					var pred = deferEvery([_.negate(PTL(utils.findByClass, 'extent')), PTL(utils.findByClass, 'sell')])(getResult),
 						doCallback = PTL(utils.doWhen, pred, cb);
-					eventing('resize', [], _.throttle(_.partial(negate, doCallback), 66), window).execute(true);
+					eventing('resize', [], _.debounce(_.partial(negate, doCallback), 66), window).execute(true);
 				};
 			addULClass();
 			klasAdd([nth], intro);
