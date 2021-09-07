@@ -283,12 +283,12 @@ gAlp.Looper = function () {
 			return this.status();
 		},
 		get: function (m) {
-            console.log('get: ', m)
+           // console.log('get: ', m)
 			m = m || 'value';
 			return this.status()[m];
 		},
 		set: function (pos) {
-            console.log('set: ', pos)
+            //console.log('set: ', pos)
 			if (!isNaN(parseFloat(pos)) && pos >= 0) {
 				this.position = pos;
 			}

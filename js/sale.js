@@ -19,6 +19,11 @@ if (!window.gAlp) {
     function existy(x) {
 		return x != null;
 	}
+    
+    function assign(o, v) {
+        o = v;
+        return o;
+    }
 
 	function cat() {
 		var head = _.first(arguments);
@@ -285,8 +290,7 @@ if (!window.gAlp) {
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
 		reporter = PTL(utils.findByTag(0), 'h2', document),
-        altWidths = [ALWAYS([[['width', '1024px']]]), ALWAYS([[['width', '600px']]])],
-        simMaxWidth = gAlp.Util.doAlternate()(altWidths),
+        emptyTabs = twicedefer(assign)([])(navtabs),
         doWrap = function () {},
 		makeDisplayer = function (klas) {
 			return {
@@ -295,7 +299,6 @@ if (!window.gAlp) {
 			};
 		},
 		makeAbbrv = function (tag, ancr, pred) {
-            console.log(tag, ancr, _.isFunction(pred))
 			var split_space = thrice(doMethod)('split')(' '),
 				Ab = function (el, i, j) {
 					this.el = el;
@@ -387,76 +390,15 @@ if (!window.gAlp) {
 			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.status, $looper))();
 		},
 		tab_cb_bridge = PTL(COMP(delayExecute, delayNavListener), COMP(tab_cb, getTarget)),
-		navBuilder = function (caption, i) {
+		navBuilderCB = function (caption, i) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
                 eq = PTL(equals, i, $looper.get('index')),
-				doCurrent = PTL(utils.getBest, eq, [PTL(klasAdd, 'current'), _.identity]);
+				doCurrent = PTL(utils.getBest, eq, [PTL(klasAdd, 'current'), _.identity]);//tab mode requires this
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, makeUL)();
 			return getUL();
 		},
 		isLoop = doMethodDefer('findByClass')('loop')(utils),
-		abbreviateTabs = function (flag) {
-            console.log(flag)
-			//return;
-			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
-				return;
-			}
-			var finder = _.partial(utils.findByTag(0), 'ul', utils.findByTag(0)('main')),
-				splitters = {
-					2: '(max-width: 320px)',
-					3: '(max-width: 600px)',
-					4: '(max-width: 1060px)'
-				},
-				j = utils.findByClass('loop') ? 0 : 1,
-                isLess = function (n) {
-                    return window.viewportSize.getWidth() < n;
-                },
-                getThreshold = function (query) {
-                    return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
-                },
-                doCheck = COMP(isLess, getThreshold),
-                tgt = j ? q375 : q468,
-				///action = Modernizr.mq(tgt) ? 'exec' : 'undo',
-				action = doCheck(tgt) ? 'exec' : 'undo',
-				//TEMP(?) FIX to missing id of list on UL
-				//list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
-				list = utils.$('list'),
-				tabs = list.getElementsByTagName('a'),
-				factory,
-				split,
-				cb;
-            console.log('abbr', j)
-			if (!navtabs[0]) {
-				factory = makeAbbrv('a', $$('list'), PTL(utils.findByClass, 'tab'));
-				cb = function (el, i) {
-					return factory(el, i, j);
-				};
-				navtabs = _.map(tabs, cb);
-			}
-			if (j === 0) {
-				/*default is to set the abbreviation to first word (j === 0) in loop scenario
-				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
-                and we'll elect to go with this on the Alpaca name as otherwise we would need to run abbreviateTabs every time we advance which means setting a fresh array of Ab instances each time and setting split preferences. As it stands we only abbreviate on load or resize
-				*/
-				navtabs[0].split = doCheck(q411) ? 0 : undefined;
-				navtabs[1].split = undefined; //ie isNaN so no splitting
-				//navtabs[1].split = doCheck(q468); //ie isNaN so no splitting
-				navtabs[2].split = doCheck(q468) ? 0 : undefined;
-			} else {
-				if (splitters[alp_len]) {
-					split = doCheck(splitters[alp_len]) ? 1 : split;
-					action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
-				}
-				navtabs = _.map(navtabs, function (o) {
-					o.split = split;
-					return o;
-				});
-			}
-			_.each(navtabs, function (map, i) {
-				navtabs[i][action](tabs[i]);
-			});
-		},
 		doInc = function (n) {
 			return COMP(PTL(modulo, n), increment);
 		},
@@ -544,7 +486,6 @@ if (!window.gAlp) {
 				doColspan = PTL(setAttrs, {
 					colSpan: 2 //!!!!////camelCase!!!!
 				}),
-				doMap = twice(utils.doMap),
 				getPath = function (array) {
 					return array.slice(-1)[0][1];
 				},
@@ -604,18 +545,79 @@ if (!window.gAlp) {
 				}
 			}
 		},
+        	abbreviateTabs = function (flag) {
+			if (!utils.findByClass('sell') || utils.findByClass('extent') /*|| utils.doWhen(flag, isDesktop)*/) {
+                return;
+			}
+			var splitters = {
+					2: '(max-width: 320px)',
+					3: '(max-width: 600px)',
+					4: '(max-width: 1060px)'
+				},
+				j = utils.findByClass('loop') ? 0 : 1,
+                isLess = function (n) {
+                    return window.viewportSize.getWidth() < n;
+                },
+                getThreshold = function (query) {
+                    return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
+                },
+                doCheck = COMP(isLess, getThreshold),
+                tgt = j ? q375 : q468,
+				///action = Modernizr.mq(tgt) ? 'exec' : 'undo',
+				action = doCheck(tgt) ? 'exec' : 'undo',
+				//TEMP(?) FIX to missing id of list on UL
+				//list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
+				list = utils.$('list'),
+				tabs = list.getElementsByTagName('a'),
+				factory,
+				split,
+				cb;
+                console.log(navtabs)
+			if (typeof navtabs[0] === 'undefined') {
+				factory = makeAbbrv('a', $$('list'), PTL(utils.findByClass, 'tab'));
+				cb = function (el, i) {
+					return factory(el, i, j);
+				};
+				navtabs = _.map(tabs, cb);
+			}
+            else {
+                console.log(navtabs)
+            }
+			if (j === 0) {
+				/*default is to set the abbreviation to first word (j === 0) in loop scenario
+				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
+                and we'll elect to go with this on the Alpaca name as otherwise we would need to run abbreviateTabs every time we advance which means setting a fresh array of Ab instances each time and setting split preferences. As it stands we only abbreviate on load or resize
+				*/
+				navtabs[0].split = doCheck(q411) ? 0 : undefined;
+				navtabs[1].split = undefined; //ie isNaN so no splitting
+				//navtabs[1].split = doCheck(q468); //ie isNaN so no splitting
+				navtabs[2].split = doCheck(q468) ? 0 : undefined;
+			} else {
+				if (splitters[alp_len]) {
+					split = doCheck(splitters[alp_len]) ? 1 : split;
+					action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
+				}
+				navtabs = _.map(navtabs, function (o) {
+					o.split = split;
+					return o;
+				});
+			}
+			_.each(navtabs, function (map, i) {
+				navtabs[i][action](tabs[i]);
+			});
+		},
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
 			var deferMembers = deferEach($looper.get('members')),
 				makeCaptions = deferMembers(doCaption_cb),
 				bindCurrent = _.bind($looper.status, $looper),
-				makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(navBuilder)),
+				makeTabs = COMP(tab_cb_bridge, deferEach(true_captions)(navBuilderCB)),
 				doFind = _.bind($looper.find, $looper),
 				goGetValue = COMP(doGet('value'), bindCurrent),
 				goGetIndex = COMP(doGet('index'), bindCurrent),
 				prepLoopTabs = COMP(thrice(doMethod)('concat')('Next Alpaca'), thrice(lazyVal)('concat')(['Alpacas For Sale']), getterBridge, deferMap([COMP(goGetIndex, doFind), true_captions])(getResult)),
-				makeLoopTabs = deferEach(prepLoopTabs)(navBuilder),
+				makeLoopTabs = deferEach(prepLoopTabs)(navBuilderCB),
 				captionsORtabs = [
 					[gt4, makeCaptions],
 					[mob4, makeCaptions],
@@ -630,7 +632,8 @@ if (!window.gAlp) {
 				//UPDATE: BUT ul needs restoring on rturn to gallery mode(makeUL)
 				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), goSetCaptions, addULClass, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
-				loopevents = [COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext),
+                advance = COMP(utils.con, emptyTabs, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
+				loopevents = [advance,
 					restoreCaptions,
 					noOp,
 					noOp
@@ -653,7 +656,7 @@ if (!window.gAlp) {
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
 				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, /*abbreviateTabs, */invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
@@ -697,15 +700,7 @@ if (!window.gAlp) {
 		};
 	//gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 	factory();
-    /*
-    var ar = [],
-        tmp = COMP(doGet('innerHTML'), reporter),
-        doCat = COMP(twice(cat), PTL(invoke, tmp)),
-        exec = COMP(thrice(lazyVal)('push')(ar), doGet(0), thrice(doMethod)('split')(' '), tmp),
-        undo = COMP(utils.con, doCat, thricedefer(doMethod)('shift')(null)(ar));
-        exec();
-        undo();
-   */
+    
 	(function () {
 		var el = utils.findByTag(0)('header'),
 			box = el.getBoundingClientRect(),

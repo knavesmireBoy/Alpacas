@@ -219,7 +219,8 @@ gAlp.Util = (function () {
         return el;
     }
 
-	function setter(o, k, v) {
+	function setProperty(o, k, v) {
+       // console.log(arguments)
 		o = getResult(o);
 		if (o && !undef(o[k])) {
 			o[k] = v;
@@ -227,7 +228,7 @@ gAlp.Util = (function () {
 	}
 
 	function lazySet(v, o, k) {
-		return setter(o, k, v);
+		return setProperty(o, k, v);
 	}
 
 	function getter(o, p) {
@@ -238,7 +239,7 @@ gAlp.Util = (function () {
 	}
 
 	function setret(o, k, v) {
-		setter(o, k, v);
+		setProperty(o, k, v);
 		return o;
 	}
 
@@ -1264,7 +1265,7 @@ gAlp.Util = (function () {
 		setAnchor: setAnchor,
 		setAttributes: _.partial(setFromFactory(!window.addEventListener), always(true), 'setAttribute'),
 		setText: curry3(setAdapter)('innerHTML'),
-		setter: setter,
+		setter: setProperty,
 		shout: function (m) {
 			var slice = Array.prototype.slice,
 				applier = function (f, args) {

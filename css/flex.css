@@ -187,7 +187,7 @@ ul#list {
 			/* NEW, Spec - Opera 12.1, Firefox 20+ */
 		}
 		#sell table {
-			table-layout: fixed;
+			/*table-layout: fixed;*/
 		}
 		div#sell>a {
 			/*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
