@@ -20,8 +20,8 @@ if (!window.gAlp) {
 		return x != null;
 	}
     
-    function assign(o, v) {
-        o = v;
+    function assign(o, v, p) {
+        o[p] = v;
         return o;
     }
 
@@ -308,13 +308,12 @@ if (!window.gAlp) {
 					this.split = k;
 				},
 				undo = function () {
-                    
 					var byTag = utils.findByTag(this.index),
 						el = byTag(tag, ancr);
 					el.innerHTML = this.text || el.innerHTML;
 				},
 				exec = function (el) {
-                    console.log('exc')
+                    console.log('eeecxx')
 					if (!isNaN(this.split)) {
 						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
@@ -543,15 +542,26 @@ if (!window.gAlp) {
 				}
 			}
         },
-        $abbos = gAlp.Group.from([]),
+        $abbosManager = (function(coll){
+            var o = gAlp.Group.from(coll);
+            o.add = function(member, i){
+                i = isNaN(i) ? this.members.length : i;
+                this.members.splice(i, 0, member);
+            };
+            o.remove = function(i){
+                this.members.splice(i, 1);
+            };
+            o.get = function(i){
+                return isNaN(i) ? this.members : this.members[i];
+            };
+            return o;
+        }([])),
         abbo_factory = function(j){
             var tabs = utils.getByTag('a', utils.$('list')),
                 factory = makeAbbrv('a', $$('list')),
                 cb = function (el, i) {
-                    //var $abbo = utils.makeContext();
-                    //$abbos.add($abbo.init(factory(el, i, j)));
-                    //return $abbo;
-					return factory(el, i, j);
+                    $abbosManager.add(factory(el, i, j));
+					return $abbosManager.get(i);
 				};
                 return _.map(tabs, cb);
         },
@@ -567,6 +577,8 @@ if (!window.gAlp) {
                 query = isTab() ? q468 : q375,
 				action = doCheck(query) ? 'execute' : 'undo',
                 mytabs,
+                doSplit = thrice(assign)('split'),
+                perform = thrice(doMethod),
                 split,
                 splitters = {
                             2: '(max-width: 320px)',
@@ -577,21 +589,35 @@ if (!window.gAlp) {
                 if (splitters[alp_len]) {
                     split = doCheck(splitters[alp_len]) ? 1 : split;
                     action = doCheck(splitters[alp_len]) ? 'execute' : 'undo';
+                    perform = perform(action)(null);
                 }
+                $abbosManager.visit(doSplit(split));
+                /*
                 mytabs = _.map(abbos, function (abbo, i) {
                     abbo.split = split;
                     return abbo;
                 });
+                */
+                
             }            
             else {
+                /*
                 mytabs = abbos || abbo_factory(0);//tabs supplied on load/resize, not on advance
                 mytabs[0].split = doCheck(q411) ? 0 : undefined;
 				mytabs[1].split = undefined; //ie isNaN so no splitting
 				mytabs[2].split = doCheck(q468) ? 0 : undefined;
+                */
             }
+            
+            //console.log($abbosManager.get())
+            $abbosManager.visit(perform);
+            
+            
+            /*
             _.each(mytabs, function (map, i) {
                 mytabs[i][action](tabs[i]);
             });
+            */
         },
         abbreviateTabs = function (pred, coll) {
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
@@ -602,10 +628,9 @@ if (!window.gAlp) {
             }
         },
         abTabsLoad = function(i){
-            console.log('load')
            var pred = PTL(utils.findByClass, 'tab'),
-               coll = pred() ? abbo_factory(1) : null;
-               //coll = (pred() && i > 0) ? abbo_factory(1) : null;
+               //coll = pred() ? abbo_factory(1) : null;
+               coll = (pred() && i > 0) ? abbo_factory(1) : $abbosManager.get();
                abbreviateTabs(pred, coll); 
         },
         abTabsEnter = function(/*listener object*/){
