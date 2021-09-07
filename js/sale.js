@@ -568,7 +568,6 @@ if (!window.gAlp) {
                             3: '(max-width: 600px)',
                             4: '(max-width: 1060px)'
                         };
-            console.log(tabs)
             if(isTab()) {
                 if (splitters[alp_len]) {
                     split = doCheck(splitters[alp_len]) ? 1 : split;
@@ -590,8 +589,6 @@ if (!window.gAlp) {
             });
         },
         abbreviateTabs = function (pred, coll) {
-                                        console.log(arguments)
-
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
                 return;
 			}
@@ -605,7 +602,7 @@ if (!window.gAlp) {
                abbreviateTabs(pred, coll); 
         },
         abTabsEnter = function(/*listener object*/){
-               abbreviateTabs(ALWAYS(false), abbo_factory(0)); 
+            abbreviateTabs(ALWAYS(false), abbo_factory(0)); 
         },
         abTabsAdvance = function(){
             abbreviateTabs(PTL(utils.findByClass, 'tab'));
