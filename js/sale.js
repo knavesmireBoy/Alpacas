@@ -290,7 +290,6 @@ if (!window.gAlp) {
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
 		reporter = PTL(utils.findByTag(0), 'h2', document),
-        emptyTabs = twicedefer(assign)([])(navtabs),
         doWrap = function () {},
 		makeDisplayer = function (klas) {
 			return {
