@@ -308,11 +308,13 @@ if (!window.gAlp) {
 					this.split = k;
 				},
 				undo = function () {
+                    
 					var byTag = utils.findByTag(this.index),
 						el = byTag(tag, ancr);
 					el.innerHTML = this.text || el.innerHTML;
 				},
 				exec = function (el) {
+                    console.log('exc')
 					if (!isNaN(this.split)) {
 						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
@@ -321,13 +323,13 @@ if (!window.gAlp) {
             
             if(alp_len > 1){
                 Ab.prototype = {
-					exec: exec,
+					execute: exec,
 					undo: undo
 				};
             }
             else {
                 Ab.prototype = {
-                    exec: noOp,
+                    execute: noOp,
                     undo: noOp
                 };
             }
@@ -541,11 +543,14 @@ if (!window.gAlp) {
 				}
 			}
         },
-        
+        $abbos = gAlp.Group.from([]),
         abbo_factory = function(j){
             var tabs = utils.getByTag('a', utils.$('list')),
                 factory = makeAbbrv('a', $$('list')),
-				cb = function (el, i) {
+                cb = function (el, i) {
+                    //var $abbo = utils.makeContext();
+                    //$abbos.add($abbo.init(factory(el, i, j)));
+                    //return $abbo;
 					return factory(el, i, j);
 				};
                 return _.map(tabs, cb);
@@ -560,7 +565,7 @@ if (!window.gAlp) {
                 doCheck = COMP(isLess, getThreshold),
                 tabs = utils.getByTag('a', utils.$('list')),
                 query = isTab() ? q468 : q375,
-				action = doCheck(query) ? 'exec' : 'undo',
+				action = doCheck(query) ? 'execute' : 'undo',
                 mytabs,
                 split,
                 splitters = {
@@ -571,9 +576,9 @@ if (!window.gAlp) {
             if(isTab()) {
                 if (splitters[alp_len]) {
                     split = doCheck(splitters[alp_len]) ? 1 : split;
-                    action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
+                    action = doCheck(splitters[alp_len]) ? 'execute' : 'undo';
                 }
-                mytabs = _.map(abbos, function (abbo) {
+                mytabs = _.map(abbos, function (abbo, i) {
                     abbo.split = split;
                     return abbo;
                 });
@@ -596,9 +601,11 @@ if (!window.gAlp) {
                 abbo_driver(pred, coll);
             }
         },
-        abTabsLoad = function(){
+        abTabsLoad = function(i){
+            console.log('load')
            var pred = PTL(utils.findByClass, 'tab'),
                coll = pred() ? abbo_factory(1) : null;
+               //coll = (pred() && i > 0) ? abbo_factory(1) : null;
                abbreviateTabs(pred, coll); 
         },
         abTabsEnter = function(/*listener object*/){
@@ -667,6 +674,7 @@ if (!window.gAlp) {
 						$toggler.execute(true); //unshift to maintain nav as LAST listener
 					}
 				}, utils.$('sell')),
+                count = 1,
 				negate = function (cb) { /////////////
 					if (!getEnvironment()) {
                         doWrap();
@@ -679,7 +687,7 @@ if (!window.gAlp) {
 						}
                       
 					}
-                    abTabsLoad();
+                    abTabsLoad(count--);
 					goSetCaptions();
 					
 				},
