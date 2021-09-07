@@ -313,7 +313,6 @@ if (!window.gAlp) {
 					el.innerHTML = this.text || el.innerHTML;
 				},
 				exec = function (el) {
-                    console.log('eeecxx')
 					if (!isNaN(this.split)) {
 						el = el || this.el;
 						el.innerHTML = split_space(this.text)[this.split];
@@ -549,7 +548,7 @@ if (!window.gAlp) {
                 this.members.splice(i, 0, member);
             };
             o.remove = function(i){
-                this.members.splice(i, 1);
+                return this.members.splice(i, 1)[0];
             };
             o.get = function(i){
                 return isNaN(i) ? this.members : this.members[i];
@@ -573,10 +572,8 @@ if (!window.gAlp) {
                     return window.viewportSize.getWidth() < n;
                 },
                 doCheck = COMP(isLess, getThreshold),
-                tabs = utils.getByTag('a', utils.$('list')),
                 query = isTab() ? q468 : q375,
 				action = doCheck(query) ? 'execute' : 'undo',
-                mytabs,
                 doSplit = thrice(assign)('split'),
                 perform = thrice(doMethod),
                 split,
@@ -592,32 +589,14 @@ if (!window.gAlp) {
                     perform = perform(action)(null);
                 }
                 $abbosManager.visit(doSplit(split));
-                /*
-                mytabs = _.map(abbos, function (abbo, i) {
-                    abbo.split = split;
-                    return abbo;
-                });
-                */
-                
             }            
             else {
-                /*
-                mytabs = abbos || abbo_factory(0);//tabs supplied on load/resize, not on advance
-                mytabs[0].split = doCheck(q411) ? 0 : undefined;
-				mytabs[1].split = undefined; //ie isNaN so no splitting
-				mytabs[2].split = doCheck(q468) ? 0 : undefined;
-                */
+                $abbosManager.get(0).split = doCheck(q411) ? 0 : undefined;
+                $abbosManager.get(1).split = undefined;
+                $abbosManager.get(2).split = doCheck(q468) ? 0 : undefined;
+                perform = perform(action)(null);
             }
-            
-            //console.log($abbosManager.get())
             $abbosManager.visit(perform);
-            
-            
-            /*
-            _.each(mytabs, function (map, i) {
-                mytabs[i][action](tabs[i]);
-            });
-            */
         },
         abbreviateTabs = function (pred, coll) {
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
@@ -629,15 +608,21 @@ if (!window.gAlp) {
         },
         abTabsLoad = function(i){
            var pred = PTL(utils.findByClass, 'tab'),
-               //coll = pred() ? abbo_factory(1) : null;
                coll = (pred() && i > 0) ? abbo_factory(1) : $abbosManager.get();
                abbreviateTabs(pred, coll); 
         },
         abTabsEnter = function(/*listener object*/){
-            abbreviateTabs(ALWAYS(false), abbo_factory(0)); 
+            var coll = $abbosManager.get();
+            coll =  _.isEmpty(coll) ? abbo_factory(0) : coll;
+            abbreviateTabs(ALWAYS(false), coll); 
         },
         abTabsAdvance = function(){
-            abbreviateTabs(PTL(utils.findByClass, 'tab'));
+            $abbosManager.remove(1);
+            abbo_factory(0);
+            $abbosManager.remove(2);
+            $abbosManager.remove(3);
+            $abbosManager.add($abbosManager.remove(2), 1);
+            abbreviateTabs(PTL(utils.findByClass, 'tab'), $abbosManager.get());
         },
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
