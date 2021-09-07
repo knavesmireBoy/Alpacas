@@ -298,13 +298,14 @@ if (!window.gAlp) {
 				hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
 			};
 		},
-		makeAbbrv = function (tag, ancr, pred) {
-			var split_space = thrice(doMethod)('split')(' '),
-				Ab = function (el, i, j) {
+		makeAbbrv = function (tag, ancr, j) {
+            var split_space = thrice(doMethod)('split')(' '),
+                noOp = function(){},
+				Ab = function (el, i, k) {
 					this.el = el;
-					this.text = el.innerHTML;
+					this.text = el && el.innerHTML;
 					this.index = i;
-					this.split = j;
+					this.split = k;
 				},
 				undo = function () {
 					var byTag = utils.findByTag(this.index),
@@ -317,28 +318,23 @@ if (!window.gAlp) {
 						el.innerHTML = split_space(this.text)[this.split];
 					}
 				};
-			if (_.isFunction(pred)) {
-				Ab.prototype = {
+            
+            if(alp_len > 1){
+                Ab.prototype = {
 					exec: exec,
 					undo: undo
 				};
-			} else {
-				Ab.prototype = {
-					exec: function (el) {
-						el = el || this.el;
-						el.innerHTML = this.text.abbreviate();
-					},
-					undo: undo
-				};
-			}
+            }
+            else {
+                Ab.prototype = {
+                    exec: noOp,
+                    undo: noOp
+                };
+            }
 			return function (el, i) {
-				var j;
-				if (_.isFunction(pred)) {
-					j = pred() ? 1 : 0;
-				}
 				return new Ab(el, i, j);
 			};
-		},
+        },
 		doHide = function (el) {
 			utils.hide(el);
 			utils.hide(utils.getPrevious(el));
@@ -544,8 +540,57 @@ if (!window.gAlp) {
 					preInvoke(zipUndo);
 				}
 			}
-		},
-        	abbreviateTabs = function (flag) {
+        },
+        
+        abbo_factory = function(j){
+            var tabs = utils.getByTag('a', utils.$('list')),
+                factory = makeAbbrv('a', $$('list')),
+				cb = function (el, i) {
+					return factory(el, i, j);
+				};
+                return _.map(tabs, cb);
+        },
+        abbo_driver = function(isTab){
+            var getThreshold = function (query) {
+                    return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
+                },
+                isLess = function (n) {
+                    return window.viewportSize.getWidth() < n;
+                },
+                doCheck = COMP(isLess, getThreshold),
+                tabs = utils.getByTag('a', utils.$('list')),
+                j = isTab() ? 1 : 0,
+                query = j ? q468 : q375,
+				action = doCheck(query) ? 'exec' : 'undo',
+                mytabs,
+                split,
+                splitters = {
+                            2: '(max-width: 320px)',
+                            3: '(max-width: 600px)',
+                            4: '(max-width: 1060px)'
+                        };
+            if(j) {
+                if (splitters[alp_len]) {
+                    split = doCheck(splitters[alp_len]) ? 1 : split;
+                    action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
+                }
+                mytabs = _.map(abbo_factory(j), function (abbo) {
+                    abbo.split = split;
+                    return abbo;
+                });
+            }            
+            else {
+                mytabs = abbo_factory();
+                mytabs[0].split = doCheck(q411) ? 0 : undefined;
+				mytabs[1].split = undefined; //ie isNaN so no splitting
+				mytabs[2].split = doCheck(q468) ? 0 : undefined;
+            }
+            _.each(mytabs, function (map, i) {
+                mytabs[i][action](tabs[i]);
+            });
+        },
+        
+        abbreviateTabs1 = function () {
 			if (!utils.findByClass('sell') || utils.findByClass('extent') /*|| utils.doWhen(flag, isDesktop)*/) {
                 return;
 			}
@@ -562,17 +607,13 @@ if (!window.gAlp) {
                     return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
                 },
                 doCheck = COMP(isLess, getThreshold),
-                tgt = j ? q375 : q468,
-				///action = Modernizr.mq(tgt) ? 'exec' : 'undo',
-				action = doCheck(tgt) ? 'exec' : 'undo',
-				//TEMP(?) FIX to missing id of list on UL
-				//list = utils.$('list') || COMP(doMap([['id', 'list']]), getUL)(),
+                query = j ? q375 : q468,
+				action = doCheck(query) ? 'exec' : 'undo',
 				list = utils.$('list'),
 				tabs = list.getElementsByTagName('a'),
 				factory,
 				split,
 				cb;
-                console.log(navtabs)
 			if (typeof navtabs[0] === 'undefined') {
 				factory = makeAbbrv('a', $$('list'), PTL(utils.findByClass, 'tab'));
 				cb = function (el, i) {
@@ -580,9 +621,6 @@ if (!window.gAlp) {
 				};
 				navtabs = _.map(tabs, cb);
 			}
-            else {
-                console.log(navtabs)
-            }
 			if (j === 0) {
 				/*default is to set the abbreviation to first word (j === 0) in loop scenario
 				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
@@ -606,6 +644,15 @@ if (!window.gAlp) {
 				navtabs[i][action](tabs[i]);
 			});
 		},
+        
+        abbreviateTabs = function () {
+			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
+                return;
+			}
+            else {
+                abbo_driver(PTL(utils.findByClass, 'tab'));
+            }
+        },
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
@@ -632,7 +679,7 @@ if (!window.gAlp) {
 				//UPDATE: BUT ul needs restoring on rturn to gallery mode(makeUL)
 				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), goSetCaptions, addULClass, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
-                advance = COMP(utils.con, emptyTabs, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
+                advance = COMP(abbreviateTabs, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
 				loopevents = [advance,
 					restoreCaptions,
 					noOp,
