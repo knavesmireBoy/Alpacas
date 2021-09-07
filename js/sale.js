@@ -550,7 +550,7 @@ if (!window.gAlp) {
 				};
                 return _.map(tabs, cb);
         },
-        abbo_driver = function(isTab){
+        abbo_driver = function(isTab, abbos){
             var getThreshold = function (query) {
                     return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
                 },
@@ -559,8 +559,7 @@ if (!window.gAlp) {
                 },
                 doCheck = COMP(isLess, getThreshold),
                 tabs = utils.getByTag('a', utils.$('list')),
-                j = isTab() ? 1 : 0,
-                query = j ? q468 : q375,
+                query = isTab() ? q468 : q375,
 				action = doCheck(query) ? 'exec' : 'undo',
                 mytabs,
                 split,
@@ -569,18 +568,19 @@ if (!window.gAlp) {
                             3: '(max-width: 600px)',
                             4: '(max-width: 1060px)'
                         };
-            if(j) {
+            console.log(tabs)
+            if(isTab()) {
                 if (splitters[alp_len]) {
                     split = doCheck(splitters[alp_len]) ? 1 : split;
                     action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
                 }
-                mytabs = _.map(abbo_factory(j), function (abbo) {
+                mytabs = _.map(abbos, function (abbo) {
                     abbo.split = split;
                     return abbo;
                 });
             }            
             else {
-                mytabs = abbo_factory();
+                mytabs = abbos || abbo_factory(0);//tabs supplied on load/resize, not on advance
                 mytabs[0].split = doCheck(q411) ? 0 : undefined;
 				mytabs[1].split = undefined; //ie isNaN so no splitting
 				mytabs[2].split = doCheck(q468) ? 0 : undefined;
@@ -589,69 +589,26 @@ if (!window.gAlp) {
                 mytabs[i][action](tabs[i]);
             });
         },
-        
-        abbreviateTabs1 = function () {
-			if (!utils.findByClass('sell') || utils.findByClass('extent') /*|| utils.doWhen(flag, isDesktop)*/) {
-                return;
-			}
-			var splitters = {
-					2: '(max-width: 320px)',
-					3: '(max-width: 600px)',
-					4: '(max-width: 1060px)'
-				},
-				j = utils.findByClass('loop') ? 0 : 1,
-                isLess = function (n) {
-                    return window.viewportSize.getWidth() < n;
-                },
-                getThreshold = function (query) {
-                    return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
-                },
-                doCheck = COMP(isLess, getThreshold),
-                query = j ? q375 : q468,
-				action = doCheck(query) ? 'exec' : 'undo',
-				list = utils.$('list'),
-				tabs = list.getElementsByTagName('a'),
-				factory,
-				split,
-				cb;
-			if (typeof navtabs[0] === 'undefined') {
-				factory = makeAbbrv('a', $$('list'), PTL(utils.findByClass, 'tab'));
-				cb = function (el, i) {
-					return factory(el, i, j);
-				};
-				navtabs = _.map(tabs, cb);
-			}
-			if (j === 0) {
-				/*default is to set the abbreviation to first word (j === 0) in loop scenario
-				where as alpaca name is the second (so j should be set to 1, setting to undefined does not perform abbreviation
-                and we'll elect to go with this on the Alpaca name as otherwise we would need to run abbreviateTabs every time we advance which means setting a fresh array of Ab instances each time and setting split preferences. As it stands we only abbreviate on load or resize
-				*/
-				navtabs[0].split = doCheck(q411) ? 0 : undefined;
-				navtabs[1].split = undefined; //ie isNaN so no splitting
-				//navtabs[1].split = doCheck(q468); //ie isNaN so no splitting
-				navtabs[2].split = doCheck(q468) ? 0 : undefined;
-			} else {
-				if (splitters[alp_len]) {
-					split = doCheck(splitters[alp_len]) ? 1 : split;
-					action = doCheck(splitters[alp_len]) ? 'exec' : 'undo';
-				}
-				navtabs = _.map(navtabs, function (o) {
-					o.split = split;
-					return o;
-				});
-			}
-			_.each(navtabs, function (map, i) {
-				navtabs[i][action](tabs[i]);
-			});
-		},
-        
-        abbreviateTabs = function () {
+        abbreviateTabs = function (pred, coll) {
+                                        console.log(arguments)
+
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
                 return;
 			}
             else {
-                abbo_driver(PTL(utils.findByClass, 'tab'));
+                abbo_driver(pred, coll);
             }
+        },
+        abTabsLoad = function(){
+           var pred = PTL(utils.findByClass, 'tab'),
+               coll = pred() ? abbo_factory(1) : null;
+               abbreviateTabs(pred, coll); 
+        },
+        abTabsEnter = function(/*listener object*/){
+               abbreviateTabs(ALWAYS(false), abbo_factory(0)); 
+        },
+        abTabsAdvance = function(){
+            abbreviateTabs(PTL(utils.findByClass, 'tab'));
         },
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
@@ -679,7 +636,7 @@ if (!window.gAlp) {
 				//UPDATE: BUT ul needs restoring on rturn to gallery mode(makeUL)
 				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), goSetCaptions, addULClass, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
-                advance = COMP(abbreviateTabs, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
+                advance = COMP(abTabsAdvance, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
 				loopevents = [advance,
 					restoreCaptions,
 					noOp,
@@ -703,7 +660,7 @@ if (!window.gAlp) {
 				setTabStrategy = thrice(lazyVal)('set')($tabcontext),
 				setTabContext = COMP(delayExecute, setTabStrategy, makeAlternator),
 				prepTabs = PTL(utils.getBest, reSyncCheck, [PTL(setTabContext, tabFirst), prep_loop_listener]),
-				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, abbreviateTabs, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
+				doDisplay = PTL(utils.invokeWhen, COMP(isIMG, node_from_target), COMP(ALWAYS($toggle), toolTipDefer, abTabsEnter, invoke, prepTabs, deferMembers(undoCaption_cb), remove_extent, find_onclick)),
 				$selector = eventing('click', event_actions.slice(0), function (e) {
 					var $toggler = doDisplay(e),
 						iCommand = gAlp.Intaface('Command', ['execute', 'undo']);
@@ -725,7 +682,7 @@ if (!window.gAlp) {
 						}
                       
 					}
-                    abbreviateTabs(true);
+                    abTabsLoad();
 					goSetCaptions();
 					
 				},
