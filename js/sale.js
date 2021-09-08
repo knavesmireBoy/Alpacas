@@ -571,7 +571,7 @@ if (!window.gAlp) {
                     return window.viewportSize.getWidth() < n;
                 },
                 doCheck = COMP(isLess, getThreshold),
-                query = isTab() ? q468 : q375,
+                query = isTab() ? q468 : q411,
 				action = doCheck(query) ? 'execute' : 'undo',
                 doSplit = thrice(assign)('split'),
                 perform = thrice(doMethod),
@@ -616,11 +616,11 @@ if (!window.gAlp) {
             abbreviateTabs(ALWAYS(false), coll); 
         },
         abTabsAdvance = function(){
-            $abbosManager.remove(1);
-            abbo_factory(0);
-            $abbosManager.remove(2);
-            $abbosManager.remove(3);
-            $abbosManager.add($abbosManager.remove(2), 1);
+            $abbosManager.remove(1);//remove middle tab: [Alpaca For Sale, Next Alpaca]
+            abbo_factory(0);//run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
+            $abbosManager.remove(2);//[Alpaca For Sale, Next Alpaca, Maria, Next]
+            $abbosManager.remove(3);//[Alpaca For Sale, Next Alpaca, Maria]
+            $abbosManager.add($abbosManager.remove(2), 1);//[Alpaca For Sale,  Maria, Next Alpaca,]
             abbreviateTabs(PTL(utils.findByClass, 'tab'), $abbosManager.get());
         },
 		factory = function () {
