@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q411, q375, q320, navtabs) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q411, q375, q320) {
 	"use strict";
 
 	function noOp() {}
@@ -547,7 +547,13 @@ if (!window.gAlp) {
                 this.members.splice(i, 0, member);
             };
             o.remove = function(i){
-                return this.members.splice(i, 1)[0];
+                if(isNaN(i)){
+                    this.members = [];
+                }
+                else {
+                    return this.members.splice(i, 1)[0];
+                }
+                
             };
             o.get = function(i){
                 return isNaN(i) ? this.members : this.members[i];
@@ -571,28 +577,29 @@ if (!window.gAlp) {
                     return window.viewportSize.getWidth() < n;
                 },
                 doCheck = COMP(isLess, getThreshold),
-                query = isTab() ? q468 : q411,
-				action = doCheck(query) ? 'execute' : 'undo',
+				action = doCheck(q468) ? 'execute' : 'undo',
                 doSplit = thrice(assign)('split'),
                 perform = thrice(doMethod),
                 split,
                 splitters = {
                             2: '(max-width: 320px)',
-                            3: '(max-width: 600px)',
-                            4: '(max-width: 1060px)'
+                            3: '(max-width: 600px)'/*,
+                            if this kicks in and we are coming from loop to tab the active $abbo collection will be loop
+                            so tab 1 will get set to Alpacas For Sale, tab3 to Next Alpaca, need a fix
+                            4: '(max-width: 1060px)'*/
                         };
             if(isTab()) {
                 if (splitters[alp_len]) {
                     split = doCheck(splitters[alp_len]) ? 1 : split;
                     action = doCheck(splitters[alp_len]) ? 'execute' : 'undo';
                     perform = perform(action)(null);
+                    $abbosManager.visit(doSplit(split));
                 }
-                $abbosManager.visit(doSplit(split));
             }            
             else {
-                $abbosManager.get(0).split = doCheck(q411) ? 0 : undefined;
+                $abbosManager.get(0).split = doCheck(q375) ? 0 : undefined;
                 $abbosManager.get(1).split = undefined;
-                $abbosManager.get(2).split = doCheck(q468) ? 0 : undefined;
+                $abbosManager.get(2).split = doCheck(q411) ? 0 : undefined;
                 perform = perform(action)(null);
             }
             $abbosManager.visit(perform);
@@ -692,9 +699,7 @@ if (!window.gAlp) {
 							cb(); //will only run in sell AND NOT extent mode
 							//set when going from desktop to mobile, so that if exiting into gallery mode, correct listener will be restored
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
-							navtabs = [];
 						}
-                      
 					}
                     abTabsLoad(count--);
 					goSetCaptions();
@@ -738,7 +743,7 @@ if (!window.gAlp) {
         //doWrap = COMP(PTL(utils.doMap, utils.$('wrap')), simMaxWidth);
         doWrap();
     }
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)', '(max-width: 320px)', []));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)', '(max-width: 320px)'));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
 */
