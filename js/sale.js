@@ -675,9 +675,8 @@ if (!window.gAlp) {
 						if (is4()) {
 							cb(); //will only run in sell AND NOT extent mode
 							//set when going from desktop to mobile, so that if exiting into gallery mode, correct listener will be restored
-							//doAltFactory();
-							$abbreviateManager.remove();
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
+                            $abbreviateManager.remove();
 						}
 					}
 					abTabsLoad();
