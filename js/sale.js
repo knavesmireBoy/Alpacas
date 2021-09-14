@@ -550,6 +550,7 @@ if (!window.gAlp) {
 				};
 			return _.map(tabs, cb);
 		},
+        count = 1,
 		abbreviate_driver = function (isTab) {
 			var getThreshold = function (query) {
 					return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
@@ -582,7 +583,7 @@ if (!window.gAlp) {
 			}
 			$abbreviateManager.visit(perform);
 		},
-		abbreviateTabs = function (pred, coll) {
+        abbreviateTabs = function (pred, coll) {
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
 			} else {
@@ -593,12 +594,11 @@ if (!window.gAlp) {
 			var pred = PTL(utils.findByClass, 'tab'),
 				coll = $abbreviateManager.get(),
 				i = pred() ? 1 : 0;
-			abbreviateTabs(pred, _.isEmpty(coll) ? abbreviate_factory(i) : coll);
+            abbreviateTabs(pred, _.isEmpty(coll) ? abbreviate_factory(i) : coll);
 		},
-		abTabsEnter = function () {
-			var coll = $abbreviateManager.get();
-			coll = _.isEmpty(coll) ? abbreviate_factory(0) : coll;
-			abbreviateTabs(ALWAYS(false), coll);
+        abTabsEnter = function () {
+			$abbreviateManager.remove();//forc new collection of tabs
+			abbreviateTabs(ALWAYS(false), abbreviate_factory(0));
 		},
 		abTabsAdvance = function () {
 			$abbreviateManager.remove(1); //remove middle tab: [Alpaca For Sale, Next Alpaca]
@@ -669,7 +669,6 @@ if (!window.gAlp) {
 					}
 				}, utils.$('sell')),
 				negate = function (cb) { /////////////
-					//revOnLoad(getEnvironment);
 					if (!getEnvironment()) {
 						getEnvironment = _.negate(getEnvironment);
 						if (is4()) {
@@ -715,10 +714,6 @@ if (!window.gAlp) {
 			]);
 		}
 	}());
-	if (alp_len && !Modernizr.inlinesvg && !Modernizr.touchevents) {
-		//doWrap = COMP(PTL(utils.doMap, utils.$('wrap')), simMaxWidth);
-		doWrap();
-	}
 }('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)'));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
