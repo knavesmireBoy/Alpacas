@@ -523,7 +523,7 @@ if (!window.gAlp) {
 				}
 			}
 		},
-		$abbosManager = (function (coll) {
+		$abbreviateManager = (function (coll) {
 			var o = gAlp.Group.from(coll);
 			o.add = function (member, i) {
 				i = isNaN(i) ? this.members.length : i;
@@ -541,16 +541,16 @@ if (!window.gAlp) {
 			};
 			return o;
 		}([])),
-		abbo_factory = function (j) {
+		abbreviate_factory = function (j) {
 			var tabs = utils.getByTag('a', utils.$('list')),
 				factory = makeAbbrv('a', $$('list')),
 				cb = function (el, i) {
-					$abbosManager.add(factory(el, i, j));
-					return $abbosManager.get(i);
+					$abbreviateManager.add(factory(el, i, j));
+					return $abbreviateManager.get(i);
 				};
 			return _.map(tabs, cb);
 		},
-		abbo_driver = function (isTab) {
+		abbreviate_driver = function (isTab) {
 			var getThreshold = function (query) {
 					return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
 				},
@@ -564,52 +564,49 @@ if (!window.gAlp) {
 				split,
 				splitters = {
 					2: '(max-width: 320px)',
-					3: '(max-width: 600px)'
-					/*,
-					                            if this kicks in and we are coming from loop to tab the active $abbo collection will be loop
-					                            so tab 1 will get set to Alpacas For Sale, tab3 to Next Alpaca, need a fix
-					                            4: '(max-width: 1060px)'*/
+					3: '(max-width: 600px)',
+                    4: '(max-width: 1060px)'
 				};
 			if (isTab()) {
 				if (splitters[alp_len]) {
 					split = doCheck(splitters[alp_len]) ? 1 : split;
 					action = doCheck(splitters[alp_len]) ? 'execute' : 'undo';
 					perform = perform(action)(null);
-					$abbosManager.visit(doSplit(split));
+					$abbreviateManager.visit(doSplit(split));
 				}
 			} else {
-				$abbosManager.get(0).split = doCheck(q375) ? 0 : undefined;
-				$abbosManager.get(1).split = undefined;
-				$abbosManager.get(2).split = doCheck(q411) ? 0 : undefined;
+				$abbreviateManager.get(0).split = doCheck(q375) ? 0 : undefined;
+				$abbreviateManager.get(1).split = undefined;
+				$abbreviateManager.get(2).split = doCheck(q411) ? 0 : undefined;
 				perform = perform(action)(null);
 			}
-			$abbosManager.visit(perform);
+			$abbreviateManager.visit(perform);
 		},
 		abbreviateTabs = function (pred, coll) {
 			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
 				return;
 			} else {
-				abbo_driver(pred, coll);
+				abbreviate_driver(pred, coll);
 			}
 		},
 		abTabsLoad = function () {
 			var pred = PTL(utils.findByClass, 'tab'),
-				coll = $abbosManager.get(),
+				coll = $abbreviateManager.get(),
 				i = pred() ? 1 : 0;
-			abbreviateTabs(pred, _.isEmpty(coll) ? abbo_factory(i) : coll);
+			abbreviateTabs(pred, _.isEmpty(coll) ? abbreviate_factory(i) : coll);
 		},
 		abTabsEnter = function () {
-			var coll = $abbosManager.get();
-			coll = _.isEmpty(coll) ? abbo_factory(0) : coll;
+			var coll = $abbreviateManager.get();
+			coll = _.isEmpty(coll) ? abbreviate_factory(0) : coll;
 			abbreviateTabs(ALWAYS(false), coll);
 		},
 		abTabsAdvance = function () {
-			$abbosManager.remove(1); //remove middle tab: [Alpaca For Sale, Next Alpaca]
-			abbo_factory(0); //run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
-			$abbosManager.remove(2); //[Alpaca For Sale, Next Alpaca, Maria, Next]
-			$abbosManager.remove(3); //[Alpaca For Sale, Next Alpaca, Maria]
-			$abbosManager.add($abbosManager.remove(2), 1); //[Alpaca For Sale,  Maria, Next Alpaca,]
-			abbreviateTabs(PTL(utils.findByClass, 'tab'), $abbosManager.get());
+			$abbreviateManager.remove(1); //remove middle tab: [Alpaca For Sale, Next Alpaca]
+			abbreviate_factory(0); //run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
+			$abbreviateManager.remove(2); //[Alpaca For Sale, Next Alpaca, Maria, Next]
+			$abbreviateManager.remove(3); //[Alpaca For Sale, Next Alpaca, Maria]
+			$abbreviateManager.add($abbreviateManager.remove(2), 1); //[Alpaca For Sale,  Maria, Next Alpaca,]
+			abbreviateTabs(PTL(utils.findByClass, 'tab'), $abbreviateManager.get());
 		},
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
@@ -679,7 +676,7 @@ if (!window.gAlp) {
 							cb(); //will only run in sell AND NOT extent mode
 							//set when going from desktop to mobile, so that if exiting into gallery mode, correct listener will be restored
 							//doAltFactory();
-							$abbosManager.remove();
+							$abbreviateManager.remove();
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 						}
 					}
