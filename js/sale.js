@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q411, q375, q320) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q411, q375) {
 	"use strict";
 
 	function noOp() {}
@@ -15,23 +15,10 @@ if (!window.gAlp) {
 	function getResult(arg) {
 		return _.isFunction(arg) ? arg() : arg;
 	}
-    
-    function existy(x) {
-		return x != null;
-	}
-    
-    function assign(o, v, p) {
-        o[p] = v;
-        return o;
-    }
 
-	function cat() {
-		var head = _.first(arguments);
-		if (existy(head)) {
-			return head.concat.apply(head, _.rest(arguments));
-		} else {
-			return [];
-		}
+	function assign(o, v, p) {
+		o[p] = v;
+		return o;
 	}
 
 	function makeAlternator(alts) {
@@ -264,7 +251,6 @@ if (!window.gAlp) {
 		deferEach = thricedefer(doCallbacks)('each'),
 		deferIndex = thricedefer(doCallbacks)('findIndex'),
 		deferEvery = thricedefer(doCallbacks)('every'),
-		delayEvery = thrice(doCallbacks)('every'),
 		delayExecute = thrice(doMethod)('execute')(null),
 		doGet = twice(utils.getter),
 		doMap = twice(utils.doMap),
@@ -289,8 +275,8 @@ if (!window.gAlp) {
 		delayNavListener = twice(PTL(eventing, 'click', []))($$('list')),
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
-		reporter = PTL(utils.findByTag(0), 'h2', document),
-        doWrap = function () {},
+		//reporter = PTL(utils.findByTag(0), 'h2', document),
+		doWrap = function () {},
 		makeDisplayer = function (klas) {
 			return {
 				show: _.partial(klasAdd, klas),
@@ -298,8 +284,8 @@ if (!window.gAlp) {
 			};
 		},
 		makeAbbrv = function (tag, ancr, j) {
-            var split_space = thrice(doMethod)('split')(' '),
-                noOp = function(){},
+			var split_space = thrice(doMethod)('split')(' '),
+				noOp = function () {},
 				Ab = function (el, i, k) {
 					this.el = el;
 					this.text = el && el.innerHTML;
@@ -317,23 +303,21 @@ if (!window.gAlp) {
 						el.innerHTML = split_space(this.text)[this.split];
 					}
 				};
-            
-            if(alp_len > 1){
-                Ab.prototype = {
+			if (alp_len > 1) {
+				Ab.prototype = {
 					execute: exec,
 					undo: undo
 				};
-            }
-            else {
-                Ab.prototype = {
-                    execute: noOp,
-                    undo: noOp
-                };
-            }
+			} else {
+				Ab.prototype = {
+					execute: noOp,
+					undo: noOp
+				};
+			}
 			return function (el, i) {
 				return new Ab(el, i, j);
 			};
-        },
+		},
 		doHide = function (el) {
 			utils.hide(el);
 			utils.hide(utils.getPrevious(el));
@@ -380,7 +364,6 @@ if (!window.gAlp) {
 			$displayer.show(getParent(tgt));
 			//$looper.visit(COMP(utils.hide, utils.getPrevious, utils.hide));
 			$looper.visit(doHide);
-            
 			COMP(_.bind($looper.set, $looper), getTabIndex(tgt))();
 			COMP(utils.show, utils.getPrevious, utils.show, doGet('value'), _.bind($looper.status, $looper))();
 		},
@@ -388,8 +371,8 @@ if (!window.gAlp) {
 		navBuilderCB = function (caption, i) {
 			var li = twice(invokeArg)('li'),
 				link = twice(invokeArg)('a'),
-                eq = PTL(equals, i, $looper.get('index')),
-				doCurrent = PTL(utils.getBest, eq, [PTL(klasAdd, 'current'), _.identity]);//tab mode requires this
+				eq = PTL(equals, i, $looper.get('index')),
+				doCurrent = PTL(utils.getBest, eq, [PTL(klasAdd, 'current'), _.identity]); //tab mode requires this
 			COMP(utils.setText(caption), link, anCr, doCurrent, li, anCr, makeUL)();
 			return getUL();
 		},
@@ -531,7 +514,7 @@ if (!window.gAlp) {
 					deferSubString = COMP(deferTextCB, deferCaptions(COMP(thrice(doMethod)('substring')(8), doGet('innerHTML')))),
 					zipSubString = COMP(preZip, deferSubString),
 					zipUndo = COMP(preZip, COMP(deferTextCB, deferCaptions(COMP(resetCaptions, doGet('innerHTML'))))),
-                    //a string is partially applied to utils.setText, then called with an element, we zip up the partial function and the final (element) argument
+					//a string is partially applied to utils.setText, then called with an element, we zip up the partial function and the final (element) argument
 					preInvoke = COMP(twice(_.each)(invokeBridge), invoke);
 				if (queryWidthExec()) {
 					preInvoke(zipSubString);
@@ -539,97 +522,95 @@ if (!window.gAlp) {
 					preInvoke(zipUndo);
 				}
 			}
-        },
-        $abbosManager = (function(coll){
-            var o = gAlp.Group.from(coll);
-            o.add = function(member, i){
-                i = isNaN(i) ? this.members.length : i;
-                this.members.splice(i, 0, member);
-            };
-            o.remove = function(i){
-                if(isNaN(i)){
-                    this.members = [];
-                }
-                else {
-                    return this.members.splice(i, 1)[0];
-                }
-                
-            };
-            o.get = function(i){
-                return isNaN(i) ? this.members : this.members[i];
-            };
-            return o;
-        }([])),
-        abbo_factory = function(j){
-            var tabs = utils.getByTag('a', utils.$('list')),
-                factory = makeAbbrv('a', $$('list')),
-                cb = function (el, i) {
-                    $abbosManager.add(factory(el, i, j));
+		},
+		$abbosManager = (function (coll) {
+			var o = gAlp.Group.from(coll);
+			o.add = function (member, i) {
+				i = isNaN(i) ? this.members.length : i;
+				this.members.splice(i, 0, member);
+			};
+			o.remove = function (i) {
+				if (isNaN(i)) {
+					this.members = [];
+				} else {
+					return this.members.splice(i, 1)[0];
+				}
+			};
+			o.get = function (i) {
+				return isNaN(i) ? this.members : this.members[i];
+			};
+			return o;
+		}([])),
+		abbo_factory = function (j) {
+			var tabs = utils.getByTag('a', utils.$('list')),
+				factory = makeAbbrv('a', $$('list')),
+				cb = function (el, i) {
+					$abbosManager.add(factory(el, i, j));
 					return $abbosManager.get(i);
 				};
-                return _.map(tabs, cb);
-        },
-        abbo_driver = function(isTab, abbos){
-            var getThreshold = function (query) {
-                    return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
-                },
-                isLess = function (n) {
-                    return window.viewportSize.getWidth() < n;
-                },
-                doCheck = COMP(isLess, getThreshold),
+			return _.map(tabs, cb);
+		},
+		abbo_driver = function (isTab) {
+			var getThreshold = function (query) {
+					return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
+				},
+				isLess = function (n) {
+					return window.viewportSize.getWidth() < n;
+				},
+				doCheck = COMP(isLess, getThreshold),
 				action = doCheck(q468) ? 'execute' : 'undo',
-                doSplit = thrice(assign)('split'),
-                perform = thrice(doMethod),
-                split,
-                splitters = {
-                            2: '(max-width: 320px)',
-                            3: '(max-width: 600px)'/*,
-                            if this kicks in and we are coming from loop to tab the active $abbo collection will be loop
-                            so tab 1 will get set to Alpacas For Sale, tab3 to Next Alpaca, need a fix
-                            4: '(max-width: 1060px)'*/
-                        };
-            if(isTab()) {
-                if (splitters[alp_len]) {
-                    split = doCheck(splitters[alp_len]) ? 1 : split;
-                    action = doCheck(splitters[alp_len]) ? 'execute' : 'undo';
-                    perform = perform(action)(null);
-                    $abbosManager.visit(doSplit(split));
-                }
-            }            
-            else {
-                $abbosManager.get(0).split = doCheck(q375) ? 0 : undefined;
-                $abbosManager.get(1).split = undefined;
-                $abbosManager.get(2).split = doCheck(q411) ? 0 : undefined;
-                perform = perform(action)(null);
-            }
-            $abbosManager.visit(perform);
-        },
-        abbreviateTabs = function (pred, coll) {
-			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
-                return;
+				doSplit = thrice(assign)('split'),
+				perform = thrice(doMethod),
+				split,
+				splitters = {
+					2: '(max-width: 320px)',
+					3: '(max-width: 600px)'
+					/*,
+					                            if this kicks in and we are coming from loop to tab the active $abbo collection will be loop
+					                            so tab 1 will get set to Alpacas For Sale, tab3 to Next Alpaca, need a fix
+					                            4: '(max-width: 1060px)'*/
+				};
+			if (isTab()) {
+				if (splitters[alp_len]) {
+					split = doCheck(splitters[alp_len]) ? 1 : split;
+					action = doCheck(splitters[alp_len]) ? 'execute' : 'undo';
+					perform = perform(action)(null);
+					$abbosManager.visit(doSplit(split));
+				}
+			} else {
+				$abbosManager.get(0).split = doCheck(q375) ? 0 : undefined;
+				$abbosManager.get(1).split = undefined;
+				$abbosManager.get(2).split = doCheck(q411) ? 0 : undefined;
+				perform = perform(action)(null);
 			}
-            else {
-                abbo_driver(pred, coll);
-            }
-        },
-        abTabsLoad = function(i){
-           var pred = PTL(utils.findByClass, 'tab'),
-               coll = (pred() && i > 0) ? abbo_factory(1) : $abbosManager.get();
-               abbreviateTabs(pred, coll); 
-        },
-        abTabsEnter = function(/*listener object*/){
-            var coll = $abbosManager.get();
-            coll =  _.isEmpty(coll) ? abbo_factory(0) : coll;
-            abbreviateTabs(ALWAYS(false), coll); 
-        },
-        abTabsAdvance = function(){
-            $abbosManager.remove(1);//remove middle tab: [Alpaca For Sale, Next Alpaca]
-            abbo_factory(0);//run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
-            $abbosManager.remove(2);//[Alpaca For Sale, Next Alpaca, Maria, Next]
-            $abbosManager.remove(3);//[Alpaca For Sale, Next Alpaca, Maria]
-            $abbosManager.add($abbosManager.remove(2), 1);//[Alpaca For Sale,  Maria, Next Alpaca,]
-            abbreviateTabs(PTL(utils.findByClass, 'tab'), $abbosManager.get());
-        },
+			$abbosManager.visit(perform);
+		},
+		abbreviateTabs = function (pred, coll) {
+			if (!utils.findByClass('sell') || utils.findByClass('extent')) {
+				return;
+			} else {
+				abbo_driver(pred, coll);
+			}
+		},
+		abTabsLoad = function () {
+			var pred = PTL(utils.findByClass, 'tab'),
+				coll = $abbosManager.get(),
+				i = pred() ? 1 : 0;
+			abbreviateTabs(pred, _.isEmpty(coll) ? abbo_factory(i) : coll);
+		},
+		abTabsEnter = function () {
+			var coll = $abbosManager.get();
+			coll = _.isEmpty(coll) ? abbo_factory(0) : coll;
+			abbreviateTabs(ALWAYS(false), coll);
+		},
+		abTabsAdvance = function () {
+			$abbosManager.remove(1); //remove middle tab: [Alpaca For Sale, Next Alpaca]
+			abbo_factory(0); //run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
+			$abbosManager.remove(2); //[Alpaca For Sale, Next Alpaca, Maria, Next]
+			$abbosManager.remove(3); //[Alpaca For Sale, Next Alpaca, Maria]
+			$abbosManager.add($abbosManager.remove(2), 1); //[Alpaca For Sale,  Maria, Next Alpaca,]
+			abbreviateTabs(PTL(utils.findByClass, 'tab'), $abbosManager.get());
+		},
 		factory = function () {
 			maybeLoad(PTL(doLoad, alpacas_select, renderTable_CB));
 			doLoop(utils.getByTag('a', intro));
@@ -647,7 +628,7 @@ if (!window.gAlp) {
 					[mob4, makeCaptions],
 					[ALWAYS(alp_len), makeTabs],
 					[ALWAYS(true), function () {}]
-				],
+                ],
 				$divcontext = utils.makeContext().init(),
 				showCurrent = COMP(utils.show, utils.getPrevious, utils.show, doGet('value')),
 				deferShow = COMP(showCurrent, _.bind($looper.forward, $looper)),
@@ -656,7 +637,7 @@ if (!window.gAlp) {
 				//UPDATE: BUT ul needs restoring on rturn to gallery mode(makeUL)
 				restoreCaptions = COMP(delayExecute, ALWAYS($divcontext), goSetCaptions, addULClass, deleteListFromCache, undoToggle, makeCaptions, utils.hide, PTL(utils.findByClass, 'show')),
 				getNameTab = PTL(utils.findByTag(1), 'a', $$('list')),
-                advance = COMP(abTabsAdvance, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
+				advance = COMP(abTabsAdvance, COMP(invoke, twice(COMP)(getNameTab), utils.setText, PTL(utils.getter, true_captions), goGetIndex, doFind, deferNext)),
 				loopevents = [advance,
 					restoreCaptions,
 					noOp,
@@ -690,20 +671,20 @@ if (!window.gAlp) {
 						$toggler.execute(true); //unshift to maintain nav as LAST listener
 					}
 				}, utils.$('sell')),
-                count = 1,
 				negate = function (cb) { /////////////
+					//revOnLoad(getEnvironment);
 					if (!getEnvironment()) {
-                        doWrap();
 						getEnvironment = _.negate(getEnvironment);
 						if (is4()) {
 							cb(); //will only run in sell AND NOT extent mode
 							//set when going from desktop to mobile, so that if exiting into gallery mode, correct listener will be restored
+							//doAltFactory();
+							$abbosManager.remove();
 							$divcontext.set(utils.getBest(isLoop, [$selector, $toggle]));
 						}
 					}
-                    abTabsLoad(count--);
+					abTabsLoad();
 					goSetCaptions();
-					
 				},
 				throttler = function (cb) {
 					negate(noOp); //onload
@@ -723,7 +704,6 @@ if (!window.gAlp) {
 		};
 	//gAlp.Util.eventCache.triggerEvent(utils.$('sell'), 'click');
 	factory();
-    
 	(function () {
 		var el = utils.findByTag(0)('header'),
 			box = el.getBoundingClientRect(),
@@ -739,11 +719,11 @@ if (!window.gAlp) {
 			]);
 		}
 	}());
-    if (alp_len && !Modernizr.inlinesvg && !Modernizr.touchevents) {
-        //doWrap = COMP(PTL(utils.doMap, utils.$('wrap')), simMaxWidth);
-        doWrap();
-    }
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)', '(max-width: 320px)'));
+	if (alp_len && !Modernizr.inlinesvg && !Modernizr.touchevents) {
+		//doWrap = COMP(PTL(utils.doMap, utils.$('wrap')), simMaxWidth);
+		doWrap();
+	}
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)'));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
 */
