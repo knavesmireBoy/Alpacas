@@ -7,7 +7,7 @@
 if (!window.gAlp) {
 	window.gAlp = {};
 }
-(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q411, q375) {
+(function (query, mq, touchevents, article, report, displayclass, linkEx, navExes, q468, q430, q375) {
 	"use strict";
 
 	function noOp() {}
@@ -276,31 +276,35 @@ if (!window.gAlp) {
 		deferNavListener = twicedefer(PTL(eventing, 'click', []))($$('list')),
 		getTabIndex = COMP(deferIndex(PTL(utils.getByTag, 'a', $$('list'))), twice(equals)),
 		//reporter = PTL(utils.findByTag(0), 'h2', document),
-		doWrap = function () {},
 		makeDisplayer = function (klas) {
 			return {
 				show: _.partial(klasAdd, klas),
 				hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
 			};
 		},
-		makeAbbrv = function (tag, ancr, j) {
+		makeAbbrv = function (tag, ancr) {
 			var split_space = thrice(doMethod)('split')(' '),
 				noOp = function () {},
 				Ab = function (el, i, k) {
 					this.el = el;
 					this.text = el && el.innerHTML;
-					this.index = i;
-					this.split = k;
+					//this.index = i;
+					//this.split = k;
+                    console.log(el,i,k)
 				},
 				undo = function () {
-					var byTag = utils.findByTag(this.index),
-						el = byTag(tag, ancr);
-					el.innerHTML = this.text || el.innerHTML;
+                    /*
+                    var byTag = utils.findByTag(this.index),
+                        el = byTag(tag, ancr);
+                    console.log(this.el);
+                    */
+                    //this.el.innerHTML = this.text || el.innerHTML;
+                    this.el.innerHTML = this.text;
 				},
-				exec = function (el) {
+				exec = function () {
 					if (!isNaN(this.split)) {
-						el = el || this.el;
-						el.innerHTML = split_space(this.text)[this.split];
+						//el = el || this.el;
+						this.el.innerHTML = split_space(this.text)[this.split];
 					}
 				};
 			if (alp_len > 1) {
@@ -315,7 +319,7 @@ if (!window.gAlp) {
 				};
 			}
 			return function (el, i) {
-				return new Ab(el, i, j);
+				return new Ab(el, i);
 			};
 		},
 		doHide = function (el) {
@@ -550,7 +554,6 @@ if (!window.gAlp) {
 				};
 			return _.map(tabs, cb);
 		},
-        count = 1,
 		abbreviate_driver = function (isTab) {
 			var getThreshold = function (query) {
 					return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
@@ -578,7 +581,7 @@ if (!window.gAlp) {
 			} else {
 				$abbreviateManager.get(0).split = doCheck(q375) ? 0 : undefined;
 				$abbreviateManager.get(1).split = undefined;
-				$abbreviateManager.get(2).split = doCheck(q411) ? 0 : undefined;
+				$abbreviateManager.get(2).split = doCheck(q430) ? 0 : undefined;
 				perform = perform(action)(null);
 			}
 			$abbreviateManager.visit(perform);
@@ -714,7 +717,7 @@ if (!window.gAlp) {
 			]);
 		}
 	}());
-}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 411px)', '(max-width: 375px)'));
+}('(min-width: 769px)', Modernizr.mq('only all'), Modernizr.touchevents, document.getElementsByTagName('article')[0], document.getElementsByTagName('h2')[0], 'show', /\/([a-z]+)\d?\.jpg$/i, [/^next/i, /^alpacas/i, new RegExp('^[^<]', 'i'), /^</], '(max-width: 468px)', '(max-width: 430px)', '(max-width: 375px)'));
 /*
 CRUCIAL TO MANAGE EVENT LISTENERS, ADDING AND REMVOVING AS REQUIRED, THIS MAINLY AFFECTS SWITCHING FROM LOOP TO TAB SCENARIO, WHICH (CURRENTLY) ONLY AFFECTS AN EXTENT OF 4 ALPACAS, EVENT HANDLERS ARE ADDED WITH EXECUTE $listener.execute AND REMOVED WITH UNDO $listener.undo BUT CAN INDIRECTLY BE CALLED BY REMOVING FROM UTILS.EVENTCACHE CALLING DELETE WITH false ENSURES THE LAST ADDED EVENT HANDLER GETS DELETED V USEFUL IN THIS SETUP
 */
