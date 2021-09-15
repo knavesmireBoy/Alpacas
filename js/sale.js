@@ -282,28 +282,21 @@ if (!window.gAlp) {
 				hide: _.compose(_.partial(klasRem, klas), _.partial(utils.findByClass, klas))
 			};
 		},
-		makeAbbrv = function (tag, ancr) {
+		makeAbbrv = function (el) {
 			var split_space = thrice(doMethod)('split')(' '),
 				noOp = function () {},
-				Ab = function (el, i, k) {
+				Ab = function (el) {
 					this.el = el;
 					this.text = el && el.innerHTML;
-					//this.index = i;
-					//this.split = k;
-                    console.log(el,i,k)
+                    
 				},
 				undo = function () {
-                    /*
-                    var byTag = utils.findByTag(this.index),
-                        el = byTag(tag, ancr);
-                    console.log(this.el);
-                    */
-                    //this.el.innerHTML = this.text || el.innerHTML;
-                    this.el.innerHTML = this.text;
+                    if (this.el.innerHTML !== this.text) {
+                        this.el.innerHTML = this.text;
+                    }
 				},
 				exec = function () {
 					if (!isNaN(this.split)) {
-						//el = el || this.el;
 						this.el.innerHTML = split_space(this.text)[this.split];
 					}
 				};
@@ -318,9 +311,7 @@ if (!window.gAlp) {
 					undo: noOp
 				};
 			}
-			return function (el, i) {
-				return new Ab(el, i);
-			};
+            return new Ab(el);
 		},
 		doHide = function (el) {
 			utils.hide(el);
@@ -545,15 +536,14 @@ if (!window.gAlp) {
 			};
 			return o;
 		}([])),
-		abbreviate_factory = function (j) {
+		abbreviate_factory = function () {
 			var tabs = utils.getByTag('a', utils.$('list')),
-				factory = makeAbbrv('a', $$('list')),
-				cb = function (el, i) {
-					$abbreviateManager.add(factory(el, i, j));
-					return $abbreviateManager.get(i);
+				cb = function (el) {
+                    $abbreviateManager.add(makeAbbrv(el));
 				};
 			return _.map(tabs, cb);
 		},
+        do_abbreviate_factory = PTL(utils.doWhen, alp_len, abbreviate_factory),
 		abbreviate_driver = function (isTab) {
 			var getThreshold = function (query) {
 					return Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]);
@@ -595,17 +585,16 @@ if (!window.gAlp) {
 		},
 		abTabsLoad = function () {
 			var pred = PTL(utils.findByClass, 'tab'),
-				coll = $abbreviateManager.get(),
-				i = pred() ? 1 : 0;
-            abbreviateTabs(pred, _.isEmpty(coll) ? abbreviate_factory(i) : coll);
+				coll = $abbreviateManager.get();
+            abbreviateTabs(pred, _.isEmpty(coll) ? do_abbreviate_factory() : coll);
 		},
         abTabsEnter = function () {
-			$abbreviateManager.remove();//forc new collection of tabs
-			abbreviateTabs(ALWAYS(false), abbreviate_factory(0));
+			$abbreviateManager.remove();//force new collection of tabs
+			abbreviateTabs(ALWAYS(false), abbreviate_factory());
 		},
 		abTabsAdvance = function () {
 			$abbreviateManager.remove(1); //remove middle tab: [Alpaca For Sale, Next Alpaca]
-			abbreviate_factory(0); //run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
+			abbreviate_factory(); //run factory[Alpaca For Sale, Next Alpaca, Alpaca, Maria(eg), Next]
 			$abbreviateManager.remove(2); //[Alpaca For Sale, Next Alpaca, Maria, Next]
 			$abbreviateManager.remove(3); //[Alpaca For Sale, Next Alpaca, Maria]
 			$abbreviateManager.add($abbreviateManager.remove(2), 1); //[Alpaca For Sale,  Maria, Next Alpaca,]
