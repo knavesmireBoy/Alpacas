@@ -20,13 +20,17 @@ if (!window.gAlp) {
 	function isBig(n) {
 		return window.viewportSize.getWidth() >= n;
 	}
-    
-    
-    function invokeRest(m, o) {
-        return o[m].apply(o, _.rest(arguments, 2));
-    }
-    
-    function add(a, b) {
+
+	function invokeRest(m, o) {
+		return o[m].apply(o, _.rest(arguments, 2));
+	}
+
+	function applyArg(f, arg) {
+		arg = _.isArray(arg) ? arg : [arg];
+		return f.apply(null, arg);
+	}
+
+	function add(a, b) {
 		return a + b;
 	}
 
@@ -35,51 +39,64 @@ if (!window.gAlp) {
 		return o[p] && o[p](v);
 	}
 
-    
+	function getUrlParameter(sParam) {
+		var sPageURL = window.location.search.substring(1),
+			sURLVariables = sPageURL.split('&'),
+			sParameterName,
+			i;
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam) {
+				return typeof sParameterName[1] === 'undefined' ? true : decodeURIComponent(sParameterName[1]);
+			}
+		}
+		return false;
+	}
+
+	function getUrlParameter2(name) {
+		name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+            results = regex.exec(window.location.search);
+		return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+	}
 	var utils = gAlp.Util,
 		ptL = _.partial,
 		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
 		//con = window.console.log.bind(window),
-        curryFactory = utils.curryFactory,
+		curryFactory = utils.curryFactory,
 		twice = curryFactory(2),
-		thrice = curryFactory(3),
 		eventing = utils.eventer,
 		threshold = Number(query.match(new RegExp('[^\\d]+(\\d+)[^\\d]+'))[1]),
-        
-        getIndex = (function () {
+		getIndex = (function () {
 			if (mq) {
 				return function () {
-                    return isBig(threshold) ? 1 : 0;
-                    //return Modernizr.mq(query) ? 1 : 0
+					return isBig(threshold) ? 1 : 0;
+					//return Modernizr.mq(query) ? 1 : 0
 				};
 			}
 			return function () {
 				return isBig(threshold) ? 1 : 0;
 			};
 		}()),
-        
-        getPredicate = (function () {
+		getPredicate = (function () {
 			if (mq) {
-                return ptL(isBig, threshold);
+				return ptL(isBig, threshold);
 				//return ptL(Modernizr.mq, query);//fails in Opera < 10
 			} else {
 				return ptL(isBig, threshold);
 			}
 		}()),
-	
-	
 		switchAction = function (collection, bool) {
 			var i = bool ? Number(!getIndex()) : getIndex();
 			return collection[i];
 		},
-        
 		prepAction = function () {
 			getPredicate = _.negate(getPredicate);
 			return switchAction.apply(null, arguments);
 		},
 		constr,
 		player,
-        anCr = utils.append(),
+		anCr = utils.append(),
 		swapimg = utils.getByClass("swap"),
 		getKid = function () {
 			return utils.getDomChild(utils.getNodeByTag('img'))(mask_target.firstChild);
@@ -87,14 +104,25 @@ if (!window.gAlp) {
 		kid = getKid(),
 		//https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet
 		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
+		intro = "Having worked together on a number of print projects I was approached by Sylvia Sharpe of the York Minster Fund to work on a website that would support her post-retirement venture, breeding and rearing Alpacas. For this site learning javascript was a requirement as navigating a picture gallery was firmly on the wish list. Jeremy Keith's recently published <a href='https://domscripting.com/book/' target='_blank'>Dom Scripting</a> was simply the right book at the right time. It was a bible of best practice, primarily focused on helping designers navigate the DOM. Sylvia has since packed up the Alpacas so the original site is sadly no longer hosted at www.granaryalpacas.co.uk, but looked liked this the last time I worked on it in <a href='https://knavesmireboy.github.io/legacy_alpacas/' target='_blank'>2011</a>. This is the current refactored, responsive version used as a playground for a few newer css techniques.",
 		factory = function (cond) {
-			var activate = ptL(utils.doMap, mask_target, [[['display', 'block']]]),
+			var activate = ptL(utils.doMap, mask_target, [
+					[
+						['display', 'block']
+					]
+				]),
 				standard = function () {
 					var orig = utils.getDomChild(utils.getNodeByTag('img'))(mask_target),
 						mask_path = ie6 ? '_mask8.png' : '_mask.png',
-                        src = invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path),
+						src = invokeRest('replace', orig.getAttribute('src'), /\.\w+$/, mask_path),
 						exec = function () {
-                            _.compose(twice(utils.doMap)([['alt', ''], ['src', src], [["margin-right", "-100%"]]]), anCr(mask_target), getKid)();
+							_.compose(twice(utils.doMap)([
+								['alt', ''],
+								['src', src],
+								[
+									["margin-right", "-100%"]
+								]
+							]), anCr(mask_target), getKid)();
 							window.setTimeout(activate, 500);
 						};
 					/*
@@ -104,7 +132,6 @@ if (!window.gAlp) {
 					to camelCase*/
 					return {
 						init: function (outcomes) {
-                            
 							if (getPredicate()) {
 								return this.execute;
 							}
@@ -115,7 +142,7 @@ if (!window.gAlp) {
 							try {
 								utils.highLighter.perform();
 								exec();
-                                //report.innerHTML = mask_target.children.length;
+								//report.innerHTML = mask_target.children.length;
 							} catch (e) {
 								report.innerHTML = e.message;
 							}
@@ -127,8 +154,8 @@ if (!window.gAlp) {
 				},
 				swap = function () {
 					var src = ['src', "../images/honcho.jpg"],
-                        alt = ['alt', "Alpacas sitting on ground"],
-                        render = _.compose(ptL(utils.addClass, 'swap'), twice(utils.doMap)([src, alt]), anCr(mask_target)),
+						alt = ['alt', "Alpacas sitting on ground"],
+						render = _.compose(ptL(utils.addClass, 'swap'), twice(utils.doMap)([src, alt]), anCr(mask_target)),
 						oldel;
 					return {
 						init: function (outcomes) {
@@ -149,9 +176,8 @@ if (!window.gAlp) {
 						}
 					};
 				};
-			return utils.getBestOnly(cond, [swap, standard])();//return command
+			return utils.getBestOnly(cond, [swap, standard])(); //return command
 		};
-
 	if (!cssmask || swapimg[0]) {
 		constr = function () {
 			return factory(always(swapper));
@@ -163,23 +189,37 @@ if (!window.gAlp) {
 						prepAction(outcomes, true)();
 					}
 				};
-            eventing('resize', [], _.throttle(handler, 66), window).execute();
+			eventing('resize', [], _.throttle(handler, 66), window).execute();
 			command.init(outcomes)();
 		};
-        eventing('load', [], ptL(player, constr()), window).execute();
+		eventing('load', [], ptL(player, constr()), window).execute();
 	} //cssmask
-          (function () {
-        var el = utils.findByTag(0)('header'),
-            box = el.getBoundingClientRect(),
-            w = box.width || box.right - box.left,
-            home = 'url(assets/header_ipad.png)',
-            other = 'url(../assets/header_ipad.png)',
-            swap = utils.$('welcome') ? home : other;
-        if (w > 960) {
-            utils.doMap(el, [[['background-image', swap]]]);
-        }
-    }());
-    
-                
+	(function () {
+		var el = utils.findByTag(0)('header'),
+			box = el.getBoundingClientRect(),
+			w = box.width || box.right - box.left,
+			home = 'url(assets/header_ipad.png)',
+			other = 'url(../assets/header_ipad.png)',
+			swap = utils.$('welcome') ? home : other,
+            urlParams = window.URLSearchParams ? new window.URLSearchParams(window.location.search) : {};
+        urlParams.has === urlParams.has || getUrlParameter;
+		if (w > 960) {
+			utils.doMap(el, [
+				[
+					['background-image', swap]
+				]
+			]);
+		}
+		if (urlParams.has('cv')) {
+			var href = ['href', '?'],
+				exit = ['id', 'exit'],
+				cross = ['txt', 'close'];
+			_.compose(twice(utils.doMap)([
+				['txt', intro]
+			]), twice(applyArg)('p'), anCr, _.partial(utils.climbDom, 1), twice(utils.doMap)([href, exit, cross]), twice(applyArg)('a'), anCr, twice(utils.doMap)([
+				['id', 'intro']
+			]), anCr(utils.findByClass('intro')))('div');            
+		}
+	}());
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), "(min-width: 769px)", Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
 //document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
