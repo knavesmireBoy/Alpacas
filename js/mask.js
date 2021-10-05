@@ -104,7 +104,7 @@ if (!window.gAlp) {
 		kid = getKid(),
 		//https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet
 		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
-		intro = "Having worked together on a number of print projects I was approached by Sylvia Sharpe of the York Minster Fund to work on a website that would support her post-retirement venture, breeding and rearing Alpacas. For this site learning javascript was a requirement as navigating a picture gallery was firmly on the wish list. Jeremy Keith's recently published <a href='https://domscripting.com/book/' target='_blank'>Dom Scripting</a> was simply the right book at the right time. It was a bible of best practice, primarily focused on helping designers navigate the DOM. Sylvia has since packed up the Alpacas so the original site is sadly no longer hosted at www.granaryalpacas.co.uk, but looked liked this the last time I worked on it in <a href='https://knavesmireboy.github.io/legacy_alpacas/' target='_blank'>2011</a>. This is the current refactored, responsive version used as a playground for a few newer css techniques.",
+		intro = "Having worked together on a number of print projects I was approached by Sylvia Sharpe of the <a href= 'https://yorkminster.org/get-involved/donate/york-minster-fund/' target='_blank'>York Minster Fund</a> to work on a website that would support her post-retirement venture, breeding and rearing Alpacas. For this site learning javascript was a requirement as navigating a picture gallery was firmly on the wish list. Jeremy Keith's recently published <a href='https://domscripting.com/book/' target='_blank'>Dom Scripting</a> was simply the right book at the right time. It was a bible of best practice and remains a great introduction for crafting bespoke websites. The Alpacas were packed off elsewhere so the original site is sadly no longer hosted at www.granaryalpacas.co.uk, but it would have looked like this the last time I worked on it in <a href='https://knavesmireboy.github.io/legacy_alpacas/' target='_blank'>2011</a>. This responsive version has been a great playground for a exploring newer css techniques.",
 		factory = function (cond) {
 			var activate = ptL(utils.doMap, mask_target, [
 					[
@@ -211,7 +211,7 @@ if (!window.gAlp) {
 			]);
 		}
 		if (urlParams.has('cv')) {
-			var href = ['href', '?'],
+			var href = ['href', '.'],
 				exit = ['id', 'exit'],
 				cross = ['txt', 'close'];
 			_.compose(twice(utils.doMap)([

@@ -10,7 +10,7 @@
 
 #welcome #intro {
     background-color: black;
-    background-color: rgba(0,0,0, .9);
+    background-color: rgba(0, 66 ,0, .9);
     position: absolute;
     padding: 2em;
     z-index: 4;
@@ -29,6 +29,11 @@
     z-index: 2;
     text-indent: 100%;
     overflow: hidden;
+    transform: none;
+}
+
+#welcome #exit:focus, #welcome #exit:hover {
+    background-color: #900;
 }
 
 #welcome #intro p {
