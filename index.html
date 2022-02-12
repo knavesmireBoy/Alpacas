@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-	
-    <meta charset="utf-8">
+<meta charset="utf-8">
     <!-- IE compatibility mode issue 
 this messed up Modernizr flex detection
 	<meta content="IE=9; IE=8; IE=7" http-equiv="X-UA-Compatible">
@@ -76,6 +75,44 @@ this messed up Modernizr flex detection
 	<script src="js/global.js"></script> 
 	<script src="js/splitter.js"></script> 
 	<script src="js/mask.js"></script> 
-	<script src="js/split.js"></script> 
+	<script src="js/split.js"></script>
+    <script>
+        /*
+    var list = [1,2,3,4,5,6,7,8],
+        f1 = function(list){
+            return _.chunk(list, list.length/2);
+        },
+        f2 = function(list){
+            var odd = [],
+                even = [];
+            _.each(list, function(n, i){
+                if(i % 2){ odd.push(n); }
+                else { even.push(n); }
+            });
+            return [even, odd];
+        },
+        f3 = function(list, ){
+            var tmp = [],
+                ret = [];
+            _.each(list, function(sub, i){
+                if(i % 2){
+                    tmp.push(sub);
+                    ret.push(tmp);
+                    tmp = [];
+                }
+                else {
+                    tmp.push(sub);
+                }
+            });
+            return f1(_.flatten(ret));
+        };
+        
+        console.log(f1(list));
+        console.log(f2(list))
+        //list = _.chunk(_.flatten(f2(_.flatten(_.map(f1(list), f1), 1)),1),2);
+        list = _.flatten(f2(_.flatten(_.map(f1(list), f1), 1)),1);
+        console.log(f3(list))
+    */
+    </script>
 </body>
 </html>

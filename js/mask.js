@@ -97,6 +97,7 @@ if (!window.gAlp) {
 		constr,
 		player,
 		anCr = utils.append(),
+		anCrIn = utils.insert(),
 		swapimg = utils.getByClass("swap"),
 		getKid = function () {
 			return utils.getDomChild(utils.getNodeByTag('img'))(mask_target.firstChild);
@@ -213,12 +214,14 @@ if (!window.gAlp) {
 		if (urlParams.has('cv')) {
 			var href = ['href', '.'],
 				exit = ['id', 'exit'],
-				cross = ['txt', 'close'];
+				cross = ['txt', 'close'],
+                ancr = utils.findByClass('intro'),
+                ref = utils.getChild(ancr);
 			_.compose(twice(utils.doMap)([
 				['txt', intro]
 			]), twice(applyArg)('p'), anCr, _.partial(utils.climbDom, 1), twice(utils.doMap)([href, exit, cross]), twice(applyArg)('a'), anCr, twice(utils.doMap)([
 				['id', 'intro']
-			]), anCr(utils.findByClass('intro')))('div');            
+			]), anCrIn(ref, ancr))('div');            
 		}
 	}());
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), "(min-width: 769px)", Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));

@@ -200,7 +200,9 @@
     #stud_services.verbose main article p {
 	margin-right: 0%;
 }
-}
+    #welcome #intro {
+        background-color: rgba(0, 66 ,0, 1);
+    }
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
 	#upkeep footer {
 		margin-top: 0%;
@@ -253,9 +255,6 @@
 	#alpacas_for_sale #innerwrap, #alpacas_for_sale footer {
 		margin-top: 0;
 	}
-    
-  
-    
     /*
     if JS disabled and masking is not supported a solution is to reduce the size of the pic so it sits to the right of the copy
     BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support
@@ -278,7 +277,6 @@
         .no-js main {
             position: static;
         }
-    
     }
     */
       .no-js header {
