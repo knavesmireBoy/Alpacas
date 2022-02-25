@@ -115,6 +115,9 @@
 #contact_us main>aside {
 	width: 66%;
 }
+
+    
+ 
 @media only screen  {
   #contact_us main aside {
 	width: 70%;
@@ -147,6 +150,7 @@
 		margin-right: 0%;
 	}
 }
+
 @media only screen and (max-width: 768px) {
 	#about_us main .read-more-target p:first-child {
 		margin-right: 0%;
@@ -203,6 +207,8 @@
     #welcome #intro {
         background-color: rgba(0, 66 ,0, 1);
     }
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
 	#upkeep footer {
 		margin-top: 0%;
