@@ -192,7 +192,7 @@ gAlp.Util = (function () {
 		return el;
 	}
     
-    /*FATAL ERROR: this failed when called in a loop as v is modified in place and is empty when next called*/
+    /*FATAL ERROR: this failed when called in a loop as v is modified in place and is empty when next called
 	function doMapRecur(el, v) {
 		var tgt = v.length && v.splice(0, 1)[0],
 			pass;
@@ -204,6 +204,7 @@ gAlp.Util = (function () {
 		el = attrMap(getResult(el), toObject(tgt), pass);
 		return doMapRecur(el, v);
 	}
+    */
     
     function doMapLoop(el, v){
         /*second argument (v) should be an array of arrays [[p,v], [p,v], [[p,v]]]
