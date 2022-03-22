@@ -379,6 +379,14 @@ gAlp.Util = (function () {
 		}
 		return false;
 	}
+    /*
+    function getUrlParameter2(name) {
+		name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+            results = regex.exec(window.location.search);
+		return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+	}
+    */
 
 	function insertAfter(newElement, targetElement) {
 		var parent = targetElement.parentNode;
