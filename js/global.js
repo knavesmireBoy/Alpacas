@@ -365,6 +365,20 @@ gAlp.Util = (function () {
 			return null;
 		};
 	}
+    
+    function getUrlParameter(sParam) {
+		var sPageURL = window.location.search.substring(1),
+			sURLVariables = sPageURL.split('&'),
+			sParameterName,
+			i;
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam) {
+				return typeof sParameterName[1] === 'undefined' ? true : decodeURIComponent(sParameterName[1]);
+			}
+		}
+		return false;
+	}
 
 	function insertAfter(newElement, targetElement) {
 		var parent = targetElement.parentNode;
@@ -1138,6 +1152,11 @@ gAlp.Util = (function () {
 		getPrevious: _.partial(nested, curry2(getter)('previousSibling'), getPreviousElement),
 		//getPrevious: _.compose(_.partial(nested, curry2(getter)('previousSibling')), _.partial(partialize, getPreviousElement)),
 		getScrollThreshold: getScrollThreshold,
+        getUrlParameter: function(){
+            var urlParams = window.URLSearchParams ? new window.URLSearchParams(window.location.search) : {};
+            urlParams.has = urlParams.has || getUrlParameter;
+            return urlParams;
+        },
 		getZero: _.partial(byIndex, 0),
 		getter: getter,
 		gtThan: gtThan,

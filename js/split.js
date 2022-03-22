@@ -93,7 +93,6 @@ if (!window.gAlp) {
 				return ptL(isBig, threshold);
 			}
 		}()),
-       
 		memoFactory = function (target, copy) {
 			var hyperlinks = {},
 				ran = false,
@@ -142,15 +141,18 @@ if (!window.gAlp) {
 					input = _.compose(getStrong, getLinks),
 					output = _.compose(setStrong, setLinks),
 					exec = function () {
-						var face = utils.getComputedStyle(target, 'font-family').split(',')[0],
+						var params = utils.getUrlParameter(),
+                            face = utils.getComputedStyle(target, 'font-family').split(',')[0],
 							size = Math.round(parseFloat(utils.getComputedStyle(target, 'font-size'))),
 							splitter = window.gAlp.Splitter();
+                       if(!params.has('cv')){
 						target.innerHTML = input(target.innerHTML);
 						splitter.init(target, face.replace('\\', ''), size);
 						target.innerHTML = output(splitter.output('span'));
 						utils.show(target);
 						count -= 1;
-					};
+                       }
+                       }
 				return {
 					execute: function () {
 						return memo.revert(count, exec);

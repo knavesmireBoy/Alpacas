@@ -202,8 +202,8 @@ if (!window.gAlp) {
 			home = 'url(assets/header_ipad.png)',
 			other = 'url(../assets/header_ipad.png)',
 			swap = utils.$('welcome') ? home : other,
-            urlParams = window.URLSearchParams ? new window.URLSearchParams(window.location.search) : {};
-        urlParams.has === urlParams.has || getUrlParameter;
+            params = utils.getUrlParameter();
+
 		if (w > 960) {
 			utils.doMap(el, [
 				[
@@ -211,7 +211,7 @@ if (!window.gAlp) {
 				]
 			]);
 		}
-		if (urlParams.has('cv')) {
+		if (params.has('cv')) {
 			var href = ['href', '.'],
 				exit = ['id', 'exit'],
 				cross = ['txt', 'close'],
