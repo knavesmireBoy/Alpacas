@@ -141,18 +141,15 @@ if (!window.gAlp) {
 					input = _.compose(getStrong, getLinks),
 					output = _.compose(setStrong, setLinks),
 					exec = function () {
-						var params = utils.getUrlParameter(),
-                            face = utils.getComputedStyle(target, 'font-family').split(',')[0],
+						var face = utils.getComputedStyle(target, 'font-family').split(',')[0],
 							size = Math.round(parseFloat(utils.getComputedStyle(target, 'font-size'))),
 							splitter = window.gAlp.Splitter();
-                       if(!params.has('cv')){
 						target.innerHTML = input(target.innerHTML);
 						splitter.init(target, face.replace('\\', ''), size);
 						target.innerHTML = output(splitter.output('span'));
 						utils.show(target);
 						count -= 1;
-                       }
-                       }
+                       };
 				return {
 					execute: function () {
 						return memo.revert(count, exec);
@@ -162,6 +159,10 @@ if (!window.gAlp) {
 		}, //split
 		do_split = doSplitz(2),
 		paras = utils.getByClass('.intro')[0] || utils.getByTag('article', document)[0],
+        //ensure we target correct para (querystring of ?cv loads explanatory para with a div parentnode)
+        myparas = _.filter(paras.getElementsByTagName('p'), function(para){
+            return para.parentNode.nodeName.match(/article/i);
+        }),
 		// now re-check on scroll
 		splitHandler = function () {
 			var $command = do_split.apply(null, arguments),
@@ -174,7 +175,7 @@ if (!window.gAlp) {
 		split_handler = function (p) {
 			splitHandler(p, p.innerHTML);
 		},
-		splitLoad = quatro(invokeEach)(_)('each')(paras.getElementsByTagName('p'))(split_handler),
+		splitLoad = quatro(invokeEach)(_)('each')(myparas)(split_handler),
 		doHandleSplit = ptL(_.every, [verbose, Modernizr.touchevents, Modernizr.cssanimations, getPredicate], getResult);
        eventing('load', [], _.compose(ptL(utils.invokeWhen, doHandleSplit, splitLoad)), window).execute();
 	enableScrollHandlers();
