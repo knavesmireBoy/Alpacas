@@ -65,6 +65,14 @@
     <script src="../js/basicIterator.js"></script>
     <script src="../js/tooltips.js"></script>
     <script src="../js/sale.js"></script>
+     <script src="../js/cacher.js"></script>
+    <script>
+        document.onreadystatechange = function() {
+	if (document.readyState === "interactive" && window.localStorage) {
+        gAlp.Cacher(/\/sale\/\w+\/(.+$)/, 'small', 'big');
+    }
+        };
+    </script>
     <!--<script src="../js/darn_table.js"></script>-->
 </body>
 </html>
