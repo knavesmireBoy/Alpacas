@@ -33,7 +33,7 @@ function doMatch(str, reg, i) {
 	return isNaN(i) ? str.match(reg) : str.match(reg)[i];
 }
 
-function swap (els, reg, filterCB, cb) {
+function swap (els, filterCB, cb) {
     return _.each(_.filter(els, filterCB), cb);
 }
 
@@ -56,8 +56,10 @@ gAlp.Cacher = function(path, lo, hi) {
         image.src = getHiRes(img, 'src');
         image.onload = function() {
             logCache(doMatch(this.src, path, 1));
+            //setHiRes(grp[i], 'src');
             if (!grp[i + 1]) {
-                swap(grp, new RegExp(lo), curry(setHiRes)(null)('src'));
+                //no need to filter at this point
+                swap(grp, function() { return true; }, curry(setHiRes)(null)('src'));
             }
         };
     }
@@ -67,13 +69,13 @@ gAlp.Cacher = function(path, lo, hi) {
         filter = curry(doFilter)(regex),
         doCallback = curry(setHiRes)(null),
         doSwap = function(){
-            swap(images, regex, filter('src'), doCallback('src'));
+            swap(images, filter('src'), doCallback('src'));
         },
         img = images.length && images[images.length - 1],
             //check if last listed image is cached
 			matched = img && doMatch(img.getAttribute('src'), path, 1);
     //swap hyperlinks from small to big
-    swap(document.getElementsByTagName('a'), regex, filter('href'), doCallback('href'));
+    swap(document.getElementsByTagName('a'), filter('href'), doCallback('href'));
     
      if(window.localStorage) {
          if(!window.localStorage.cachedElements) {
@@ -83,7 +85,7 @@ gAlp.Cacher = function(path, lo, hi) {
 		if (isCached(matched)) {
 			doSwap();
 		} else {
-			swap(images, regex, filter('src'), doCache);
+			swap(images, filter('src'), doCache);
 		}
      }
     else {
