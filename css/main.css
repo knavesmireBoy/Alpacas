@@ -1,4 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Merriweather:wght@400;700&display=swap);
+@import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;700&family=Merriweather:ital,wght@0,700;1,400&display=swap");
+nav a, nav a:link, nav a:visited {
+  background-image: url(../assets/links.jpg);
+  background-repeat: no-repeat;
+  background-position: 0 -4%;
+  color: #080;
+}
+
 /*.selector {
   @include prefix(transform, rotate(45deg), webkit ms);
 }
@@ -123,7 +131,7 @@ ol, ul, dl {
 }
 
 body {
-  font: 0.8em "Trebuchet MS", sans-serif;
+  font: 400 0.8em "Merriweather", "Trebuchet MS", sans-serif;
   background-color: white;
 }
 
@@ -207,9 +215,33 @@ b {
 }
 
 header {
-  background-image: url("../assets/header__964.png");
-  background-position: 50% 0;
-  background-repeat: no-repeat;
+  background: url(../assets/header_ipad.png) no-repeat 90% 0;
+  background-size: 100%;
+}
+
+hr {
+  border: 0px;
+  margin-right: 35%;
+  height: 1px;
+}
+
+nav {
+  white-space: nowrap;
+  font: 700 1.2em/2 "Merriweather Sans", Verdana, sans-serif;
+  /*keep separate to keep early ie happy!*/
+  /* ie6 requires "nav a.current:visited" */
+}
+nav li {
+  border-bottom: solid #C6C084 1px;
+}
+nav a:hover {
+  text-decoration: none;
+  color: #6e2900;
+  background-position: 0 47%;
+}
+nav a.current, nav a.current:visited, nav a:active {
+  color: #900;
+  background-position: 0 99%;
 }
 
 footer {
@@ -219,58 +251,19 @@ footer {
   text-align: right;
   background-position: 50% 0%;
   color: white;
-}
-
-nav {
-  white-space: nowrap;
-  font: 700 1em/2 Verdana, sans-serif;
-}
-
-hr {
-  border: 0px;
-  margin-right: 35%;
-  height: 1px;
-}
-
-footer, footer ul {
-  background-image: url("../assets/grass_ipad.png");
   background-repeat: no-repeat;
+  background-image: url("../assets/grass_ipad.png");
 }
-
-nav li {
-  border-bottom: solid #C6C084 1px;
-}
-
 footer ul {
   background-color: #759707;
   border-top: solid 1px #9c0;
   background-position: 50% 100%;
+  background-repeat: no-repeat;
+  background-image: url("../assets/grass_ipad.png");
 }
-
 footer li {
   line-height: 2;
 }
-
-nav a, nav a:link, nav a:visited {
-  background-image: url(../assets/links.jpg);
-  background-repeat: no-repeat;
-  background-position: 0 -4%;
-  color: #080;
-}
-
-nav a:hover {
-  text-decoration: none;
-  color: #6e2900;
-  background-position: 0 47%;
-}
-
-/*keep separate to keep early ie happy!*/
-/* ie6 requires "nav a.current:visited" */
-nav a.current, nav a.current:visited, nav a:active {
-  color: rgb(153, 0, 0);
-  background-position: 0 99%;
-}
-
 footer a, footer a:link, footer a:visited {
   color: white;
 }
@@ -282,11 +275,52 @@ footer a, footer a:link, footer a:visited {
   box-sizing: border-box;
 }
 
-#welcome nav li:nth-child(1) a, #about_us nav li:nth-child(2) a, #about_alpacas nav li:nth-child(3) a, #upkeep nav li:nth-child(4) a, #stud_services nav li:nth-child(5) a, #alpacas_for_sale nav li:nth-child(6) a, #links nav li:nth-child(7) a, #contact_us nav li:nth-child(8) a, #gallery nav li:nth-child(9) a {
+#welcome nav li:nth-child(1) a {
   color: #900;
   background-position: 0 99%;
 }
 
+#about_us nav li:nth-child(2) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#about_alpacas nav li:nth-child(3) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#upkeep nav li:nth-child(4) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#stud_services nav li:nth-child(5) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#alpacas_for_sale nav li:nth-child(6) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#links nav li:nth-child(7) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#contact_us nav li:nth-child(8) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+#gallery nav li:nth-child(9) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+/* eg.. #welcome nav li:nth-child(1) a {}*/
 .no-js body {
   background-color: rgb(255, 255, 248);
 }
@@ -299,10 +333,6 @@ body {
   /*display: flex;
   flex-direction: column;
    https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
-}
-
-header {
-  padding-top: 17em;
 }
 
 nav {
@@ -344,21 +374,31 @@ nav li {
   overflow: hidden;
 }
 
+header {
+  padding-top: 17em;
+}
 header h1 {
   margin: -8% 0 0;
   width: 100%;
 }
-
 header h2 {
   /* fix IF supporting screen sizes below width of 800px */
   margin-left: 28%;
 }
-
 header a:link, header a:visited {
   position: absolute;
-  width: 29%;
   top: 0px;
   left: 0px;
+  width: 29%;
+}
+header a h1 {
+  white-space: nowrap;
+  width: 100%;
+  text-indent: -999px;
+}
+header a h1 img {
+  margin: 0;
+  position: relative;
 }
 
 footer ul {
@@ -367,7 +407,6 @@ footer ul {
   line-height: 1.2;
   line-height: 1;
 }
-
 footer li {
   display: inline-block;
   display: inline;
@@ -400,23 +439,8 @@ aside > img {
   color: blue;
 }
 
-header a h1 {
-  white-space: nowrap;
-  width: 100%;
-  text-indent: -999px;
-}
-
-header a h1 img {
-  margin: 0;
-  position: relative;
-}
-
 nav a, nav a:link, nav a:visited {
   padding: 0 0 0 2.5em;
-}
-
-.read-more-target {
-  margin-top: 0.7em;
 }
 
 .no-cssgradients hr {
@@ -449,9 +473,10 @@ main p, main label.read-more-trigger {
 }
 
 main > aside {
-  width: 76%;
+  width: 100%;
   right: -23%;
   bottom: 3%;
+  max-width: 60em;
 }
 
 /*??*/
@@ -496,11 +521,7 @@ header, footer, nav li, nav a, #wrap, #innerwrap {
   width: 100%;
 }
 
-#wrap, article.intro {
-  overflow: hidden;
-}
-
-footer, main aside, header a, main label, main input, main .read-more-target, #innerwrap {
+footer, main aside, header a, main label, main input, main .read-more-target, article.intro, #innerwrap, #wrap {
   overflow: hidden;
 }
 
@@ -517,11 +538,12 @@ a#yag {
   right: -1em;
 }
 
+/* these declared widths are purely for old versions of ie overwritten for moder browsers*/
 #welcome main aside {
   width: 126%;
-  max-width: 69em;
   right: -15%;
   bottom: 13%;
+  max-width: 69em;
 }
 
 #welcome p {
@@ -571,16 +593,16 @@ a#yag {
 
 #about_us main aside {
   width: 100%;
-  max-width: 62em;
   right: 0em;
   bottom: 14%;
+  max-width: 62em;
 }
 
 #about_alpacas main aside {
   width: 111%;
-  max-width: 60em;
   right: -25%;
   bottom: 12%;
+  max-width: 60em;
 }
 
 #about_alpacas.verbose article.intro p {
@@ -589,9 +611,9 @@ a#yag {
 
 #upkeep main aside {
   width: 119%;
-  max-width: 60em;
   right: -19%;
   bottom: 14%;
+  max-width: 60em;
 }
 
 #upkeep p:first-of-type {
@@ -600,8 +622,9 @@ a#yag {
 
 #stud_services main aside {
   width: 125%;
-  right: -20%;
+  right: -17%;
   bottom: 2%;
+  max-width: 60em;
 }
 
 #stud_services.verbose main article p {
@@ -610,16 +633,16 @@ a#yag {
 
 #links main aside {
   width: 135%;
-  max-width: 75em;
   right: -25%;
   bottom: 2%;
+  max-width: 75em;
 }
 
 #contact_us main aside {
   width: 95%;
-  max-width: 55em;
   right: -18%;
   bottom: 13%;
+  max-width: 55em;
 }
 
 #contact_us p {
@@ -749,32 +772,32 @@ a#yag {
     z-index: -1;
   }
   #welcome aside img {
-    -webkit-mask: url("../images/carlos_masking.png") -1px -1px/cover;
-    mask: url("../images/carlos_masking.png") -1px -1px/cover;
+    -webkit-mask: url(../images/carlos_masking.png) -1px -1px/cover;
+    mask: url(../images/carlos_masking.png) -1px -1px/cover;
   }
   .cssmask #about_us aside img {
-    -webkit-mask: url("../images/honcho_masking.png") -1px 0px/cover;
-    mask: url("../images/honcho_masking.png") -1px 0px/cover;
+    -webkit-mask: url(../images/honcho_masking.png) -10px 0px/cover;
+    mask: url(../images/honcho_masking.png) -10px 0px/cover;
   }
   #about_alpacas aside img {
-    -webkit-mask: url("../images/about_alpacas_masking.png") -1px 0px/cover;
-    mask: url("../images/about_alpacas_masking.png") -1px 0px/cover;
+    -webkit-mask: url(../images/about_alpacas_masking.png) -1px 0px/cover;
+    mask: url(../images/about_alpacas_masking.png) -1px 0px/cover;
   }
   #upkeep aside img {
-    -webkit-mask: url("../images/upkeep_masking.png") -1px -1px/cover;
-    mask: url("../images/upkeep_masking.png") -1px -1px/cover;
+    -webkit-mask: url(../images/upkeep_masking.png) -1px -1px/cover;
+    mask: url(../images/upkeep_masking.png) -1px -1px/cover;
   }
   #stud_services aside img:first-child {
-    -webkit-mask: url("../images/stud_masking.png") -1px 0px/cover;
-    mask: url("../images/stud_masking.png") -1px 0px/cover;
+    -webkit-mask: url(../images/stud_masking.png) -1px 0px/cover;
+    mask: url(../images/stud_masking.png) -1px 0px/cover;
   }
   #links aside img {
-    -webkit-mask: url("../images/links_masking.png") 0px 0px/cover;
-    mask: url("../images/links_masking.png") 0px 0px/cover;
+    -webkit-mask: url(../images/links_masking.png) 0 0/cover;
+    mask: url(../images/links_masking.png) 0 0/cover;
   }
   #contact_us aside img {
-    -webkit-mask: url("../images/contacts_masking.png") -1px -1px/cover;
-    mask: url("../images/contacts_masking.png") -1px -1px/cover;
+    -webkit-mask: url(../images/contacts_masking.png) -1px -1px/cover;
+    mask: url(../images/contacts_masking.png) -1px -1px/cover;
   }
   #alpacas_for_sale #wrap main aside {
     z-index: 1;
@@ -787,9 +810,8 @@ a#yag {
     margin-top: 0;
   }
   /*
-  if JS disabled and masking is not supported a solution is to reduce the size of the pic so it sits to the right of the copy
-  BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support
-  this seems unfair so the only concession is that the header sits on top of the unmasked image and it simply means that the green bottom-border sits on top of the masked image
+  if JS disabled and masking is not supported a solution is to reduce the size of the unmasked pic so it sits to the right of the copy
+  BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support. This seems unfair so the only concession is that the header sits on top of the unmasked image and it simply means that the green bottom-border sits on top of the masked image
   .no-js main {
       position: relative;
   }
@@ -824,10 +846,16 @@ http://cssmediaqueries.com/overview.html*/
 @media only screen {
   header {
     padding-top: 22%;
-    background: no-repeat center/cover url("../assets/header.png");
+    background: url(../assets/header.png) no-repeat center;
+    background-size: cover;
   }
   .inlinesvg header[style] {
-    background: no-repeat center/cover url("../assets/header.png") !important;
+    background: url(../assets/header.png) no-repeat center/cover !important;
+    /*background-image: url(../assets/header.png);
+    background-size: cover !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    */
   }
   h2 {
     font: italic 3.2em "Handwritten", Palatino, cursive;
@@ -851,11 +879,11 @@ http://cssmediaqueries.com/overview.html*/
     background-position: 0% 47%;
   }
   #innerwrap nav {
-    font: 700 1em/2.3 Verdana, sans-serif;
+    font: 700 1.2em/2 "Merriweather Sans", Verdana, sans-serif;
   }
   /*background size gives false positives in some browsers, using inlinesvg where support is slightly more recent*/
   .inlinesvg #wrap footer {
-    background: url(../assets/grass.png) no-repeat 50% 0%;
+    background: url(../assets/grass.png) no-repeat 0% 100%;
     background-size: 105%;
   }
   .inlinesvg #wrap footer ul {
@@ -864,16 +892,16 @@ http://cssmediaqueries.com/overview.html*/
   }
   @supports (background-size: cover) {
     #wrap footer {
-      background: url(../assets/grass.png) no-repeat 50% 0%;
+      background: url(../assets/grass.png) no-repeat 0% 100%;
       background-size: 105%;
     }
     #wrap footer ul {
       background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
       background-size: 150%;
     }
-  }
-  #innerwrap main p {
-    text-shadow: 1px 1px 2px white;
+    #innerwrap main p {
+      text-shadow: 1px 1px 2px white;
+    }
   }
 }
 @media only screen and (max-width: 768px) {
@@ -886,6 +914,11 @@ http://cssmediaqueries.com/overview.html*/
   }
   h2 {
     font-size: -webkit-calc(28px + (42 - 28) * (100vw - 320px) / (768 - 320));
+    /*font-size: -moz-calc(($fm * 1px) + ($fx - $fm) * (100vw - ($min * 1px)) / ($max - $min));
+    font-size: -o-calc(($fm * 1px) + ($fx - $fm) * (100vw - ($min * 1px)) / ($max - $min));
+    font-size: -webkit-calc(($fm * 1px) + ($fx - $fm) * (100vw - ($min * 1px)) / ($max - $min));
+        */
+    font-size: calc(28px + 14 * (100vw - 320px) / 448);
   }
   nav a, nav a:link, nav a:visited {
     background-image: none;
@@ -896,20 +929,24 @@ http://cssmediaqueries.com/overview.html*/
     background: #FBFCFC;
     background: linear-gradient(90deg, #FBFCFC, white);
     border-width: 0px 0px 1px 0px;
+    -moz-box-shadow: 3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
     -webkit-box-shadow: 3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
     box-shadow: 3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
     line-height: 2.7;
     z-index: 2;
   }
   .menu {
+    -moz-box-shadow: inset 0px 0px 5px hsla(300deg, 10%, 20%, 0.75), 2px 2px 2px hsla(300deg, 10%, 20%, 0.75);
     -webkit-box-shadow: inset 0px 0px 5px hsla(300deg, 10%, 20%, 0.75), 2px 2px 2px hsla(300deg, 10%, 20%, 0.75);
     box-shadow: inset 0px 0px 5px hsla(300deg, 10%, 20%, 0.75), 2px 2px 2px hsla(300deg, 10%, 20%, 0.75);
     background: url(../assets/menu-icon.png) center no-repeat #C6C084;
     background-size: 105%;
   }
   .menu:hover {
-    -webkit-transform: scale(90%);
+    -moz-transform: scale(90%);
     -ms-transform: scale(90%);
+    -o-transform: scale(90%);
+    -webkit-transform: scale(90%);
     transform: scale(90%);
   }
   nav li:last-child {
@@ -930,14 +967,12 @@ http://cssmediaqueries.com/overview.html*/
   main .read-more-state ~ .read-more-trigger::before {
     content: "Read On";
     color: #900;
-    color: rgb(153, 0, 0);
   }
   main .read-more-state:checked ~ .read-more-trigger::before {
     content: "Read It";
   }
   main .read-more-trigger:hover, main .read-more-state:checked ~ .read-more-trigger::before {
     color: #080;
-    color: rgb(0, 136, 0);
   }
   main .read-more-state ~ .read-more-target p {
     position: absolute;
@@ -948,16 +983,17 @@ http://cssmediaqueries.com/overview.html*/
     opacity: 1;
   }
   .ellipsis.touchevents main .read-more-state ~ .read-more-target p {
-    -webkit-transition: opacity 2s;
+    -moz-transition: opacity 2s;
     -o-transition: opacity 2s;
+    -webkit-transition: opacity 2s;
     transition: opacity 2s;
   }
-  .ellipsis.touchevents main .read-more-state ~ .read-more-target p.elip {
+  .ellipsis.touchevents main .read-more-state ~ .read-more-target p p.elip {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  .ellipsis.touchevents main .read-more-state ~ .read-more-target p.show {
+  .ellipsis.touchevents main .read-more-state ~ .read-more-target p p.show {
     white-space: normal;
     text-overflow: inherit;
   }
@@ -983,9 +1019,9 @@ http://cssmediaqueries.com/overview.html*/
     transform: translate(0, -2.7em);
   }
   100% {
-    -webkit-transform: translate(0, 0em);
-    -ms-transform: translate(0, 0em);
-    transform: translate(0, 0em);
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 }
 @keyframes alpacasBounce {
@@ -994,68 +1030,51 @@ http://cssmediaqueries.com/overview.html*/
     -ms-transform: translate(0, 50em);
     transform: translate(0, 50em);
   }
-  50% {
-    -webkit-transform: translate(0, -2em);
-    -ms-transform: translate(0, -2em);
-    transform: translate(0, -2em);
-  }
-  100% {
-    -webkit-transform: translate(0, 0em);
-    -ms-transform: translate(0, 0em);
-    transform: translate(0, 0em);
-  }
-}
-@keyframes bounce {
-  0% {
-    -webkit-transform: translate(0, 40em);
-    -ms-transform: translate(0, 50em);
-    transform: translate(0, 50em);
-  }
-  50% {
+  60% {
     -webkit-transform: translate(0, -2.7em);
     -ms-transform: translate(0, -2.7em);
     transform: translate(0, -2.7em);
   }
   100% {
-    -webkit-transform: translate(0, 0em);
-    -ms-transform: translate(0, 0em);
-    transform: translate(0, 0em);
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 }
 @-webkit-keyframes alpacasSlide {
   /*position for inline elements */
   0% {
-    -webkit-transform: translate(50em, 0);
-    -ms-transform: translate(50em, 0);
-    transform: translate(50em, 0);
+    -webkit-transform: translate(50em, 0em);
+    -ms-transform: translate(50em, 0em);
+    transform: translate(50em, 0em);
   }
   50% {
-    -webkit-transform: translate(4em, 0);
-    -ms-transform: translate(4em, 0);
-    transform: translate(4em, 0);
+    -webkit-transform: translate(4em, 0em);
+    -ms-transform: translate(4em, 0em);
+    transform: translate(4em, 0em);
   }
   100% {
-    -webkit-transform: translate(0, 0em);
-    -ms-transform: translate(0, 0em);
-    transform: translate(0, 0em);
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 }
 @keyframes alpacasSlide {
   /*position for inline elements */
   0% {
-    -webkit-transform: translate(50em, 0);
-    -ms-transform: translate(50em, 0);
-    transform: translate(50em, 0);
+    -webkit-transform: translate(50em, 0em);
+    -ms-transform: translate(50em, 0em);
+    transform: translate(50em, 0em);
   }
   50% {
-    -webkit-transform: translate(4em, 0);
-    -ms-transform: translate(4em, 0);
-    transform: translate(4em, 0);
+    -webkit-transform: translate(4em, 0em);
+    -ms-transform: translate(4em, 0em);
+    transform: translate(4em, 0em);
   }
   100% {
-    -webkit-transform: translate(0, 0em);
-    -ms-transform: translate(0, 0em);
-    transform: translate(0, 0em);
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 }
 @-webkit-keyframes entry {
@@ -1090,14 +1109,6 @@ http://cssmediaqueries.com/overview.html*/
     -webkit-transform: translate(0, 0);
     -ms-transform: translate(0, 0);
     transform: translate(0, 0);
-  }
-}
-@-webkit-keyframes animatedBackground {
-  0% {
-    background-position: 50% 0%;
-  }
-  100% {
-    background-position: 50% 100%;
   }
 }
 @keyframes fade {
@@ -1143,6 +1154,11 @@ http://cssmediaqueries.com/overview.html*/
   }
 }
 @media screen and (max-width: 768px) {
+  .menu {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+  }
   body {
     margin: 3.5%;
   }
@@ -1180,9 +1196,6 @@ http://cssmediaqueries.com/overview.html*/
     /*opera*/
   }
   .menu {
-    position: absolute;
-    top: 0%;
-    left: 0%;
     height: 3em;
     width: 3em;
     opacity: 0.99;
@@ -1402,56 +1415,76 @@ figure {
   box-shadow: 0px 0px 30px hsl(61deg, 38%, 70%);
   background: #FFF;
 }
+figure :hover {
+  color: #6e2900;
+  border-color: black;
+}
+figure :hover img {
+  opacity: 1;
+  box-shadow: 0 0 3px black;
+}
+figure img {
+  border: solid 1px black;
+  opacity: 0.9;
+}
 
 table {
   padding: 0px;
 }
-
 table table {
   font-size: 1em;
   border-width: 0;
 }
-
+table table tr:last-child {
+  font-size: 1em;
+}
+table table td {
+  border-width: 1px 0 0;
+  padding: 0.5em;
+}
+table tr:nth-of-type(even) {
+  background-color: #f5f8eb;
+}
+table tr:nth-child(7) td {
+  font-weight: bold;
+  font-size: 1.1em;
+  text-transform: uppercase;
+  color: #900;
+}
+table tr:last-child {
+  font-size: 1em;
+}
+table tbody {
+  border: 0px;
+  min-width: 100%;
+}
 table th {
   vertical-align: middle;
   text-transform: uppercase;
   text-shadow: 1px 1px 1px hsla(75deg, 50%, 20%, 0.75);
   border-width: 0;
 }
-
-figure img {
-  border: solid 1px black;
-  opacity: 0.9;
+table th:first-of-type {
+  border: solid 1px #FFF;
+  border: solid 1px rgba(255, 255, 255, 0.5);
+  border-width: 0 1px 0 0;
 }
-
-table td, table table td {
+table th:nth-of-type(odd) {
+  border-right-color: rgba(255, 255, 255, 0.2);
+}
+table td {
   border-width: 1px 0 0;
   padding: 0.5em;
 }
-
-/**/
-table tbody {
-  border: 0px;
-  min-width: 100%;
+table td:last-of-type {
+  border-right-width: 0px;
 }
 
 .sell {
   font-family: Georgia, Palatino, serif;
 }
 
-figure:hover {
-  color: #6e2900;
-  border-color: black;
-}
-
-td:last-child {
-  border-right-width: 0px solid black;
-}
-
-th:nth-child(odd) {
-  border-right-color: rgba(255, 255, 255, 0.2);
-}
-
+/*classes added where nth-child not supported*/
 td.nested {
   padding: 0;
   border-width: 0;
@@ -1460,32 +1493,13 @@ td.nested {
 td.description {
   font-weight: bold;
   font-size: 1.1em;
-  color: #900;
   text-transform: uppercase;
+  color: #900;
   border-width: 1px 0 0;
 }
 
 th.odd {
   border-right: solid 1px #FFF;
-}
-
-figure:hover img {
-  opacity: 1;
-  box-shadow: 0 0 3px black;
-}
-
-tr:nth-of-type(even) {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-th:first-child {
-  border: solid 1px #FFF;
-  border: solid 1px rgba(255, 255, 255, 0.5);
-  border-width: 0 1px 0 0;
-}
-
-tr:last-child {
-  font-size: 1em;
 }
 
 tr > th.odd {
@@ -1516,31 +1530,16 @@ tr:last-child td {
   border-width: 1px 0 0;
 }
 
-ul.tab a {
-  color: #7F9933;
-  text-transform: uppercase;
-}
-
-tr:nth-child(7) td {
-  font-weight: bold;
-  font-size: 1.1em;
-  text-transform: uppercase;
-  color: #900;
-}
-
-ul.loop a {
-  text-shadow: 1px 1px 1px hsla(75deg, 50%, 20%, 0.75);
-  padding: 0.7em 0.5em 0.7em 2em;
-  color: #FFF;
-}
-
 table table tr:last-child {
   font-size: 1em;
 }
 
+ul.tab a {
+  color: #7F9933;
+  text-transform: uppercase;
+}
 ul.tab li a {
   border-color: #7F9933;
-  border-color: hsl(75deg, 50%, 40%);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   background: #EBF2D8;
@@ -1549,6 +1548,32 @@ ul.tab li a {
   -o-transition: background 1.5s;
   transition: background 1.5s;
   text-shadow: 2px 2px 2px #FFF;
+}
+ul.tab li a:hover {
+  color: #5f7326;
+}
+ul.loop a {
+  text-shadow: 1px 1px 1px hsla(75deg, 50%, 20%, 0.75);
+  padding: 0.7em 0.5em 0.7em 2em;
+  color: #FFF;
+}
+ul.loop a:hover {
+  color: #EBF2D8;
+}
+ul.loop li:nth-child(2) a {
+  background: #9FBF3F;
+}
+ul.loop li:nth-child(3) a {
+  background: #B2CC65;
+}
+ul.loop li:nth-child(2) a::after {
+  border-left-color: #9FBF3F;
+}
+ul.loop li:nth-child(3) a::after {
+  border-left-color: #B2CC65;
+}
+ul.loop li:first-of-type(1) a {
+  padding-left: 0.7em;
 }
 
 .nthchild ul.loop a::before {
@@ -1569,17 +1594,8 @@ ul.tab li a {
   border-left: 1.2em solid hsl(75deg, 50%, 40%);
 }
 
-ul.loop li:first-child a {
-  padding-left: 0.7em;
-}
-
 .no-nthchild ul.loop a {
   border-right: solid 1px #FFF;
-}
-
-ul.loop a:hover {
-  color: #EBF2D8;
-  color: hsl(75deg, 50%, 90%);
 }
 
 ul.tab li.current a {
@@ -1587,32 +1603,8 @@ ul.tab li.current a {
   border-bottom-color: #EBF2D8;
 }
 
-ul.tab a:hover {
-  color: hsl(75deg, 50%, 30%);
-}
-
 .no-nthchild ul.loop a {
   padding: 0.7em 1.2em;
-}
-
-ul.loop li:nth-child(2) a {
-  background: #9FBF3F;
-  background: hsl(75deg, 50%, 50%);
-}
-
-ul.loop li:nth-child(3) a {
-  background: #B2CC65;
-  background: hsl(75deg, 50%, 60%);
-}
-
-ul.loop li:nth-child(2) a::after {
-  border-left-color: #9FBF3F;
-  border-left-color: hsl(75deg, 50%, 50%);
-}
-
-ul.loop li:nth-child(3) a::after {
-  border-left-color: #B2CC65;
-  border-left-color: hsl(75deg, 50%, 60%);
 }
 
 article.intro ul a:hover {
@@ -1624,7 +1616,7 @@ article.intro ul a:hover {
 }
 
 ul.tab li.current a:hover {
-  color: hsl(75deg, 50%, 40%);
+  color: #7F9933;
 }
 
 .no-nthchild table tr.odd td {
@@ -1635,7 +1627,6 @@ th, ul.loop a, .sell #tooltip div:first-child {
   color: #FFF;
   font-weight: bold;
   background: #7F9933;
-  background: hsl(75deg, 50%, 40%);
 }
 
 ul.tab a, figure, figure a, .sell #sell {
@@ -1653,17 +1644,17 @@ ul.tab a, figure, figure a, .sell #sell {
   font-weight: normal;
   font-size: 0.7em;
   opacity: 0;
-  -webkit-transform: translate(-10em, -10em);
   -ms-transform: translate(-10em, -10em);
+  -webkit-transform: translate(-10em, -10em);
   transform: translate(-10em, -10em);
+  -ms-transition-duration: 2s;
+  -webkit-transition-duration: 2s;
+  -o-transition-duration: 2s;
+  transition-duration: 2s;
   -webkit-transition-property: opacity, -webkit-transform;
   transition-property: opacity, -webkit-transform;
   -o-transition-property: transform, opacity;
   transition-property: transform, opacity;
-  transition-property: transform, opacity, -webkit-transform;
-  -webkit-transition-duration: 2s;
-  -o-transition-duration: 2s;
-  transition-duration: 2s;
 }
 
 #sell > a {
@@ -1709,22 +1700,25 @@ ul.tab a, figure, figure a, .sell #sell {
 }
 
 #tooltip.tip {
-  -webkit-transform: translate(10em, -3em);
   -ms-transform: translate(10em, -3em);
+  -webkit-transform: translate(10em, -3em);
+  -o-transform: translate(10em, -3em);
   transform: translate(10em, -3em);
   opacity: 0.75;
 }
 
 #tooltip.tb1 {
-  -webkit-transform: translate(2em, -5em);
   -ms-transform: translate(2em, -5em);
+  -webkit-transform: translate(2em, -5em);
+  -o-transform: translate(2em, -5em);
   transform: translate(2em, -5em);
   opacity: 1;
 }
 
 #tooltip.tb2 {
-  -webkit-transform: translate(2em, 10em);
   -ms-transform: translate(2em, 10em);
+  -webkit-transform: translate(2em, 10em);
+  -o-transform: translate(2em, 10em);
   transform: translate(2em, 10em);
   z-index: 5;
 }
@@ -1733,9 +1727,10 @@ ul.tab a, figure, figure a, .sell #sell {
   bottom: 10em;
   left: 0em;
   opacity: 1;
-  -webkit-transform: translate(-11em, 0em);
-  -ms-transform: translate(-11em, 0em);
-  transform: translate(-11em, 0em);
+  -ms-transform: translate(11em, 0);
+  -webkit-transform: translate(11em, 0);
+  -o-transform: translate(11em, 0);
+  transform: translate(11em, 0);
 }
 
 #tooltip div:first-child {
@@ -1744,20 +1739,23 @@ ul.tab a, figure, figure a, .sell #sell {
 }
 
 .sell #tooltip.tip {
-  -webkit-transform: translate(10em, 0em);
-  -ms-transform: translate(10em, 0em);
-  transform: translate(10em, 0em);
+  -ms-transform: translate(10em, 0);
+  -webkit-transform: translate(10em, 0);
+  -o-transform: translate(10em, 0);
+  transform: translate(10em, 0);
 }
 
 .sell #tooltip.tb1 {
-  -webkit-transform: translate(0em, 10em);
-  -ms-transform: translate(0em, 10em);
-  transform: translate(0em, 10em);
+  -ms-transform: translate(0, 10em);
+  -webkit-transform: translate(0, 10em);
+  -o-transform: translate(0, 10em);
+  transform: translate(0, 10em);
 }
 
 .sell #tooltip.tb2 {
-  -webkit-transform: translate(-50em, 10em);
   -ms-transform: translate(-50em, 10em);
+  -webkit-transform: translate(-50em, 10em);
+  -o-transform: translate(-50em, 10em);
   transform: translate(-50em, 10em);
 }
 
@@ -1767,14 +1765,14 @@ ul.tab a, figure, figure a, .sell #sell {
 
 #alpacas_for_sale.sell h2 {
   color: #900;
-  color: hsl(0deg, 100%, 30%);
   opacity: 1;
 }
 
 #sell > a:hover, #sell > table:hover {
   opacity: 0.9;
-  -webkit-transform: scale(1.01);
   -ms-transform: scale(1.01);
+  -webkit-transform: scale(1.01);
+  -o-transform: scale(1.01);
   transform: scale(1.01);
 }
 
@@ -1824,6 +1822,12 @@ ul.tab a, figure, figure a, .sell #sell {
 ul#thumbnails {
   border-color: #9c0;
 }
+ul#thumbnails a:link, ul#thumbnails a:visited {
+  border-color: black;
+}
+ul#thumbnails a:hover, ul#thumbnails a:active {
+  border-color: #900;
+}
 
 #controls.static button {
   border: 1px solid #FFF;
@@ -1835,14 +1839,6 @@ ul#thumbnails {
   background-color: rgba(150, 150, 150, 0.5);
   color: black;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
-}
-
-ul#thumbnails a:link, ul#thumbnails a:visited {
-  border-color: black;
-}
-
-ul#thumbnails a:hover, ul#thumbnails a:active {
-  border-color: #900;
 }
 
 button#backbutton {
@@ -1870,7 +1866,6 @@ table {
   margin-right: 2.5%;
   float: left;
 }
-
 table table {
   margin-right: 0%;
   width: 100%;
@@ -1884,11 +1879,9 @@ table table {
   *padding: 2% 1%;
   *height: 1%;
 }
-
 .extent a {
   padding: 0;
 }
-
 .extent figure {
   display: inline;
   display: inline-block;
@@ -1899,6 +1892,19 @@ table table {
   width: 23%;
   *width: 22.6%;
   _width: 22%;
+}
+.extent figure a {
+  border-width: 0 0.8em;
+  padding: 1em 0 0;
+}
+.extent figure img {
+  width: 100%;
+}
+.extent figure > * {
+  border: 1em solid white;
+}
+.extent figcaption {
+  _border: 4px solid white;
 }
 
 .five figure {
@@ -1911,14 +1917,6 @@ table table {
   width: 14.6%;
   *width: 14.3%;
   _width: 13.7%;
-}
-
-.extent figure > * {
-  border: 1em solid white;
-}
-
-.extent figcaption {
-  _border: 4px solid white;
 }
 
 .six figcaption {
@@ -1938,6 +1936,9 @@ article.intro {
 }
 
 .tab {
+  -o-transform: translateX(-1000px);
+  -ms-transform: translateX(-1000px);
+  -webkit-transform: translateX(-1000px);
   transform: translateX(-1000px);
   -webkit-transition: left 1s;
   -o-transition: left 1s;
@@ -1945,7 +1946,10 @@ article.intro {
 }
 
 .loop, .tab {
-  transform: translateX(0px);
+  -o-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
 }
 
 .tab li {
@@ -1956,17 +1960,8 @@ article.intro {
   padding: 0.7em 1.3em;
 }
 
-.extent figure a {
-  border-width: 0 0.8em;
-  padding: 1em 0 0;
-}
-
 #sell.extent figure a {
   _padding: 1em 0 0;
-}
-
-.extent figure img {
-  width: 100%;
 }
 
 .loop a::after, .loop a::before {
@@ -1993,8 +1988,7 @@ article.intro {
 #sell > a {
   padding: 1.6%;
   *height: 1%;
-  border: 1px solid #809933;
-  border: 1px solid hsl(75deg, 50%, 40%);
+  border: 1px solid #759707;
 }
 
 #sell a {
@@ -2018,14 +2012,19 @@ article.intro {
   z-index: -1;
   display: block;
 }
-
+#alpacas_for_sale main aside img {
+  float: none;
+}
 #alpacas_for_sale main > aside {
   width: 72%;
 }
-
 #alpacas_for_sale header {
   z-index: 0;
   margin-bottom: 1em;
+}
+#alpacas_for_sale article.intro {
+  position: relative;
+  width: 100%;
 }
 
 /* early ie requires ul#list, ul#list li to pull content above #sell div */
@@ -2039,10 +2038,6 @@ article.intro {
   right: 0%;
   margin: 0;
   z-index: 1;
-}
-
-#alpacas_for_sale aside img {
-  float: none;
 }
 
 .sell #sell {
@@ -2060,11 +2055,6 @@ article.intro {
 
 .loop + #sell {
   margin-top: 0;
-}
-
-#alpacas_for_sale article.intro {
-  position: relative;
-  width: 100%;
 }
 
 .touch, .sell aside, table, .tog table.show, .extent table.show, #sell a {
@@ -2358,6 +2348,8 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
   button#exit:hover, button#exit:focus {
     background-color: hsla(75deg, 50%, 40%, 0.5);
     color: #FFF;
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
@@ -2366,13 +2358,19 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
   }
   ul#thumbnails.gallery li {
     width: 17.31%;
-  }
-  ul#thumbnails.gallery li, ul#thumbnails.gallery li a {
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
   ul#thumbnails.gallery li.portrait {
     width: 13.2%;
+  }
+  ul#thumbnails.gallery li a {
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
   }
   .no-textshadow button#exit {
     color: hsl(75deg, 50%, 40%);
@@ -2460,7 +2458,6 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
   }
   /*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
   .sell #sell a.show, .sell #sell.tog table.show {
-    /*display: none;*/
     position: absolute;
     left: -9999px;
   }
@@ -2679,7 +2676,7 @@ ul#list {
 /*@supports (display: grid){ }*/
 /* false positive (-moz-column-gap: 20px) (-webkit-column-gap: 20px) or */
 @supports (column-gap: 20px) {
-  ul#thumbnails.gallery {
+  #thumbnails.gallery {
     padding: 0.6em;
     display: -ms-grid;
     display: grid;

@@ -378,6 +378,12 @@ ul.tab a, figure, figure a, .sell #sell {
 }
 ul#thumbnails {
 	border-color: #9c0;
+    a:link, a:visited{
+        border-color: black;
+    }
+    a:hover, a:active {
+        border-color: $current;
+    }
 }
 #controls.static button {
 	border: 1px solid #FFF;
@@ -389,12 +395,7 @@ ul#thumbnails {
 	color: black;
 	text-shadow: 1px 1px 1px rgba(255, 255, 255, .75);
 }
-ul#thumbnails a:link, ul#thumbnails a:visited {
-	border-color: black;
-}
-ul#thumbnails a:hover, ul#thumbnails a:active {
-	border-color: $current;
-}
+
 button#backbutton {
 	background-position: 50% 14.5%;
 }
