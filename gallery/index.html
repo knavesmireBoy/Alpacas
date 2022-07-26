@@ -8,8 +8,8 @@
 <meta content="Gallery: A set of pictures to browse. Press center button for to toggle a slideshow" name="description">
 <meta content="Andrew Sykes" name="author">
 	<title>Granary Alpacas | Gallery</title>
-	<link href="../css/lofi.css" rel="stylesheet">
-	<link href="../css/hifi.css" rel="stylesheet">
+	<link href="../css/lofi.css" media="all" rel="stylesheet">
+    <link href="../css/hifi.css" media="all" rel="stylesheet">
     <link rel="shortcut icon" type="image/jpg" href="../assets/favicon.ico"/>
 	<script>
 	document.cookie='resolution='+Math.max(screen.width,screen.height)+'; path=/';
@@ -26,23 +26,23 @@
 		<div id="innerwrap">
 			<main role="main">
                 <ul id="thumbnails" class="gallery">
-                    <li><a href="../gal/big/New_arrivals.jpg"><img alt="Our new arrivals" src="../gal/big/New_arrivals.jpg"></a></li>
-                    <li><a href="../gal/big/PabloANDMum.jpg"><img alt="Pablo and Mum" src="../gal/big/PabloANDMum.jpg"></a></li>
-                    <li><a href="../gal/big/Enrico.jpg"><img alt="Enrico at 1 month" src="../gal/big/Enrico.jpg"></a></li>
-                    <li><a  href="../gal/big/The_boys.jpg"><img alt="Male Alpacas" src="../gal/big/The_boys.jpg"></a></li>
-                    <li><a href="../gal/big/gys2.jpg"><img alt="Carlos strolls out" src="../gal/big/gys2.jpg"></a></li>
-                    <li class="portrait"><a href="../gal/big/WiredUp.jpg"><img alt="All wired up" src="../gal/big/WiredUp.jpg"></a></li>
-                    <li><a href="../gal/big/grazing.jpg"><img alt="Alpacas Grazing" src="../gal/big/grazing.jpg"></a></li>
-                    <li><a href="../gal/big/gys4.jpg"><img alt="Carlos and attendees" src="../gal/big/gys4.jpg"></a></li>
-                    <li><a href="../gal/big/gys5.jpg"><img alt="Carlos has a rush of interest" src="../gal/big/gys5.jpg"></a></li>
-                    <li><a href="../gal/big/honcho.jpg"><img alt="Honcho" src="../gal/big/honcho.jpg"></a></li>
-                    <li><a href="../gal/big/sunsetAlpaca.jpg"><img alt="Miguel" src="../gal/big/sunsetAlpaca.jpg"></a></li>
-                    <li class="portrait"><a href="../gal/big/Juanita.jpg"><img alt="Juanita" src="../gal/big/Juanita.jpg"></a></li>
-                    <li><a href="../gal/big/First_steps.jpg"><img alt="First Steps" src="../gal/big/First_steps.jpg"></a></li>
-                    <li><a href="../gal/big/enrico2.jpg"><img alt="Enrico" src="../gal/big/enrico2.jpg"></a></li>
-                    <li><a href="../gal/big/Sancho.jpg"><img alt="Sancho" src="../gal/big/Sancho.jpg"></a></li>
-                    <li><a href="../gal/big/wotthis.jpg"><img alt="What is this?" src="../gal/big/wotthis.jpg"></a></li>
-                    <li><a href="../gal/big/Jose.jpg"><img alt="Jose" src="../gal/big/Jose.jpg"></a></li>
+                    <li><a href="../gal/big/New_arrivals.jpg"><img alt="Our new arrivals" src="../gal/small/New_arrivals.jpg"></a></li>
+                    <li><a href="../gal/big/PabloANDMum.jpg"><img alt="Pablo and Mum" src="../gal/small/PabloANDMum.jpg"></a></li>
+                    <li><a href="../gal/big/Enrico.jpg"><img alt="Enrico at 1 month" src="../gal/small/Enrico.jpg"></a></li>
+                    <li><a  href="../gal/big/The_boys.jpg"><img alt="Male Alpacas" src="../gal/small/The_boys.jpg"></a></li>
+                    <li><a href="../gal/big/gys2.jpg"><img alt="Carlos strolls out" src="../gal/small/gys2.jpg"></a></li>
+                    <li class="portrait"><a href="../gal/big/WiredUp.jpg"><img alt="All wired up" src="../gal/small/WiredUp.jpg"></a></li>
+                    <li><a href="../gal/big/grazing.jpg"><img alt="Alpacas Grazing" src="../gal/small/grazing.jpg"></a></li>
+                    <li><a href="../gal/big/gys4.jpg"><img alt="Carlos and attendees" src="../gal/small/gys4.jpg"></a></li>
+                    <li><a href="../gal/big/gys5.jpg"><img alt="Carlos has a rush of interest" src="../gal/small/gys5.jpg"></a></li>
+                    <li><a href="../gal/big/honcho.jpg"><img alt="Honcho" src="../gal/small/honcho.jpg"></a></li>
+                    <li><a href="../gal/big/sunsetAlpaca.jpg"><img alt="Miguel" src="../gal/small/sunsetAlpaca.jpg"></a></li>
+                    <li class="portrait"><a href="../gal/big/Juanita.jpg"><img alt="Juanita" src="../gal/small/Juanita.jpg"></a></li>
+                    <li><a href="../gal/big/First_steps.jpg"><img alt="First Steps" src="../gal/small/First_steps.jpg"></a></li>
+                    <li><a href="../gal/big/enrico2.jpg"><img alt="Enrico" src="../gal/small/enrico2.jpg"></a></li>
+                    <li><a href="../gal/big/Sancho.jpg"><img alt="Sancho" src="../gal/small/Sancho.jpg"></a></li>
+                    <li><a href="../gal/big/wotthis.jpg"><img alt="What is this?" src="../gal/small/wotthis.jpg"></a></li>
+                    <li><a href="../gal/big/Jose.jpg"><img alt="Jose" src="../gal/small/Jose.jpg"></a></li>
                 </ul>
                 <!--
                 <section id="controls"><button id="backbutton"></button><button id="playbutton"></button><button id="forwardbutton"></button></section>-->
@@ -76,6 +76,16 @@
     <script src="../js/viewportSize.js"></script>
     <script src="../js/shims.js"></script>
     <script src="../js/underscore.js"></script>
+     <script src="../js/cacher.js"></script>
+    <script>
+        document.onreadystatechange = function() {
+            //check early ie
+	if (document.readyState === "interactive") {
+        //document.getElementsByTagName('h2')[0].innerHTML = 'done';
+            gAlp.Cacher(/\/gal\/\w+\/(.+$)/, 'small', 'big');
+    }
+        };
+    </script>
     <script src="../js/intaface.js"></script>
     <script src="../js/classlist.js"></script>
     <script src="../js/global.js"></script>
