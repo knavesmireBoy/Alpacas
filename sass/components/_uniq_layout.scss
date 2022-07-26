@@ -3,7 +3,7 @@
     @include alpacas(126%, -15%, 13%, 69em);
 }
 #welcome p {
-    @include alpaca-margin(.5em, 31%, .5em, 0);
+    @include alpaca-margin($r: 30%);
 }
 
 #welcome #intro {
@@ -51,20 +51,30 @@
 #about_alpacas main aside {
     @include alpacas(111%, -25%, 12%, 60em);
 }
+
+#about_alpacas #wrap aside {
+		bottom: calc(10% + ((30 - 10) * ((100vw - 768px) / (1280 - 768))));
+	}
+
 #about_alpacas.verbose article.intro p {
     margin: 0 35% .5em 0;
     }
 #upkeep main aside {
     @include alpacas(119%, -19%, 14%, 60em);
 }
+
+#upkeep #wrap aside {
+    bottom: calc(10% + ((50 - 10) * ((100vw - 850px) / (1280 - 850))));
+}
+
 #upkeep p:first-of-type {
-	margin-right: 27%;
+    @include alpaca_margin($r: 27%)
 }
 #stud_services main aside {
     @include alpacas(125%, -17%, 2%);
 }
-#stud_services.verbose main article p {
-	margin-right: 69%;
+#stud_services p {
+	@include alpaca_margin($r: 69%);
 }
 #links main aside {
     @include alpacas(135%, -25%, 2%, 75em);
@@ -83,15 +93,18 @@
 #stud_services main>aside {
 	width: 90%;
 }
-#links main>aside {
+#links {
+    main>aside {
 	width: 100%;
+        dl {
+            margin: 1em 0;
+        }
+        dd {
+            margin: .1em 0 .4em .75em;
+        }
+    }
 }
-#links dl {
-	margin: 1em 0;
-}
-#links dd {
-	margin: .1em 0 .4em .75em;
-}
+
 #contact_us main>aside {
 	width: 66%;
 }
@@ -103,23 +116,15 @@
 }
 
 @media only screen and (max-width: 1100px) {
-	#welcome article.intro p {
+	#welcome article.intro p, #about_us article.intro p {
 		margin-right: 0%;
 	}
-	#about_us article.intro p {
-		margin-right: 0%;
-	}
-
-	#about_alpacas #wrap aside {
-		bottom: 14%;
-	}
-	#upkeep main aside {
-		bottom: 10%;
-	}
+    
 	/* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
 	#links main aside {
 		z-index: -1;
 	}
+
 }
 
 @media only screen and (max-width: 850px) {
@@ -141,36 +146,28 @@
     }
     
 	#links dt:nth-child(1) {
-		-webkit-animation: entry 1s ease-out 1s backwards;
-		animation: entry 1s ease-out 1s backwards;
+        @include prefix(animation, entry 1s ease-out 1s backwards, webkit);
 	}
 	#links dd:nth-child(2) {
-		-webkit-animation: entry 1s ease-out 2s backwards;
-		animation: entry 1s ease-out 2s backwards;
+        @include prefix(animation, entry 1s ease-out 2s backwards, webkit);
 	}
 	#links dt:nth-child(3) {
-		-webkit-animation: entry 1s ease-out 3s backwards;
-		animation: entry 1s ease-out 3s backwards;
+		@include prefix(animation, entry 1s ease-out 3s backwards, webkit);
 	}
 	#links dd:nth-child(4) {
-		-webkit-animation: entry 1s ease-out 4s backwards;
-		animation: entry 1s ease-out 4s backwards;
+		@include prefix(animation, entry 1s ease-out 4s backwards, webkit);
 	}
 	#links dt:nth-child(5) {
-		-webkit-animation: entry 1s ease-out 5s backwards;
-		animation: entry 1s ease-out 5s backwards;
+		@include prefix(animation, entry 1s ease-out 5s backwards, webkit);
 	}
 	#links dd:nth-child(6) {
-		-webkit-animation: entry 1s ease-out 6s backwards;
-		animation: entry 1s ease-out 6s backwards;
+		@include prefix(animation, entry 1s ease-out 6s backwards, webkit);
 	}
 	#links dt:nth-child(7) {
-		-webkit-animation: entry 1s ease-out 7s backwards;
-		animation: entry 1s ease-out 7s backwards;
+		@include prefix(animation, entry 1s ease-out 7s backwards, webkit);
 	}
 	#links dd:nth-child(8) {
-		-webkit-animation: entry 1s ease-out 8s backwards;
-		animation: entry 1s ease-out 8s backwards;
+		@include prefix(animation, entry 1s ease-out 8s backwards, webkit);
 	}
     #stud_services.verbose footer {
 		margin-top: 9%;
@@ -219,6 +216,7 @@
 	#links aside img {
         @include alpaca-mask('links_masking.png', 0,0);
 	}
+   
 	#contact_us aside img {
         @include alpaca-mask('contacts_masking.png');
 	}

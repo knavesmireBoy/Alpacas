@@ -129,6 +129,10 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     .extent figure:nth-of-type(2) figcaption {
         border-width: .5em 0 1em;
     }
+    
+     #links dl {
+        margin: 0 0 1em;
+    }
 }
 
 @media only screen and (max-width: 667px) {

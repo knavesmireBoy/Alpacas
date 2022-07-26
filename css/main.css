@@ -439,10 +439,6 @@ nav a, nav a:link, nav a:visited {
   padding: 0 0 0 2.5em;
 }
 
-.no-cssgradients hr {
-  display: none;
-}
-
 .verbose article p {
   margin: 0.5em 35% 0.5em 0;
 }
@@ -521,7 +517,7 @@ footer, main aside, header a, main label, main input, main .read-more-target, ar
   overflow: hidden;
 }
 
-#innerwrap input {
+#innerwrap input, .no-cssgradients hr {
   cursor: pointer;
   position: absolute;
   left: -9999px;
@@ -543,7 +539,7 @@ a#yag {
 }
 
 #welcome p {
-  margin: 0.5em 31% 0.5em 0;
+  margin: 0.5em 30% 0.5em 0;
 }
 
 #welcome #intro {
@@ -601,6 +597,10 @@ a#yag {
   max-width: 60em;
 }
 
+#about_alpacas #wrap aside {
+  bottom: calc(10% + 20 * (100vw - 768px) / 512);
+}
+
 #about_alpacas.verbose article.intro p {
   margin: 0 35% 0.5em 0;
 }
@@ -612,8 +612,12 @@ a#yag {
   max-width: 60em;
 }
 
+#upkeep #wrap aside {
+  bottom: calc(10% + 40 * (100vw - 850px) / 430);
+}
+
 #upkeep p:first-of-type {
-  margin-right: 27%;
+  margin: 0.5em 27% 0.5em 0;
 }
 
 #stud_services main aside {
@@ -623,8 +627,8 @@ a#yag {
   max-width: 60em;
 }
 
-#stud_services.verbose main article p {
-  margin-right: 69%;
+#stud_services p {
+  margin: 0.5em 69% 0.5em 0;
 }
 
 #links main aside {
@@ -657,12 +661,10 @@ a#yag {
 #links main > aside {
   width: 100%;
 }
-
-#links dl {
+#links main > aside dl {
   margin: 1em 0;
 }
-
-#links dd {
+#links main > aside dd {
   margin: 0.1em 0 0.4em 0.75em;
 }
 
@@ -676,17 +678,8 @@ a#yag {
   }
 }
 @media only screen and (max-width: 1100px) {
-  #welcome article.intro p {
+  #welcome article.intro p, #about_us article.intro p {
     margin-right: 0%;
-  }
-  #about_us article.intro p {
-    margin-right: 0%;
-  }
-  #about_alpacas #wrap aside {
-    bottom: 14%;
-  }
-  #upkeep main aside {
-    bottom: 10%;
   }
   /* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
   #links main aside {
@@ -2015,10 +2008,6 @@ article.intro {
   border: 1px solid #759707;
 }
 
-#sell.extent table {
-  display: none;
-}
-
 #sell a {
   display: block;
   _padding: 1.6%;
@@ -2475,6 +2464,9 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
   }
   .extent figure:nth-of-type(2) figcaption {
     border-width: 0.5em 0 1em;
+  }
+  #links dl {
+    margin: 0 0 1em;
   }
 }
 @media only screen and (max-width: 667px) {

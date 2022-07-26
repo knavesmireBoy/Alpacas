@@ -71,15 +71,12 @@ a:link,  a:visited {
 	white-space: nowrap;
 	width: 100%;
 	text-indent: -999px;
-}
-
-a h1 img {
+       img {
 	margin: 0;
     position: relative;
     }
+} 
 }//header
-
-
 
 footer {
     ul {
@@ -120,16 +117,14 @@ aside>img {
 	color: blue;
 }
 
-nav a, nav a:link, nav a:visited {
+nav {
+    a, a:link, a:visited {
 	padding: 0 0 0 2.5em;
 }
-
-.no-cssgradients hr {
-	display: none;
 }
 
 .verbose article p {
-    margin: .5em 35% .5em 0;
+       @include alpaca-margin;
 }
 
 footer li:first-child::after {
@@ -203,10 +198,9 @@ footer, main aside,  header a, main label, main input, main .read-more-target, a
 	overflow: hidden;
 }
 
-#innerwrap input {
+#innerwrap input, .no-cssgradients hr {
 	cursor: pointer;
-	position: absolute;
-	left: -9999px;
+    @include hide();
 }
 
 a#yag {

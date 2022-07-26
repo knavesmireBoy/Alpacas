@@ -3,6 +3,11 @@
     background-image: url("../assets/grass_ipad.png");
 }
 
+@mixin mainpara ($t:.5em, $r: 35%, $b: .5em, $l: 0, $h: 1.2) {
+    margin: .5em 35% .5em 0; 
+    line-height: $h;
+}
+
 @mixin alpacas ($w: 126%, $r: -25%, $b: 13%, $m: 60em) {
     width: $w;
 	right: $r;
@@ -10,7 +15,7 @@
     max-width: $m;
 }
 
-@mixin alpaca-margin ($t, $r, $b, $l) {
+@mixin alpaca-margin ($t:.5em, $r: 35%, $b: .5em, $l: 0) {
     margin: $t $r $b $l;
 }
 
