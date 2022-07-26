@@ -84,6 +84,8 @@ gAlp.Cacher = function(path, lo, hi) {
         if(!matched) return;
 		if (isCached(matched)) {
 			doSwap();
+            //using this to speed up fade from grey when images cached
+            document.documentElement.classList.add('done');
 		} else {
 			swap(images, filter('src'), doCache);
 		}

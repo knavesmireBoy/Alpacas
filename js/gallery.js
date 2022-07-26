@@ -1,6 +1,7 @@
 /*jslint nomen: true */
 /*global window: false */
 /*global document: false */
+/*global navigator: false */
 /*global Modernizr: false */
 /*global gAlp: false */
 /*global _: false */
@@ -67,7 +68,7 @@
 
 	function doMethod(o, v, p) {
 		//console.log(arguments);
-		return o[p] && o[p](v);
+		return o && o[p] && o[p](v);
 	}
 
 	function lazyVal(v, o, p) {
@@ -78,7 +79,6 @@
 		return _[p](getResult(coll), cb);
 	}
 	var utils = gAlp.Util,
-		//con = utils.con,
 		ptL = _.partial,
 		doComp = _.compose,
 		//creates an object that wraps an iterator, allows setting new instance of iterator ($looper.build) and forwards all requests
@@ -120,12 +120,12 @@
 		getLength = doGet('length'),
 		text_from_target = doComp(doGet('id'), getTarget),
 		node_from_target = utils.drillDown([mytarget, 'nodeName']),
+		src_from_target = utils.drillDown([mytarget, 'src']),
 		getSlideChild = doComp(utils.getChild, utils.getChild, $$('slide')),
 		getBaseChild = doComp(utils.getChild, utils.getChild, $$('base')),
 		getBaseSrc = doComp(utils.drillDown(['src']), getBaseChild),
 		queryOrientation = thrice(greaterBridge)('clientWidth')('clientHeight'),
 		getLI = utils.getDomParent(utils.getNodeByTag('li')),
-		getSRC = twice(utils.getter)('src'),
 		getDomTargetImg = utils.getDomChild(utils.getNodeByTag('img')),
 		$slide_swapper = utils.makeContext(),
 		$setup = utils.makeContext(),
@@ -503,14 +503,17 @@
 			$recur.i = 47; //slide is clone of base initially, so fade can start quickly, ie countdown from lowish figure
 			return mynext;
 		}, //factory
+        /*
         mock = {
             target: {
                 nodeName: 'IMG',
                 src: "http://81.131.244.169/Alpacas/gal/big/Sancho.jpg"
             }
         },
-		setup_val = doComp(thrice(doMethod)('match')(/img/i), node_from_target),
-		//setup_val = utils.always(mock),
+        */
+        /*switched from checking if image is clicked to checking correct path AS page loads with lo res images from the small folder 2 birds 1 stone*/
+		setup_validate = doComp(thrice(doMethod)('match')(/big/), src_from_target),
+		//setup_validate = utils.always(mock),
 		setup = function (e) {
 			doComp(setindex, utils.drillDown([mytarget, 'src']))(e);
 			doComp(ptL(klasAdd, 'static'), thrice(doMapBridge)('id')('controls'), anCr(main))('section');
@@ -553,7 +556,7 @@
 			_.each([$controls, $exit, $locate, $controls_undostat, $controls_dostat], go_execute);
 			$setup.undo();
 		};
-	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_val, setup), main));
+	$setup.set(eventing('click', event_actions.slice(0, 2), ptL(utils.invokeWhen, setup_validate, setup), main));
     $setup.execute();
     utils.highLighter.perform();
   (function () {

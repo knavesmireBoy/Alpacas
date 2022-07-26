@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Merriweather:wght@400;700&display=swap);
-@import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;700&family=Merriweather:ital,wght@0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&family=Merriweather+Sans:wght@400;700&family=Merriweather:ital,wght@0,700;1,400&display=swap");
 nav a, nav a:link, nav a:visited {
   background-image: url(../assets/links.jpg);
   background-repeat: no-repeat;
@@ -126,10 +126,6 @@ ol, ul, dl {
   font-weight: 700;
   font-style: normal;
 }
-#sell.extent table {
-  display: none;
-}
-
 body {
   font: 400 0.8em "Merriweather", "Trebuchet MS", sans-serif;
   background-color: white;
@@ -227,7 +223,7 @@ hr {
 
 nav {
   white-space: nowrap;
-  font: 700 1.2em/2 "Merriweather Sans", Verdana, sans-serif;
+  font: 700 1.2em/2 "Bree Serif", Verdana, sans-serif;
   /*keep separate to keep early ie happy!*/
   /* ie6 requires "nav a.current:visited" */
 }
@@ -879,7 +875,7 @@ http://cssmediaqueries.com/overview.html*/
     background-position: 0% 47%;
   }
   #innerwrap nav {
-    font: 700 1.2em/2 "Merriweather Sans", Verdana, sans-serif;
+    font: 700 1.2em/2 "Bree Serif", Verdana, sans-serif;
   }
   /*background size gives false positives in some browsers, using inlinesvg where support is slightly more recent*/
   .inlinesvg #wrap footer {
@@ -960,7 +956,7 @@ http://cssmediaqueries.com/overview.html*/
   /* https://codepen.io/Idered/pen/AeBgF*/
   /* main required to override main { position: relative; }*/
   main .read-more-state ~ .read-more-trigger {
-    font: 0.8em/2.5 "Droid Sans", sans-serif;
+    font: 0.8em/2.5 "Merriweather Sans", sans-serif;
     border: 1px solid #ddd;
     border-radius: 0.25em;
   }
@@ -1405,6 +1401,22 @@ http://cssmediaqueries.com/overview.html*/
 }
 
 /*https://www.oliverboorman.biz/projects/css_test/*/
+@keyframes fadefromgrey {
+  0% {
+    filter: grayscale(100%);
+  }
+  100% {
+    filter: grayscale(0%);
+  }
+}
+@-webkit-keyframes fadefromgrey {
+  0% {
+    -webkit-filter: grayscale(100%);
+  }
+  100% {
+    -webkit-filter: grayscale(0%);
+  }
+}
 figcaption {
   text-align: center;
   font: normal 1em "Handwritten", Georgia, Palatino, serif;
@@ -1829,6 +1841,18 @@ ul#thumbnails a:hover, ul#thumbnails a:active {
   border-color: #900;
 }
 
+ul#thumbnails.gallery img {
+  -moz-animation: fadefromgrey 10s ease-out;
+  -webkit-animation: fadefromgrey 10s ease-out;
+  animation: fadefromgrey 10s ease-out;
+}
+
+.done ul#thumbnails.gallery img {
+  -moz-animation: fadefromgrey 0s ease-out;
+  -webkit-animation: fadefromgrey 0s ease-out;
+  animation: fadefromgrey 0s ease-out;
+}
+
 #controls.static button {
   border: 1px solid #FFF;
   border: 1px solid rgba(255, 255, 255, 0.75);
@@ -1989,6 +2013,10 @@ article.intro {
   padding: 1.6%;
   *height: 1%;
   border: 1px solid #759707;
+}
+
+#sell.extent table {
+  display: none;
 }
 
 #sell a {

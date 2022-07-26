@@ -3,6 +3,25 @@ $bkg: #EBF2D8;
 $main: #7F9933;
 $pale: #B2CC65;
 $mid: #9FBF3F;
+
+@keyframes fadefromgrey {
+	0% {
+    filter: grayscale(100%);
+	}
+	100% {
+		filter: grayscale(0%);
+	}
+}
+
+@-webkit-keyframes fadefromgrey {
+	0% {
+        -webkit-filter: grayscale(100%);
+	}
+	100% {
+		-webkit-filter: grayscale(0%);
+	}
+}
+
 figcaption {
 	text-align: center;
 	font: normal 1em "Handwritten", Georgia, Palatino, serif;
@@ -384,6 +403,13 @@ ul#thumbnails {
     a:hover, a:active {
         border-color: $current;
     }
+}
+
+ul#thumbnails.gallery img {
+    @include prefix(animation, fadefromgrey 10s ease-out, moz webkit);
+    }
+.done ul#thumbnails.gallery img {
+    @include prefix(animation, fadefromgrey 0s ease-out, moz webkit);
 }
 #controls.static button {
 	border: 1px solid #FFF;
