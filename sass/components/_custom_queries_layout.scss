@@ -130,8 +130,8 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
         border-width: .5em 0 1em;
     }
     
-     #links dl {
-        margin: 0 0 1em;
+     #links dl, #contact_us p:last-of-type {
+         margin: 0 0 1em;
     }
 }
 

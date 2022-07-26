@@ -1,8 +1,10 @@
 //https://stackoverflow.com/questions/5855985/sass-first-child-not-working
 $bkg: #EBF2D8;
+$bkg:  #dfe8c7;
 $main: #7F9933;
 $pale: #B2CC65;
 $mid: #9FBF3F;
+$bkgtex:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='32' viewBox='0 0 16 32'%3E%3Cg fill='%23ebf2d8' fill-opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M0 24h4v2H0v-2zm0 4h6v2H0v-2zm0-8h2v2H0v-2zM0 0h4v2H0V0zm0 4h2v2H0V4zm16 20h-6v2h6v-2zm0 4H8v2h8v-2zm0-8h-4v2h4v-2zm0-20h-6v2h6V0zm0 4h-4v2h4V4zm-2 12h2v2h-2v-2zm0-8h2v2h-2V8zM2 8h10v2H2V8zm0 8h10v2H2v-2zm-2-4h14v2H0v-2zm4-8h6v2H4V4zm0 16h6v2H4v-2zM6 0h2v2H6V0zm0 24h2v2H6v-2z'/%3E%3C/g%3E%3C/svg%3E");
 
 $speed: 5s;
 
@@ -73,12 +75,13 @@ table {
      tr {
         &:nth-of-type(even) {
             background-color: lighten($bkg, 5%);
+            background-color: rgba(255,255,255, .5);
     }
          &:nth-child(7) td {
              @include description();
          }
          &:last-child {
-             font-size: 1em;
+             font-size: .95em;
          }
     }
    
@@ -108,10 +111,15 @@ table {
     }
 }
 
-
-.sell {
-	font-family: Georgia, Palatino, serif;
+.sell table td {
+    font-size: .9em;
 }
+
+.sell main ul {
+    font-family: $navfontfam;
+    font-size: 1.1em;
+}
+
 
 /*classes added where nth-child not supported*/
 td.nested {
@@ -156,6 +164,7 @@ ul {
     &.tab a {
         color: $main;
         text-transform: uppercase;
+        font-weight: 700;
     }
     &.tab li a {
 	border-color: $main;
@@ -166,7 +175,7 @@ ul {
 	-webkit-transition: background 1.5s;
 	-o-transition: background 1.5s;
 	transition: background 1.5s;
-	text-shadow: 2px 2px 2px #FFF;
+	text-shadow: 1px 1px 1px #FFF;
         &:hover {
             color: darken($main, 10%);
         }
@@ -221,8 +230,12 @@ ul {
 	border-right: solid 1px #FFF;
 }
 
+ul.tab li a {
+    background-color: $bkg;
+	background-image: $bkgtex
+}
+
 ul.tab li.current a {
-	background: $bkg;
 	border-bottom-color: $bkg;
 }
 
@@ -249,13 +262,17 @@ th, ul.loop a, .sell #tooltip div:first-child {
 	font-weight: bold;
 	background: $main;
 }
+th {
+    background-color: hsla(75, 70%, 30%, 0.75);
+}
 
 ul.tab a, figure, figure a, .sell #sell {
 	border: solid 1px black;
 }
 
 .sell #sell {
-	background: $bkg;
+    background-color: $bkg;
+	background-image: $bkgtex;
 }
 #tooltip {
 	position: absolute;

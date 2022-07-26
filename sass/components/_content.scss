@@ -13,20 +13,22 @@ nav {
 	font: $navfontsize $navfontfam;
     li {
         border-bottom: solid $menu 1px;
-    }
-    a, a:link, a:visited {
+    
+    & a, & a:link, & a:visited {
         @extend %wavy;
     }
-    a:hover {
+ 
+    /*keep separate to keep early ie happy!*/
+/* ie6 requires "nav a.current:visited" */
+    & a.current, & a.current:visited, & a:active {
+        color: $current;
+        background-position: 0 99%;
+    }
+       & a:hover {
         text-decoration: none;
         color: $navhover;
         background-position: 0 47%;
     }
-    /*keep separate to keep early ie happy!*/
-/* ie6 requires "nav a.current:visited" */
-    a.current, a.current:visited, a:active {
-        color: $current;
-        background-position: 0 99%;
     }
 }
 footer {

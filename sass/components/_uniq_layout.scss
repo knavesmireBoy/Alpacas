@@ -5,7 +5,8 @@
 #welcome p {
     @include alpaca-margin($r: 30%);
 }
-
+/*
+what is this??
 #welcome #intro {
     background-color: black;
     background-color: rgba(0, 66 ,0, .9);
@@ -28,10 +29,9 @@
     text-indent: 100%;
     overflow: hidden;
     transform: none;
-}
-
-#welcome #exit:focus, #welcome #exit:hover {
-    background-color: #900;
+    &:focus, &:hover {
+        background-color: $current;
+    }
 }
 
 #welcome #intro p {
@@ -45,8 +45,9 @@
     color: white;
     text-decoration: underline;
 }
+*/
 #about_us main aside {
-    @include alpacas(100%, 0em, 14%, 62em);
+    @include alpacas(100%, -1em, 14%, 62em);
 }
 #about_alpacas main aside {
     @include alpacas(111%, -25%, 12%, 60em);
@@ -113,13 +114,16 @@
   #contact_us main aside {
 	width: 70%;
 } 
+    
+    #links main aside {
+		z-index: -1;
+	}
 }
 
 @media only screen and (max-width: 1100px) {
 	#welcome article.intro p, #about_us article.intro p {
 		margin-right: 0%;
 	}
-    
 	/* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
 	#links main aside {
 		z-index: -1;

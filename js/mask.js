@@ -30,15 +30,6 @@ if (!window.gAlp) {
 		return f.apply(null, arg);
 	}
 
-	function add(a, b) {
-		return a + b;
-	}
-
-	function doMethod(o, v, p) {
-		//console.log(arguments);
-		return o[p] && o[p](v);
-	}
-
 	var utils = gAlp.Util,
 		ptL = _.partial,
 		//getPredicate = utils.getBest(always(mq), [ptL(Modernizr.mq, query), ptL(isBig, threshold)]),
@@ -104,7 +95,7 @@ if (!window.gAlp) {
 									["margin-right", "-100%"]
 								]
 							]), anCr(mask_target), getKid)();
-							window.setTimeout(activate, 500);
+							setTimeout(activate, 500);
 						};
 					/*
 					https://stackoverflow.com/questions/7715562/css-style-property-names-going-from-the-regular-version-to-the-js-property-ca
@@ -112,7 +103,7 @@ if (!window.gAlp) {
 					but CSSStyleDeclaration.style.setProperty accepts css/hyphen type property names without conversion
 					to camelCase*/
 					return {
-						init: function (outcomes) {
+						init: function (/*outcomes*/) {
 							if (getPredicate()) {
 								return this.execute;
 							}

@@ -33,6 +33,12 @@ function doMatch(str, reg, i) {
 	return isNaN(i) ? str.match(reg) : str.match(reg)[i];
 }
 
+function always(arg){
+    return function(){
+        return arg;
+    };
+}
+
 function swap (els, filterCB, cb) {
     return _.each(_.filter(els, filterCB), cb);
 }
@@ -60,7 +66,7 @@ gAlp.Cacher = function(path, lo, hi) {
             if (!grp[i + 1]) {
                 gAlp.Util.addClass(['done'], document.documentElement);
                 //no need to filter at this point
-                swap(grp, function() { return true; }, curry(setHiRes)(null)('src'));
+                swap(grp, always(true), curry(setHiRes)(null)('src'));
             }
         };
     }
