@@ -78,19 +78,24 @@ gAlp.Cacher = function(path, lo, hi) {
     swap(document.getElementsByTagName('a'), filter('href'), doCallback('href'));
     
      if(window.localStorage) {
+         console.log('stor')
          if(!window.localStorage.cachedElements) {
              window.localStorage.cachedElements = "";
          }
         if(!matched) return;
+         console.log('match')
 		if (isCached(matched)) {
+            console.log('ismatch')
 			doSwap();
             //using this to speed up fade from grey when images cached
             document.documentElement.classList.add('done');
 		} else {
+            console.log('cache')
 			swap(images, filter('src'), doCache);
 		}
      }
     else {
+        console.log('nostor')
         doSwap();
     }
 };
