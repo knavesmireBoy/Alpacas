@@ -2110,12 +2110,16 @@ ul#thumbnails {
   width: 89.7%;
   *width: 91%;
   /*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
+  -moz-transition: width 1s ease-in-out;
+  -o-transition: width 1s ease-in-out;
+  -webkit-transition: width 1s ease-in-out;
   transition: width 1s ease-in-out;
 }
 
 #gallery footer ul > * {
-  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
   -o-transition: all 1s;
+  -webkit-transition: all 1s;
   transition: all 1s;
   opacity: 1;
 }
@@ -2124,34 +2128,28 @@ ul#thumbnails li {
   float: left;
   width: 100%;
 }
-
 ul#thumbnails li a {
   display: block;
 }
-
-#gallery.showtime footer {
-  margin-top: 0%;
+ul#thumbnails li.go {
+  visibility: hidden;
 }
-
-.showtime ul#thumbnails {
-  margin: 3% auto 0;
-}
-
 ul#thumbnails.portrait {
   width: 60%;
 }
-
 ul#thumbnails.gallery {
   padding: 4px;
 }
-
 ul#thumbnails.gallery li {
   border: solid 4px white;
   width: 8.06em;
 }
+.showtime ul#thumbnails {
+  margin: 3% auto 0;
+}
 
-ul#thumbnails li.go {
-  visibility: hidden;
+#gallery.showtime footer {
+  margin-top: 0%;
 }
 
 /* base INITIAL settings on 800px screen @screen use %*/
@@ -2160,6 +2158,10 @@ ul#thumbnails.gallery li.portrait {
   width: 4.259em;
   clear: right;
   *width: 5.3em;
+}
+
+#gallery.showtime footer {
+  margin-top: 0%;
 }
 
 ul#thumbnails.gallery li.portrait {
@@ -2182,6 +2184,10 @@ ul#thumbnails li, .playing li#paused, .swap #base {
   zoom: 1;
   /* Triggers "hasLayout" in IE 7 and lower */
   *display: inline;
+}
+
+ul#thumbnails.preload li {
+  display: none;
 }
 
 /* G A L L E R Y | S H O W T I M E */
@@ -2268,15 +2274,12 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
   top: 2.4em;
   opacity: 1;
 }
-
 .touchevents #gallery.showtime footer {
   margin-top: -5em;
 }
-
 .touchevents #wrap.inplay footer ul > * {
   opacity: 0;
 }
-
 .touchevents #gallery.showtime #innerwrap {
   padding-bottom: 6em;
 }

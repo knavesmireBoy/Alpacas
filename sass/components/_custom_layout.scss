@@ -239,40 +239,41 @@ ul#thumbnails {
     width: 89.7%;
     *width: 91%;
 	/*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
-    transition: width 1s ease-in-out;
+    @include prefix(transition, width 1s ease-in-out, moz o webkit);
 }
 #gallery footer ul>* {
-	-webkit-transition: all 1s;
-	-o-transition: all 1s;
-	transition: all 1s;
+    @include prefix(transition, all 1s, moz o webkit);
 	opacity: 1;
 }
-ul#thumbnails li {
-	float: left;
-	width: 100%;
-}
-ul#thumbnails li a {
-	display: block;
+ul#thumbnails {
+    li {
+        float: left;
+        width: 100%;
+        a {
+            display: block;
+        }
+        &.go {
+            visibility: hidden;
+        }
+    }
+    &.portrait {
+        width: 60%;
+    }
+    &.gallery {
+        padding: 4px;
+    }
+    &.gallery li {
+        border: solid 4px white;
+        width: 8.06em;
+    }
+    .showtime & {
+        margin: 3% auto 0;
+    }
 }
 #gallery.showtime footer {
 	margin-top: 0%;
 }
-.showtime ul#thumbnails {
-	margin: 3% auto 0;
-}
-ul#thumbnails.portrait {
-	width: 60%;
-}
-ul#thumbnails.gallery {
-	padding: 4px;
-}
-ul#thumbnails.gallery li {
-	border: solid 4px white;
-	width: 8.06em;
-}
-ul#thumbnails li.go {
-	visibility: hidden;
-}
+
 /* base INITIAL settings on 800px screen @screen use %*/
 
 ul#thumbnails.gallery li.portrait {
@@ -281,13 +282,16 @@ ul#thumbnails.gallery li.portrait {
 	clear: right;
 	*width: 5.3em;
 }
+#gallery.showtime footer {
+	margin-top: 0%;
+}
+
 ul#thumbnails.gallery li.portrait {
 	width: 78px;
 	width: 6em;
 }
 ul#thumbnails li, .playing li#paused, .swap #base {
-	position: absolute;
-	left: -9999px;
+	@include hide();
 	opacity: 0;
 }
 .inplay #paused, ul li#base, ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide {
@@ -299,6 +303,9 @@ ul#thumbnails li, .playing li#paused, .swap #base {
 	zoom: 1;
 	/* Triggers "hasLayout" in IE 7 and lower */
 	*display: inline;
+}
+ul#thumbnails.preload li {
+    display: none;
 }
 /* G A L L E R Y | S H O W T I M E */
 
@@ -374,20 +381,20 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
 .js #exit:hover, .js #exit:focus {
 	background-position: 50% 106%;
 }
-.touchevents .inplay #controls {
+.touchevents {
+.inplay #controls {
 	top: 2.4em;
 	opacity: 1;
 }
-
-.touchevents #gallery.showtime footer {
+#gallery.showtime footer {
 	margin-top: -5em;
 }
-.touchevents #wrap.inplay footer ul>* {
+#wrap.inplay footer ul>* {
 	opacity: 0;
 }
-
-.touchevents #gallery.showtime #innerwrap {
+#gallery.showtime #innerwrap {
 	padding-bottom: 6em;
+}
 }
 
 .no-touchevents {
