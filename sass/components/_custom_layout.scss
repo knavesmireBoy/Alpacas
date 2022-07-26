@@ -302,6 +302,12 @@ ul#thumbnails li, .playing li#paused, .swap #base {
 }
 /* G A L L E R Y | S H O W T I M E */
 
+#controls, #controls button {
+	display: inline;
+	display: inline-block;
+	zoom: 1;
+}
+
 #controls {
 	font-size: 1.8em;
 	margin: 0 auto;
@@ -313,19 +319,19 @@ ul#thumbnails li, .playing li#paused, .swap #base {
 	opacity: 0;
 	display: table;
 	border-spacing: .5em;
+    button {
+        width: 1.5em;
+        height: 1.5em;
+        padding: 0;
+        margin: 0 .3em;
+        display: table-cell;
+    }
+    &.static {
+        top: -3em;
+        opacity: 1;
+    }
 }
-#controls, #controls button {
-	display: inline;
-	display: inline-block;
-	zoom: 1;
-}
-#controls button {
-	width: 1.5em;
-	height: 1.5em;
-	padding: 0;
-	margin: 0 .3em;
-	display: table-cell;
-}
+
 button#exit {
 	margin: 0.33em;
 }
@@ -339,10 +345,7 @@ li#slide, li#paused {
 .swap #slide {
 	margin-left: 0;
 }
-#controls.static {
-	top: -3em;
-	opacity: 1;
-}
+
 .js #exit {
 	width: 36px;
 	height: 36px;
@@ -355,10 +358,8 @@ li#slide, li#paused {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-image: url(../assets/close_transparent.png);
-	background-color: #7F9933;
-	-webkit-transition: all 1s;
-	-o-transition: all 1s;
-	transition: all 1s;
+	background-color: $grass;
+    @include prefix(transition, all 1s, o ms webkit);
     box-sizing: border-box;
 }
 
@@ -377,30 +378,55 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
 	top: 2.4em;
 	opacity: 1;
 }
+
 .touchevents #gallery.showtime footer {
 	margin-top: -5em;
 }
 .touchevents #wrap.inplay footer ul>* {
 	opacity: 0;
 }
-.no-touchevents button#forwardbutton:hover {
-	background-position: 50% 56%;
-}
-.no-touchevents button#backbutton:hover {
-	background-position: 50% 70.5%;
-}
-.no-touchevents button#playbutton:hover {
-	background-position: 50% 85%;
-}
-.no-touchevents .playing button#playbutton:hover {
-	background-position: 50% 100%;
-}
+
 .touchevents #gallery.showtime #innerwrap {
 	padding-bottom: 6em;
 }
+
+.no-touchevents {
+    button#forwardbutton:hover {
+	background-position: 50% 56%;
+}
+    button#backbutton:hover {
+	background-position: 50% 70.5%;
+}
+    button#playbutton:hover {
+	background-position: 50% 85%;
+}
+    .playing button#playbutton:hover {
+	background-position: 50% 100%;
+}
+}
+
 @media only screen {
 	#exit:hover, #exit:focus {
 		-webkit-transform: rotate(360deg);
 		transform: rotate(360deg);
 	}
 }
+#preload {
+    display: none;
+}
+
+/*
+sass practice
+#controls {
+    .touchevents .inplay & {
+        font-stretch: condensed;
+    }
+}
+button {
+    &#forwardbutton:hover {
+        .no-touchevents & {
+        background-position: 11% 11%;
+        }
+    }
+}
+*/

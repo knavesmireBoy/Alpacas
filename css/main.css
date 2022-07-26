@@ -2185,6 +2185,12 @@ ul#thumbnails li, .playing li#paused, .swap #base {
 }
 
 /* G A L L E R Y | S H O W T I M E */
+#controls, #controls button {
+  display: inline;
+  display: inline-block;
+  zoom: 1;
+}
+
 #controls {
   font-size: 1.8em;
   margin: 0 auto;
@@ -2197,19 +2203,16 @@ ul#thumbnails li, .playing li#paused, .swap #base {
   display: table;
   border-spacing: 0.5em;
 }
-
-#controls, #controls button {
-  display: inline;
-  display: inline-block;
-  zoom: 1;
-}
-
 #controls button {
   width: 1.5em;
   height: 1.5em;
   padding: 0;
   margin: 0 0.3em;
   display: table-cell;
+}
+#controls.static {
+  top: -3em;
+  opacity: 1;
 }
 
 button#exit {
@@ -2229,11 +2232,6 @@ li#slide, li#paused {
   margin-left: 0;
 }
 
-#controls.static {
-  top: -3em;
-  opacity: 1;
-}
-
 .js #exit {
   width: 36px;
   height: 36px;
@@ -2246,9 +2244,10 @@ li#slide, li#paused {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url(../assets/close_transparent.png);
-  background-color: #7F9933;
-  -webkit-transition: all 1s;
+  background-color: #759707;
   -o-transition: all 1s;
+  -ms-transition: all 1s;
+  -webkit-transition: all 1s;
   transition: all 1s;
   box-sizing: border-box;
 }
@@ -2278,24 +2277,21 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
   opacity: 0;
 }
 
+.touchevents #gallery.showtime #innerwrap {
+  padding-bottom: 6em;
+}
+
 .no-touchevents button#forwardbutton:hover {
   background-position: 50% 56%;
 }
-
 .no-touchevents button#backbutton:hover {
   background-position: 50% 70.5%;
 }
-
 .no-touchevents button#playbutton:hover {
   background-position: 50% 85%;
 }
-
 .no-touchevents .playing button#playbutton:hover {
   background-position: 50% 100%;
-}
-
-.touchevents #gallery.showtime #innerwrap {
-  padding-bottom: 6em;
 }
 
 @media only screen {
@@ -2304,6 +2300,25 @@ logic dictates that we only get to this point courtesy of javascript so moderniz
     transform: rotate(360deg);
   }
 }
+#preload {
+  display: none;
+}
+
+/*
+sass practice
+#controls {
+    .touchevents .inplay & {
+        font-stretch: condensed;
+    }
+}
+button {
+    &#forwardbutton:hover {
+        .no-touchevents & {
+        background-position: 11% 11%;
+        }
+    }
+}
+*/
 /* https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/ */
 /*https://css-tricks.com/logic-in-media-queries/*/
 /*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
