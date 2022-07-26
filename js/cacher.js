@@ -58,9 +58,8 @@ gAlp.Cacher = function(path, lo, hi) {
             logCache(doMatch(this.src, path, 1));
             //setHiRes(grp[i], 'src');
             if (!grp[i + 1]) {
+                gAlp.Util.addClass(['done'], document.documentElement);
                 //no need to filter at this point
-                console.log(document.documentElement)
-                document.documentElement.classList.add('done');
                 swap(grp, function() { return true; }, curry(setHiRes)(null)('src'));
             }
         };
@@ -85,11 +84,9 @@ gAlp.Cacher = function(path, lo, hi) {
          }
         if(!matched) return;
 		if (isCached(matched)) {
-            console.log('ismatch')
 			doSwap();
             //using this to speed up fade from grey when images cached
 		} else {
-            console.log('cache')
 			swap(images, filter('src'), doCache);
 		}
      }

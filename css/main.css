@@ -1842,9 +1842,9 @@ ul#thumbnails a:hover, ul#thumbnails a:active {
 }
 
 ul#thumbnails.gallery img {
-  -moz-animation: fadefromgrey 10s ease-out;
-  -webkit-animation: fadefromgrey 10s ease-out;
-  animation: fadefromgrey 10s ease-out;
+  -moz-animation: fadefromgrey 5s ease-out;
+  -webkit-animation: fadefromgrey 5s ease-out;
+  animation: fadefromgrey 5s ease-out;
 }
 
 .done ul#thumbnails.gallery img {

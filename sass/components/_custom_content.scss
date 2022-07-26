@@ -4,6 +4,8 @@ $main: #7F9933;
 $pale: #B2CC65;
 $mid: #9FBF3F;
 
+$speed: 5s;
+
 @keyframes fadefromgrey {
 	0% {
     filter: grayscale(100%);
@@ -406,7 +408,7 @@ ul#thumbnails {
 }
 
 ul#thumbnails.gallery img {
-    @include prefix(animation, fadefromgrey 10s ease-out, moz webkit);
+    @include prefix(animation, fadefromgrey $speed ease-out, moz webkit);
     }
 .done ul#thumbnails.gallery img {
     @include prefix(animation, fadefromgrey 0s ease-out, moz webkit);
