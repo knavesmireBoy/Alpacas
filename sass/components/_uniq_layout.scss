@@ -1,11 +1,9 @@
+/* these declared widths are purely for old versions of ie overwritten for moder browsers*/
 #welcome main aside {
-	width: 126%;
-	max-width: 69em;
-	right: -15%;
-	bottom: 13%;
+    @include alpacas(126%, -15%, 13%, 69em);
 }
 #welcome p {
-    margin: .5em 31% .5em 0;
+    @include alpaca-margin(.5em, 31%, .5em, 0);
 }
 
 #welcome #intro {
@@ -48,49 +46,31 @@
     text-decoration: underline;
 }
 #about_us main aside {
-	width: 100%;
-	max-width: 62em;
-	right: 0em;
-	bottom: 14%;
+    @include alpacas(100%, 0em, 14%, 62em);
 }
 #about_alpacas main aside {
-	width: 111%;
-	max-width: 60em;
-	right: -25%;
-	bottom: 12%;
+    @include alpacas(111%, -25%, 12%, 60em);
 }
-
 #about_alpacas.verbose article.intro p {
     margin: 0 35% .5em 0;
     }
 #upkeep main aside {
-	width: 119%;
-	max-width: 60em;
-	right: -19%;
-	bottom: 14%;
+    @include alpacas(119%, -19%, 14%, 60em);
 }
 #upkeep p:first-of-type {
 	margin-right: 27%;
 }
 #stud_services main aside {
-	width: 125%;
-	right: -20%;
-	bottom: 2%;
+    @include alpacas(125%, -17%, 2%);
 }
 #stud_services.verbose main article p {
 	margin-right: 69%;
 }
 #links main aside {
-	width: 135%;
-	max-width: 75em;
-	right: -25%;
-	bottom: 2%;
+    @include alpacas(135%, -25%, 2%, 75em);
 }
 #contact_us main aside {
-	width: 95%;
-	max-width: 55em;
-	right: -18%;
-	bottom: 13%;
+    @include alpacas(95%, -18%, 13%, 55em);
 }
 #contact_us p {
 	line-height: 1.8;
@@ -115,8 +95,6 @@
 #contact_us main>aside {
 	width: 66%;
 }
-
-    
  
 @media only screen  {
   #contact_us main aside {
@@ -143,7 +121,6 @@
 		z-index: -1;
 	}
 }
-
 
 @media only screen and (max-width: 850px) {
 	.verbose main div p:first-child {
@@ -224,32 +201,26 @@
 		z-index: -1;
 	}
 	#welcome aside img {
-		-webkit-mask: url('../images/carlos_masking.png') -1px -1px / cover;
-		mask: url('../images/carlos_masking.png') -1px -1px / cover;
+        @include alpaca-mask('carlos_masking.png');
 	}
 	.cssmask #about_us aside img {
-		-webkit-mask: url('../images/honcho_masking.png') -1px 0px / cover;
-		mask: url('../images/honcho_masking.png') -1px 0px / cover;
+        @include alpaca-mask('honcho_masking.png', -10px, 0px);
 	}
 	#about_alpacas aside img {
-		-webkit-mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
-		mask: url('../images/about_alpacas_masking.png') -1px 0px / cover;
+        @include alpaca-mask('about_alpacas_masking.png', -1px, 0px);
+
 	}
 	#upkeep aside img {
-		-webkit-mask: url('../images/upkeep_masking.png') -1px -1px / cover;
-		mask: url('../images/upkeep_masking.png') -1px -1px / cover;
+        @include alpaca-mask('upkeep_masking.png');
 	}
 	#stud_services aside img:first-child {
-		-webkit-mask: url('../images/stud_masking.png') -1px 0px / cover;
-		mask: url('../images/stud_masking.png') -1px 0px / cover;
+         @include alpaca-mask('stud_masking.png', -1px, 0px);
 	}
 	#links aside img {
-		-webkit-mask: url('../images/links_masking.png') 0px 0px / cover;
-		mask: url('../images/links_masking.png') 0px 0px / cover;
+        @include alpaca-mask('links_masking.png', 0,0);
 	}
 	#contact_us aside img {
-		-webkit-mask: url('../images/contacts_masking.png') -1px -1px / cover;
-		mask: url('../images/contacts_masking.png') -1px -1px / cover;
+        @include alpaca-mask('contacts_masking.png');
 	}
 	#alpacas_for_sale #wrap main aside {
 		z-index: 1;
@@ -262,9 +233,8 @@
 		margin-top: 0;
 	}
     /*
-    if JS disabled and masking is not supported a solution is to reduce the size of the pic so it sits to the right of the copy
-    BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support
-    this seems unfair so the only concession is that the header sits on top of the unmasked image and it simply means that the green bottom-border sits on top of the masked image
+    if JS disabled and masking is not supported a solution is to reduce the size of the unmasked pic so it sits to the right of the copy
+    BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support. This seems unfair so the only concession is that the header sits on top of the unmasked image and it simply means that the green bottom-border sits on top of the masked image
     .no-js main {
         position: relative;
     }

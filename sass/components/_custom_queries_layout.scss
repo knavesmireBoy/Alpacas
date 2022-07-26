@@ -13,19 +13,21 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 */
 
 @media only screen {
+    
+    @mixin button () {
+        background-image: url(../assets/buttons_sprite.png);
+        background-color: hsla(75, 50%, 40%, .3);
+        background-size: 128%;
+    }
 	figcaption {
 		font: normal 1.4em/1 "Handwritten", Georgia, Palatino, serif;
 	}
 	.inlinesvg #controls button {
-		background-image: url(../assets/buttons_sprite.png);
-		background-color: hsla(75, 50%, 40%, .3);
-		background-size: 128%;
+		@include button();
 	}
     @supports (background-size: cover) {
         #controls button {
-		background-image: url(../assets/buttons_sprite.png);
-		background-color: hsla(75, 50%, 40%, .3);
-		background-size: 128%;
+            @include button();
         }
     }
 	button#exit {
@@ -47,22 +49,22 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	button#exit:hover, button#exit:focus {
 		background-color: hsla(75, 50%, 40%, .5);
 		color: #FFF;
-		-webkit-transform: rotate(360deg);
-		transform: rotate(360deg);
+        @include prefix(transform, rotate(360deg), ms o webkit);
 	}
 	ul#thumbnails.gallery {
 		padding: .67%;
+        li {
+            width: 17.31%;
+            @include prefix(box-sizing, border-box, ms o webkit);
+            &.portrait {
+                width: 13.2%;
+            }
+            a {
+                @include prefix(box-sizing, border-box, ms o webkit);
+            }
+        }
 	}
-	ul#thumbnails.gallery li {
-		width: 17.31%;
-	}
-	ul#thumbnails.gallery li, ul#thumbnails.gallery li a {
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-	}
-	ul#thumbnails.gallery li.portrait {
-		width: 13.2%;
-	}
+
 	.no-textshadow button#exit {
 		color: hsla(75, 50%, 40%, 1);
 	}
@@ -122,13 +124,11 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
     
     .extent figcaption {
         border-width: .5em .7em 1em;
-}
+    }
     
-    .extent figure:nth-of-type(2) figcaption{
+    .extent figure:nth-of-type(2) figcaption {
         border-width: .5em 0 1em;
     }
-
-
 }
 
 @media only screen and (max-width: 667px) {
@@ -149,8 +149,7 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		top: 2.1em;
 	}
 	#sell a.show, #sell.tog table.show {
-		position: absolute;
-		left: -9999px;
+		@include hide();
 	}
 	#sell table.show, #sell.tog a.show, #sell.extent a.show {
 		position: static;
@@ -158,19 +157,16 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 	}
 	/*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
 	.sell #sell a.show, .sell #sell.tog table.show {
-		/*display: none;*/
-		position: absolute;
-		left: -9999px;
+		@include hide();
 	}
 	.sell #sell.tog a.show, .sell #sell table.show {
 		/*display: block;*/
 		position: static;
 		left: 0;
 	}
-    
-       .extent figcaption {
+    .extent figcaption {
         border-width: .5em 0 1em;
-}
+    }
     #stud_services #wrap footer {
 		padding-top: 0%;
 		margin-top: 9%;
@@ -203,17 +199,16 @@ Note: This media feature is also implemented by Webkit as -webkit-device-pixel-r
 		box-shadow: none;
 	}
     
-    
     ul#thumbnails.gallery {
 		width: 98%;
-	}
-     ul#thumbnails.gallery li {
-		width: 17.2%;
+        li {
+            width: 17.2%;
+            &.portrait {
+                width: 14.7%;
+            }
+        }
 	}
 	
-    ul#thumbnails.gallery li.portrait {
-		width: 14.7%;
-	}
 	ul#thumbnails {
 		padding: 1%;
 	}

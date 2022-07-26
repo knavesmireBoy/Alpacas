@@ -1,3 +1,8 @@
+//https://stackoverflow.com/questions/5855985/sass-first-child-not-working
+$bkg: #EBF2D8;
+$main: #7F9933;
+$pale: #B2CC65;
+$mid: #9FBF3F;
 figcaption {
 	text-align: center;
 	font: normal 1em "Handwritten", Georgia, Palatino, serif;
@@ -6,87 +11,98 @@ figure {
 	border-color: #556B2F;
 	box-shadow: 0px 0px 30px hsl(61, 38%, 70%);
 	background: #FFF;
-}
-table {
-	padding: 0px;
-}
-
-table table {
-	font-size: 1em;
-	border-width: 0;
-}
-table th {
-	vertical-align: middle;
-	text-transform: uppercase;
-	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
-	border-width: 0;
+    :hover {
+        color: #6e2900;
+        border-color: black;
+        img {
+            opacity: 1;
+            box-shadow: 0 0 3px black;
+        }
+    }
+    img {
+        border: solid 1px black;
+        opacity: .9;
+    }
 }
 
-figure img {
-	border: solid 1px black;
-    opacity: .9;
-}
-
-
-table td, table table td {
-	border-width: 1px 0 0;
+@mixin tdata () {
+    border-width: 1px 0 0;
 	padding: .5em;
 }
-/**/
 
-table tbody {
-	border: 0px;
-	min-width: 100%;
+@mixin description () {
+    font-weight: bold;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	color: $current;
 }
+
+table {
+	padding: 0px;
+    table {
+        font-size: 1em;
+        border-width: 0;
+        tr:last-child {
+            font-size: 1em;
+        }
+        td {
+           @include tdata; 
+        }
+    }
+     tr {
+        &:nth-of-type(even) {
+            background-color: lighten($bkg, 5%);
+    }
+         &:nth-child(7) td {
+             @include description();
+         }
+         &:last-child {
+             font-size: 1em;
+         }
+    }
+   
+    tbody {
+        border: 0px;
+        min-width: 100%;
+    }
+    th {
+        vertical-align: middle;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
+        border-width: 0;
+        &:first-of-type {
+            border: solid 1px #FFF;
+            border: solid 1px rgba(255, 255, 255, .5);
+            border-width: 0 1px 0 0;
+    }
+        &:nth-of-type(odd) {
+            border-right-color: rgba(255, 255, 255, .2);
+        }
+    }
+    td {
+        @include tdata;
+        &:last-of-type {
+            border-right-width: 0px;
+        }
+    }
+}
+
 
 .sell {
 	font-family: Georgia, Palatino, serif;
 }
 
-figure:hover {
-	color: #6e2900;
-	border-color: black;
-}
-
-td:last-child {
-	border-right-width: 0px solid black;
-}
-th:nth-child(odd) {
-	border-right-color: rgba(255, 255, 255, .2);
-}
-
+/*classes added where nth-child not supported*/
 td.nested {
 	padding: 0;
 	border-width: 0;
 }
 td.description {
-	font-weight: bold;
-	font-size: 1.1em;
-	color: #900;
-	text-transform: uppercase;
+    @include description();
 	border-width: 1px 0 0;
 }
 th.odd {
 	border-right: solid 1px #FFF;
-}
-
-
-figure:hover img{
-    opacity: 1;
-    box-shadow: 0 0 3px black;
-}
-
-tr:nth-of-type(even) {
-	background-color: rgba(255, 255, 255, .5);
-}
-
-th:first-child {
-	border: solid 1px #FFF;
-	border: solid 1px rgba(255, 255, 255, .5);
-	border-width: 0 1px 0 0;
-}
-tr:last-child {
-	font-size: 1em;
 }
 
 tr>th.odd {
@@ -110,42 +126,59 @@ td:first-child+td {
 tr:last-child td {
 	border-width: 1px 0 0;
 }
-ul.tab a {
-	color: #7F9933;
-	text-transform: uppercase;
-}
-
-tr:nth-child(7) td {
-	font-weight: bold;
-	font-size: 1.1em;
-	text-transform: uppercase;
-	color: #900;
-}
-
-
-
-ul.loop a {
-	text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
-	padding: 0.7em .5em 0.7em 2em;
-	color: #FFF;
-}
 
 table table tr:last-child {
 	font-size: 1em;
 }
 
-ul.tab li a {
-	border-color: #7F9933;
-	border-color: hsla(75, 50%, 40%, 1);
+ul {
+    &.tab a {
+        color: $main;
+        text-transform: uppercase;
+    }
+    &.tab li a {
+	border-color: $main;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
-	background: #EBF2D8;
+	background: $bkg;
 	background: hsla(75, 50%, 90%, .5);
 	-webkit-transition: background 1.5s;
 	-o-transition: background 1.5s;
 	transition: background 1.5s;
 	text-shadow: 2px 2px 2px #FFF;
+        &:hover {
+            color: darken($main, 10%);
+        }
+    }
+    &.loop {
+        a {
+            text-shadow: 1px 1px 1px hsla(75, 50%, 20%, .75);
+            padding: 0.7em .5em 0.7em 2em;
+            color: #FFF;
+            &:hover {
+                color: $bkg;
+            }
+        }
+        li {
+            &:nth-child(2) a {
+            background: $mid;
+        }
+            &:nth-child(3) a {
+                background: $pale;
+            }
+            &:nth-child(2) a::after {
+                border-left-color: $mid;
+            }
+            &:nth-child(3) a::after {
+                border-left-color: $pale;
+            }
+            &:first-of-type(1) a {
+                padding-left: 0.7em;
+            }
+        }
+    }
 }
+
 .nthchild ul.loop a::before {
 	content: "";
 	margin-left: 1px;
@@ -159,45 +192,23 @@ ul.tab li a {
 	border-top: 2em solid transparent;
 	/* Go big on the size, and let overflow hide */
 	border-bottom: 2em solid transparent;
-	border-left: 1.2em solid #7F9933;
+	border-left: 1.2em solid $main;
 	border-left: 1.2em solid hsla(75, 50%, 40%, 1);
 }
-ul.loop li:first-child a {
-	padding-left: 0.7em;
-}
+
 .no-nthchild ul.loop a {
 	border-right: solid 1px #FFF;
 }
-ul.loop a:hover {
-	color: #EBF2D8;
-	color: hsla(75, 50%, 90%, 1);
-}
+
 ul.tab li.current a {
-	background: #EBF2D8;
-	border-bottom-color: #EBF2D8;
+	background: $bkg;
+	border-bottom-color: $bkg;
 }
-ul.tab a:hover {
-	color: hsla(75, 50%, 30%, 1);
-}
+
 .no-nthchild ul.loop a {
 	padding: .7em 1.2em;
 }
-ul.loop li:nth-child(2) a {
-	background: #9FBF3F;
-	background: hsla(75, 50%, 50%, 1);
-}
-ul.loop li:nth-child(3) a {
-	background: #B2CC65;
-	background: hsla(75, 50%, 60%, 1);
-}
-ul.loop li:nth-child(2) a::after {
-	border-left-color: #9FBF3F;
-	border-left-color: hsla(75, 50%, 50%, 1);
-}
-ul.loop li:nth-child(3) a::after {
-	border-left-color: #B2CC65;
-	border-left-color: hsla(75, 50%, 60%, 1);
-}
+
 article.intro ul a:hover {
 	text-decoration: none;
 }
@@ -205,7 +216,7 @@ article.intro ul a:hover {
 	padding-left: 1em;
 }
 ul.tab li.current a:hover {
-	color: hsla(75, 50%, 40%, 1);
+	color: $main;
 }
 
 .no-nthchild table tr.odd td {
@@ -215,8 +226,7 @@ ul.tab li.current a:hover {
 th, ul.loop a, .sell #tooltip div:first-child {
 	color: #FFF;
 	font-weight: bold;
-	background: #7F9933;
-	background: hsla(75, 50%, 40%, 1);
+	background: $main;
 }
 
 ul.tab a, figure, figure a, .sell #sell {
@@ -224,7 +234,7 @@ ul.tab a, figure, figure a, .sell #sell {
 }
 
 .sell #sell {
-	background: #EBF2D8;
+	background: $bkg;
 }
 #tooltip {
 	position: absolute;
@@ -233,17 +243,12 @@ ul.tab a, figure, figure a, .sell #sell {
 	font-weight: normal;
 	font-size: .7em;
 	opacity: 0;
-	-webkit-transform: translate(-10em, -10em);
-	-ms-transform: translate(-10em, -10em);
-	transform: translate(-10em, -10em);
+    @include prefix(transform, translate(-10em, -10em), ms webkit);
+    @include prefix(transition-duration, 2s, ms webkit o);
 	-webkit-transition-property: opacity, -webkit-transform;
 	transition-property: opacity, -webkit-transform;
 	-o-transition-property: transform, opacity;
 	transition-property: transform, opacity;
-	transition-property: transform, opacity, -webkit-transform;
-	-webkit-transition-duration: 2s;
-	-o-transition-duration: 2s;
-	transition-duration: 2s;
 }
 #sell>a {
 	background-color: #FFF;
@@ -254,7 +259,7 @@ ul.tab a, figure, figure a, .sell #sell {
 
 #sell a {
     background-color: #FFF;
-    border-color: #7F9933;
+    border-color: $main;
 }
 
 #sell>table {
@@ -274,44 +279,35 @@ ul.tab a, figure, figure a, .sell #sell {
 
 /* the mere presence of direct child selector prevents ie 6 reading the rules have to move it to its own selector*/
 #sell > a {
-    border-color: #7F9933;
+    border-color: $main;
     border-color: hsla(75, 50%, 40%, 1);
 }
 
 .sell #sell, table, table td, body.sell #sell.extent {
-	border-color: #7F9933;
+	border-color: $main;
 }
 
 #sell.extent a{
     border-color: #fff;
 }
 
-
 #tooltip.tip {
-	-webkit-transform: translate(10em, -3em);
-	-ms-transform: translate(10em, -3em);
-	transform: translate(10em, -3em);
+    @include prefix(transform, translate(10em, -3em), ms webkit o);
 	opacity: .75;
 }
 #tooltip.tb1 {
-	-webkit-transform: translate(2em, -5em);
-	-ms-transform: translate(2em, -5em);
-	transform: translate(2em, -5em);
+	@include prefix(transform, translate(2em, -5em), ms webkit o);
 	opacity: 1;
 }
 #tooltip.tb2 {
-	-webkit-transform: translate(2em, 10em);
-	-ms-transform: translate(2em, 10em);
-	transform: translate(2em, 10em);
+	@include prefix(transform, translate(2em, 10em), ms webkit o);
 	z-index: 5;
 }
 .sell #tooltip {
 	bottom: 10em;
 	left: 0em;
 	opacity: 1;
-	-webkit-transform: translate(-11em, 0em);
-	-ms-transform: translate(-11em, 0em);
-	transform: translate(-11em, 0em);
+    @include prefix(transform, translate(11em, 0), ms webkit o);
 }
 
 #tooltip div:first-child {
@@ -320,35 +316,26 @@ ul.tab a, figure, figure a, .sell #sell {
 }
 
 .sell #tooltip.tip {
-	-webkit-transform: translate(10em, 0em);
-	-ms-transform: translate(10em, 0em);
-	transform: translate(10em, 0em);
+	@include prefix(transform, translate(10em, 0), ms webkit o);
 }
 .sell #tooltip.tb1 {
-	-webkit-transform: translate(0em, 10em);
-	-ms-transform: translate(0em, 10em);
-	transform: translate(0em, 10em);
+	@include prefix(transform, translate(0, 10em), ms webkit o);
 }
 .sell #tooltip.tb2 {
-	-webkit-transform: translate(-50em, 10em);
-	-ms-transform: translate(-50em, 10em);
-	transform: translate(-50em, 10em);
+	@include prefix(transform, translate(-50em, 10em), ms webkit o);
 }
 .sell #tooltip div:first-child {
 	text-shadow: 1px 1px 1px black;
 }
 
 #alpacas_for_sale.sell h2 {
-	color: #900;
-	color: hsla(0, 100%, 30%, 1);
+	color: $current;
     opacity: 1;
 }
 
 #sell > a:hover, #sell>table:hover {
 	opacity: .9;
-	-webkit-transform: scale(1.01);
-	-ms-transform: scale(1.01);
-	transform: scale(1.01);
+    @include prefix(transform, scale(1.01), ms webkit o);
 }
 
 #tooltip #triangle {
@@ -360,7 +347,7 @@ ul.tab a, figure, figure a, .sell #sell {
 	margin: -1px 0px 0px 5em;
 }
 .sell #tooltip #triangle {
-	border-top: 12px solid #7F9933;
+	border-top: 12px solid $main;
 }
 #sell.extent+#tooltip {
 	visibility: hidden;
@@ -373,7 +360,7 @@ ul.tab a, figure, figure a, .sell #sell {
 #controls button {
 	cursor: pointer;
 	background-color: #556B2F;
-	border: 1px solid #7F9933;
+	border: 1px solid $main;
 	border: 1px solid hsla(75, 50%, 40%, 1);
 	border-radius: .2em;
 	-webkit-box-shadow: 2px 2px 4px black;
@@ -406,7 +393,7 @@ ul#thumbnails a:link, ul#thumbnails a:visited {
 	border-color: black;
 }
 ul#thumbnails a:hover, ul#thumbnails a:active {
-	border-color: #900;
+	border-color: $current;
 }
 button#backbutton {
 	background-position: 50% 14.5%;

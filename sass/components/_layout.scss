@@ -9,10 +9,6 @@ body {
 	 https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
 }
 
-header {
-	padding-top: 17em;
-}
-
 nav {
 	width: 23%;
 	min-width: 18%;
@@ -52,31 +48,52 @@ nav li /*,nav ul */ {
 	overflow: hidden;
 }
 
-header h1 {
-	margin: -8% 0 0;
-    width: 100%;
+header {
+    padding-top: 17em;
+    h1 {
+        margin: -8% 0 0;
+        width: 100%;
 }
-header h2 {
+h2 {
 	/* fix IF supporting screen sizes below width of 800px */
 	margin-left: 28%;
 }
-header a:link, header a:visited {
-	position: absolute;
-	width: 29%;
+    
+a:link,  a:visited {
+   // @extend %abs;
+	position: absolute; 
 	top: 0px;
 	left: 0px;
+    width: 29%;
 }
-footer ul {
-	padding: 22% 5% 3.5% 0;
-	padding: 3% 5% 3% 0;
-	line-height: 1.2;
-	line-height: 1;
+    
+   a h1 {
+	white-space: nowrap;
+	width: 100%;
+	text-indent: -999px;
 }
-footer li {
-	display: inline-block;
-	display: inline;
-	zoom: 1;
-	margin-left: .25em;
+
+a h1 img {
+	margin: 0;
+    position: relative;
+    }
+}//header
+
+
+
+footer {
+    ul {
+        padding: 22% 5% 3.5% 0;
+        padding: 3% 5% 3% 0;
+        line-height: 1.2;
+        line-height: 1;
+    }
+    li {
+        display: inline-block;
+        display: inline;
+        zoom: 1;
+        margin-left: .25em;
+    }
 }
 /* fix for ie at small screens */
 nav div {
@@ -103,24 +120,10 @@ aside>img {
 	color: blue;
 }
 
-header a h1 {
-	white-space: nowrap;
-	width: 100%;
-	text-indent: -999px;
-}
-
-header a h1 img {
-	margin: 0;
-    position: relative;
-}
-
 nav a, nav a:link, nav a:visited {
 	padding: 0 0 0 2.5em;
 }
 
-.read-more-target {
-    margin-top: .7em;
-}
 .no-cssgradients hr {
 	display: none;
 }
@@ -152,9 +155,7 @@ main p, main label.read-more-trigger {
 	z-index: 2;
 }
 main>aside {
-	width: 76%;
-	right: -23%;
-	bottom: 3%;
+    @include alpacas(100%, -23%, 3%);
 }
 /*??*/
 nav, main, aside img {
@@ -197,10 +198,8 @@ footer, main p, main label.read-more-trigger, #wrap {
 header, footer, nav li, nav a, #wrap, #innerwrap {
 	width: 100%;
 }
-#wrap, article.intro {
-	overflow: hidden;
-}
-footer, main aside,  header a, main label, main input, main .read-more-target, #innerwrap {
+
+footer, main aside,  header a, main label, main input, main .read-more-target, article.intro, #innerwrap, #wrap {
 	overflow: hidden;
 }
 

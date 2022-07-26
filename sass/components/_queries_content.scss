@@ -6,15 +6,20 @@ http://cssmediaqueries.com/overview.html*/
 
 /* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
 @media only screen {
-
+    
     header {
 		padding-top: 22%;
-        background: no-repeat center/cover url("../assets/header.png");
+        @include header-hi($bg: 'header.png', $size: cover, $pos: center);
 	}
-    .inlinesvg header[style] {
-        background: no-repeat center/cover url("../assets/header.png") !important;
+    //NON SASS to be safehttps://css-tricks.com/override-inline-styles-with-css/
+       .inlinesvg header[style] {
+           background: url(../assets/header.png) no-repeat center / cover !important;
+           /*background-image: url(../assets/header.png);
+           background-size: cover !important;
+           background-repeat: no-repeat;
+           background-position: center;
+           */
     }
-    
     h2 {
         font: italic 3.2em "Handwritten", Palatino, cursive;
     }
@@ -27,42 +32,39 @@ http://cssmediaqueries.com/overview.html*/
 	}
     */
     /* ... including this: */
-    nav a, nav a:link, nav a:visited {
-	background-image: url(../assets/links.jpg);
-	background-repeat: no-repeat;
-	background-position: 0 -5%;
-	color: #080;
-}
-     nav a:hover {
-		background-position: 0% 47%;
-	}
+    nav {
+        a, a:link, a:visited {
+            background-image: url(../assets/links.jpg);
+            background-repeat: no-repeat;
+            background-position: 0 -5%;
+            color: $link;
+        }
+        a:hover {
+            background-position: 0% 47%;
+        }
+    }
 		
 	#innerwrap nav {
-		font: 700 1em/2.3 Verdana, sans-serif;
+		font: $navfontsize $navfontfam;
 	}
 	/*background size gives false positives in some browsers, using inlinesvg where support is slightly more recent*/
 	.inlinesvg #wrap footer {
-		background: url(../assets/grass.png) no-repeat 50% 0%;
-		background-size: 105%;
-	}
-	.inlinesvg #wrap footer ul {
-		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
-		background-size: 150%;
-	}
-    @supports (background-size: cover) {
-       #wrap footer {
-		background: url(../assets/grass.png) no-repeat 50% 0%;
-		background-size: 105%;
-	}
-	#wrap footer ul {
-		background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
-		background-size: 150%;
-	} 
+        @include grassy-hi($size: 105%);
+        ul {
+            @include grassy-hi($bg: $grass, $size: 150%);
+        }
     }
-    #innerwrap main p {
-		text-shadow: 1px 1px 2px white;
-	}
- 
+    @supports (background-size: cover) {
+        #wrap footer {
+            @include grassy-hi($size: 105%);
+            ul {
+                @include grassy-hi($bg: $grass, $size: 150%);
+            } 
+        }
+        #innerwrap main p {
+            text-shadow: 1px 1px 2px white;
+        }
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -74,34 +76,32 @@ http://cssmediaqueries.com/overview.html*/
 		text-indent: 0px;
 		padding-bottom: .1em;
 	}
-        h2 {
+    h2 {
         font-size: -webkit-calc(28px + (42 - 28) * (100vw - 320px) / (768 - 320));
-
+        @include doFontSize(28, 42, 768, 320);
     }
-	nav a, nav a:link, nav a:visited {
-		background-image: none;
-		padding: 0em .8em;
-	}
-	nav ul, nav:active ul {
-		border: solid #C6C084 1px;
-		background: #FBFCFC;
+	nav {
+        a, a:link, a:visited {
+            background-image: none;
+            padding: 0em .8em;
+        }
+    }
+    nav ul, nav:active ul {
+		border: solid $menu 1px;
+        background: #FBFCFC;
 		background: linear-gradient(90deg, #FBFCFC, white);
 		border-width: 0px 0px 1px 0px;
-		-webkit-box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
-		box-shadow: 3px 3px 6px hsla(300, 10%, 20%, .75);
+        @include prefix(box-shadow, 3px 3px 6px hsla(300, 10%, 20%, .75), moz webkit);
 		line-height: 2.7;
 		z-index: 2;
 	}
 	.menu {
-		-webkit-box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
-		box-shadow: inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75);
-		background: url(../assets/menu-icon.png) center no-repeat #C6C084;
+        @include prefix(box-shadow, (inset 0px 0px 5px hsla(300, 10%, 20%, .75), 2px 2px 2px hsla(300, 10%, 20%, .75)), moz webkit);
+		background: url(../assets/menu-icon.png) center no-repeat $menu;
 		background-size: 105%;
 	}
 	.menu:hover {
-		-webkit-transform: scale(90%);
-		-ms-transform: scale(90%);
-		transform: scale(90%);
+        @include prefix(transform, scale(90%), moz ms o webkit);
 	}
 	nav li:last-child {
 		border-width: 0;
@@ -120,15 +120,13 @@ http://cssmediaqueries.com/overview.html*/
 	}
 	main .read-more-state~.read-more-trigger::before {
 		content: 'Read On';
-		color: #900;
-		color: rgb(153, 0, 0);
+		color: $current;
 	}
 	main .read-more-state:checked~.read-more-trigger::before {
 		content: 'Read It';
 	}
 	main .read-more-trigger:hover, main .read-more-state:checked~.read-more-trigger::before {
-		color: #080;
-		color: rgb(0, 136, 0);
+		color: $link;
 	}
 	main .read-more-state~.read-more-target p {
 		position: absolute;
@@ -139,19 +137,18 @@ http://cssmediaqueries.com/overview.html*/
 		opacity: 1;
 	}
 	.ellipsis.touchevents main .read-more-state~.read-more-target p {
-		-webkit-transition: opacity 2s;
-		-o-transition: opacity 2s;
-		transition: opacity 2s;
-	}
-	.ellipsis.touchevents main .read-more-state~.read-more-target p.elip {
-		overflow: hidden;
+        @include prefix(transition, opacity 2s, moz o webkit);
+        p.elip {
+            overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-	}
-	.ellipsis.touchevents main .read-more-state~.read-more-target p.show {
-		white-space: normal;
+        }
+        p.show {
+            white-space: normal;
 		text-overflow: inherit;
+        }
 	}
+    
     /*https://css-tricks.com/override-inline-styles-with-css/*/
     #wrap header, #wrap header[style] {
 		background-image: none !important;

@@ -1,20 +1,5 @@
 header {
-	background-image: url("../assets/header__964.png");
-	background-position: 50% 0;
-	background-repeat: no-repeat;
-}
-
-footer {
-	font: 700 1.25em/200% Georgia;
-	letter-spacing: -1px;
-	white-space: nowrap;
-	text-align: right;
-	background-position: 50% 0%;
-	color: white;
-}
-nav {
-	white-space: nowrap;
-	font: 700 1em/2 Verdana, sans-serif;
+    @include header-hi();
 }
 
 hr {
@@ -23,43 +8,47 @@ hr {
 	height: 1px;
 }
 
-footer, footer ul {
-	background-image: url("../assets/grass_ipad.png");
-	background-repeat: no-repeat;
-}
-
-nav li {
-	border-bottom: solid #C6C084 1px;
-}
-footer ul {
-	background-color: #759707;
-	border-top: solid 1px #9c0;
-	background-position: 50% 100%;
-}
-footer li {
-	line-height: 2;
-}
-nav a, nav a:link, nav a:visited {
-	background-image: url(../assets/links.jpg);
-	background-repeat: no-repeat;
-	background-position: 0 -4%;
-	color: #080;
-}
-
-nav a:hover {
-	text-decoration: none;
-	color: #6e2900;
-	background-position: 0 47%;
-}
-/*keep separate to keep early ie happy!*/
+nav {
+    white-space: nowrap;
+	font: $navfontsize $navfontfam;
+    li {
+        border-bottom: solid $menu 1px;
+    }
+    a, a:link, a:visited {
+        @extend %wavy;
+    }
+    a:hover {
+        text-decoration: none;
+        color: $navhover;
+        background-position: 0 47%;
+    }
+    /*keep separate to keep early ie happy!*/
 /* ie6 requires "nav a.current:visited" */
-nav a.current, nav a.current:visited, nav a:active {
-	color: rgb(153, 0, 0);
-	background-position: 0 99%;
+    a.current, a.current:visited, a:active {
+        color: $current;
+        background-position: 0 99%;
+    }
 }
-
-footer a, footer a:link, footer a:visited{
+footer {
+    font: 700 1.25em/200% $serif;
+	letter-spacing: -1px;
+	white-space: nowrap;
+	text-align: right;
+	background-position: 50% 0%;
 	color: white;
+    @include footy;
+    ul {
+        background-color: $grass;
+        border-top: solid 1px $limey;
+        background-position: 50% 100%;
+        @include footy;
+    }
+    li {
+        line-height: 2;
+    }
+    a, a:link, a:visited{
+        color: white;
+    }
 }
 
 .fade {
@@ -69,10 +58,14 @@ footer a, footer a:link, footer a:visited{
 	box-sizing: border-box;
 }
 
-#welcome nav li:nth-child(1) a, #about_us nav li:nth-child(2) a, #about_alpacas nav li:nth-child(3) a, #upkeep nav li:nth-child(4) a, #stud_services nav li:nth-child(5) a, #alpacas_for_sale nav li:nth-child(6) a, #links nav li:nth-child(7) a, #contact_us nav li:nth-child(8) a, #gallery nav li:nth-child(9) a {
-	color: #900;
-	background-position: 0 99%;
-}
+ @for $i from 1 through length($navlist) {
+     $l: nth($navlist, $i);
+        #{$l} nav li:nth-child(#{$i}) a {
+            color: $current;
+            background-position: 0 99%;
+     }
+    }
+/* eg.. #welcome nav li:nth-child(1) a {}*/
 .no-js body {
     background-color: rgb(255, 255, 248);
 }

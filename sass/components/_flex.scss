@@ -37,16 +37,10 @@ https://github.com/philipwalton/flexbugs
 */
 
 ul#list {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
+    @include flexy;
 }
 #controls {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
+	@include flexy;
 	-webkit-box-pack: center;
 	-webkit-justify-content: center;
 	-ms-flex-pack: center;
@@ -59,9 +53,7 @@ ul#list {
 	flex: 0 0 auto;
 }
 .extent {
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
+    @include prefix(flex-wrap, wrap, webkit ms);
 }
 .extent figure {
 	/*just use defaults*/
@@ -110,7 +102,7 @@ ul#list {
 /* false positive (-moz-column-gap: 20px) (-webkit-column-gap: 20px) or */
 
 @supports(column-gap: 20px) {
-	ul#thumbnails.gallery {
+	#thumbnails.gallery {
 		padding: .6em;
 		display: -ms-grid;
 		display: grid;
