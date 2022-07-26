@@ -1,0 +1,3011 @@
+@import url(https://fonts.googleapis.com/css?family=Merriweather:wght@400;700&display=swap);
+/*.selector {
+  @include prefix(transform, rotate(45deg), webkit ms);
+}
+*/
+/* a = (current browser width(100vw) - minimum operating size) DIVIDED by (max-range - min range)
+    b = (max-font-size(42) - base-font-size(28))
+    c = b * a
+    result = base-font-size + c
+*/
+/*https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25*/
+/*Box sizing (the nuclear option)*/
+html {
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  -ms-box-sizing: inherit;
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+/* Fix font rendering defaults */
+html, button {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: 100%;
+}
+
+html, body {
+  height: 100%;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, input, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+}
+
+/* IE fixes for HTML5 elements */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+strong, b, mark {
+  font-weight: bold;
+  font-style: inherit;
+}
+
+em, i, cite, q, address, dfn, var {
+  font-style: italic;
+  font-weight: inherit;
+}
+
+a, u, ins {
+  text-decoration: none;
+}
+
+pre, code, samp, kbd {
+  font-family: monospace;
+}
+
+iframe {
+  width: 100%;
+}
+
+img {
+  /*max-width: 100%;
+     height: auto;
+     -msinterpolation-mode: bicubic;*/
+  border: none;
+}
+
+input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-size: 100%;
+}
+
+ol, ul, dl {
+  list-style: none;
+}
+
+@font-face {
+  font-family: "Handwritten";
+  src: url("../fonts/AlexBrush-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "sidebar";
+  src: url("../fonts/ebgaramond12-regular-webfont.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/ebgaramond12-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/ebgaramond12-regular-webfont.woff") format("woff"), url("../fonts/ebgaramond12-regular-webfont.woff2") format("woff2"), url("../fonts/ebgaramond12-regular-webfont.ttf") format("truetype"), url("../fonts/ebgaramond12-regular-webfont.svg#svgFontName") format("svg");
+  /* Legacy iOS */
+  font-weight: 700;
+  font-style: normal;
+}
+#sell.extent table {
+  display: none;
+}
+
+body {
+  font: 0.8em "Trebuchet MS", sans-serif;
+  background-color: white;
+}
+
+p {
+  line-height: 1.5;
+  margin: 0 35% 0.7em 0;
+}
+
+table {
+  border: solid 1px black;
+}
+
+th, td {
+  padding: 0.3em;
+  vertical-align: top;
+  border: 1px solid;
+}
+
+th {
+  color: white;
+  font-weight: bold;
+  background-color: black;
+  vertical-align: middle;
+}
+
+th em {
+  font-style: normal;
+  white-space: nowrap;
+  padding-right: 1em;
+}
+
+a, a:link, a:visited, h2 {
+  color: #900;
+  color: rgb(153, 0, 0);
+}
+
+a, a:link, a:visited {
+  border-width: 0;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active, a:focus {
+  outline: none;
+  -moz-outline-style: none;
+}
+
+/* to prevent bottom gaps. BUT overide if inline treatment of images is required. https://developer.mozilla.org/en/Images,_Tables,_and_Mysterious_Gaps */
+img {
+  width: 100%;
+  /*	height: auto; */
+}
+
+img, nav a {
+  display: block;
+}
+
+button {
+  padding: 0 0.4em;
+  margin: 0 0.3em;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font: italic 2.8em "Handwritten", Georgia, cursive;
+  text-indent: 0.1em;
+  border-bottom: solid #9c0 1px;
+  letter-spacing: -0.01em;
+}
+
+b {
+  color: #ff6;
+  color: rgb(255, 255, 102);
+}
+
+header {
+  background-image: url("../assets/header__964.png");
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+}
+
+footer {
+  font: 700 1.25em/200% Georgia;
+  letter-spacing: -1px;
+  white-space: nowrap;
+  text-align: right;
+  background-position: 50% 0%;
+  color: white;
+}
+
+nav {
+  white-space: nowrap;
+  font: 700 1em/2 Verdana, sans-serif;
+}
+
+hr {
+  border: 0px;
+  margin-right: 35%;
+  height: 1px;
+}
+
+footer, footer ul {
+  background-image: url("../assets/grass_ipad.png");
+  background-repeat: no-repeat;
+}
+
+nav li {
+  border-bottom: solid #C6C084 1px;
+}
+
+footer ul {
+  background-color: #759707;
+  border-top: solid 1px #9c0;
+  background-position: 50% 100%;
+}
+
+footer li {
+  line-height: 2;
+}
+
+nav a, nav a:link, nav a:visited {
+  background-image: url(../assets/links.jpg);
+  background-repeat: no-repeat;
+  background-position: 0 -4%;
+  color: #080;
+}
+
+nav a:hover {
+  text-decoration: none;
+  color: #6e2900;
+  background-position: 0 47%;
+}
+
+/*keep separate to keep early ie happy!*/
+/* ie6 requires "nav a.current:visited" */
+nav a.current, nav a.current:visited, nav a:active {
+  color: rgb(153, 0, 0);
+  background-position: 0 99%;
+}
+
+footer a, footer a:link, footer a:visited {
+  color: white;
+}
+
+.fade {
+  background-image: linear-gradient(90deg, rgba(153, 204, 0, 0), rgb(153, 204, 0) 40%, rgba(153, 204, 0, 0) 100%);
+  max-width: 100%;
+  background-position: 50%;
+  box-sizing: border-box;
+}
+
+#welcome nav li:nth-child(1) a, #about_us nav li:nth-child(2) a, #about_alpacas nav li:nth-child(3) a, #upkeep nav li:nth-child(4) a, #stud_services nav li:nth-child(5) a, #alpacas_for_sale nav li:nth-child(6) a, #links nav li:nth-child(7) a, #contact_us nav li:nth-child(8) a, #gallery nav li:nth-child(9) a {
+  color: #900;
+  background-position: 0 99%;
+}
+
+.no-js body {
+  background-color: rgb(255, 255, 248);
+}
+
+/*html.js devicemotion deviceorientation svg svgasimg inlinesvg svgfilters svgasimg opacity classlist nthchild requestanimationframe raf no-touchevents cssanimations backgroundsize no-cssgridlegacy no-cssgrid flexbox flexboxlegacy no-flexboxtweener flexwrap no-cssmask rgba hsla ellipsis cssgradients bgpositionshorthand boxshadow textshadow cssvhunit cssvmaxunit cssvminunit borderradius cssvwunit csscalc objectfit object-fit {
+}
+*/
+body {
+  margin: 2em;
+  /*display: flex;
+  flex-direction: column;
+   https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css */
+}
+
+header {
+  padding-top: 17em;
+}
+
+nav {
+  width: 23%;
+  min-width: 18%;
+  z-index: 2;
+  margin-left: 1.5em;
+  float: left;
+}
+
+main {
+  padding: 0.8em 0 0;
+  width: 71%;
+  float: right;
+}
+
+/*https://css-tricks.com/all-about-floats/*/
+footer {
+  padding-top: 15%;
+  clear: both;
+  z-index: 1;
+}
+
+header, aside img {
+  position: relative;
+  width: 100%;
+}
+
+main aside {
+  margin: 0;
+  position: absolute;
+  z-index: 0;
+  /* z-index required IF persisting with masking, explore clipping */
+  /* https://philipwalton.com/articles/what-no-one-told-you-about-z-index/ */
+}
+
+/*ie 7*/
+nav li {
+  overflow: hidden;
+}
+
+header h1 {
+  margin: -8% 0 0;
+  width: 100%;
+}
+
+header h2 {
+  /* fix IF supporting screen sizes below width of 800px */
+  margin-left: 28%;
+}
+
+header a:link, header a:visited {
+  position: absolute;
+  width: 29%;
+  top: 0px;
+  left: 0px;
+}
+
+footer ul {
+  padding: 22% 5% 3.5% 0;
+  padding: 3% 5% 3% 0;
+  line-height: 1.2;
+  line-height: 1;
+}
+
+footer li {
+  display: inline-block;
+  display: inline;
+  zoom: 1;
+  margin-left: 0.25em;
+}
+
+/* fix for ie at small screens */
+nav div {
+  *display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  *min-width: 166px;
+}
+
+/* set img color to red */
+aside img {
+  float: right;
+  display: block;
+  color: red;
+}
+
+/* reset img color to white for ie > 6*/
+aside > img {
+  color: white;
+}
+
+/* target ie 7 separately*/
+* + html aside img {
+  color: blue;
+}
+
+header a h1 {
+  white-space: nowrap;
+  width: 100%;
+  text-indent: -999px;
+}
+
+header a h1 img {
+  margin: 0;
+  position: relative;
+}
+
+nav a, nav a:link, nav a:visited {
+  padding: 0 0 0 2.5em;
+}
+
+.read-more-target {
+  margin-top: 0.7em;
+}
+
+.no-cssgradients hr {
+  display: none;
+}
+
+.verbose article p {
+  margin: 0.5em 35% 0.5em 0;
+}
+
+footer li:first-child::after {
+  content: " |";
+  margin-right: -0.25em;
+}
+
+.verbose article.intro p {
+  margin: 0 35% 0.5em 0;
+}
+
+.no-cssmask main aside {
+  /*hide while js masking kicks in ONLY for browswers that don't support masking*/
+  z-index: -1;
+  display: none;
+}
+
+/* https://stopdesign.com/eg/ie5mac-bpf */
+/* Start Mac IE5 filter \*/
+main p, main label.read-more-trigger {
+  z-index: 2;
+}
+
+main > aside {
+  width: 76%;
+  right: -23%;
+  bottom: 3%;
+}
+
+/*??*/
+nav, main, aside img {
+  *display: inline;
+}
+
+/*
+#innerwrap  {
+    display: flex;
+    flex-flow: row-reverse;
+}
+
+#innerwrap  nav{
+flex: 3 0 1%;
+margin-right: 6%;
+}
+#innerwrap  main{
+flex: 10 0 1%;
+}
+
+@media only screen and (max-width: 768px) {
+
+}
+*/
+/* End Mac IE5 filter */
+/*https://www.sitepoint.com/community/t/how-to-detect-whether-css-enabled-or-not-using-javascript/4597/5*/
+#checkDummy {
+  margin-top: 1px;
+  display: none;
+}
+
+#wrap {
+  margin: 0 auto;
+}
+
+footer, main p, main label.read-more-trigger, #wrap {
+  position: relative;
+}
+
+header, footer, nav li, nav a, #wrap, #innerwrap {
+  width: 100%;
+}
+
+#wrap, article.intro {
+  overflow: hidden;
+}
+
+footer, main aside, header a, main label, main input, main .read-more-target, #innerwrap {
+  overflow: hidden;
+}
+
+#innerwrap input {
+  cursor: pointer;
+  position: absolute;
+  left: -9999px;
+}
+
+a#yag {
+  top: 0;
+  left: auto;
+  width: 16.6%;
+  right: -1em;
+}
+
+#welcome main aside {
+  width: 126%;
+  max-width: 69em;
+  right: -15%;
+  bottom: 13%;
+}
+
+#welcome p {
+  margin: 0.5em 31% 0.5em 0;
+}
+
+#welcome #intro {
+  background-color: black;
+  background-color: rgba(0, 66, 0, 0.9);
+  position: absolute;
+  padding: 2em;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 20px 20px black;
+  font-family: Georgia, serif;
+}
+
+#welcome #exit {
+  left: 0;
+  float: right;
+  margin: 0.5em;
+  background-color: transparent;
+  position: relative;
+  z-index: 2;
+  text-indent: 100%;
+  overflow: hidden;
+  transform: none;
+}
+
+#welcome #exit:focus, #welcome #exit:hover {
+  background-color: #900;
+}
+
+#welcome #intro p {
+  margin: 0.5em;
+  color: white;
+  text-shadow: none;
+  position: relative;
+  z-index: 1;
+}
+
+#intro a {
+  color: white;
+  text-decoration: underline;
+}
+
+#about_us main aside {
+  width: 100%;
+  max-width: 62em;
+  right: 0em;
+  bottom: 14%;
+}
+
+#about_alpacas main aside {
+  width: 111%;
+  max-width: 60em;
+  right: -25%;
+  bottom: 12%;
+}
+
+#about_alpacas.verbose article.intro p {
+  margin: 0 35% 0.5em 0;
+}
+
+#upkeep main aside {
+  width: 119%;
+  max-width: 60em;
+  right: -19%;
+  bottom: 14%;
+}
+
+#upkeep p:first-of-type {
+  margin-right: 27%;
+}
+
+#stud_services main aside {
+  width: 125%;
+  right: -20%;
+  bottom: 2%;
+}
+
+#stud_services.verbose main article p {
+  margin-right: 69%;
+}
+
+#links main aside {
+  width: 135%;
+  max-width: 75em;
+  right: -25%;
+  bottom: 2%;
+}
+
+#contact_us main aside {
+  width: 95%;
+  max-width: 55em;
+  right: -18%;
+  bottom: 13%;
+}
+
+#contact_us p {
+  line-height: 1.8;
+  margin: 0;
+}
+
+#welcome main > aside, #about_us main > aside, #about_alpacas main > aside, #upkeep main > aside {
+  width: 80%;
+}
+
+#stud_services main > aside {
+  width: 90%;
+}
+
+#links main > aside {
+  width: 100%;
+}
+
+#links dl {
+  margin: 1em 0;
+}
+
+#links dd {
+  margin: 0.1em 0 0.4em 0.75em;
+}
+
+#contact_us main > aside {
+  width: 66%;
+}
+
+@media only screen {
+  #contact_us main aside {
+    width: 70%;
+  }
+}
+@media only screen and (max-width: 1100px) {
+  #welcome article.intro p {
+    margin-right: 0%;
+  }
+  #about_us article.intro p {
+    margin-right: 0%;
+  }
+  #about_alpacas #wrap aside {
+    bottom: 14%;
+  }
+  #upkeep main aside {
+    bottom: 10%;
+  }
+  /* this pic overlaps half the nav (interfering with selecting) until this point, defer bringing forward*/
+  #links main aside {
+    z-index: -1;
+  }
+}
+@media only screen and (max-width: 850px) {
+  .verbose main div p:first-child {
+    margin-right: 0%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #about_us main .read-more-target p:first-child {
+    margin-right: 0%;
+  }
+  .no-js #about_us aside img {
+    visibility: hidden;
+  }
+  .no-js #about_us aside {
+    background: center/contain no-repeat url("../images/honcho.jpg");
+  }
+  #links dt:nth-child(1) {
+    -webkit-animation: entry 1s ease-out 1s backwards;
+    animation: entry 1s ease-out 1s backwards;
+  }
+  #links dd:nth-child(2) {
+    -webkit-animation: entry 1s ease-out 2s backwards;
+    animation: entry 1s ease-out 2s backwards;
+  }
+  #links dt:nth-child(3) {
+    -webkit-animation: entry 1s ease-out 3s backwards;
+    animation: entry 1s ease-out 3s backwards;
+  }
+  #links dd:nth-child(4) {
+    -webkit-animation: entry 1s ease-out 4s backwards;
+    animation: entry 1s ease-out 4s backwards;
+  }
+  #links dt:nth-child(5) {
+    -webkit-animation: entry 1s ease-out 5s backwards;
+    animation: entry 1s ease-out 5s backwards;
+  }
+  #links dd:nth-child(6) {
+    -webkit-animation: entry 1s ease-out 6s backwards;
+    animation: entry 1s ease-out 6s backwards;
+  }
+  #links dt:nth-child(7) {
+    -webkit-animation: entry 1s ease-out 7s backwards;
+    animation: entry 1s ease-out 7s backwards;
+  }
+  #links dd:nth-child(8) {
+    -webkit-animation: entry 1s ease-out 8s backwards;
+    animation: entry 1s ease-out 8s backwards;
+  }
+  #stud_services.verbose footer {
+    margin-top: 9%;
+  }
+  #stud_services article.intro p {
+    margin-right: 0%;
+  }
+  #stud_services.verbose main article p {
+    margin-right: 0%;
+  }
+  #welcome #intro {
+    background-color: rgb(0, 66, 0);
+  }
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  #upkeep footer {
+    margin-top: 0%;
+  }
+  .js #upkeep p {
+    margin-right: 0%;
+  }
+}
+@media only screen and (min-width: 769px) {
+  /* @supports(mask-image:  url('')) {
+   @supports (mask-size: cover) or (-webkit-mask-size: cover) {*/
+  #about_us main aside {
+    z-index: -1;
+  }
+  #welcome aside img {
+    -webkit-mask: url("../images/carlos_masking.png") -1px -1px/cover;
+    mask: url("../images/carlos_masking.png") -1px -1px/cover;
+  }
+  .cssmask #about_us aside img {
+    -webkit-mask: url("../images/honcho_masking.png") -1px 0px/cover;
+    mask: url("../images/honcho_masking.png") -1px 0px/cover;
+  }
+  #about_alpacas aside img {
+    -webkit-mask: url("../images/about_alpacas_masking.png") -1px 0px/cover;
+    mask: url("../images/about_alpacas_masking.png") -1px 0px/cover;
+  }
+  #upkeep aside img {
+    -webkit-mask: url("../images/upkeep_masking.png") -1px -1px/cover;
+    mask: url("../images/upkeep_masking.png") -1px -1px/cover;
+  }
+  #stud_services aside img:first-child {
+    -webkit-mask: url("../images/stud_masking.png") -1px 0px/cover;
+    mask: url("../images/stud_masking.png") -1px 0px/cover;
+  }
+  #links aside img {
+    -webkit-mask: url("../images/links_masking.png") 0px 0px/cover;
+    mask: url("../images/links_masking.png") 0px 0px/cover;
+  }
+  #contact_us aside img {
+    -webkit-mask: url("../images/contacts_masking.png") -1px -1px/cover;
+    mask: url("../images/contacts_masking.png") -1px -1px/cover;
+  }
+  #alpacas_for_sale #wrap main aside {
+    z-index: 1;
+  }
+  #alpacas_for_sale #wrap main aside {
+    max-width: 50em;
+    width: 130%;
+  }
+  #alpacas_for_sale #innerwrap, #alpacas_for_sale footer {
+    margin-top: 0;
+  }
+  /*
+  if JS disabled and masking is not supported a solution is to reduce the size of the pic so it sits to the right of the copy
+  BUT then browsers that support mask are compromised and mask has to be re-instated through a feature query which those browsers may not support
+  this seems unfair so the only concession is that the header sits on top of the unmasked image and it simply means that the green bottom-border sits on top of the masked image
+  .no-js main {
+      position: relative;
+  }
+
+  .no-js #wrap main aside {
+      right: 0;
+      bottom: 0;
+      width: 30%;
+  }
+  @supports (mask-size: cover) or (-webkit-mask-size: cover) {
+      .no-js #welcome main aside {
+          width: 126%;
+          right: -15%;
+          bottom: 13%;
+      }
+      .no-js main {
+          position: static;
+      }
+  }
+  */
+  .no-js header {
+    position: relative;
+    z-index: 1;
+  }
+}
+/* https://stackoverflow.com/questions/6917639/css-media-query-not-working-in-ie-9 */
+/*http://browserhacks.com/*/
+/*netrenderer: 9: 997; 10: 1016; 11: 850*/
+/*https://stackoverflow.com/questions/41847420/media-queries-deprecated
+http://cssmediaqueries.com/overview.html*/
+/* NET RENDERER HAS ISSUES WITH BG IMAGES AND LIKES THIS LAST... */
+@media only screen {
+  header {
+    padding-top: 22%;
+    background: no-repeat center/cover url("../assets/header.png");
+  }
+  .inlinesvg header[style] {
+    background: no-repeat center/cover url("../assets/header.png") !important;
+  }
+  h2 {
+    font: italic 3.2em "Handwritten", Palatino, cursive;
+  }
+  /*
+         nav a:hover, nav a:active {
+  	-webkit-transform: scale(1.01);
+  	-ms-transform: scale(1.01);
+  	transform: scale(1.01);
+  	transform-origin: left;
+  }
+     */
+  /* ... including this: */
+  nav a, nav a:link, nav a:visited {
+    background-image: url(../assets/links.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 -5%;
+    color: #080;
+  }
+  nav a:hover {
+    background-position: 0% 47%;
+  }
+  #innerwrap nav {
+    font: 700 1em/2.3 Verdana, sans-serif;
+  }
+  /*background size gives false positives in some browsers, using inlinesvg where support is slightly more recent*/
+  .inlinesvg #wrap footer {
+    background: url(../assets/grass.png) no-repeat 50% 0%;
+    background-size: 105%;
+  }
+  .inlinesvg #wrap footer ul {
+    background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
+    background-size: 150%;
+  }
+  @supports (background-size: cover) {
+    #wrap footer {
+      background: url(../assets/grass.png) no-repeat 50% 0%;
+      background-size: 105%;
+    }
+    #wrap footer ul {
+      background: #759707 url(../assets/grass.png) no-repeat 0% 100%;
+      background-size: 150%;
+    }
+  }
+  #innerwrap main p {
+    text-shadow: 1px 1px 2px white;
+  }
+}
+@media only screen and (max-width: 768px) {
+  main hr {
+    display: none;
+  }
+  header h2 {
+    text-indent: 0px;
+    padding-bottom: 0.1em;
+  }
+  h2 {
+    font-size: -webkit-calc(28px + (42 - 28) * (100vw - 320px) / (768 - 320));
+  }
+  nav a, nav a:link, nav a:visited {
+    background-image: none;
+    padding: 0em 0.8em;
+  }
+  nav ul, nav:active ul {
+    border: solid #C6C084 1px;
+    background: #FBFCFC;
+    background: linear-gradient(90deg, #FBFCFC, white);
+    border-width: 0px 0px 1px 0px;
+    -webkit-box-shadow: 3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
+    box-shadow: 3px 3px 6px hsla(300deg, 10%, 20%, 0.75);
+    line-height: 2.7;
+    z-index: 2;
+  }
+  .menu {
+    -webkit-box-shadow: inset 0px 0px 5px hsla(300deg, 10%, 20%, 0.75), 2px 2px 2px hsla(300deg, 10%, 20%, 0.75);
+    box-shadow: inset 0px 0px 5px hsla(300deg, 10%, 20%, 0.75), 2px 2px 2px hsla(300deg, 10%, 20%, 0.75);
+    background: url(../assets/menu-icon.png) center no-repeat #C6C084;
+    background-size: 105%;
+  }
+  .menu:hover {
+    -webkit-transform: scale(90%);
+    -ms-transform: scale(90%);
+    transform: scale(90%);
+  }
+  nav li:last-child {
+    border-width: 0;
+  }
+  nav a:hover {
+    background-color: #eeeedd;
+    background-color: rgb(238, 238, 221);
+    text-shadow: 1px 1px 1px white;
+  }
+  /* https://codepen.io/Idered/pen/AeBgF*/
+  /* main required to override main { position: relative; }*/
+  main .read-more-state ~ .read-more-trigger {
+    font: 0.8em/2.5 "Droid Sans", sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 0.25em;
+  }
+  main .read-more-state ~ .read-more-trigger::before {
+    content: "Read On";
+    color: #900;
+    color: rgb(153, 0, 0);
+  }
+  main .read-more-state:checked ~ .read-more-trigger::before {
+    content: "Read It";
+  }
+  main .read-more-trigger:hover, main .read-more-state:checked ~ .read-more-trigger::before {
+    color: #080;
+    color: rgb(0, 136, 0);
+  }
+  main .read-more-state ~ .read-more-target p {
+    position: absolute;
+    opacity: 0;
+  }
+  main .read-more-state:checked ~ .read-more-target p, .ellipsis.touchevents main .read-more-target p.show, .ellipsis.touchevents main .read-more-state ~ .read-more-target p.elip {
+    position: relative;
+    opacity: 1;
+  }
+  .ellipsis.touchevents main .read-more-state ~ .read-more-target p {
+    -webkit-transition: opacity 2s;
+    -o-transition: opacity 2s;
+    transition: opacity 2s;
+  }
+  .ellipsis.touchevents main .read-more-state ~ .read-more-target p.elip {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .ellipsis.touchevents main .read-more-state ~ .read-more-target p.show {
+    white-space: normal;
+    text-overflow: inherit;
+  }
+  /*https://css-tricks.com/override-inline-styles-with-css/*/
+  #wrap header, #wrap header[style] {
+    background-image: none !important;
+  }
+}
+@media only screen and (min-width: 769px) {
+  main p, main hr {
+    animation: fade 3s ease-in;
+  }
+}
+@-webkit-keyframes alpacasBounce {
+  0% {
+    -webkit-transform: translate(0, 50em);
+    -ms-transform: translate(0, 50em);
+    transform: translate(0, 50em);
+  }
+  60% {
+    -webkit-transform: translate(0, -2.7em);
+    -ms-transform: translate(0, -2.7em);
+    transform: translate(0, -2.7em);
+  }
+  100% {
+    -webkit-transform: translate(0, 0em);
+    -ms-transform: translate(0, 0em);
+    transform: translate(0, 0em);
+  }
+}
+@keyframes alpacasBounce {
+  0% {
+    -webkit-transform: translate(0, 50em);
+    -ms-transform: translate(0, 50em);
+    transform: translate(0, 50em);
+  }
+  50% {
+    -webkit-transform: translate(0, -2em);
+    -ms-transform: translate(0, -2em);
+    transform: translate(0, -2em);
+  }
+  100% {
+    -webkit-transform: translate(0, 0em);
+    -ms-transform: translate(0, 0em);
+    transform: translate(0, 0em);
+  }
+}
+@keyframes bounce {
+  0% {
+    -webkit-transform: translate(0, 40em);
+    -ms-transform: translate(0, 50em);
+    transform: translate(0, 50em);
+  }
+  50% {
+    -webkit-transform: translate(0, -2.7em);
+    -ms-transform: translate(0, -2.7em);
+    transform: translate(0, -2.7em);
+  }
+  100% {
+    -webkit-transform: translate(0, 0em);
+    -ms-transform: translate(0, 0em);
+    transform: translate(0, 0em);
+  }
+}
+@-webkit-keyframes alpacasSlide {
+  /*position for inline elements */
+  0% {
+    -webkit-transform: translate(50em, 0);
+    -ms-transform: translate(50em, 0);
+    transform: translate(50em, 0);
+  }
+  50% {
+    -webkit-transform: translate(4em, 0);
+    -ms-transform: translate(4em, 0);
+    transform: translate(4em, 0);
+  }
+  100% {
+    -webkit-transform: translate(0, 0em);
+    -ms-transform: translate(0, 0em);
+    transform: translate(0, 0em);
+  }
+}
+@keyframes alpacasSlide {
+  /*position for inline elements */
+  0% {
+    -webkit-transform: translate(50em, 0);
+    -ms-transform: translate(50em, 0);
+    transform: translate(50em, 0);
+  }
+  50% {
+    -webkit-transform: translate(4em, 0);
+    -ms-transform: translate(4em, 0);
+    transform: translate(4em, 0);
+  }
+  100% {
+    -webkit-transform: translate(0, 0em);
+    -ms-transform: translate(0, 0em);
+    transform: translate(0, 0em);
+  }
+}
+@-webkit-keyframes entry {
+  0% {
+    -webkit-transform: translate(9999px, 0);
+    -ms-transform: translate(9999px, 0);
+    transform: translate(9999px, 0);
+  }
+  90% {
+    -webkit-transform: translate(-25px, 0);
+    -ms-transform: translate(-25px, 0);
+    transform: translate(-25px, 0);
+  }
+  100% {
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+@keyframes entry {
+  0% {
+    -webkit-transform: translate(9999px, 0);
+    -ms-transform: translate(9999px, 0);
+    transform: translate(9999px, 0);
+  }
+  90% {
+    -webkit-transform: translate(-25px, 0);
+    -ms-transform: translate(-25px, 0);
+    transform: translate(-25px, 0);
+  }
+  100% {
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+@-webkit-keyframes animatedBackground {
+  0% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 50% 100%;
+  }
+}
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@media only screen {
+  nav {
+    margin-left: 1em;
+  }
+  aside {
+    -webkit-animation: alpacasBounce 3s 1 ease-out;
+    animation: alpacasBounce 3s 1 ease-out;
+  }
+  aside:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .read-more-target {
+    margin-top: 0;
+  }
+  #wrap {
+    min-width: 500px;
+    max-width: 80em;
+  }
+  #wrap #innerwrap {
+    margin-bottom: 0;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  #upkeep main article.intro p {
+    margin: 0.7em 0 0;
+  }
+}
+@media only screen and (max-width: 850px) {
+  #about_alpacas main article.intro p {
+    margin: 0.7em 0 0;
+  }
+}
+@media screen and (max-width: 768px) {
+  body {
+    margin: 3.5%;
+  }
+  header {
+    width: 100%;
+    padding-top: 0;
+    background: none;
+    overflow: hidden;
+  }
+  header > * {
+    vertical-align: bottom;
+    margin: 0px;
+    width: 100%;
+  }
+  header h2 {
+    float: left;
+    margin: 0;
+  }
+  main, nav {
+    width: 100%;
+  }
+  aside img {
+    float: none;
+  }
+  header a h1 img {
+    margin: 0;
+  }
+  nav ul, nav:active ul {
+    position: absolute;
+    left: -999em;
+    top: 3em;
+    padding: 0;
+    display: block;
+    z-index: 3;
+    /*opera*/
+  }
+  .menu {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 3em;
+    width: 3em;
+    opacity: 0.99;
+    display: block;
+    z-index: 3;
+  }
+  .read-more-target {
+    margin-top: 0.7em;
+  }
+  header a:first-child {
+    width: 22em;
+    left: auto;
+    right: -3.7em;
+  }
+  main .read-more-trigger {
+    display: inline-block;
+    padding: 0 0.5em;
+    margin: 0.5em 0;
+  }
+  article.intro p span {
+    display: inline-block;
+    position: relative;
+  }
+  .js article.intro hr, .cssgradients hr {
+    display: none;
+  }
+  #wrap {
+    min-width: 250px;
+    width: 100%;
+  }
+  #ga_logo {
+    position: relative;
+    left: auto;
+    float: right;
+    clear: both;
+    display: block;
+    right: 0;
+    width: 50%;
+    margin: -2em -8% -1em 0;
+  }
+  .objectfit #ga_logo {
+    width: calc(220px + 140 * (100vw - 320px) / 448);
+    margin-right: calc(-35px - 25 * (100vw - 320px) / 448);
+    margin-top: calc(-40px + 25 * (100vw - 320px) / 448);
+  }
+  a#yag {
+    top: auto;
+    bottom: -0.1em;
+    width: 6em;
+  }
+  a#yag {
+    position: relative;
+    float: right;
+    bottom: 0;
+    margin-top: -4.75em;
+  }
+  #wrap footer {
+    padding-top: 0%;
+    margin-top: 9%;
+  }
+  /*#wrap reqd to counter for example #welcome main>aside direct child selector reqd to hide rule from ie 6*/
+  #wrap main aside {
+    -webkit-animation: alpacasSlide 1s 1 ease-out;
+    animation: alpacasSlide 1s 1 ease-out;
+    position: static;
+    width: 100%;
+  }
+  #menu-toggle:checked + ul {
+    top: 3.33em;
+    left: 0em;
+  }
+  .verbose #wrap p {
+    margin: 0 0 0.7em;
+  }
+  .verbose #wrap footer {
+    margin-top: 1%;
+  }
+  .verbose #wrap article.intro p {
+    margin: 0.7em 0;
+  }
+  .js body.sell #innerwrap main aside {
+    display: none;
+  }
+  article.intro p span:nth-of-type(1), #contact_us article p:nth-of-type(1) {
+    -webkit-animation: entry 0.5s ease-out;
+    animation: entry 0.5s ease-out;
+    color: red;
+  }
+  article.intro p span:nth-of-type(2), #contact_us article p:nth-of-type(2) {
+    -webkit-animation: entry 1.5s ease-out;
+    animation: entry 1.5s ease-out;
+    color: blue;
+  }
+  article.intro p span:nth-of-type(3), #contact_us article p:nth-of-type(3) {
+    -webkit-animation: entry 2.5s ease-out;
+    animation: entry 2.5s ease-out;
+    color: green;
+  }
+  article.intro p span:nth-of-type(4), #contact_us article p:nth-of-type(4) {
+    -webkit-animation: entry 3s ease-in-out;
+    animation: entry 3s ease-in-out;
+    color: purple;
+  }
+  article.intro p span:nth-of-type(5), #contact_us article p:nth-of-type(5) {
+    -webkit-animation: entry 3.5s ease-in-out;
+    animation: entry 3.5s ease-in-out;
+  }
+  article.intro p span:nth-of-type(6) {
+    -webkit-animation: entry 4s 1 ease-in-out;
+    animation: entry 4s 1 ease-in-out;
+  }
+  #stud_services article p:nth-of-type(1) {
+    -webkit-animation: entry 0.5s ease-out;
+    animation: entry 0.5s ease-out;
+  }
+  /*
+  #stud_services article p:nth-of-type(1) span:nth-of-type(2) {
+  	-webkit-animation: entry 1s ease-out;
+  	animation: entry 1s ease-out;
+  }
+  #stud_services article p:nth-of-type(1) span:nth-of-type(3) {
+  	-webkit-animation: entry 1.5s ease-out;
+  	animation: entry 1.5s ease-out;
+  }
+     */
+  #stud_services article p:nth-of-type(2) {
+    -webkit-animation: entry 2.5s ease-out;
+    animation: entry 2.5s ease-out;
+  }
+  /*
+  #stud_services article p:nth-of-type(2) span:nth-of-type(2) {
+  	-webkit-animation: entry 3s ease-out;
+  	animation: entry 3s ease-out;
+  }
+     */
+  #stud_services article p:nth-of-type(3) {
+    -webkit-animation: entry 3.5s ease-out;
+    animation: entry 3.5s ease-out;
+  }
+  /*
+  #stud_services article p:nth-of-type(3) span:nth-of-type(2) {
+  	-webkit-animation: entry 4s ease-out;
+  	animation: entry 4s ease-out;
+  }
+     */
+  #stud_services article p:nth-of-type(4) {
+    -webkit-animation: entry 6s ease-out;
+    animation: entry 6s ease-out;
+  }
+  /*override color for production*/
+  article.intro p:nth-of-type(n+1) span, #contact_us article p:nth-of-type(n+1) {
+    color: black;
+  }
+}
+/* mobile layout */
+@media only screen and (max-width: 568px) {
+  #ga_logo {
+    width: 60%;
+    margin: -2em -10% -1em 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 0.8em;
+  }
+  header {
+    padding-top: 11em;
+    padding-top: 0;
+  }
+  header h1 {
+    margin: -1.7em 0 0;
+    margin: 0;
+  }
+  footer li {
+    display: block;
+    line-height: 1.3;
+    margin: 0;
+  }
+  footer li:first-child::after {
+    content: "";
+    margin: 0;
+  }
+  a#yag {
+    width: 5em;
+  }
+  #ga_logo {
+    width: 80%;
+    margin: -3.6em -12% -1em 0;
+  }
+}
+/*https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet*/
+@media screen\0  {
+  header a {
+    top: -5%;
+  }
+  a#yag {
+    top: 1%;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .ellipsis.touchevents main .read-more-trigger {
+    display: none;
+  }
+}
+.ellipsis.touchevents main .read-more-trigger {
+  display: none;
+}
+
+/*https://www.oliverboorman.biz/projects/css_test/*/
+figcaption {
+  text-align: center;
+  font: normal 1em "Handwritten", Georgia, Palatino, serif;
+}
+
+figure {
+  border-color: #556B2F;
+  box-shadow: 0px 0px 30px hsl(61deg, 38%, 70%);
+  background: #FFF;
+}
+
+table {
+  padding: 0px;
+}
+
+table table {
+  font-size: 1em;
+  border-width: 0;
+}
+
+table th {
+  vertical-align: middle;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 1px hsla(75deg, 50%, 20%, 0.75);
+  border-width: 0;
+}
+
+figure img {
+  border: solid 1px black;
+  opacity: 0.9;
+}
+
+table td, table table td {
+  border-width: 1px 0 0;
+  padding: 0.5em;
+}
+
+/**/
+table tbody {
+  border: 0px;
+  min-width: 100%;
+}
+
+.sell {
+  font-family: Georgia, Palatino, serif;
+}
+
+figure:hover {
+  color: #6e2900;
+  border-color: black;
+}
+
+td:last-child {
+  border-right-width: 0px solid black;
+}
+
+th:nth-child(odd) {
+  border-right-color: rgba(255, 255, 255, 0.2);
+}
+
+td.nested {
+  padding: 0;
+  border-width: 0;
+}
+
+td.description {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #900;
+  text-transform: uppercase;
+  border-width: 1px 0 0;
+}
+
+th.odd {
+  border-right: solid 1px #FFF;
+}
+
+figure:hover img {
+  opacity: 1;
+  box-shadow: 0 0 3px black;
+}
+
+tr:nth-of-type(even) {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+th:first-child {
+  border: solid 1px #FFF;
+  border: solid 1px rgba(255, 255, 255, 0.5);
+  border-width: 0 1px 0 0;
+}
+
+tr:last-child {
+  font-size: 1em;
+}
+
+tr > th.odd {
+  border-right: solid 0px #FFF;
+}
+
+tr td.odd {
+  border-width: 1px 1px 0 0;
+}
+
+tr > td.odd {
+  border-width: 1px 0 0 0;
+}
+
+tr > th.odd + th {
+  border-left: solid 1px #FFF;
+}
+
+tr > td.odd + td {
+  border-width: 1px 0 0 1px;
+}
+
+td:first-child + td {
+  border-width: 1px 0 0 1px;
+}
+
+tr:last-child td {
+  border-width: 1px 0 0;
+}
+
+ul.tab a {
+  color: #7F9933;
+  text-transform: uppercase;
+}
+
+tr:nth-child(7) td {
+  font-weight: bold;
+  font-size: 1.1em;
+  text-transform: uppercase;
+  color: #900;
+}
+
+ul.loop a {
+  text-shadow: 1px 1px 1px hsla(75deg, 50%, 20%, 0.75);
+  padding: 0.7em 0.5em 0.7em 2em;
+  color: #FFF;
+}
+
+table table tr:last-child {
+  font-size: 1em;
+}
+
+ul.tab li a {
+  border-color: #7F9933;
+  border-color: hsl(75deg, 50%, 40%);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background: #EBF2D8;
+  background: hsla(75deg, 50%, 90%, 0.5);
+  -webkit-transition: background 1.5s;
+  -o-transition: background 1.5s;
+  transition: background 1.5s;
+  text-shadow: 2px 2px 2px #FFF;
+}
+
+.nthchild ul.loop a::before {
+  content: "";
+  margin-left: 1px;
+  border: 2em solid transparent;
+  border-left-width: 1.2em;
+  border-left-color: #FFF;
+  border-right-width: 0;
+}
+
+.nthchild ul.loop a::after {
+  content: " ";
+  border-top: 2em solid transparent;
+  /* Go big on the size, and let overflow hide */
+  border-bottom: 2em solid transparent;
+  border-left: 1.2em solid #7F9933;
+  border-left: 1.2em solid hsl(75deg, 50%, 40%);
+}
+
+ul.loop li:first-child a {
+  padding-left: 0.7em;
+}
+
+.no-nthchild ul.loop a {
+  border-right: solid 1px #FFF;
+}
+
+ul.loop a:hover {
+  color: #EBF2D8;
+  color: hsl(75deg, 50%, 90%);
+}
+
+ul.tab li.current a {
+  background: #EBF2D8;
+  border-bottom-color: #EBF2D8;
+}
+
+ul.tab a:hover {
+  color: hsl(75deg, 50%, 30%);
+}
+
+.no-nthchild ul.loop a {
+  padding: 0.7em 1.2em;
+}
+
+ul.loop li:nth-child(2) a {
+  background: #9FBF3F;
+  background: hsl(75deg, 50%, 50%);
+}
+
+ul.loop li:nth-child(3) a {
+  background: #B2CC65;
+  background: hsl(75deg, 50%, 60%);
+}
+
+ul.loop li:nth-child(2) a::after {
+  border-left-color: #9FBF3F;
+  border-left-color: hsl(75deg, 50%, 50%);
+}
+
+ul.loop li:nth-child(3) a::after {
+  border-left-color: #B2CC65;
+  border-left-color: hsl(75deg, 50%, 60%);
+}
+
+article.intro ul a:hover {
+  text-decoration: none;
+}
+
+.nthchild ul.loop li:first-child a {
+  padding-left: 1em;
+}
+
+ul.tab li.current a:hover {
+  color: hsl(75deg, 50%, 40%);
+}
+
+.no-nthchild table tr.odd td {
+  background: #F2F1DE;
+}
+
+th, ul.loop a, .sell #tooltip div:first-child {
+  color: #FFF;
+  font-weight: bold;
+  background: #7F9933;
+  background: hsl(75deg, 50%, 40%);
+}
+
+ul.tab a, figure, figure a, .sell #sell {
+  border: solid 1px black;
+}
+
+.sell #sell {
+  background: #EBF2D8;
+}
+
+#tooltip {
+  position: absolute;
+  z-index: 3;
+  bottom: 0em;
+  font-weight: normal;
+  font-size: 0.7em;
+  opacity: 0;
+  -webkit-transform: translate(-10em, -10em);
+  -ms-transform: translate(-10em, -10em);
+  transform: translate(-10em, -10em);
+  -webkit-transition-property: opacity, -webkit-transform;
+  transition-property: opacity, -webkit-transform;
+  -o-transition-property: transform, opacity;
+  transition-property: transform, opacity;
+  transition-property: transform, opacity, -webkit-transform;
+  -webkit-transition-duration: 2s;
+  -o-transition-duration: 2s;
+  transition-duration: 2s;
+}
+
+#sell > a {
+  background-color: #FFF;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 2px 5px #FFF;
+  opacity: 1;
+}
+
+#sell a {
+  background-color: #FFF;
+  border-color: #7F9933;
+}
+
+#sell > table {
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.8);
+  opacity: 0.9;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#alpacas_for_sale h2 {
+  color: #944;
+  color: hsla(0deg, 100%, 30%, 0.3);
+}
+
+.no-hsla #alpacas_for_sale h2 {
+  opacity: 0.3;
+}
+
+/* the mere presence of direct child selector prevents ie 6 reading the rules have to move it to its own selector*/
+#sell > a {
+  border-color: #7F9933;
+  border-color: hsl(75deg, 50%, 40%);
+}
+
+.sell #sell, table, table td, body.sell #sell.extent {
+  border-color: #7F9933;
+}
+
+#sell.extent a {
+  border-color: #fff;
+}
+
+#tooltip.tip {
+  -webkit-transform: translate(10em, -3em);
+  -ms-transform: translate(10em, -3em);
+  transform: translate(10em, -3em);
+  opacity: 0.75;
+}
+
+#tooltip.tb1 {
+  -webkit-transform: translate(2em, -5em);
+  -ms-transform: translate(2em, -5em);
+  transform: translate(2em, -5em);
+  opacity: 1;
+}
+
+#tooltip.tb2 {
+  -webkit-transform: translate(2em, 10em);
+  -ms-transform: translate(2em, 10em);
+  transform: translate(2em, 10em);
+  z-index: 5;
+}
+
+.sell #tooltip {
+  bottom: 10em;
+  left: 0em;
+  opacity: 1;
+  -webkit-transform: translate(-11em, 0em);
+  -ms-transform: translate(-11em, 0em);
+  transform: translate(-11em, 0em);
+}
+
+#tooltip div:first-child {
+  background: #FFF;
+  padding: 3px;
+}
+
+.sell #tooltip.tip {
+  -webkit-transform: translate(10em, 0em);
+  -ms-transform: translate(10em, 0em);
+  transform: translate(10em, 0em);
+}
+
+.sell #tooltip.tb1 {
+  -webkit-transform: translate(0em, 10em);
+  -ms-transform: translate(0em, 10em);
+  transform: translate(0em, 10em);
+}
+
+.sell #tooltip.tb2 {
+  -webkit-transform: translate(-50em, 10em);
+  -ms-transform: translate(-50em, 10em);
+  transform: translate(-50em, 10em);
+}
+
+.sell #tooltip div:first-child {
+  text-shadow: 1px 1px 1px black;
+}
+
+#alpacas_for_sale.sell h2 {
+  color: #900;
+  color: hsl(0deg, 100%, 30%);
+  opacity: 1;
+}
+
+#sell > a:hover, #sell > table:hover {
+  opacity: 0.9;
+  -webkit-transform: scale(1.01);
+  -ms-transform: scale(1.01);
+  transform: scale(1.01);
+}
+
+#tooltip #triangle {
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #FFF;
+  margin: -1px 0px 0px 5em;
+}
+
+.sell #tooltip #triangle {
+  border-top: 12px solid #7F9933;
+}
+
+#sell.extent + #tooltip {
+  visibility: hidden;
+}
+
+/*"gallery"*/
+#thumbnails, ul#thumbnails a {
+  border: 1px solid;
+}
+
+#controls button {
+  cursor: pointer;
+  background-color: #556B2F;
+  border: 1px solid #7F9933;
+  border: 1px solid hsl(75deg, 50%, 40%);
+  border-radius: 0.2em;
+  -webkit-box-shadow: 2px 2px 4px black;
+  box-shadow: 2px 2px 4px black;
+  text-shadow: 1px 1px 1px black;
+  line-height: 1.6;
+  opacity: 1;
+  background-image: url(../assets/buttons_sprite_lowend8.png);
+  background-repeat: no-repeat;
+  background-position: 50% 0%;
+}
+
+#controls > button {
+  background-image: url(../assets/buttons_sprite_lowend.png);
+  background-color: hsla(50deg, 50%, 40%, 0.3);
+}
+
+ul#thumbnails {
+  border-color: #9c0;
+}
+
+#controls.static button {
+  border: 1px solid #FFF;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+#controls button:hover, #controls button:focus {
+  background-color: silver;
+  background-color: rgba(150, 150, 150, 0.5);
+  color: black;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.75);
+}
+
+ul#thumbnails a:link, ul#thumbnails a:visited {
+  border-color: black;
+}
+
+ul#thumbnails a:hover, ul#thumbnails a:active {
+  border-color: #900;
+}
+
+button#backbutton {
+  background-position: 50% 14.5%;
+}
+
+button#playbutton {
+  background-position: 50% 29%;
+}
+
+.playing #playbutton {
+  background-position: 50% 44%;
+  opacity: 0.9;
+}
+
+/*https://www.paulirish.com/2008/the-two-css-selector-bugs-in-ie6/*/
+* {
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  width: 46.5%;
+  min-width: 18em;
+  margin-right: 2.5%;
+  float: left;
+}
+
+table table {
+  margin-right: 0%;
+  width: 100%;
+}
+
+.extent {
+  left: 0;
+  margin: 0 auto;
+  height: 1%;
+  *padding: 0.6em 0.3em;
+  *padding: 2% 1%;
+  *height: 1%;
+}
+
+.extent a {
+  padding: 0;
+}
+
+.extent figure {
+  display: inline;
+  display: inline-block;
+  margin: 0.3em 1%;
+  padding: 0;
+  vertical-align: bottom;
+  box-sizing: border-box;
+  width: 23%;
+  *width: 22.6%;
+  _width: 22%;
+}
+
+.five figure {
+  width: 18%;
+  *width: 17.6%;
+  _width: 17.1%;
+}
+
+.six figure {
+  width: 14.6%;
+  *width: 14.3%;
+  _width: 13.7%;
+}
+
+.extent figure > * {
+  border: 1em solid white;
+}
+
+.extent figcaption {
+  _border: 4px solid white;
+}
+
+.six figcaption {
+  border-width: 0.5em 4px 1em;
+}
+
+.five figcaption {
+  border-width: 0.5em 0 1em;
+}
+
+.four figcaption {
+  border-width: 0.5em 0 1em;
+}
+
+article.intro {
+  *height: 1%;
+}
+
+.tab {
+  transform: translateX(-1000px);
+  -webkit-transition: left 1s;
+  -o-transition: left 1s;
+  transition: all 1s;
+}
+
+.loop, .tab {
+  transform: translateX(0px);
+}
+
+.tab li {
+  margin-right: 0.1em;
+}
+
+.tab a {
+  padding: 0.7em 1.3em;
+}
+
+.extent figure a {
+  border-width: 0 0.8em;
+  padding: 1em 0 0;
+}
+
+#sell.extent figure a {
+  _padding: 1em 0 0;
+}
+
+.extent figure img {
+  width: 100%;
+}
+
+.loop a::after, .loop a::before {
+  /*border arrows */
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  margin-top: -2em;
+}
+
+/*https://stackoverflow.com/questions/13501061/css-table-cell-size-issues*/
+.sell .tog a {
+  margin-left: 0;
+}
+
+#sell, #sell > a, ul#thumbnails, ul#list {
+  overflow: hidden;
+}
+
+#sell > a {
+  padding: 1.6%;
+  *height: 1%;
+  border: 1px solid #809933;
+  border: 1px solid hsl(75deg, 50%, 40%);
+}
+
+#sell a {
+  display: block;
+  _padding: 1.6%;
+  *height: 1%;
+  overflow: hidden;
+}
+
+#sell.extent a {
+  overflow: visible;
+}
+
+#list li, #list li a {
+  float: left;
+  zoom: 1;
+}
+
+#alpacas_for_sale main aside {
+  width: 100%;
+  z-index: -1;
+  display: block;
+}
+
+#alpacas_for_sale main > aside {
+  width: 72%;
+}
+
+#alpacas_for_sale header {
+  z-index: 0;
+  margin-bottom: 1em;
+}
+
+/* early ie requires ul#list, ul#list li to pull content above #sell div */
+#controls, #alpacas_for_sale aside, ul#list, ul#thumbnails, #gallery main, ul#list li {
+  position: relative;
+}
+
+#alpacas_for_sale main aside {
+  position: absolute;
+  bottom: 12%;
+  right: 0%;
+  margin: 0;
+  z-index: 1;
+}
+
+#alpacas_for_sale aside img {
+  float: none;
+}
+
+.sell #sell {
+  padding: 2%;
+  height: 1%;
+  /* ie prefers this to margin-bottom -1px on ul#list */
+  margin-top: -1px;
+  *clear: left;
+}
+
+.sell #sell.extent {
+  margin-top: 0;
+  padding: 1%;
+}
+
+.loop + #sell {
+  margin-top: 0;
+}
+
+#alpacas_for_sale article.intro {
+  position: relative;
+  width: 100%;
+}
+
+.touch, .sell aside, table, .tog table.show, .extent table.show, #sell a {
+  position: absolute;
+  left: -9999px;
+}
+
+table.show, #sell a.show, #sell.extent a {
+  position: static;
+  left: 0px;
+}
+
+/*clear float in a situaton where javascript is disabled and tables are hardcoded into html*/
+.no-js div#sell a {
+  margin: 0 0 2% 2%;
+}
+
+/*
+html.js #sell a, html.js table {
+	*display: none;
+}
+html.js #sell a.show, html.js .extent a, html.js table.show {
+	*display: block;
+}
+*/
+.no-js div#sell a:last-child {
+  margin: 0 0 0% 2%;
+}
+
+/* end of sale */
+/* G A L L E R Y */
+#gallery footer {
+  padding: 0%;
+  margin-top: 4%;
+  border-width: 0px;
+}
+
+#gallery #yag img {
+  color: red;
+}
+
+#gallery #yag > img {
+  color: white;
+}
+
+ul#thumbnails {
+  margin: 4% auto 0;
+  /*clear
+    transform: scale(.95);*/
+  font-size: 1.03em;
+  font-size: 0.9375em;
+  padding: 4px;
+  width: 89.7%;
+  *width: 91%;
+  /*https://stackoverflow.com/questions/1823551/what-is-this-ie-css-bug-called-double-vertical-padding*/
+  transition: width 1s ease-in-out;
+}
+
+#gallery footer ul > * {
+  -webkit-transition: all 1s;
+  -o-transition: all 1s;
+  transition: all 1s;
+  opacity: 1;
+}
+
+ul#thumbnails li {
+  float: left;
+  width: 100%;
+}
+
+ul#thumbnails li a {
+  display: block;
+}
+
+#gallery.showtime footer {
+  margin-top: 0%;
+}
+
+.showtime ul#thumbnails {
+  margin: 3% auto 0;
+}
+
+ul#thumbnails.portrait {
+  width: 60%;
+}
+
+ul#thumbnails.gallery {
+  padding: 4px;
+}
+
+ul#thumbnails.gallery li {
+  border: solid 4px white;
+  width: 8.06em;
+}
+
+ul#thumbnails li.go {
+  visibility: hidden;
+}
+
+/* base INITIAL settings on 800px screen @screen use %*/
+ul#thumbnails.gallery li.portrait {
+  float: right;
+  width: 4.259em;
+  clear: right;
+  *width: 5.3em;
+}
+
+ul#thumbnails.gallery li.portrait {
+  width: 78px;
+  width: 6em;
+}
+
+ul#thumbnails li, .playing li#paused, .swap #base {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+}
+
+.inplay #paused, ul li#base, ul#thumbnails.gallery li, ul#thumbnails li.show, ul#thumbnails li#slide {
+  position: relative;
+  left: 0;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  /* IE8 and lower */
+  zoom: 1;
+  /* Triggers "hasLayout" in IE 7 and lower */
+  *display: inline;
+}
+
+/* G A L L E R Y | S H O W T I M E */
+#controls {
+  font-size: 1.8em;
+  margin: 0 auto;
+  -webkit-transition: all 1s;
+  -o-transition: all 1s;
+  transition: all 1s;
+  top: 0em;
+  z-index: 2;
+  opacity: 0;
+  display: table;
+  border-spacing: 0.5em;
+}
+
+#controls, #controls button {
+  display: inline;
+  display: inline-block;
+  zoom: 1;
+}
+
+#controls button {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+  margin: 0 0.3em;
+  display: table-cell;
+}
+
+button#exit {
+  margin: 0.33em;
+}
+
+#gallery main {
+  padding: 0;
+  text-align: center;
+}
+
+li#slide, li#paused {
+  margin-left: -100%;
+}
+
+.swap #slide {
+  margin-left: 0;
+}
+
+#controls.static {
+  top: -3em;
+  opacity: 1;
+}
+
+.js #exit {
+  width: 36px;
+  height: 36px;
+  left: calc(100% - 36px);
+  margin: 1em 0 0;
+  display: block;
+  position: relative;
+  line-height: 1;
+  border: 0px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(../assets/close_transparent.png);
+  background-color: #7F9933;
+  -webkit-transition: all 1s;
+  -o-transition: all 1s;
+  transition: all 1s;
+  box-sizing: border-box;
+}
+
+.no-objectfit #exit {
+  left: 94%;
+  /* ie < 8 text-align center trumps left*/
+  *left: 47%;
+}
+
+/*.touchevents replaces media queries (hover: hover) || (pointer: fine) where support is doubtful
+logic dictates that we only get to this point courtesy of javascript so modernizr supplies the className .(no-)touchevents */
+.js #exit:hover, .js #exit:focus {
+  background-position: 50% 106%;
+}
+
+.touchevents .inplay #controls {
+  top: 2.4em;
+  opacity: 1;
+}
+
+.touchevents #gallery.showtime footer {
+  margin-top: -5em;
+}
+
+.touchevents #wrap.inplay footer ul > * {
+  opacity: 0;
+}
+
+.no-touchevents button#forwardbutton:hover {
+  background-position: 50% 56%;
+}
+
+.no-touchevents button#backbutton:hover {
+  background-position: 50% 70.5%;
+}
+
+.no-touchevents button#playbutton:hover {
+  background-position: 50% 85%;
+}
+
+.no-touchevents .playing button#playbutton:hover {
+  background-position: 50% 100%;
+}
+
+.touchevents #gallery.showtime #innerwrap {
+  padding-bottom: 6em;
+}
+
+@media only screen {
+  #exit:hover, #exit:focus {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+/* https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/ */
+/*https://css-tricks.com/logic-in-media-queries/*/
+/*https://responsivedesign.is/develop/browser-feature-support/media-queries-for-common-device-breakpoints/*/
+/*https://stackoverflow.com/questions/25759046/iphone-6-and-6-plus-media-queries*/
+/*
+-moz-device-pixel-ratio
+Gives the number of device pixels per CSS pixel.
+Note: This media feature is also implemented by Webkit as -webkit-device-pixel-ratio. The min and max prefixes as implemented by Gecko are named min--moz-device-pixel-ratio and max--moz-device-pixel-ratio; but the same prefixes as implemented by Webkit are named -webkit-min-device-pixel-ratio and -webkit-max-device-pixel-ratio.
+*/
+@media only screen {
+  figcaption {
+    font: normal 1.4em/1 "Handwritten", Georgia, Palatino, serif;
+  }
+  .inlinesvg #controls button {
+    background-image: url(../assets/buttons_sprite.png);
+    background-color: hsla(75deg, 50%, 40%, 0.3);
+    background-size: 128%;
+  }
+  @supports (background-size: cover) {
+    #controls button {
+      background-image: url(../assets/buttons_sprite.png);
+      background-color: hsla(75deg, 50%, 40%, 0.3);
+      background-size: 128%;
+    }
+  }
+  button#exit {
+    color: hsla(75deg, 50%, 40%, 0.5);
+    padding: 0.2em 0.25em;
+    border-radius: 2em;
+    border: 0px solid #FFF;
+    font-size: 2em;
+    text-shadow: 1px 1px 1px hsl(75deg, 50%, 30%);
+    background: none;
+    width: auto;
+    height: auto;
+    display: inline;
+  }
+  ul#thumbnails li a {
+    float: none;
+    /*?*/
+  }
+  button#exit:hover, button#exit:focus {
+    background-color: hsla(75deg, 50%, 40%, 0.5);
+    color: #FFF;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+  ul#thumbnails.gallery {
+    padding: 0.67%;
+  }
+  ul#thumbnails.gallery li {
+    width: 17.31%;
+  }
+  ul#thumbnails.gallery li, ul#thumbnails.gallery li a {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  ul#thumbnails.gallery li.portrait {
+    width: 13.2%;
+  }
+  .no-textshadow button#exit {
+    color: hsl(75deg, 50%, 40%);
+  }
+}
+@media only screen and (max-width: 1100px) {
+  .five figcaption {
+    border-width: 0.5em 0.7em 1em;
+  }
+}
+@media only screen and (max-width: 900px) {
+  #links main aside {
+    right: -30%;
+  }
+  .four figcaption {
+    border-width: 0.5em 0.7em 1em;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #sell a {
+    margin-left: 0%;
+  }
+  #alpacas_for_sale footer {
+    padding-top: 15%;
+    margin-top: -15%;
+  }
+  #alpacas_for_sale main > aside {
+    position: relative;
+    width: 100%;
+    right: 0%;
+  }
+  #alpacas_for_sale.sell footer {
+    padding-top: 0;
+    margin-top: 9%;
+  }
+  #gallery.showtime header h2 {
+    margin: 0%;
+  }
+  .js #alpacas_for_sale aside img {
+    margin: 0%;
+    float: none;
+    animation: enter 1s 1 ease-out;
+  }
+  #alpacas_for_sale.sell main > aside {
+    position: absolute;
+  }
+  article.intro div#sell figure a {
+    margin-left: 0%;
+  }
+  #sell.tog a.show {
+    margin: 0;
+    display: block;
+  }
+  .extent figcaption {
+    border-width: 0.5em 0.7em 1em;
+  }
+  .extent figure:nth-of-type(2) figcaption {
+    border-width: 0.5em 0 1em;
+  }
+}
+@media only screen and (max-width: 667px) {
+  ul.loop li a {
+    font-size: 1em;
+    padding: 1em 0.5em 1em 2em;
+  }
+  /* if not using flex */
+  #sell table {
+    float: none;
+    width: 100%;
+    margin: 0;
+  }
+  .sell #sell {
+    text-align: center;
+  }
+  .touchevents .inplay #controls {
+    top: 2.1em;
+  }
+  #sell a.show, #sell.tog table.show {
+    position: absolute;
+    left: -9999px;
+  }
+  #sell table.show, #sell.tog a.show, #sell.extent a.show {
+    position: static;
+    left: 0;
+  }
+  /*https://stackoverflow.com/questions/21715927/table-row-not-expanding-to-full-width/36606652*/
+  .sell #sell a.show, .sell #sell.tog table.show {
+    /*display: none;*/
+    position: absolute;
+    left: -9999px;
+  }
+  .sell #sell.tog a.show, .sell #sell table.show {
+    /*display: block;*/
+    position: static;
+    left: 0;
+  }
+  .extent figcaption {
+    border-width: 0.5em 0 1em;
+  }
+  #stud_services #wrap footer {
+    padding-top: 0%;
+    margin-top: 9%;
+  }
+}
+@media only screen and (max-width: 667px) and (orientation: portrait) {
+  #controls {
+    font-size: 1.5em;
+  }
+  .touchevents .inplay #controls {
+    top: 2.2em;
+  }
+}
+@media only screen and (max-width: 375px) and (orientation: portrait) {
+  #list, #sell {
+    font-size: 0.9em;
+  }
+  #list.tab, #list.tab + #sell {
+    font-size: 0.95em;
+  }
+}
+@media only screen and (max-width: 320px) and (orientation: portrait) {
+  html body {
+    font-size: 0.66em;
+  }
+  h2 {
+    font-size: 2.7em;
+  }
+  figure a {
+    box-shadow: none;
+  }
+  ul#thumbnails.gallery {
+    width: 98%;
+  }
+  ul#thumbnails.gallery li {
+    width: 17.2%;
+  }
+  ul#thumbnails.gallery li.portrait {
+    width: 14.7%;
+  }
+  ul#thumbnails {
+    padding: 1%;
+  }
+  #controls.static {
+    top: -2.7em;
+  }
+  #alpacas_for_sale #tooltip {
+    bottom: 23em;
+  }
+  .no-objectfit #exit {
+    left: 90%;
+  }
+}
+@media only screen and (min-width: 1100px) {
+  .six figure:nth-of-type(5) figcaption {
+    border-width: 0.5em 0.2em 1em;
+  }
+}
+.flexboxlegacy #alpacas_for_sale .extent {
+  display: -webkit-box;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;
+  /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;
+  /* TWEENER - IE 10 */
+  display: -webkit-flex;
+  /* NEW - Chrome */
+  display: flex;
+  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+.flexboxlegacy #alpacas_for_sale figure {
+  -webkit-box-flex: 1;
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-flex: 1;
+  /* OLD - Firefox 19- */
+  /* For old syntax, otherwise collapses. */
+  -webkit-flex: 1;
+  /* Chrome */
+  -ms-flex: 1;
+  /* IE 10 */
+  flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  -ms-flex-preferred-size: 10%;
+  -webkit-flex-basis: 10%;
+  flex-basis: 10%;
+}
+
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 20 version
+ https://www.smashingmagazine.com/2019/02/css-browser-support/ 
+https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css 
+https://github.com/philipwalton/flexbugs
+*/
+/*
+.js #alpacas_for_sale {
+	background-color: ivory;
+}
+
+
+.flexboxlegacy #alpacas_for_sale {
+	background-color: cornsilk;
+}
+
+.flexboxtweener #alpacas_for_sale {
+	background-color: papayawhip;
+}
+
+.flexbox #alpacas_for_sale {
+	background-color: peachpuff;
+}
+
+.flexwrap #alpacas_for_sale {
+	background-color: orange;
+}
+
+.cssgrid body#alpacas_for_sale {
+	background-color: pink;
+}
+
+*/
+ul#list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+#controls {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+#controls button {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 auto;
+  -webkit-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+
+.extent {
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.extent figure {
+  /*just use defaults*/
+  /*-webkit-box-flex: 1;*/
+  /* OLD - iOS 6-, Safari 3.1-6 */
+  /*-moz-box-flex: 1;*/
+  /* OLD - Firefox 19- */
+  /* For old syntax, otherwise collapses. */
+  /*-webkit-flex: 1;*/
+  /* Chrome */
+  /*-ms-flex: 1;*/
+  /* IE 10 */
+  /*flex: 1;*/
+  -webkit-box-flex: 1 1 48%;
+  -moz-box-flex: 1 1 48%;
+  webkit-flex: 1 1 48%;
+  ms-flex: 1 1 48%;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 48%;
+  -ms-flex: 1 1 48%;
+  flex: 1 1 48%;
+  /* longhand
+     -ms-flex-positive: 1;
+     flex-grow: 1;
+     -ms-flex-negative: 1;
+     flex-shrink: 1;
+     -ms-flex-preferred-size: 44%;
+     flex-basis: 44%;
+     border: solid 1px red;
+     */
+}
+
+.five figure {
+  -webkit-box-flex: 1 1 30%;
+  -moz-box-flex: 1 1 30%;
+  webkit-flex: 1 1 30%;
+  ms-flex: 1 1 30%;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 30%;
+  -ms-flex: 1 1 30%;
+  flex: 1 1 30%;
+}
+
+/*supports*/
+/*@supports (display: grid){ }*/
+/* false positive (-moz-column-gap: 20px) (-webkit-column-gap: 20px) or */
+@supports (column-gap: 20px) {
+  ul#thumbnails.gallery {
+    padding: 0.6em;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 0.6em 1fr 0.6em 1fr 0.6em 1fr 0.6em 1fr 0.6em 0.74fr;
+    grid-template-columns: repeat(5, 1fr) 0.74fr;
+    grid-gap: 0.6em;
+  }
+  main ul#thumbnails.gallery li {
+    margin: 0px;
+    width: auto;
+    border-width: 0;
+  }
+  /*http://nthmaster.com/*/
+  /*up to 5th*/
+  ul#thumbnails.gallery li:nth-child(-n+5) {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 2;
+    grid-row: 1/3;
+  }
+  /*from 7th*/
+  ul#thumbnails.gallery li:nth-child(n+7) {
+    -ms-grid-row: 3;
+    -ms-grid-row-span: 2;
+    grid-row: 3/5;
+  }
+  /*from 13th*/
+  ul#thumbnails.gallery li:nth-child(n+13) {
+    -ms-grid-row: 5;
+    -ms-grid-row-span: 2;
+    grid-row: 5/7;
+  }
+  ul#thumbnails.gallery li.portrait:nth-child(6) {
+    -ms-grid-column: 6;
+    -ms-grid-column-span: 1;
+    grid-column: 6/7;
+    -ms-grid-row-span: 3;
+    grid-row: span 3;
+    width: auto;
+    /* OR..
+          grid-area: 1 / 6 / 4 / 7;
+          grid-row 1 / 4;
+          */
+  }
+  ul#thumbnails.gallery li.portrait:nth-child(12) {
+    /*grid-column: 6 / 7; superfluous as it defaults to the remaining available space*/
+    -ms-grid-row: 4;
+    -ms-grid-row-span: 3;
+    grid-row: 4/7;
+    width: auto;
+  }
+}
+@media only screen and (max-width: 767px) {
+  @supports (column-gap: 20px) {
+    ul#thumbnails.gallery {
+      -ms-grid-columns: 1fr [5] 0.75fr;
+      grid-template-columns: repeat(5, 1fr) 0.75fr;
+    }
+  }
+  header h2 {
+    z-index: 1;
+  }
+}
+@media only screen and (max-width: 667px) {
+  @supports (display: -webkit-flex) or (display: -moz-flex) or (display: flex) {
+    .extent {
+      display: -webkit-box;
+      /* OLD - iOS 6-, Safari 3.1-6 */
+      /* OLD - Firefox 19- (buggy but mostly works) */
+      display: -ms-flexbox;
+      /* TWEENER - IE 10 */
+      display: -webkit-flex;
+      /* NEW - Chrome */
+      display: flex;
+      /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    }
+    #sell table {
+      /*table-layout: fixed;*/
+    }
+    div#sell > a {
+      /*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
+      padding: 0.825em;
+    }
+    .extent > a {
+      /*https://stackoverflow.com/questions/33502702/flex-elements-ignore-percent-padding-in-firefox*/
+      padding: 0em;
+    }
+    #sell.tog {
+      padding: 3%;
+    }
+    #sell.tog a {
+      margin: 0%;
+    }
+  }
+  @supports (column-gap: 20px) {
+    /*reset to override inline-block scenario*/
+    #sell figure {
+      width: auto;
+    }
+    .intro .extent {
+      display: -ms-grid;
+      display: grid;
+      -ms-grid-columns: 1fr 0.5em 1fr;
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: auto;
+      grid-gap: 0.5em;
+      margin: 0;
+    }
+    .five .extent {
+      -ms-grid-columns: 1fr [12];
+      grid-template-columns: repeat(12, 1fr);
+      -ms-grid-rows: 1fr [3];
+      grid-template-rows: repeat(3, 1fr);
+    }
+    .five .extent > *:nth-child(1) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 1;
+    }
+    .five .extent > *:nth-child(2) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 2;
+    }
+    .five .extent > *:nth-child(3) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 3;
+    }
+    .five .extent > *:nth-child(4) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 4;
+    }
+    .five .extent > *:nth-child(5) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 5;
+    }
+    .five .extent > *:nth-child(6) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 6;
+    }
+    .five .extent > *:nth-child(7) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 7;
+    }
+    .five .extent > *:nth-child(8) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 8;
+    }
+    .five .extent > *:nth-child(9) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 9;
+    }
+    .five .extent > *:nth-child(10) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 10;
+    }
+    .five .extent > *:nth-child(11) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 11;
+    }
+    .five .extent > *:nth-child(12) {
+      -ms-grid-row: 1;
+      -ms-grid-column: 12;
+    }
+    .five .extent > *:nth-child(13) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 1;
+    }
+    .five .extent > *:nth-child(14) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 2;
+    }
+    .five .extent > *:nth-child(15) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 3;
+    }
+    .five .extent > *:nth-child(16) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 4;
+    }
+    .five .extent > *:nth-child(17) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 5;
+    }
+    .five .extent > *:nth-child(18) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 6;
+    }
+    .five .extent > *:nth-child(19) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 7;
+    }
+    .five .extent > *:nth-child(20) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 8;
+    }
+    .five .extent > *:nth-child(21) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 9;
+    }
+    .five .extent > *:nth-child(22) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 10;
+    }
+    .five .extent > *:nth-child(23) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 11;
+    }
+    .five .extent > *:nth-child(24) {
+      -ms-grid-row: 2;
+      -ms-grid-column: 12;
+    }
+    .five .extent > *:nth-child(25) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 1;
+    }
+    .five .extent > *:nth-child(26) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 2;
+    }
+    .five .extent > *:nth-child(27) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 3;
+    }
+    .five .extent > *:nth-child(28) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 4;
+    }
+    .five .extent > *:nth-child(29) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 5;
+    }
+    .five .extent > *:nth-child(30) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 6;
+    }
+    .five .extent > *:nth-child(31) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 7;
+    }
+    .five .extent > *:nth-child(32) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 8;
+    }
+    .five .extent > *:nth-child(33) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 9;
+    }
+    .five .extent > *:nth-child(34) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 10;
+    }
+    .five .extent > *:nth-child(35) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 11;
+    }
+    .five .extent > *:nth-child(36) {
+      -ms-grid-row: 3;
+      -ms-grid-column: 12;
+    }
+    .five .extent figure:nth-child(even) {
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 6;
+      grid-column: 1/7;
+    }
+    .five .extent figure:nth-child(odd) {
+      -ms-grid-column: 7;
+      -ms-grid-column-span: 6;
+      grid-column: 7/13;
+    }
+    .five .extent figure:last-child {
+      -ms-grid-column: 4;
+      -ms-grid-column-span: 6;
+      grid-column: 4/10;
+    }
+    .extent figure {
+      margin: 0;
+    }
+    .six .extent {
+      display: -ms-grid;
+      display: grid;
+      -ms-grid-columns: 1fr 0.5em 1fr 0.5em 1fr;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+      grid-gap: 0.5em;
+      margin: 0;
+    }
+  }
+  /*grid*/
+}
+/*667*/
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
+  @supports (column-gap: 20px) {
+    ul#thumbnails.gallery li {
+      width: auto;
+      margin: 0px;
+    }
+  }
+}
+@media only screen and (min-width: 768px) {
+  @supports (column-gap: 20px) {
+    header {
+      display: grid;
+      grid-template-columns: repeat(35, 1fr);
+      grid-template-rows: repeat(9, 2.2em);
+      padding: 0;
+    }
+    header > a:link {
+      position: relative;
+      width: 100%;
+    }
+    header h2 {
+      grid-column: 11/36;
+      grid-row: 8/10;
+      margin: 0;
+    }
+    a#yag {
+      grid-column: 30/36;
+      grid-row: 1/7;
+      position: relative;
+      width: 100%;
+      margin: 0;
+    }
+    a#ga_logo {
+      grid-column: 1/11;
+      grid-row: 1/8;
+      margin: 0;
+    }
+  }
+}
+
+/*# sourceMappingURL=main.css.map */
