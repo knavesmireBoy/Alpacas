@@ -15,7 +15,7 @@ nav {
         border-bottom: solid $menu 1px;
     
     & a, & a:link, & a:visited {
-        @extend %wavy;
+        @include wavy;
     }
  
     /*keep separate to keep early ie happy!*/

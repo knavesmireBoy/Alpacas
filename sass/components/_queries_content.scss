@@ -34,9 +34,7 @@ http://cssmediaqueries.com/overview.html*/
     /* ... including this: */
     nav {
         a, a:link, a:visited {
-            background-image: url(../assets/links.jpg);
-            background-repeat: no-repeat;
-            background-position: 0 -5%;
+            @include wavy;
             color: $link;
         }
         a:hover {
@@ -80,7 +78,7 @@ http://cssmediaqueries.com/overview.html*/
         font-size: -webkit-calc(28px + (42 - 28) * (100vw - 320px) / (768 - 320));
         @include doFontSize(28, 42, 768, 320);
     }
-	nav {
+	nav li {
         a, a:link, a:visited {
             background-image: none;
             padding: 0em .8em;

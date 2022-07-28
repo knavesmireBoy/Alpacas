@@ -1,12 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Merriweather:wght@400;700&display=swap);
-@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&family=Merriweather+Sans:wght@400;700&family=Merriweather:ital,wght@0,700;1,400&display=swap");
-nav li a, nav li a:link, nav li a:visited {
-  background-image: url(../assets/links.jpg);
-  background-repeat: no-repeat;
-  background-position: 0 -4%;
-  color: #080;
-}
-
 /*.selector {
   @include prefix(transform, rotate(45deg), webkit ms);
 }
@@ -18,6 +10,7 @@ nav li a, nav li a:link, nav li a:visited {
 */
 /*https://gist.github.com/robinrendle/1d20c566c5e5fbd67f25*/
 /*Box sizing (the nuclear option)*/
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&family=Merriweather+Sans:wght@400;700&family=Merriweather:ital,wght@0,700;1,400&display=swap");
 html {
   -ms-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -229,6 +222,12 @@ nav li {
   border-bottom: solid #C6C084 1px;
   /*keep separate to keep early ie happy!*/
   /* ie6 requires "nav a.current:visited" */
+}
+nav li a, nav li a:link, nav li a:visited {
+  background-image: url(../assets/links.jpg);
+  background-repeat: no-repeat;
+  background-position: 0 -4%;
+  color: #080;
 }
 nav li a.current, nav li a.current:visited, nav li a:active {
   color: #900;
@@ -864,7 +863,8 @@ http://cssmediaqueries.com/overview.html*/
   nav a, nav a:link, nav a:visited {
     background-image: url(../assets/links.jpg);
     background-repeat: no-repeat;
-    background-position: 0 -5%;
+    background-position: 0 -4%;
+    color: #080;
     color: #080;
   }
   nav a:hover {
@@ -912,7 +912,7 @@ http://cssmediaqueries.com/overview.html*/
         */
     font-size: calc(28px + 14 * (100vw - 320px) / 448);
   }
-  nav a, nav a:link, nav a:visited {
+  nav li a, nav li a:link, nav li a:visited {
     background-image: none;
     padding: 0em 0.8em;
   }
