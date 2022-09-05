@@ -5,8 +5,7 @@
 #welcome p {
     @include alpaca-margin($r: 30%);
 }
-/*
-what is this??
+
 #welcome #intro {
     background-color: black;
     background-color: rgba(0, 66 ,0, .9);
@@ -45,7 +44,7 @@ what is this??
     color: white;
     text-decoration: underline;
 }
-*/
+
 #about_us main aside {
     @include alpacas(100%, -1em, 14%, 62em);
 }
