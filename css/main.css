@@ -541,8 +541,6 @@ a#yag {
   margin: 0.5em 30% 0.5em 0;
 }
 
-/*
-what is this??
 #welcome #intro {
     background-color: black;
     background-color: rgba(0, 66 ,0, .9);
@@ -581,7 +579,7 @@ what is this??
     color: white;
     text-decoration: underline;
 }
-*/
+
 #about_us main aside {
   width: 100%;
   right: -1em;
