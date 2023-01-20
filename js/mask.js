@@ -194,6 +194,9 @@ if (!window.gAlp) {
 				['id', 'intro']
 			]), anCrIn(ref, ancr))('div');            
 		}
+		else {
+			//report.innerHTML = window.navigator.userAgent;
+		}
 	}());
 }(document, document.getElementsByTagName('aside')[0], document.getElementById('about_us'), ['unmask', 'mask'], Modernizr.mq('only all'), "(min-width: 769px)", Modernizr.cssmask, Modernizr.cssanimations, Modernizr.touchevents, document.getElementsByTagName('h2')[0]));
 //document.getElementById('article').getElementsByTagName('p')[0].innerHTML = document.documentElement.className;
