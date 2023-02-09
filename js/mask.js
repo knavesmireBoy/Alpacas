@@ -29,6 +29,10 @@ if (!window.gAlp) {
 		arg = _.isArray(arg) ? arg : [arg];
 		return f.apply(null, arg);
 	}
+	function getResult(arg) {
+		return _.isFunction(arg) ? arg() : arg;
+	}
+
 
 	var utils = gAlp.Util,
 		ptL = _.partial,
@@ -76,7 +80,8 @@ if (!window.gAlp) {
 		kid = getKid(),
 		//https://stackoverflow.com/questions/28417056/how-to-target-only-ie-any-version-within-a-stylesheet
 		ie6 = utils.getComputedStyle(kid, 'color') === 'red' ? true : false,
-		intro = "Having worked together on a number of print projects I was approached by Sylvia Sharpe of the <a href= 'https://yorkminster.org/get-involved/donate/york-minster-fund/' target='_blank'>York Minster Fund</a> to work on a website that would support her post-retirement venture, breeding and rearing Alpacas. For this site learning javascript was a requirement as navigating a picture gallery was firmly on the wish list. Jeremy Keith's recently published <a href='https://domscripting.com/book/' target='_blank'>Dom Scripting</a> was simply the right book at the right time. It was a bible of best practice and remains a great introduction for crafting bespoke websites. The Alpacas were packed off elsewhere so the original site is sadly no longer hosted at www.granaryalpacas.co.uk, but it would have looked like this the last time I worked on it in <a href='https://knavesmireboy.github.io/legacy_alpacas/' target='_blank'>2011</a>. This responsive version has been a great playground for a exploring newer css techniques.",
+		intro = "Having worked together on a number of print projects I was approached by Sylvia Sharpe of the <a href= 'https://yorkminster.org/get-involved/donate/york-minster-fund/' target='_blank'>York Minster Fund</a> to work on a website that would support her post-retirement venture, breeding and rearing Alpacas. For this site learning javascript was a requirement as navigating a picture gallery was firmly on the wish list. Jeremy Keith's recently published <a href='https://domscripting.com/book/' target='_blank'>Dom Scripting</a> was simply the right book at the right time. It was a bible of best practice and remains a great introduction for crafting bespoke websites. The Alpacas were packed off elsewhere so the original site is sadly no longer hosted at www.granaryalpacas.co.uk, but it would have looked like this the last time I worked on it in <a href='https://knavesmireboy.github.io/legacy_alpacas/' target='_blank'>2011</a>.",
+		intro2 = " This responsive version has been a great playground for a exploring newer css techniques, and most recently sass. The 'For Sale' page is definitely a contender for utilisng a database, if only for the R in CRUD, at the moment JS delivers a random number of creatures onload. Such fun.",
 		factory = function (cond) {
 			var activate = ptL(utils.doMap, mask_target, [
 					[
@@ -173,7 +178,12 @@ if (!window.gAlp) {
 			home = 'url(assets/header_ipad.png)',
 			other = 'url(../assets/header_ipad.png)',
 			swap = utils.$('welcome') ? home : other,
-            params = utils.getUrlParameter();
+            params = utils.getUrlParameter(),
+			makePara = function (ancr, para) {
+				return _.compose(twice(utils.doMap)([
+					['txt', para]
+				]), twice(applyArg)('p'), anCr, _.partial(utils.climbDom, 1))(ancr)
+			};
 
 		if (w > 960) {
 			utils.doMap(el, [
@@ -188,9 +198,8 @@ if (!window.gAlp) {
 				cross = ['txt', 'close'],
                 ancr = utils.findByClass('intro'),
                 ref = utils.getChild(ancr);
-			_.compose(twice(utils.doMap)([
-				['txt', intro]
-			]), twice(applyArg)('p'), anCr, _.partial(utils.climbDom, 1), twice(utils.doMap)([href, exit, cross]), twice(applyArg)('a'), anCr, twice(utils.doMap)([
+			_.compose(
+				twice(makePara)(intro2), twice(makePara)(intro), twice(utils.doMap)([href, exit, cross]), twice(applyArg)('a'), anCr, twice(utils.doMap)([
 				['id', 'intro']
 			]), anCrIn(ref, ancr))('div');            
 		}
